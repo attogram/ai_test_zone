@@ -1,0 +1,6 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: create a simple web page about an interesting topic.
+model: openai/gpt-4o
