@@ -1,0 +1,28 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: |
+create a web page:
+
+Content:
+- Describe yourself in the first person.
+- introduce yourself.
+- details on your ai model and version.
+- details on your capabilities.
+- details on your limitations.
+- details on your technical setup.
+- details on how you created this web page.
+- details on this prompt:
+  - how it was parsed.
+  - include this full prompt.
+
+Setup:
+- self-contained single HTML file.
+- cross-browser, mobile friendly
+
+Limits:
+- do not ask for clarifications.
+- just show me the final HTML file.
+- if you can not do this task, 
+  just create web page explaining why not.
