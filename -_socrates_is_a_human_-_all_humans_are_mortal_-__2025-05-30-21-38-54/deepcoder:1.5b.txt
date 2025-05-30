@@ -1,0 +1,19 @@
+<think>
+Okay, so I need to figure out whether Socrates is mortal based on the given statements. Let's break it down step by step.
+
+First, the statement says "Socrates is a human." That means Socrates belongs to the category of humans. Now, the next part is "All humans are mortal." So if every person is mortal, and since Socrates is a human, then he must be mortal as well.
+
+I think this is an example of a syllogism where we use deductive reasoning. The first premise establishes that Socrates is a specific type of human. The second premise generalizes all humans to be mortal. Combining these two allows us to conclude that since Socrates is a human, he must be mortal.
+
+I should make sure there are no exceptions or special cases here. Since both statements are universal and straightforward, it seems safe to apply the conclusion. So yes, logically, Socrates must be mortal.
+</think>
+
+Based on the given premises:
+
+1. **Socrates is a human.**
+2. **All humans are mortal.**
+
+We can deduce that since every human is mortal (including Socrates), Socrates must be mortal.
+
+**Answer:** Yes, Socrates is mortal because all humans are mortal and Socrates is a human.
+

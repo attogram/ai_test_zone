@@ -1,0 +1,11 @@
+The question asks about the mortal status of Socrates, considering the statements that:
+
+- Socrates is a human.
+- All humans are mortal.
+
+From the first statement, we can infer that Socrates is a human.
+
+From the second statement, we can infer that all humans are mortal.
+
+Therefore, the answer is **Yes**, Socrates is mortal.
+

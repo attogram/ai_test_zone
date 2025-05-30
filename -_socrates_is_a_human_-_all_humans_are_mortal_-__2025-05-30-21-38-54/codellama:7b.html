@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: monospace;
+    margin: 5px;
+  }
+  textarea {
+    white-space: pre-wrap;
+    width: 90%;
+  }
+  header, footer {
+    background-color: #f0f0f0;
+    margin: 5px;
+    padding: 5px;
+  }
+  .menu {
+    font-size: small;
+  }
+</style><title>ollama-multirun: codellama:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>-_socrates_is_a_human_-_all_humans_are_mortal_-_</a>: <b>codellama:7b</b><br /><br />
+<span class='menu'>Models: 
+<b>codellama:7b</b>, 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a>, 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a>, 
+<a href='./gemma:2b.html'>gemma:2b</a>, 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a>, 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a>, 
+<a href='./mistral:7b.html'>mistral:7b</a>, 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a>, 
+<a href='./qwen2.5vl:3b.html'>qwen2.5vl:3b</a>, 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a>, 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>)<br />
+<textarea readonly rows='4'>- Socrates is a human.
+- All humans are mortal.
+- Is Socrates mortal?</textarea>
+</p>
+<p>Output: codellama:7b (<a href='./codellama:7b.txt'>raw</a>)<br />
+<textarea readonly rows='7'>
+Yes, Socrates is mortal because he is a human being and all humans are mortal by definition.</textarea>
+</p>
+<p>Stats: codellama:7b (<a href='./codellama:7b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       13.327192599s
+load duration:        6.080900099s
+prompt eval count:    45 token(s)
+prompt eval duration: 3.493058877s
+prompt eval rate:     12.88 tokens/s
+eval count:           25 token(s)
+eval duration:        3.748483829s
+eval rate:            6.67 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/codellama:7b'>codellama:7b</a></p>
+<p>Created on 2025-05-30 21:39:09</p>
+<footer><p>Generated with <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v1.5</p></footer>
+</body></html>
