@@ -1,0 +1,26 @@
+Here's a JavaScript function that converts an array into an HTML unordered list (`<ul>`):
+
+```javascript
+function arrayToHTMLList(arr) {
+    let htmlList = '<ul>';
+
+    // Iterate over the array elements
+    for (let i = 0; i < arr.length; i++) {
+        htmlList += `<li>${arr[i]}</li>`;
+    }
+
+    htmlList += '</ul>';
+    return htmlList;
+}
+```
+
+You can use this function like so:
+
+```javascript
+const arrayData = ['Item 1', 'Item 2', 'Item 3'];
+const htmlListElement = document.getElementById('listContainer'); // Replace with your desired container ID
+htmlListElement.innerHTML = arrayToHTMLList(arrayData);
+```
+
+This will create an unordered list (`<ul>`) within the specified HTML element (replace `'listContainer'` with your desired container ID).
+

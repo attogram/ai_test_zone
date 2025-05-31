@@ -1,0 +1,26 @@
+Here's a simple JavaScript function that takes an array as input and outputs an HTML unordered list (ul) of its contents.
+
+```javascript
+function createList(array) {
+  let html = "<ul>";
+  
+  for(let i=0; i<array.length; i++) {
+    html += "<li>" + array[i] + "</li>";
+  }
+  
+  html += "</ul>";
+  
+  return html;
+}
+```
+
+To use this function, simply pass in an array of items you want to display as a list. Here's an example:
+
+```javascript
+let items = ["apple", "banana", "cherry"];
+console.log(createList(items));
+// <ul><li>apple</li><li>banana</li><li>cherry</li></ul>
+```
+
+This will return the HTML code for an unordered list of the array's contents. You can then insert this into your webpage wherever you want the list to appear.
+

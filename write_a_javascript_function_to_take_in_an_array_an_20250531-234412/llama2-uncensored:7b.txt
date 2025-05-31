@@ -1,0 +1,18 @@
+Sure, here's an example JavaScript code that takes in an array and outputs it as a list using HTML:
+```html
+
+ var arr = [1, 2, 3, 4];
+ 
+ function listArray(arr) {
+ document.getElementById("list").innerHTML = "";
+ for (var i=0;i<arr.length;i++) {
+ var li = document.createElement("li");
+ li.textContent = arr[i];
+ document.getElementById("list").appendChild(li);
+ }
+ }
+ 
+ listArray(arr);
+```
+In this code, the `list` div element is created and given an ID of "list". The function `listArray` takes in an array as its parameter `arr`. It then loops through each item in the array using a for loop. For each item, it creates a new HTML list item (`li`) with text content set to the value of the item in the array. Finally, it appends each list item to the `list` element using `.appendChild()`.
+

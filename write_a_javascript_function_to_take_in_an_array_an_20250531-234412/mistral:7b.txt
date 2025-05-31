@@ -1,0 +1,15 @@
+ Here's a simple JavaScript function that takes an array as input and outputs an HTML unordered list (<ul>) containing the array elements:
+
+```javascript
+function arrayToHtmlList(arr) {
+    let listItems = arr.map((item, index) => `<li key="${index}">${item}</li>`);
+    return `<ul>${listItems.join('')}</ul>`;
+}
+
+// Example usage:
+let myArray = ['Apple', 'Banana', 'Orange'];
+console.log(arrayToHtmlList(myArray));
+```
+
+This function first creates an array of list items (<li>) for each element in the input array, using JavaScript's map() method. It then returns a string containing the unordered list (<ul>) with all the list items concatenated together. The key attribute on each <li> is set to its corresponding index in the array, which can be useful if you want to ensure uniqueness for any DOM manipulation or handling of React keys.
+
