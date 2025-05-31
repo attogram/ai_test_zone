@@ -1,0 +1,11 @@
+Sure, I can help you with that. Here's the modified function:
+```bash
+function addModelToIndexFile {
+ responseWords=$(wc -w < "$modelFile") || true # handle error if file doesn't exist or can't be read
+ responseBytes=$(wc -c < "$modelFile" | awk '{print $1}') || true # handle error if file can't be read
+ 
+ echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$responseWords</td><td>${responseBytes}</td>" >> "$indexFile"
+}
+```
+In this modified function, we simply use `${}` to interpolate the values into the string that will be written to the index file. We also handle errors by assigning `true` to variables that don't exist or can't be read.
+

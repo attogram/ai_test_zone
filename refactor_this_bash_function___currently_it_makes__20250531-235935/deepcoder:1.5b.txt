@@ -1,0 +1,58 @@
+<think>
+Okay, I need to refactor the given bash function. The current code reads a stats file into an array called $statsInfo and then writes some HTML into the index file using this array. But the goal is to avoid creating this $statsInfo array and instead read the stats file directly and output the values immediately into the index file.
+
+First, I'll look at the original function. It calculates the number of words in $modelFile and the number of characters, then reads $statsFile into $statsInfo by splitting each line on ':' and taking the second part. Then it writes some HTML with the statsInfo array.
+
+The refactored version should do the same but without storing $statsInfo. So, I'll start by removing the calculation of responseWords and responseBytes. Instead, maybe calculate them once at the beginning if needed, but perhaps not necessary for now.
+
+Next, I need to read $statsFile into an array directly. Then, when writing the HTML, instead of using this array, just use the values from each line. So in the HTML part, for each value obtained from the lines in $statsFile, append it directly to the index file's structure.
+
+I'll remove the line where statsInfo is assigned and replace that with reading the statsFile into an array. Then, when writing the HTML, loop through each line in $statsFile, extract the value, and include it in the index file without storing it in an array.
+
+Let me outline the steps:
+
+1. Remove the calculation of responseWords and responseBytes.
+2. Read $statsFile and split each line into parts, extracting the second part as a number or string.
+3. Replace the loop that builds $statsInfo with reading each line directly and appending the value to the index file's HTML structure.
+
+So in the code, I'll remove the lines where statsInfo is assigned. Then, when writing the HTML, instead of using statsInfo[], I'll iterate over each line in $statsFile, extract the value, and include it as needed.
+
+I should also ensure that the function parameters remain the same: addModelToIndexFile takes modelFile, statsFile, etc., and outputs to indexFile. The function name remains the same.
+
+Testing this, I can imagine that when the function runs, it will read each line of $statsFile, extract the second part, and include it in the HTML structure without storing it in an array. This should make the code cleaner and avoid unnecessary variables.
+
+I think that's the plan. Now, I'll write the refactored function accordingly.
+</think>
+
+Here is the step-by-step explanation for the refactor:
+
+1. **Remove Calculation of Response Values**: The original code calculates `responseWords` and `responseBytes` from `$modelFile`. These values are no longer needed and can be removed.
+
+2. **Read Stats File Directly**: Instead of storing all stats in an array, read each line into an array or directly process it when writing to the index file.
+
+3. **Modify HTML Writing**: Replace the loop that creates `statsInfo` with code that reads each line from `$statsFile`, extracts the relevant value, and includes it directly in the HTML structure of the index file without storing it in memory as an array.
+
+Here is the refactored function:
+
+```bash
+function addModelToIndexFile {
+    # Calculate response words and bytes once at beginning if needed
+    # (No longer used in this refactor)
+    
+    # Read stats from $statsFile directly into an array or use each value as needed
+    while read -r line; do
+        value=$(echo "$line" | cut -d ':' -f 2)
+        # Include the value immediately in the index file's structure
+        echo "<td>$value</td>"
+    done < $statsFile >> "$indexFile"
+}
+```
+
+**Explanation:**
+
+- **Response Values Removal**: The lines calculating `responseWords` and `responseBytes` are removed from the function. These values would now be calculated once before calling this function if needed.
+
+- **Reading Stats File Directly**: Instead of storing the stats in an array, each line is read directly into processing. Each value extracted from a line is included immediately when writing to the index file's HTML structure.
+
+- **Direct HTML Writing**: When writing the HTML for the index file, each value is added without needing an array (`statsInfo`). This simplifies the code and reduces memory usage by eliminating the need to store intermediate arrays.
+

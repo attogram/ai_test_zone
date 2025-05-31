@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: llama2-uncensored:7b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>refactor_this_bash_function___currently_it_makes_</a>: <b>llama2-uncensored:7b</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<b>llama2-uncensored:7b</b> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./refactor_this_bash_function___currently_it_makes_.prompt.yaml'>yaml</a>)
+  words:143  bytes:1093<br />
+<textarea readonly rows='10'>Refactor this bash function:
+- currently it makes $statsInfo array via reading $statsFile, then loops through it to add the values to the index file.
+- refactor to not use the $statsInfo array, just read $statsFile directly and output the values directly into the index file.
+- The function should still take the same parameters and produce the same output.
+
+Code:
+
+function addModelToIndexFile {
+    responseWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+
+    # parse the stats file into an array, splitting on : character, getting the second part of each line
+    statsInfo=()
+    while read -r line; do
+      value=$(echo &quot;$line&quot; | cut -d &#39;:&#39; -f2)
+      statsInfo+=(&quot;$value&quot;)
+    done &lt; &quot;$statsFile&quot;
+
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;${responseBytes}&lt;/td&gt;&quot;
+        for value in &quot;${statsInfo[@]}&quot;; do
+            if [[ -n &quot;$value&quot; ]]; then
+              echo &quot;&lt;td&gt;${value}&lt;/td&gt;&quot;;
+            fi
+        done
+        echo &quot;&lt;/tr&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}</textarea>
+</p>
+<p>Output: llama2-uncensored:7b (<a href='./llama2-uncensored:7b.txt'>raw</a>)  words:98  bytes:667<br />
+<textarea readonly rows='15'>Sure, I can help you with that. Here&#39;s the modified function:
+```bash
+function addModelToIndexFile {
+ responseWords=$(wc -w &lt; &quot;$modelFile&quot;) || true # handle error if file doesn&#39;t exist or can&#39;t be read
+ responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;) || true # handle error if file can&#39;t be read
+ 
+ echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;${responseBytes}&lt;/td&gt;&quot; &gt;&gt; &quot;$indexFile&quot;
+}
+```
+In this modified function, we simply use `${}` to interpolate the values into the string that will be written to the index file. We also handle errors by assigning `true` to variables that don&#39;t exist or can&#39;t be read.</textarea>
+</p>
+<p>Stats: llama2-uncensored:7b (<a href='./llama2-uncensored:7b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       1m14.519452683s
+load duration:        5.34077011s
+prompt eval count:    338 token(s)
+prompt eval duration: 29.291206983s
+prompt eval rate:     11.54 tokens/s
+eval count:           200 token(s)
+eval duration:        39.886565647s
+eval rate:            5.01 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/llama2-uncensored:7b'>llama2-uncensored:7b</a></p>
+<p>Created: 2025-06-01 00:05:42</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.1</p></footer>
+</body></html>

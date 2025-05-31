@@ -1,0 +1,24 @@
+
+Here's a refactored version of the function that doesn't use an array to store the values from the stats file:
+```
+function addModelToIndexFile {
+    model=$1
+    modelFile=$2
+    statsFile=$3
+    indexFile=$4
+
+    responseWords=$(wc -w < "$modelFile" | awk '{print $1}')
+    responseBytes=$(wc -c < "$modelFile" | awk '{print $1}')
+
+    while read -r line; do
+        value=$(echo "$line" | cut -d ':' -f2)
+        if [[ -n "$value" ]]; then
+            echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$responseWords</td><td>${responseBytes}</td>"
+            echo "<td>${value}</td>";
+            echo "</tr>" >> "$indexFile"
+        fi
+    done < "$statsFile"
+}
+```
+This version reads the stats file directly and outputs the values into the index file without storing them in an array. The function still takes the same parameters as before, but it doesn't use the `statsInfo` array.
+

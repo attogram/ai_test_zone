@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>refactor_this_bash_function___currently_it_makes_</a>: <b>dolphin3:8b</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./refactor_this_bash_function___currently_it_makes_.prompt.yaml'>yaml</a>)
+  words:143  bytes:1093<br />
+<textarea readonly rows='10'>Refactor this bash function:
+- currently it makes $statsInfo array via reading $statsFile, then loops through it to add the values to the index file.
+- refactor to not use the $statsInfo array, just read $statsFile directly and output the values directly into the index file.
+- The function should still take the same parameters and produce the same output.
+
+Code:
+
+function addModelToIndexFile {
+    responseWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+
+    # parse the stats file into an array, splitting on : character, getting the second part of each line
+    statsInfo=()
+    while read -r line; do
+      value=$(echo &quot;$line&quot; | cut -d &#39;:&#39; -f2)
+      statsInfo+=(&quot;$value&quot;)
+    done &lt; &quot;$statsFile&quot;
+
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;${responseBytes}&lt;/td&gt;&quot;
+        for value in &quot;${statsInfo[@]}&quot;; do
+            if [[ -n &quot;$value&quot; ]]; then
+              echo &quot;&lt;td&gt;${value}&lt;/td&gt;&quot;;
+            fi
+        done
+        echo &quot;&lt;/tr&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3:8b.txt'>raw</a>)  words:123  bytes:958<br />
+<textarea readonly rows='25'>Refactored code:
+
+```bash
+function addModelToIndexFile {
+    responseWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;${responseBytes}&lt;/td&gt;&quot;
+        while read -r line; do
+            value=$(echo &quot;$line&quot; | cut -d &#39;:&#39; -f2)
+            if [[ -n &quot;$value&quot; ]]; then
+                echo &quot;&lt;td&gt;${value}&lt;/td&gt;&quot;;
+            fi
+        done &lt; &quot;$statsFile&quot;
+        echo &quot;&lt;/tr&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}
+```
+In this refactored version, we removed the `statsInfo` array and its associated logic. Instead of storing each value in an array and then looping through it later, we added a `while` loop directly inside the `awk` script that writes to the index file. This way, we process each line from `$statsFile` immediately after reading it and outputting the relevant information into the index file.</textarea>
+</p>
+<p>Stats: dolphin3:8b (<a href='./dolphin3:8b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       1m29.920437242s
+load duration:        8.020810697s
+prompt eval count:    303 token(s)
+prompt eval duration: 31.303926191s
+prompt eval rate:     9.68 tokens/s
+eval count:           247 token(s)
+eval duration:        50.593934174s
+eval rate:            4.88 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></p>
+<p>Created: 2025-06-01 00:03:18</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.1</p></footer>
+</body></html>

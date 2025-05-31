@@ -1,0 +1,26 @@
+```
+
+**Refactored code:**
+
+```bash
+function addModelToIndexFile {
+    # read stats file into a single string
+    statsInfo=$(cat "$statsFile" | grep -v '^#')
+
+    # split the string into lines and extract values
+    lines=$(IFS':' read -r -d '\n' -ra statsInfo <<< "$statsInfo")
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$lines</td>"
+    ) >> "$indexFile"
+}
+```
+
+**Changes:**
+
+* Removed the temporary array `$statsInfo`.
+* Used the `grep` command to extract values from the `$statsFile` directly.
+* Split the string into lines using `IFS':'` and read each line with `read -r`.
+* Joined the extracted values with `<` and `>` signs into the HTML string.
+* Used `>>` for file manipulation instead of `echo >>` to ensure the output is appended to the existing file.
+

@@ -1,0 +1,28 @@
+Refactor this bash function:
+- currently it makes $statsInfo array via reading $statsFile, then loops through it to add the values to the index file.
+- refactor to not use the $statsInfo array, just read $statsFile directly and output the values directly into the index file.
+- The function should still take the same parameters and produce the same output.
+
+Code:
+
+function addModelToIndexFile {
+    responseWords=$(wc -w < "$modelFile" | awk '{print $1}')
+    responseBytes=$(wc -c < "$modelFile" | awk '{print $1}')
+
+    # parse the stats file into an array, splitting on : character, getting the second part of each line
+    statsInfo=()
+    while read -r line; do
+      value=$(echo "$line" | cut -d ':' -f2)
+      statsInfo+=("$value")
+    done < "$statsFile"
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$responseWords</td><td>${responseBytes}</td>"
+        for value in "${statsInfo[@]}"; do
+            if [[ -n "$value" ]]; then
+              echo "<td>${value}</td>";
+            fi
+        done
+        echo "</tr>"
+    ) >> "$indexFile"
+}

@@ -1,0 +1,19 @@
+Here is the refactored bash function:
+
+```bash
+function addModelToIndexFile {
+    # Read $statsFile directly and loop through it to output values into index file
+    while read -r line; do
+        value=$(echo "$line" | cut -d ':' -f2)
+        (
+            echo "<tr><td class='left'><a href='./$model.html'>$model</a></td>"
+            echo "<td>$responseWords</td>"
+            echo "<td>${responseBytes}</td>"
+            echo "<td>${value}</td>"
+        ) >> "$indexFile"
+    done < "$statsFile"
+}
+```
+
+This refactored version of the function reads the `$statsFile` directly and outputs the values into the index file (`$indexFile`) without creating an intermediate array (`statsInfo`). It uses a single `while read -r line;` loop to process each line in `$statsFile`, extracting the desired value using `cut` as before. The rest of the HTML structure is built within the loop and appended to the `$indexFile`.
+

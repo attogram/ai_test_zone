@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: gemma:2b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>refactor_this_bash_function___currently_it_makes_</a>: <b>gemma:2b</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<b>gemma:2b</b> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./refactor_this_bash_function___currently_it_makes_.prompt.yaml'>yaml</a>)
+  words:143  bytes:1093<br />
+<textarea readonly rows='10'>Refactor this bash function:
+- currently it makes $statsInfo array via reading $statsFile, then loops through it to add the values to the index file.
+- refactor to not use the $statsInfo array, just read $statsFile directly and output the values directly into the index file.
+- The function should still take the same parameters and produce the same output.
+
+Code:
+
+function addModelToIndexFile {
+    responseWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+
+    # parse the stats file into an array, splitting on : character, getting the second part of each line
+    statsInfo=()
+    while read -r line; do
+      value=$(echo &quot;$line&quot; | cut -d &#39;:&#39; -f2)
+      statsInfo+=(&quot;$value&quot;)
+    done &lt; &quot;$statsFile&quot;
+
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;${responseBytes}&lt;/td&gt;&quot;
+        for value in &quot;${statsInfo[@]}&quot;; do
+            if [[ -n &quot;$value&quot; ]]; then
+              echo &quot;&lt;td&gt;${value}&lt;/td&gt;&quot;;
+            fi
+        done
+        echo &quot;&lt;/tr&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}</textarea>
+</p>
+<p>Output: gemma:2b (<a href='./gemma:2b.txt'>raw</a>)  words:118  bytes:807<br />
+<textarea readonly rows='30'>```
+
+**Refactored code:**
+
+```bash
+function addModelToIndexFile {
+    # read stats file into a single string
+    statsInfo=$(cat &quot;$statsFile&quot; | grep -v &#39;^#&#39;)
+
+    # split the string into lines and extract values
+    lines=$(IFS&#39;:&#39; read -r -d &#39;\n&#39; -ra statsInfo &lt;&lt;&lt; &quot;$statsInfo&quot;)
+
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$lines&lt;/td&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}
+```
+
+**Changes:**
+
+* Removed the temporary array `$statsInfo`.
+* Used the `grep` command to extract values from the `$statsFile` directly.
+* Split the string into lines using `IFS&#39;:&#39;` and read each line with `read -r`.
+* Joined the extracted values with `&lt;` and `&gt;` signs into the HTML string.
+* Used `&gt;&gt;` for file manipulation instead of `echo &gt;&gt;` to ensure the output is appended to the existing file.</textarea>
+</p>
+<p>Stats: gemma:2b (<a href='./gemma:2b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       30.510677723s
+load duration:        2.588886121s
+prompt eval count:    321 token(s)
+prompt eval duration: 7.644768355s
+prompt eval rate:     41.99 tokens/s
+eval count:           231 token(s)
+eval duration:        20.275889226s
+eval rate:            11.39 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/gemma:2b'>gemma:2b</a></p>
+<p>Created: 2025-06-01 00:03:51</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.1</p></footer>
+</body></html>
