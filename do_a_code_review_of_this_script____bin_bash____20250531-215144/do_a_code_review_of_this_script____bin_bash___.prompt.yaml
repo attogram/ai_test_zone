@@ -1,6 +1,3 @@
-name: do_a_code_review_of_this_script____bin_bash___
-description: 
-model: ollama-multirun
 messages:
   - role: system
     content:
@@ -297,3 +294,4 @@ messages:
       finishIndexFile
       
       echo; echo "Done: $directory/"
+model: ''
