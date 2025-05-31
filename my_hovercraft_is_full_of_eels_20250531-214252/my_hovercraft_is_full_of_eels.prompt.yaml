@@ -1,0 +1,9 @@
+name: my_hovercraft_is_full_of_eels
+description: 
+model: 
+messages:
+  - role: system
+    content:
+  - role: user
+    content: |
+      My hovercraft is full of eels

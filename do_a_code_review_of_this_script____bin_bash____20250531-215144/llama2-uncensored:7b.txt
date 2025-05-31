@@ -1,0 +1,7 @@
+You can use the `cat` command to concatenate multiple files into a single string, and then `echo` that string. For example, in your script, you could do something like this:
+```
+promptWords=$(wc -w < "$promptFile" | awk '{print $1}') # Get number of words in prompt
+promptBytes=$(wc -c < "$promptFile" | awk '{print $1}') # Get bytes in prompt
+echo "<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./${tag}.prompt.yaml'>yaml</a>)  words:$promptWords  bytes:$promptBytes<br />"
+```
+

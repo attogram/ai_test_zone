@@ -1,0 +1,18 @@
+<think>
+Okay, so I need to figure out if Socrates is mortal based on the given statements. Let me break it down step by step.
+
+First, the statement says that Socrates is a human. That means Socrates belongs to the category of humans. Now, the second statement says that all humans are mortal. So, since Socrates is a human, and everyone in that group is mortal, it logically follows that Socrates must be mortal. 
+
+I don't see any exceptions or exceptions to these statements, so I think this conclusion holds true.
+</think>
+
+To determine if Socrates is mortal based on the given statements:
+
+1. **Socrates is a human**: This means Socrates belongs to the category of humans.
+
+2. **All humans are mortal**: This statement implies that every member of the human category has the property of being mortal.
+
+**Conclusion**: Since Socrates is a human and all humans are mortal, it follows logically that Socrates is mortal.
+
+**Answer:** Yes, Socrates is mortal.
+

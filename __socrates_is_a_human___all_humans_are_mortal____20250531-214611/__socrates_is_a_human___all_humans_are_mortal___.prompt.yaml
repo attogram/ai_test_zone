@@ -1,0 +1,11 @@
+name: __socrates_is_a_human___all_humans_are_mortal___
+description: 
+model: 
+messages:
+  - role: system
+    content:
+  - role: user
+    content: |
+      - Socrates is a human.
+      - All humans are mortal.
+      - Is Socrates mortal?

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: qwen2.5-coder:7b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>do_a_code_review_of_this_script____bin_bash___</a>: <b>qwen2.5-coder:7b</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<b>qwen2.5-coder:7b</b> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./do_a_code_review_of_this_script____bin_bash___.prompt.yaml'>yaml</a>)
+  words:971  bytes:8534<br />
+<textarea readonly rows='10'>Do a code review of this script:
+
+#!/bin/bash
+#
+# ollama multirun
+#
+# Bash shell script to run a prompt against all models in ollama, and save the output as web pages
+#
+# Usage:
+#  - Enter prompt manually:  ./multirun.sh
+#  - Enter prompt from file: ./multirun.sh &lt; prompt.txt
+#  - Enter prompt from pipe: echo &quot;your prompt&quot; | ./multirun.sh
+#                            echo &quot;summarize this file: $(cat filename)&quot; | ./multirun.sh
+#
+# Requires: ollama, bash, expect, awk, sed, tr, wc
+
+NAME=&quot;ollama multirun&quot;
+VERSION=&quot;2.0&quot;
+URL=&quot;https://github.com/attogram/ollama-multirun&quot;
+RESULTS_DIRECTORY=&quot;results&quot;
+
+echo; echo &quot;$NAME v$VERSION&quot;; echo
+
+function setModels {
+  models=$(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort) # Get list of models, sorted alphabetically
+  echo &quot;Models:&quot;; echo &quot;$models&quot;; echo
+  if [ -z &quot;$models&quot; ]; then
+    echo &quot;No models found. Please install models with &#39;ollama pull &lt;model-name&gt;&#39;&quot;
+    exit 1
+  fi
+}
+
+function createResultsDirectory {
+  tag=$(safeTag &quot;$prompt&quot;)
+  directory=&quot;${RESULTS_DIRECTORY}/${tag}_$(date &#39;+%Y%m%d-%H%M%S&#39;)&quot;
+  echo; echo &quot;Creating: $directory/&quot;
+  mkdir -p &quot;$directory&quot;
+}
+
+function setPrompt {
+  if [ -t 0 ]; then
+    echo &quot;Enter prompt:&quot;;
+    read -r prompt
+  else
+    prompt=$(cat)  # get piped input
+  fi
+  echo; echo &quot;Prompt:&quot;; echo &quot;$prompt&quot;
+}
+
+function savePrompt {
+  promptFile=&quot;$directory/prompt.txt&quot;
+  echo &quot;Creating: $promptFile&quot;
+  echo &quot;$prompt&quot; &gt; &quot;$promptFile&quot;
+
+  # Github Prompt YAML: https://docs.github.com/en/github-models/use-github-models/storing-prompts-in-github-repositories
+  echo &quot;Creating: $directory/$tag.prompt.yaml&quot;
+  (
+    echo &quot;name: $tag&quot;
+    echo &quot;description: &quot;
+    echo &quot;model: &quot;
+    echo &quot;messages:&quot;
+    echo &quot;  - role: system&quot;
+    echo &quot;    content:&quot;
+    echo &quot;  - role: user&quot;
+    echo &quot;    content: |&quot;
+    while IFS= read -r line; do
+      echo &quot;      $line&quot;
+    done &lt;&lt;&lt; &quot;$prompt&quot;
+  ) &gt; &quot;$directory/$tag.prompt.yaml&quot;
+}
+
+function showPrompt {
+    promptWords=$(wc -w &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+    promptBytes=$(wc -c &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+    echo &quot;&lt;p&gt;Prompt: (&lt;a href=&#39;./prompt.txt&#39;&gt;raw&lt;/a&gt;) (&lt;a href=&#39;./${tag}.prompt.yaml&#39;&gt;yaml&lt;/a&gt;)&quot;
+    echo &quot;  words:$promptWords  bytes:$promptBytes&lt;br /&gt;&quot;
+    textarea &quot;$prompt&quot; 0 10 # 0 padding, max 10 lines
+    echo &quot;&lt;/p&gt;&quot;
+}
+
+function textarea() {
+  local content=&quot;$1&quot; # Get the input
+  if [ -z &quot;$content&quot; ]; then
+    content=&quot;&quot;
+  fi
+  local padding=&quot;$2&quot;
+  if [ -z &quot;$padding&quot; ]; then
+    padding=0
+  fi
+  local max=&quot;$3&quot;
+  if [ -z &quot;$max&quot; ]; then
+    max=25
+  fi
+  local lines=$(echo &quot;$content
+&quot; | wc -l) # Get number of lines in content
+  lines=$((lines + padding))
+  if [ &quot;$lines&quot; -gt &quot;$max&quot; ]; then
+    lines=$max
+  fi
+  content=$(echo &quot;$content&quot; | sed &#39;s/&amp;/\&amp;amp;/g; s/&lt;/\&amp;lt;/g; s/&gt;/\&amp;gt;/g; s/&quot;/\&amp;quot;/g; s/&#39;&quot;&#39;&quot;&#39;/\&amp;#39;/g&#39;) # Escape HTML special characters
+  echo &quot;&lt;textarea readonly rows=&#39;$lines&#39;&gt;${content}&lt;/textarea&gt;&quot;
+}
+
+function safeTag() {
+    local input=&quot;$1&quot; # Get the input
+    input=${input:0:50} # Truncate to first 50 characters
+    input=$(echo &quot;$input&quot; | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;) # Convert to lowercase
+    input=$(echo &quot;$input&quot; | sed &quot;s/ /_/g&quot;) # Replace spaces with underscores
+    input=$(echo &quot;$input&quot; | sed &#39;s/[^a-zA-Z0-9_]/_/g&#39; | tr -cd &#39;a-zA-Z0-9_&#39;)
+    echo &quot;$input&quot; # Output the sanitized string
+}
+
+function clear_model {
+  echo &quot;Clearing: $1&quot;
+  local run=&quot;ollama run $1&quot;
+  expect -c &quot;spawn $run
+    sleep 1;
+    send -- \&quot;/clear
+\&quot;; 
+    sleep 1;
+    send -- \&quot;/bye
+\&quot;; 
+    interact;&quot;
+  echo &quot;Stopping: $1&quot;
+  ollama stop &quot;$1&quot;
+}
+
+function setHeaderAndFooter {
+  HEADER=$(cat &lt;&lt;EOF
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+&lt;style&gt;
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+&lt;/style&gt;
+EOF
+  )
+
+  FOOTER=$(cat &lt;&lt;EOF
+&lt;footer&gt;&lt;p&gt;Generated with &lt;a target=&#39;$NAME&#39; href=&#39;$URL&#39;&gt;$NAME&lt;/a&gt; v$VERSION&lt;/p&gt;&lt;/footer&gt;
+&lt;/body&gt;&lt;/html&gt;
+EOF
+  )
+}
+
+function createMenu {
+  local currentModel=&quot;$1&quot;
+  echo &quot;&lt;span class=&#39;menu&#39;&gt;models: &quot;
+  for modelName in $models; do
+    if [ &quot;$modelName&quot; == &quot;$currentModel&quot; ]; then
+      echo &quot;&lt;b&gt;$modelName&lt;/b&gt; &quot;
+    else
+      echo &quot;&lt;a href=&#39;./$modelName.html&#39;&gt;$modelName&lt;/a&gt; &quot;
+    fi
+  done
+  echo &#39;&lt;/span&gt;&#39;;
+}
+
+function createResultsIndexFile {
+  resultsIndexFile=&quot;${RESULTS_DIRECTORY}/index.html&quot;
+  echo &quot;Creating: $resultsIndexFile&quot;
+  {
+    echo &quot;$HEADER&lt;title&gt;$NAME: results&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&quot;
+    echo &quot;&lt;header&gt;&lt;p&gt;&lt;b&gt;$NAME&lt;/b&gt;&lt;/p&gt;&lt;/header&gt;&quot;
+    echo &quot;&lt;ul&gt;&quot;
+    for dir in &quot;$RESULTS_DIRECTORY&quot;/*; do
+      if [ -d &quot;$dir&quot; ]; then
+        echo &quot;&lt;li&gt;&lt;a href=&#39;${dir##*/}/index.html&#39;&gt;${dir##*/}&lt;/a&gt;&lt;/li&gt;&quot;
+      fi
+    done
+    echo &quot;&lt;/ul&gt;&quot;
+    echo &quot;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Created: $(date &#39;+%Y-%m-%d %H:%M:%S&#39;)&lt;/p&gt;&quot;
+    echo &quot;$FOOTER&quot;
+  } &gt; $resultsIndexFile
+}
+
+function createIndexFile {
+  indexFile=&quot;$directory/index.html&quot;
+  echo &quot;Creating: $indexFile&quot;
+  {
+    echo &quot;$HEADER&lt;title&gt;$NAME: $tag&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&quot;
+    echo &quot;&lt;header&gt;&lt;a href=&#39;../index.html&#39;&gt;$NAME&lt;/a&gt;: &lt;b&gt;$tag&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;&quot;
+    createMenu &quot;index&quot;
+    echo  &quot;&lt;/header&gt;&quot;
+    showPrompt
+    cat &lt;&lt;- &quot;EOF&quot;
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th class=&#39;left&#39;&gt;model&lt;/th&gt;
+    &lt;th&gt;words&lt;/th&gt;
+    &lt;th&gt;bytes&lt;/th&gt;
+    &lt;th&gt;total&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;load&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;prompt eval&lt;br /&gt;count&lt;/th&gt;
+    &lt;th&gt;prompt eval&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;prompt eval&lt;br /&gt;rate&lt;/th&gt;
+    &lt;th&gt;eval&lt;br /&gt;count&lt;/th&gt;
+    &lt;th&gt;eval&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;eval&lt;br /&gt;rate&lt;/th&gt;
+  &lt;/tr&gt;
+EOF
+  } &gt; &quot;$indexFile&quot;
+}
+
+function addModelToIndexFile {
+    responseWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;$responseBytes&lt;/td&gt;&quot;
+        while read -r line; do
+          value=$(echo &quot;$line&quot; | cut -d &#39;:&#39; -f2) # parse the stats file per line, splitting on : character, getting the second part as the value
+          if [[ -n &quot;$value&quot; ]]; then
+            echo &quot;&lt;td&gt;${value}&lt;/td&gt;&quot;;
+          fi
+        done &lt; &quot;$statsFile&quot;
+        echo &quot;&lt;/tr&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}
+
+function finishIndexFile {
+  {
+    echo &quot;&lt;/table&gt;&quot;
+    echo &quot;&lt;br /&gt;&lt;br /&gt;&lt;p&gt;Created: $(date &#39;+%Y-%m-%d %H:%M:%S&#39;)&lt;/p&gt;&quot;
+    echo &quot;$FOOTER&quot;
+  } &gt;&gt; &quot;$indexFile&quot;
+}
+
+function getStats {
+    stats=&quot;$(cat &quot;$statsFile&quot;)&quot; # get content of stats file
+    stats=&quot;total${stats#*total}&quot; # remove everything before the first occurrence of word &#39;total&#39;
+    stats=${stats%%&quot;$(tail -n1 &lt;&lt;&lt;&quot;$stats&quot;)&quot;} # remove the last line
+    echo &quot;$stats&quot; &gt; &quot;$statsFile&quot; # save cleaned stats
+}
+
+function createModelFile {
+      modelHtmlFile=&quot;$directory/$model.html&quot;
+      echo &quot;Creating: $modelHtmlFile&quot;
+      resultsWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+      resultsBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+      {
+        echo &quot;$HEADER&lt;title&gt;$NAME: $model&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&quot;
+        echo &quot;&lt;header&gt;&lt;a href=&#39;../index.html&#39;&gt;$NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;$model&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;&quot;
+        createMenu &quot;$model&quot;
+        echo &quot;&lt;/header&gt;&quot;
+        showPrompt
+        echo &quot;&lt;p&gt;Output: $model (&lt;a href=&#39;./$model.txt&#39;&gt;raw&lt;/a&gt;)  words:$resultsWords  bytes:$resultsBytes&lt;br /&gt;&quot;
+        textarea &quot;$(cat &quot;$modelFile&quot;)&quot; 5 30 # 5 padding, max 30 lines
+        echo &quot;&lt;/p&gt;&quot;
+        echo &quot;&lt;p&gt;Stats: $model (&lt;a href=&#39;./$model.stats.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;
+        textarea &quot;$stats&quot; 0 10 # 0 padding, max 10 lines
+        echo &quot;&lt;/p&gt;&quot;
+        echo &quot;&lt;p&gt;ollama Model Info: &lt;a target=&#39;ollama&#39; href=&#39;https://ollama.com/library/${model}&#39;&gt;$model&lt;/a&gt;&lt;/p&gt;&quot;
+        echo &quot;&lt;p&gt;Created: $(date &#39;+%Y-%m-%d %H:%M:%S&#39;)&lt;/p&gt;&quot;
+        echo &quot;$FOOTER&quot;
+      } &gt; &quot;$modelHtmlFile&quot;
+}
+
+setModels
+setPrompt
+createResultsDirectory
+savePrompt
+setHeaderAndFooter
+createResultsIndexFile
+createIndexFile
+
+# Loop through each model and run it with the given prompt
+for model in $models; do
+    echo; echo &quot;Running model: $model&quot;
+    modelFile=&quot;$directory/$model.txt&quot;
+    statsFile=&quot;$directory/$model.stats.txt&quot;
+    echo &quot;Creating: $modelFile&quot;
+    echo &quot;Creating: $statsFile&quot;
+    ollama run --verbose &quot;$model&quot; -- &quot;${prompt}&quot; &gt; &quot;$modelFile&quot; 2&gt; &quot;$statsFile&quot;
+    clear_model &quot;$model&quot;
+    getStats
+    createModelFile
+    addModelToIndexFile
+done
+
+finishIndexFile
+
+echo; echo &quot;Done: $directory/&quot;</textarea>
+</p>
+<p>Output: qwen2.5-coder:7b (<a href='./qwen2.5-coder:7b.txt'>raw</a>)  words:407  bytes:2770<br />
+<textarea readonly rows='30'>This Bash script is designed to run a prompt against all models in the Ollama platform and save the output as web pages. Here&#39;s a comprehensive code review:
+
+### General Structure and Readability:
+1. **Comments**: The script has good comments, which help in understanding the purpose of different sections and functions.
+2. **Formatting**: The script is well-formatted with consistent indentation and spacing, making it easy to read.
+
+### Functions and Logic:
+1. **Function Definitions**:
+   - Each function has a clear docstring explaining its purpose.
+   - Functions like `setModels`, `createResultsDirectory`, etc., are modular and do one thing well.
+
+2. **Main Execution Flow**:
+   - The script starts by setting up the environment (models, prompt, results directory).
+   - It then loops through each model, running the prompt through Ollama, saving the output, and generating web pages.
+   - This flow is logical and easy to follow.
+
+### Edge Cases and Error Handling:
+1. **Error Handling**:
+   - The script checks if models are available (`setModels`).
+   - It handles input from different sources (manual entry, file, pipe) gracefully.
+
+2. **Edge Cases**:
+   - The script checks for piped input (`if [ -t 0 ]; then ... else ... fi`).
+   - It sanitizes the tag used in directory names to avoid issues with special characters (`safeTag`).
+
+### Potential Improvements and Issues:
+1. **Hardcoded Paths**:
+   - Some paths are hardcoded (e.g., `&quot;$directory/index.html&quot;`). Consider making them configurable.
+
+2. **Security**:
+   - The script uses `expect` for interactive commands, which might not be the most secure approach. Ensure that the `expect` script is trusted and does not have security vulnerabilities.
+
+3. **Performance**:
+   - Running Ollama for each model sequentially might be slow if there are many models. Consider parallelizing this process.
+
+4. **User Feedback**:
+   - The script provides basic feedback (e.g., &quot;Running model: $model&quot;). Adding more detailed logs or progress indicators could improve user experience.
+
+5. **HTML Output**:
+   - The HTML generation is handled using Bash string manipulation and `textarea` function. Ensure that the output is valid HTML and handles edge cases (e.g., special characters in prompt content).
+
+6. **Dependency Management**:
+   - Ensure that all dependencies (`ollama`, `expect`, etc.) are installed and available on the system where this script runs.
+
+### Example of Enhanced Logging:
+```bash
+function log() {
+    local message=&quot;$1&quot;
+    echo &quot;$(date &#39;+%Y-%m-%d %H:%M:%S&#39;) - $message&quot;
+}
+```
+
+### Conclusion:
+The script is well-structured, readable, and functional for its intended purpose. With minor improvements in error handling, security, and performance, it could be even more robust and user-friendly.</textarea>
+</p>
+<p>Stats: qwen2.5-coder:7b (<a href='./qwen2.5-coder:7b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       13m39.535888381s
+load duration:        6.815925028s
+prompt eval count:    2638 token(s)
+prompt eval duration: 8m20.433726654s
+prompt eval rate:     5.27 tokens/s
+eval count:           609 token(s)
+eval duration:        5m12.281214293s
+eval rate:            1.95 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/qwen2.5-coder:7b'>qwen2.5-coder:7b</a></p>
+<p>Created: 2025-05-31 22:45:11</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+</body></html>

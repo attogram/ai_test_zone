@@ -1,0 +1,15 @@
+
+This script is a bash shell script that runs a prompt against all models installed in Ollama, and saves the output as web pages. The script requires several external commands to function correctly, including ollama, expect, awk, sed, tr, wc.
+
+The script starts by defining several variables, including the name of the script, its version number, and a URL where the source code can be found. It also sets up an array called "models" that contains the names of all the models installed in Ollama, sorted alphabetically.
+
+The next section of the script is used to set the prompt. If the script is being run interactively (i.e., it has a terminal attached to its stdin), it will ask the user to enter the prompt manually. If the script is being run from a file or a pipe, it will read the prompt from that input instead.
+
+The script then creates a directory called "results" where all the results will be saved. It also creates an index file in this directory that provides links to each of the individual result files. The index file includes some basic information about the run, such as the tag used and the date it was created.
+
+Next, the script loops through each model in the "models" array and runs it with the given prompt using the "ollama run" command. It saves the output of the run to a file called "$model.txt" in the "results" directory, and also saves some basic statistics about the run to a file called "$model.stats.txt". The script then clears the model from memory using the "ollama stop" command.
+
+After all the models have been run, the script creates an index file that provides links to each of the individual result files. This file also includes some basic information about the run, such as the tag used and the date it was created.
+
+Overall, this script is designed to be a quick and easy way to run a prompt against multiple models in Ollama and save the results as web pages. It provides a simple interface for entering the prompt and managing the output files, and it includes some basic features such as creating links to each result file and saving statistics about the runs.
+
