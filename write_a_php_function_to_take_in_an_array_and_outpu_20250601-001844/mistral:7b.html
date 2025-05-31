@@ -30,17 +30,15 @@
   words:18  bytes:86<br />
 <textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
 </p>
-<p>Output: mistral:7b (<a href='./mistral:7b.txt'>raw</a>)  words:83  bytes:606<br />
-<textarea readonly rows='30'> Here&#39;s a simple PHP function that takes an array as input and outputs an HTML unordered list (&lt;ul&gt;) with each item enclosed within a list item (&lt;li&gt;):
+<p>Output: mistral:7b (<a href='./mistral:7b.txt'>raw</a>)  words:119  bytes:822<br />
+<textarea readonly rows='30'> Here&#39;s a simple PHP function that takes an array as input and outputs an HTML unordered list (ul&gt;li) of its contents:
 
 ```php
 function arrayToHtmlList($array) {
     $html = &#39;&lt;ul&gt;&#39;;
-
-    foreach ($array as $item) {
-        $html .= &#39;&lt;li&gt;&#39; . htmlspecialchars($item) . &#39;&lt;/li&gt;&#39;;
+    foreach ($array as $value) {
+        $html .= &#39;&lt;li&gt;&#39; . htmlspecialchars($value) . &#39;&lt;/li&gt;&#39;;
     }
-
     $html .= &#39;&lt;/ul&gt;&#39;;
     return $html;
 }
@@ -49,31 +47,33 @@ function arrayToHtmlList($array) {
 You can use this function like so:
 
 ```php
-$myArray = [&#39;Apple&#39;, &#39;Banana&#39;, &#39;Cherry&#39;];
+$myArray = [&#39;apple&#39;, &#39;banana&#39;, &#39;orange&#39;];
 echo arrayToHtmlList($myArray);
 ```
 
-This will output the following HTML:
+This will output:
 
-```html
+```
 &lt;ul&gt;
-    &lt;li&gt;Apple&lt;/li&gt;
-    &lt;li&gt;Banana&lt;/li&gt;
-    &lt;li&gt;Cherry&lt;/li&gt;
+    &lt;li&gt;apple&lt;/li&gt;
+    &lt;li&gt;banana&lt;/li&gt;
+    &lt;li&gt;orange&lt;/li&gt;
 &lt;/ul&gt;
-```</textarea>
+```
+
+The `htmlspecialchars()` function in the example is used to prevent any special characters from being interpreted as HTML tags, ensuring proper display of the list items. If you&#39;re sure that the array contents are safe and contain no HTML tags, you can remove this line.</textarea>
 </p>
 <p>Stats: mistral:7b (<a href='./mistral:7b.stats.txt'>raw</a>)<br />
-<textarea readonly rows='9'>total duration:       58.773170165s
-load duration:        6.009695597s
+<textarea readonly rows='9'>total duration:       1m1.388497142s
+load duration:        5.724409234s
 prompt eval count:    23 token(s)
-prompt eval duration: 3.950996762s
-prompt eval rate:     5.82 tokens/s
-eval count:           219 token(s)
-eval duration:        48.810308753s
-eval rate:            4.49 tokens/s</textarea>
+prompt eval duration: 3.6371725s
+prompt eval rate:     6.32 tokens/s
+eval count:           256 token(s)
+eval duration:        52.025288614s
+eval rate:            4.92 tokens/s</textarea>
 </p>
 <p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></p>
-<p>Created: 2025-05-31 23:34:11</p>
-<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+<p>Created: 2025-06-01 00:28:25</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.1</p></footer>
 </body></html>

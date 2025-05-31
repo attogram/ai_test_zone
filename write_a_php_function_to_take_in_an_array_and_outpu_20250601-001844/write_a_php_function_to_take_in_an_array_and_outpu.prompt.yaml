@@ -1,6 +1,6 @@
 messages:
   - role: system
-    content:
+    content: ''
   - role: user
     content: |
       Write a PHP function to take in an array and output a html list of the array contents

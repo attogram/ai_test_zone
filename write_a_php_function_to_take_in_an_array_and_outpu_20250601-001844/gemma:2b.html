@@ -30,62 +30,56 @@
   words:18  bytes:86<br />
 <textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
 </p>
-<p>Output: gemma:2b (<a href='./gemma:2b.txt'>raw</a>)  words:160  bytes:1000<br />
+<p>Output: gemma:2b (<a href='./gemma:2b.txt'>raw</a>)  words:134  bytes:864<br />
 <textarea readonly rows='30'>```php
-&lt;?php
-
-function array_to_html_list($array) {
-  $output = &quot;&lt;ul&gt;&quot;;
-  foreach ($array as $key =&gt; $value) {
-    $output .= &quot;&lt;li&gt;&quot; . $key . &quot;: &quot; . $value . &quot;&lt;/li&gt;&quot;;
-  }
-  $output .= &quot;&lt;/ul&gt;&quot;;
-  return $output;
+function display_array($array) {
+    $output = &#39;&lt;ul&gt;&#39;;
+    foreach ($array as $key =&gt; $value) {
+        $output .= &#39;&lt;li&gt;&#39; . $key . &#39;: &#39; . $value . &#39;&lt;/li&gt;&#39;;
+    }
+    $output .= &#39;&lt;/ul&gt;&#39;;
+    return $output;
 }
 
 // Example usage
-$array = array(
-  &quot;name&quot; =&gt; &quot;John&quot;,
-  &quot;age&quot; =&gt; 30,
-  &quot;city&quot; =&gt; &quot;New York&quot;
+$my_array = array(
+    &#39;name&#39; =&gt; &#39;John Doe&#39;,
+    &#39;age&#39; =&gt; 30,
+    &#39;city&#39; =&gt; &#39;New York&#39;
 );
 
-echo array_to_html_list($array);
-
-?&gt;
-&lt;/start_of_turn&gt;
+echo display_array($my_array);
 ```
 
 **Output:**
 
 ```html
 &lt;ul&gt;
-  &lt;li&gt;name: John&lt;/li&gt;
-  &lt;li&gt;age: 30&lt;/li&gt;
-  &lt;li&gt;city: New York&lt;/li&gt;
+    &lt;li&gt;name: John Doe&lt;/li&gt;
+    &lt;li&gt;age: 30&lt;/li&gt;
+    &lt;li&gt;city: New York&lt;/li&gt;
 &lt;/ul&gt;
 ```
 
 **Explanation:**
 
-* The `array_to_html_list()` function takes an array as input.
+* The `display_array()` function takes an array as input.
 * It uses a `foreach` loop to iterate through the array.
-* Inside the loop, it adds an `&lt;li&gt;` tag to the output string for each key-value pair.
-* The `$key` variable holds the key of the current element, and the `$value` variable holds the value of the current element.
-* The `$output` string is built up by concatenating the `&lt;li&gt;` tags with the key and value separated by a colon and a space.
-* Finally, the function returns the output string.</textarea>
+* Inside the loop, it adds an `&lt;li&gt;` tag to the output string with the key and value of each element.
+* The `return` statement returns the output string.
+* The example code creates an array and calls the `display_array()` function to output the HTML list.</textarea>
 </p>
 <p>Stats: gemma:2b (<a href='./gemma:2b.stats.txt'>raw</a>)<br />
-<textarea readonly rows='9'>total duration:       31.348889788s
-load duration:        2.385998359s
+<textarea readonly rows='9'>total duration:       25.644262813s
+load duration:        2.686560034s
 prompt eval count:    40 token(s)
-prompt eval duration: 819.993494ms
-prompt eval rate:     48.78 tokens/s
-eval count:           334 token(s)
-eval duration:        28.140244408s
-eval rate:            11.87 tokens/s</textarea>
+prompt eval duration: 920.731816ms
+prompt eval rate:     43.44 tokens/s
+eval count:           278 token(s)
+eval duration:        22.035262856s
+eval rate:            12.62 tokens/s</textarea>
 </p>
 <p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/gemma:2b'>gemma:2b</a></p>
-<p>Created: 2025-05-31 23:32:03</p>
-<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+<p>Created: 2025-06-01 00:25:58</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.1</p></footer>
 </body></html>

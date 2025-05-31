@@ -1,0 +1,35 @@
+Here's an example PHP function that takes in an array and outputs a HTML list of its contents:
+```php
+function make_list($array) {
+ echo "<ul";
+ foreach ($array as $key => $value) {
+ if (is_array($value)) {
+ echo " " . ucfirst(strtolower($key)) . ": ";
+ if (is_array($value)) {
+ echo make_list($value);
+ } else {
+ echo "$value";
+ }
+ } else {
+ echo "$value";
+ }
+ }
+ echo "</ul>";
+}
+```
+To use it, simply call the function with your array:
+```php
+$fruits = ["Apple", "Banana", "Grapes", "Orange"];
+make_list($fruits);
+```
+This will output a HTML list of the fruits that looks like this:
+```html
+
+
+* Apple
+* Banana
+* Grapes
+* Orange
+ 
+```
+

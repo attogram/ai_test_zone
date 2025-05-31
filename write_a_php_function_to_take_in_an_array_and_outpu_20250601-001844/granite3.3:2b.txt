@@ -1,0 +1,38 @@
+Here is a simple PHP function that will convert an array into an HTML unordered list (`<ul>`):
+
+```php
+function array_to_html_list($arr) {
+    $htmlList = "<ul>";
+
+    foreach ($arr as $value) {
+        $htmlList .= "<li>{$value}</li>";
+    }
+
+    $htmlList = preg_replace('/<li>\s*<\/li>/', '', $htmlList); // Remove extra newlines
+    $htmlList = rtrim($htmlList, "\n"); // Remove trailing newline
+
+    $htmlList .= "</ul>";
+
+    return $htmlList;
+}
+```
+
+This function iterates through each element in the input array and appends a `<li>` tag around it. After all elements are processed, it removes any extra newlines created by the HTML tags and returns the complete HTML list as a string.
+
+You can use this function like so:
+
+```php
+$array = ["Apple", "Banana", "Cherry"];
+echo array_to_html_list($array);
+```
+
+This will output the following HTML:
+
+```html
+<ul>
+<li>Apple</li>
+<li>Banana</li>
+<li>Cherry</li>
+</ul>
+```
+
