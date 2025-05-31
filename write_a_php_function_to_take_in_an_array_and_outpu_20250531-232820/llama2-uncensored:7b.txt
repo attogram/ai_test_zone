@@ -1,0 +1,12 @@
+Sure, here is a PHP function that takes in an array as input and outputs a HTML list of the array contents:
+```php
+function makeList($array) {
+ echo "<ol";
+ foreach ($array as $item) {
+ echo " <li>$item";
+ }
+ echo "</ol>";
+}
+```
+This function first initializes an empty string to store the output. It then uses a `foreach` loop to iterate over each item in the array. Inside the loop, it checks if the current item is not equal to `` (empty string) and then outputs it as a list item with a space before and after it. Finally, the function ends the HTML list using an `echo` statement.
+

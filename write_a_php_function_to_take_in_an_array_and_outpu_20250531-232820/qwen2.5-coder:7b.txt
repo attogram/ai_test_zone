@@ -1,0 +1,50 @@
+Certainly! Below is a simple PHP function that takes an array as input and outputs an HTML unordered list (`<ul>`) containing the elements of the array.
+
+```php
+<?php
+function arrayToHtmlList($array) {
+    if (!is_array($array)) {
+        return "<p>The provided input is not an array.</p>";
+    }
+
+    // Start the unordered list
+    $html = "<ul>";
+
+    // Loop through each element in the array and add it to the list
+    foreach ($array as $item) {
+        $html .= "<li>" . htmlspecialchars($item) . "</li>";
+    }
+
+    // Close the unordered list
+    $html .= "</ul>";
+
+    return $html;
+}
+
+// Example usage:
+$array = ["Apple", "Banana", "Cherry"];
+echo arrayToHtmlList($array);
+?>
+```
+
+### Explanation:
+1. **Function Definition**: The function `arrayToHtmlList` takes one parameter, `$array`.
+2. **Type Check**: It checks if the input is an array using `is_array()`. If not, it returns a simple error message.
+3. **HTML Initialization**: It starts by initializing an HTML string with `<ul>`.
+4. **Loop Through Array**: It uses a `foreach` loop to iterate over each element in the array. The `htmlspecialchars()` function is used to ensure that any special characters in the array elements are properly escaped, preventing XSS attacks.
+5. **List Item Addition**: For each element, it adds a list item (`<li>`) to the HTML string.
+6. **Close List**: Finally, it closes the unordered list with `</ul>`.
+
+### Example Output:
+If you run the example usage with the array `["Apple", "Banana", "Cherry"]`, the output will be:
+
+```html
+<ul>
+    <li>Apple</li>
+    <li>Banana</li>
+    <li>Cherry</li>
+</ul>
+```
+
+This function can be used to dynamically generate HTML lists from PHP arrays.
+

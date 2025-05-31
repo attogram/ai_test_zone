@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>write_a_php_function_to_take_in_an_array_and_outpu</a>: <b>dolphin3:8b</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_php_function_to_take_in_an_array_and_outpu.prompt.yaml'>yaml</a>)
+  words:18  bytes:86<br />
+<textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3:8b.txt'>raw</a>)  words:80  bytes:508<br />
+<textarea readonly rows='30'>Here&#39;s a simple example of how you can write a PHP function to convert an array into an HTML unordered list:
+
+```php
+function arrayToHtmlList($arr) {
+  $html = &#39;&lt;ul&gt;&#39;;
+  foreach ($arr as $item) {
+    $html .= &#39;&lt;li&gt;&#39; . htmlspecialchars($item) . &#39;&lt;/li&gt;&#39;;
+  }
+  $html .= &#39;&lt;/ul&gt;&#39;;
+  return $html;
+}
+```
+
+You can use this function like so:
+
+```php
+$array = [&#39;Item 1&#39;, &#39;Item 2&#39;, &#39;Item 3&#39;];
+echo arrayToHtmlList($array);
+```
+This will output:
+```html
+&lt;ul&gt;
+&lt;li&gt;Item 1&lt;/li&gt;
+&lt;li&gt;Item 2&lt;/li&gt;
+&lt;li&gt;Item 3&lt;/li&gt;
+&lt;/ul&gt;
+```</textarea>
+</p>
+<p>Stats: dolphin3:8b (<a href='./dolphin3:8b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       52.689371364s
+load duration:        8.243218099s
+prompt eval count:    41 token(s)
+prompt eval duration: 8.291874162s
+prompt eval rate:     4.94 tokens/s
+eval count:           160 token(s)
+eval duration:        36.152830295s
+eval rate:            4.43 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></p>
+<p>Created: 2025-05-31 23:31:29</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+</body></html>

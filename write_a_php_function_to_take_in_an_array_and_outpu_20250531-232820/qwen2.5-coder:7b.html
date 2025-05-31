@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: qwen2.5-coder:7b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>write_a_php_function_to_take_in_an_array_and_outpu</a>: <b>qwen2.5-coder:7b</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<b>qwen2.5-coder:7b</b> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_php_function_to_take_in_an_array_and_outpu.prompt.yaml'>yaml</a>)
+  words:18  bytes:86<br />
+<textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: qwen2.5-coder:7b (<a href='./qwen2.5-coder:7b.txt'>raw</a>)  words:251  bytes:1688<br />
+<textarea readonly rows='30'>Certainly! Below is a simple PHP function that takes an array as input and outputs an HTML unordered list (`&lt;ul&gt;`) containing the elements of the array.
+
+```php
+&lt;?php
+function arrayToHtmlList($array) {
+    if (!is_array($array)) {
+        return &quot;&lt;p&gt;The provided input is not an array.&lt;/p&gt;&quot;;
+    }
+
+    // Start the unordered list
+    $html = &quot;&lt;ul&gt;&quot;;
+
+    // Loop through each element in the array and add it to the list
+    foreach ($array as $item) {
+        $html .= &quot;&lt;li&gt;&quot; . htmlspecialchars($item) . &quot;&lt;/li&gt;&quot;;
+    }
+
+    // Close the unordered list
+    $html .= &quot;&lt;/ul&gt;&quot;;
+
+    return $html;
+}
+
+// Example usage:
+$array = [&quot;Apple&quot;, &quot;Banana&quot;, &quot;Cherry&quot;];
+echo arrayToHtmlList($array);
+?&gt;
+```
+
+### Explanation:
+1. **Function Definition**: The function `arrayToHtmlList` takes one parameter, `$array`.
+2. **Type Check**: It checks if the input is an array using `is_array()`. If not, it returns a simple error message.
+3. **HTML Initialization**: It starts by initializing an HTML string with `&lt;ul&gt;`.
+4. **Loop Through Array**: It uses a `foreach` loop to iterate over each element in the array. The `htmlspecialchars()` function is used to ensure that any special characters in the array elements are properly escaped, preventing XSS attacks.
+5. **List Item Addition**: For each element, it adds a list item (`&lt;li&gt;`) to the HTML string.
+6. **Close List**: Finally, it closes the unordered list with `&lt;/ul&gt;`.
+
+### Example Output:
+If you run the example usage with the array `[&quot;Apple&quot;, &quot;Banana&quot;, &quot;Cherry&quot;]`, the output will be:
+
+```html
+&lt;ul&gt;
+    &lt;li&gt;Apple&lt;/li&gt;
+    &lt;li&gt;Banana&lt;/li&gt;
+    &lt;li&gt;Cherry&lt;/li&gt;
+&lt;/ul&gt;
+```
+
+This function can be used to dynamically generate HTML lists from PHP arrays.</textarea>
+</p>
+<p>Stats: qwen2.5-coder:7b (<a href='./qwen2.5-coder:7b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       1m42.714880168s
+load duration:        7.132164105s
+prompt eval count:    47 token(s)
+prompt eval duration: 6.831395343s
+prompt eval rate:     6.88 tokens/s
+eval count:           424 token(s)
+eval duration:        1m28.747658382s
+eval rate:            4.78 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/qwen2.5-coder:7b'>qwen2.5-coder:7b</a></p>
+<p>Created: 2025-05-31 23:35:56</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+</body></html>

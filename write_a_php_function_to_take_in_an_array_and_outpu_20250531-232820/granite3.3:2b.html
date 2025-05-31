@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: granite3.3:2b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>write_a_php_function_to_take_in_an_array_and_outpu</a>: <b>granite3.3:2b</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<b>granite3.3:2b</b> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_php_function_to_take_in_an_array_and_outpu.prompt.yaml'>yaml</a>)
+  words:18  bytes:86<br />
+<textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: granite3.3:2b (<a href='./granite3.3:2b.txt'>raw</a>)  words:80  bytes:606<br />
+<textarea readonly rows='30'>Here is a simple PHP function that takes an array as input and outputs an HTML unordered list (`ul`) containing the array elements:
+
+```php
+function array_to_html_list($array) {
+    $htmlList = &quot;&lt;ul&gt;&quot;;
+
+    // Iterate through the array
+    foreach ($array as $value) {
+        $htmlList .= &quot;&lt;li&gt;$value&lt;/li&gt;&quot;;
+    }
+
+    $htmlList .= &quot;&lt;/ul&gt;&quot;;
+
+    return $htmlList;
+}
+```
+
+You can use this function like so:
+
+```php
+$data = [&quot;Apple&quot;, &quot;Banana&quot;, &quot;Cherry&quot;];
+echo array_to_html_list($data);
+```
+
+This will output the following HTML:
+
+```html
+&lt;ul&gt;
+  &lt;li&gt;Apple&lt;/li&gt;
+  &lt;li&gt;Banana&lt;/li&gt;
+  &lt;li&gt;Cherry&lt;/li&gt;
+&lt;/ul&gt;
+```</textarea>
+</p>
+<p>Stats: granite3.3:2b (<a href='./granite3.3:2b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       21.003526042s
+load duration:        2.707412156s
+prompt eval count:    61 token(s)
+prompt eval duration: 2.292568589s
+prompt eval rate:     26.61 tokens/s
+eval count:           191 token(s)
+eval duration:        16.001769642s
+eval rate:            11.94 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/granite3.3:2b'>granite3.3:2b</a></p>
+<p>Created: 2025-05-31 23:32:27</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+</body></html>

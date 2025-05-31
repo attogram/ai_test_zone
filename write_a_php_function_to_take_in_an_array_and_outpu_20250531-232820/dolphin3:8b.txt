@@ -1,0 +1,28 @@
+Here's a simple example of how you can write a PHP function to convert an array into an HTML unordered list:
+
+```php
+function arrayToHtmlList($arr) {
+  $html = '<ul>';
+  foreach ($arr as $item) {
+    $html .= '<li>' . htmlspecialchars($item) . '</li>';
+  }
+  $html .= '</ul>';
+  return $html;
+}
+```
+
+You can use this function like so:
+
+```php
+$array = ['Item 1', 'Item 2', 'Item 3'];
+echo arrayToHtmlList($array);
+```
+This will output:
+```html
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+</ul>
+```
+

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: codellama:7b</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <a href='./index.html'>write_a_php_function_to_take_in_an_array_and_outpu</a>: <b>codellama:7b</b><br /><br />
+<span class='menu'>models: 
+<b>codellama:7b</b> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_php_function_to_take_in_an_array_and_outpu.prompt.yaml'>yaml</a>)
+  words:18  bytes:86<br />
+<textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: codellama:7b (<a href='./codellama:7b.txt'>raw</a>)  words:135  bytes:796<br />
+<textarea readonly rows='24'>```
+&lt;?php
+function list_array($arr) {
+  $html = &#39;&lt;ul&gt;&#39;;
+  foreach ($arr as $item) {
+    $html .= &#39;&lt;li&gt;&#39; . $item . &#39;&lt;/li&gt;&#39;;
+  }
+  $html .= &#39;&lt;/ul&gt;&#39;;
+  return $html;
+}
+```
+This function takes in an array as input and returns a string of HTML that represents the list of items in the array. The `foreach` loop iterates over the array and adds each item to the `$html` variable, which is initialized with a `&lt;ul&gt;` tag. Each item is then added to the `$html` variable inside an `&lt;li&gt;` tag. Finally, the function returns the `$html` variable containing the entire list of items in HTML format.
+
+You can use this function like this:
+```
+$arr = array(&#39;apple&#39;, &#39;banana&#39;, &#39;cherry&#39;);
+echo list_array($arr);
+```
+This will output a list of the array&#39;s contents, with each item displayed inside an `&lt;li&gt;` tag.</textarea>
+</p>
+<p>Stats: codellama:7b (<a href='./codellama:7b.stats.txt'>raw</a>)<br />
+<textarea readonly rows='9'>total duration:       46.134153176s
+load duration:        6.598303509s
+prompt eval count:    38 token(s)
+prompt eval duration: 3.265875047s
+prompt eval rate:     11.64 tokens/s
+eval count:           226 token(s)
+eval duration:        36.25929069s
+eval rate:            6.23 tokens/s</textarea>
+</p>
+<p>ollama Model Info: <a target='ollama' href='https://ollama.com/library/codellama:7b'>codellama:7b</a></p>
+<p>Created: 2025-05-31 23:29:09</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+</body></html>
