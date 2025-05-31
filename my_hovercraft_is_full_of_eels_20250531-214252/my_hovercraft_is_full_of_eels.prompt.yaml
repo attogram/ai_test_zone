@@ -1,6 +1,6 @@
 name: my_hovercraft_is_full_of_eels
 description: 
-model: 
+model: ollama-multirun
 messages:
   - role: system
     content:

@@ -1,6 +1,6 @@
 name: do_a_code_review_of_this_script____bin_bash___
 description: 
-model: 
+model: ollama-multirun
 messages:
   - role: system
     content:

@@ -1,6 +1,6 @@
 name: __socrates_is_a_human___all_humans_are_mortal___
 description: 
-model: 
+model: ollama-multirun
 messages:
   - role: system
     content:
