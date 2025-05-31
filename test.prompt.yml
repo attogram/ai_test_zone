@@ -1,0 +1,6 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: My hovercraft is full of eels
+model: openai/gpt-4o
