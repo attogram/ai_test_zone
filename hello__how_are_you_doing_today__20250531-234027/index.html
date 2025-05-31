@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: monospace; }
+  textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+  header, footer { background-color: #f0f0f0; padding: 10px; }
+  .menu { font-size: small; }
+  table, td, th { border-collapse: collapse; }
+  td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+  .left { text-align: left; }
+  li { margin: 5px; }
+</style><title>ollama multirun: hello__how_are_you_doing_today_</title></head><body>
+<header><a href='../index.html'>ollama multirun</a>: <b>hello__how_are_you_doing_today_</b><br /><br />
+<span class='menu'>models: 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./hello__how_are_you_doing_today_.prompt.yaml'>yaml</a>)
+  words:6  bytes:32<br />
+<textarea readonly rows='1'>Hello, how are you doing today?</textarea>
+</p>
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr><td class='left'><a href='./codellama:7b.html'>codellama:7b</a></td><td >23</td><td>127</td>
+<td>       14.776807834s</td>
+<td>        6.32795008s</td>
+<td>    28 token(s)</td>
+<td> 2.942412016s</td>
+<td>     9.52 tokens/s</td>
+<td>           35 token(s)</td>
+<td>        5.499387673s</td>
+<td>            6.36 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a></td><td >32</td><td>175</td>
+<td>       3.700524817s</td>
+<td>        1.735032008s</td>
+<td>    11 token(s)</td>
+<td> 142.329834ms</td>
+<td>     77.29 tokens/s</td>
+<td>           44 token(s)</td>
+<td>        1.820353639s</td>
+<td>            24.17 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./dolphin3:8b.html'>dolphin3:8b</a></td><td >15</td><td>80</td>
+<td>       12.489673342s</td>
+<td>        5.429088752s</td>
+<td>    31 token(s)</td>
+<td> 3.467485184s</td>
+<td>     8.94 tokens/s</td>
+<td>           20 token(s)</td>
+<td>        3.59166468s</td>
+<td>            5.57 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./gemma:2b.html'>gemma:2b</a></td><td >23</td><td>143</td>
+<td>       5.133889944s</td>
+<td>        2.350306706s</td>
+<td>    30 token(s)</td>
+<td> 520.849752ms</td>
+<td>     57.60 tokens/s</td>
+<td>           35 token(s)</td>
+<td>        2.261000862s</td>
+<td>            15.48 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./granite3.3:2b.html'>granite3.3:2b</a></td><td >24</td><td>145</td>
+<td>       5.168353706s</td>
+<td>        1.609538498s</td>
+<td>    51 token(s)</td>
+<td> 1.168833235s</td>
+<td>     43.63 tokens/s</td>
+<td>           37 token(s)</td>
+<td>        2.388248928s</td>
+<td>            15.49 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./llama2-uncensored:7b.html'>llama2-uncensored:7b</a></td><td >7</td><td>34</td>
+<td>       9.42481201s</td>
+<td>        5.581249181s</td>
+<td>    30 token(s)</td>
+<td> 2.483822802s</td>
+<td>     12.08 tokens/s</td>
+<td>           10 token(s)</td>
+<td>        1.358192705s</td>
+<td>            7.36 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./mistral:7b.html'>mistral:7b</a></td><td >46</td><td>220</td>
+<td>       16.511844991s</td>
+<td>        4.473966176s</td>
+<td>    13 token(s)</td>
+<td> 2.093566144s</td>
+<td>     6.21 tokens/s</td>
+<td>           60 token(s)</td>
+<td>        9.943227321s</td>
+<td>            6.03 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a></td><td >36</td><td>186</td>
+<td>       16.973946501s</td>
+<td>        4.873059961s</td>
+<td>    37 token(s)</td>
+<td> 4.181381509s</td>
+<td>     8.85 tokens/s</td>
+<td>           45 token(s)</td>
+<td>        7.91786627s</td>
+<td>            5.68 tokens/s</td>
+</tr>
+<tr><td class='left'><a href='./qwen3:1.7b.html'>qwen3:1.7b</a></td><td >126</td><td>740</td>
+<td>       10.898302963s</td>
+<td>        2.226993595s</td>
+<td>    16 token(s)</td>
+<td> 232.3224ms</td>
+<td>     68.87 tokens/s</td>
+<td>           171 token(s)</td>
+<td>        8.437472496s</td>
+<td>            20.27 tokens/s</td>
+</tr>
+</table>
+<br /><br /><p>Created: 2025-05-31 23:42:23</p>
+<footer><p>Generated with <a target='ollama multirun' href='https://github.com/attogram/ollama-multirun'>ollama multirun</a> v2.0</p></footer>
+</body></html>

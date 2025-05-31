@@ -1,0 +1,7 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: |
+      Hello, how are you doing today?
+model: ''
