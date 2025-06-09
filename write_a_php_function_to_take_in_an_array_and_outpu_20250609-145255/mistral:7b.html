@@ -1,0 +1,112 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_php_function_to_take_in_an_array_and_outpu</a>: <b>mistral:7b</b>: 20250609-145255<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./starcoder:7b.html'>starcoder:7b</a> 
+<a href='./stable-code:3b.html'>stable-code:3b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<b>mistral:7b</b> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_php_function_to_take_in_an_array_and_outpu.prompt.yaml'>yaml</a>)
+  words:18  bytes:86<br />
+<textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral:7b.txt'>raw</a>)<br />
+<textarea readonly rows='25'> Here&#39;s a simple PHP function that takes an array as an argument and outputs an HTML unordered list (`&lt;ul&gt;`) containing the items from the array:
+
+```php
+function arrayToHtmlList($array) {
+    $html = &#39;&lt;ul&gt;&#39;;
+
+    foreach ($array as $item) {
+        $html .= &quot;&lt;li&gt;&quot; . htmlspecialchars($item) . &quot;&lt;/li&gt;&quot;;
+    }
+
+    $html .= &#39;&lt;/ul&gt;&#39;;
+
+    return $html;
+}
+```
+
+You can use this function in your PHP code like so:
+
+```php
+$myArray = [&#39;Apple&#39;, &#39;Banana&#39;, &#39;Orange&#39;];
+echo arrayToHtmlList($myArray);
+```
+
+The output will be:
+
+```html
+&lt;ul&gt;
+    &lt;li&gt;Apple&lt;/li&gt;
+    &lt;li&gt;Banana&lt;/li&gt;
+    &lt;li&gt;Orange&lt;/li&gt;
+&lt;/ul&gt;
+```
+
+This example uses the `htmlspecialchars()` function to escape any special characters in the array items to ensure that they are properly displayed within the HTML.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral:7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>108</td></tr>
+<tr><td class='left'>bytes</td><td>766</td></tr>
+<tr><td class='left'>total duration</td><td>14.973896709s</td></tr>
+<tr><td class='left'>load duration</td><td>2.561505375s</td></tr>
+<tr><td class='left'>prompt eval count</td><td>23 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>456.958792ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>50.33 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>249 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>11.9543355s</td></tr>
+<tr><td class='left'>eval rate</td><td>20.83 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral:7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1538M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p>page created:   2025-06-09 14:54:59</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v4.2</p>
+</footer></body></html>

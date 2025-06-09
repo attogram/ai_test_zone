@@ -1,0 +1,29 @@
+ -> No!
+```
+
+## What happens if we remove `All humans are mortal.` from the definition of Socrates?
+
+```prolog
+human(X) :- X != socrates, X is_a human.
+mortal(socrates). %  - The word "is_a" is unrecognized by Prolog, so we cannot solve this query!
+```
+
+## What is the answer to the following question?
+
+> Which of these clauses describes a set?
+
+* `1. all human are mortal.`
+* `2. all humans are male.`
+* `3. some human is male`
+* `4. every male human is human`
+
+## Is it correct to say that Prolog has "Horn Clauses"?
+
+No! If we remove the first clause (`human(X) :- X != socrates, X is_a human`), then there are no more clauses left which can possibly be satisfied. This means the following query will never return any results:
+
+```prolog
+?- mortal(socrates).
+```
+
+
+

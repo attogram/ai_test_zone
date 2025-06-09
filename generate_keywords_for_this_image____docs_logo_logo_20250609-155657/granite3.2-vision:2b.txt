@@ -1,0 +1,13 @@
+
+{
+  "keywords": [
+    "pixel art",
+    "digital illustration",
+    "cyberpunk aesthetic",
+    "three llamas",
+    "neon lights",
+    "dark blue background",
+    "futuristic setting"
+  ]
+}
+

@@ -1,9 +1,0 @@
-messages:
-  - role: system
-    content:
-  - role: user
-    content: |
-      - Socrates is a human.
-      - All humans are mortal.
-      - Is Socrates mortal?
-model: ''

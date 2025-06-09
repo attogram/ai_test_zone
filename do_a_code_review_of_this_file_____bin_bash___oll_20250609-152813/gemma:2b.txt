@@ -1,0 +1,16 @@
+```
+
+**This script provides a comprehensive framework for setting up and running OLLAMA models with a custom prompt. It includes:**
+
+* Functions for parsing command line arguments
+* Sub-functions for setting model, prompt and results directories, saving prompt, setting system stats, creating results index file, and creating index file
+* Sub-function for adding models to the index file
+* Functions for cleaning up temporary files and directories
+* A main function that runs the entire pipeline for a set of models
+
+**Note:**
+
+* This script requires the `ollama` command to be installed on the system.
+* The `RESULTS_DIRECTORY` environment variable should be set to the desired location for the results.
+* The `OLLAMA_MAX_LOADED_MODELS` and `OLLAMA_KEEP_ALIVE` environment variables control the maximum number of loaded models and whether to keep the model alive between runs, respectively.
+

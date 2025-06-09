@@ -1,0 +1,35 @@
+Certainly! Below is a Python function that takes an array (or any iterable) as input and outputs an HTML unordered list (`<ul>`) containing the elements of the array.
+
+```python
+def array_to_html_list(array):
+    # Start with the opening tag for the unordered list
+    html = '<ul>\n'
+    
+    # Iterate over each item in the array
+    for item in array:
+        # Add a list item tag with the current item
+        html += f'  <li>{item}</li>\n'
+    
+    # Close the unordered list tag
+    html += '</ul>'
+    
+    return html
+
+# Example usage:
+array = ['Apple', 'Banana', 'Cherry']
+html_list = array_to_html_list(array)
+print(html_list)
+```
+
+When you run this code with the example array, it will output:
+
+```html
+<ul>
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Cherry</li>
+</ul>
+```
+
+This function can be easily adapted to work with any iterable, not just lists.
+

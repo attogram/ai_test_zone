@@ -1,0 +1,112 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>dolphin3:8b</b>: 20250609-145743<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./starcoder:7b.html'>starcoder:7b</a> 
+<a href='./stable-code:3b.html'>stable-code:3b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_python_function_to_take_in_an_array_and_ou.prompt.yaml'>yaml</a>)
+  words:18  bytes:89<br />
+<textarea readonly rows='1'>Write a python function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3:8b.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Here is a Python function that takes an array as input and outputs an HTML unordered list:
+
+```python
+def array_to_html_list(array):
+    # Start with the opening &lt;ul&gt; tag
+    html_list = &quot;&lt;ul&gt;&quot;
+    
+    # Iterate through each item in the array
+    for item in array:
+        # Add an &lt;li&gt; element for each item, followed by its value
+        html_list += f&quot;&lt;li&gt;{item}&lt;/li&gt;&quot;
+    
+    # Close the &lt;ul&gt; tag after all items have been added
+    html_list += &quot;&lt;/ul&gt;&quot;
+    
+    # Return the final HTML list string
+    return html_list
+
+# Example usage:
+my_array = [&quot;Apple&quot;, &quot;Banana&quot;, &quot;Cherry&quot;]
+print(array_to_html_list(my_array))
+```
+
+This code will output:
+
+```html
+&lt;ul&gt;
+  &lt;li&gt;Apple&lt;/li&gt;
+  &lt;li&gt;Banana&lt;/li&gt;
+  &lt;li&gt;Cherry&lt;/li&gt;
+&lt;/ul&gt;
+```
+
+Each item in the array becomes a list item (`&lt;li&gt;` element) within the unordered list (`&lt;ul&gt;`).</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./dolphin3:8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>117</td></tr>
+<tr><td class='left'>bytes</td><td>825</td></tr>
+<tr><td class='left'>total duration</td><td>16.476848417s</td></tr>
+<tr><td class='left'>load duration</td><td>3.221474875s</td></tr>
+<tr><td class='left'>prompt eval count</td><td>41 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>556.111666ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>73.73 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>224 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>12.698825709s</td></tr>
+<tr><td class='left'>eval rate</td><td>17.64 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./dolphin3:8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>11G + 1847M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p>page created:   2025-06-09 14:59:42</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v4.2</p>
+</footer></body></html>

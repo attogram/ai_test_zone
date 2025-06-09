@@ -1,0 +1,10 @@
+ This script is for generating HTML pages using Ollama, a large language model. The generated pages contain the output of a specified prompt from the provided models and additional information such as word count, byte size, total duration, load duration, prompt evaluation metrics, and system details.
+
+The script starts by parsing command-line arguments to set various variables such as project name, directory for results, and model files. It then sets up the environment for Ollama and initializes some variables like models, prompt, results directory, and system stats.
+
+Next, it creates a results index file with links to each result's index page. Then, an index file is created that contains information about the total run (like system details) and a table listing each model along with various metrics.
+
+For each model, the script runs Ollama using the specified prompt, saves the output to a text file and stats to a separate file. It then creates a new HTML page for the model, setting up tables displaying information about the model, its output, and other relevant metrics. The created pages are linked to the results index page.
+
+Finally, the script finishes the index file by adding system details and creating the necessary images folder if it doesn't exist.
+

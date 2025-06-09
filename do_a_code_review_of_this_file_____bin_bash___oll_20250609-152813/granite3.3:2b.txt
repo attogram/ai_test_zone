@@ -1,0 +1,25 @@
+This script automates the process of running text generation models (like those available through Ollama) with provided prompts, collecting and storing statistics, and generating HTML files for model outputs, index files, and results. Here's a breakdown of what it does:
+
+1. **Setup**: It starts by defining variables and functions that handle various tasks such as creating header/footer content, running models, collecting statistics, managing output, etc.
+
+2. **Parsing command-line arguments** (parseCommandLine): This part parses any additional arguments passed to the script for customization purposes.
+
+3. **Setting up system environment**: It sets OLLAMA_MAX_LOADED_MODELS to 1 and disables keepalive mode for Ollama (`ollama run --verbose "$model" -- "${prompt}" > "$modelFile" 2> "$statsFile"`).
+
+4. **Creating directories (if not already present)**: It creates a dedicated directory for results, output files, and models if they don't exist.
+
+5. **Running the model with the prompt**: For each specified model, it generates an output file (`model.txt`) and a statistics file (`model.stats.txt`), storing them alongside their respective model names. It also collects various system stats like Ollama version, processor type, memory usage, and operating system details.
+
+6. **Processing and displaying results**: The script processes the generated data to create HTML content for the output files, index file (for models), and statistics files. It then fills in these templates with the collected information and saves them as HTML files (`index.html`, `results_index.html`).
+
+7. **Adding model entries to index files**: It dynamically adds each processed model's link to the main index file for easy browsing.
+
+8. **Finishing up**: It concludes by applying necessary cleaning operations and ensures that all HTML files are generated accurately.
+
+To execute this script, you need:
+- A text generation model like those available through Ollama (which is a convenient API gateway to various LLMs).
+- The specified `prompt` text input for each model run.
+- Basic text editing/HTML knowledge for customizing the look and feel of output files if needed.
+
+This script offers an automated solution for generating outputs from multiple models, collecting relevant statistics, and organizing them into easily navigable HTML files.
+

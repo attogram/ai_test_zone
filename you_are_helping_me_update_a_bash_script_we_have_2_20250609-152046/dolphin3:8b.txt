@@ -1,0 +1,61 @@
+Here's an example of how you can read and parse the two text files:
+
+```bash
+#!/bin/bash
+
+# Read and parse stats.txt file
+while IFS=": " read -r name value; do
+  eval "$name=\"$value\""
+done < stats.txt
+
+echo "stats variables have been set as follows:"
+for key in $(echo ${!key[*]}); do
+    echo "$key = $key"
+done
+
+# Read and parse show.txt file
+read_model=false
+read_capabilities=false
+read_parameters=false
+
+while IFS=" " read -r line || [[ -n "$line" ]]; do
+  if [[ $line == Model* ]]; then
+    read_model=true
+  elif [[ $line == Capabilities* ]]; then
+    read_capabilities=true
+  elif [[ $line == Parameters* ]]; then
+    read_parameters=true
+  fi
+
+  case "$line" in
+    architecture*)
+      arch="${line#architecture: }"
+      ;;
+    parameters*)
+      params="${line#parameters: }"
+      ;;
+    *)
+      if [[ $read_model = true ]]; then
+        echo "Model variable '$line' set to '${line#   }'"
+      elif [[ $read_capabilities = true ]]; then
+        capabilities+=("$line")
+      elif [[ $read_parameters = true ]]; then
+        params="${params},${line#   }"
+      fi
+  esac
+done < show.txt
+
+echo "Model architecture is: $arch"
+echo "Total parameters: $params"
+echo "Capabilities are as follows:"
+for capability in "${capabilities[@]}"; do
+    echo "$capability"
+done
+```
+
+This script reads the `stats.txt` file line by line and saves each line in a bash variable with its prefix removed. Afterward, it loops through all exported variables to print their names and values.
+
+For the `show.txt`, the script toggles between three modes (Model, Capabilities, Parameters) depending on what section it is currently reading. If the current line matches one of these sections, the mode will be activated by setting a boolean variable to true. The script then tries to match the line to any known pattern for that section and assigns or updates variables accordingly.
+
+After processing both files, the script prints out the Model architecture, total parameters, and each capability.
+

@@ -1,0 +1,35 @@
+ Here's a simple PHP function that takes an array as an argument and outputs an HTML unordered list (`<ul>`) containing the items from the array:
+
+```php
+function arrayToHtmlList($array) {
+    $html = '<ul>';
+
+    foreach ($array as $item) {
+        $html .= "<li>" . htmlspecialchars($item) . "</li>";
+    }
+
+    $html .= '</ul>';
+
+    return $html;
+}
+```
+
+You can use this function in your PHP code like so:
+
+```php
+$myArray = ['Apple', 'Banana', 'Orange'];
+echo arrayToHtmlList($myArray);
+```
+
+The output will be:
+
+```html
+<ul>
+    <li>Apple</li>
+    <li>Banana</li>
+    <li>Orange</li>
+</ul>
+```
+
+This example uses the `htmlspecialchars()` function to escape any special characters in the array items to ensure that they are properly displayed within the HTML.
+

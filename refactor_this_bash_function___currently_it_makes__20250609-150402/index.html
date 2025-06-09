@@ -1,0 +1,226 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: refactor_this_bash_function___currently_it_makes_</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>refactor_this_bash_function___currently_it_makes_</b>: 20250609-150402<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./starcoder:7b.html'>starcoder:7b</a> 
+<a href='./stable-code:3b.html'>stable-code:3b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./refactor_this_bash_function___currently_it_makes_.prompt.yaml'>yaml</a>)
+  words:143  bytes:1093<br />
+<textarea readonly rows='10'>Refactor this bash function:
+- currently it makes $statsInfo array via reading $statsFile, then loops through it to add the values to the index file.
+- refactor to not use the $statsInfo array, just read $statsFile directly and output the values directly into the index file.
+- The function should still take the same parameters and produce the same output.
+
+Code:
+
+function addModelToIndexFile {
+    responseWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+
+    # parse the stats file into an array, splitting on : character, getting the second part of each line
+    statsInfo=()
+    while read -r line; do
+      value=$(echo &quot;$line&quot; | cut -d &#39;:&#39; -f2)
+      statsInfo+=(&quot;$value&quot;)
+    done &lt; &quot;$statsFile&quot;
+
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;${responseBytes}&lt;/td&gt;&quot;
+        for value in &quot;${statsInfo[@]}&quot;; do
+            if [[ -n &quot;$value&quot; ]]; then
+              echo &quot;&lt;td&gt;${value}&lt;/td&gt;&quot;;
+            fi
+        done
+        echo &quot;&lt;/tr&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}</textarea>
+</p>
+
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a></td>
+<td>140</td>
+<td>1076</td>
+<td>21.323425875s</td>
+<td>3.201585958s</td>
+<td>309 token(s)</td>
+<td>2.601656625s</td>
+<td>118.77 tokens/s</td>
+<td>274 token(s)</td>
+<td>15.518500791s</td>
+<td>17.66 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama:7b.html'>codellama:7b</a></td>
+<td>224</td>
+<td>1525</td>
+<td>27.070226791s</td>
+<td>2.833184875s</td>
+<td>336 token(s)</td>
+<td>2.5937995s</td>
+<td>129.54 tokens/s</td>
+<td>416 token(s)</td>
+<td>21.641425542s</td>
+<td>19.22 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder:7b.html'>starcoder:7b</a></td>
+<td>0</td>
+<td>3</td>
+<td>4.702766834s</td>
+<td>2.640256167s</td>
+<td>319 token(s)</td>
+<td>2.006416625s</td>
+<td>158.99 tokens/s</td>
+<td>2 token(s)</td>
+<td>55.571209ms</td>
+<td>35.99 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./stable-code:3b.html'>stable-code:3b</a></td>
+<td>204</td>
+<td>1488</td>
+<td>14.723632709s</td>
+<td>1.580766209s</td>
+<td>365 token(s)</td>
+<td>1.493735542s</td>
+<td>244.35 tokens/s</td>
+<td>436 token(s)</td>
+<td>11.647432916s</td>
+<td>37.43 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a></td>
+<td>4663</td>
+<td>29818</td>
+<td>2m34.2128195s</td>
+<td>1.208088s</td>
+<td>283 token(s)</td>
+<td>583.563541ms</td>
+<td>484.95 tokens/s</td>
+<td>6464 token(s)</td>
+<td>2m32.420398584s</td>
+<td>42.41 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3:8b.html'>dolphin3:8b</a></td>
+<td>131</td>
+<td>977</td>
+<td>20.35928075s</td>
+<td>3.461135709s</td>
+<td>303 token(s)</td>
+<td>2.175469708s</td>
+<td>139.28 tokens/s</td>
+<td>255 token(s)</td>
+<td>14.720761875s</td>
+<td>17.32 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma:2b.html'>gemma:2b</a></td>
+<td>92</td>
+<td>720</td>
+<td>6.959300417s</td>
+<td>1.718669417s</td>
+<td>321 token(s)</td>
+<td>676.466125ms</td>
+<td>474.52 tokens/s</td>
+<td>220 token(s)</td>
+<td>4.562368958s</td>
+<td>48.22 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3.3:2b.html'>granite3.3:2b</a></td>
+<td>113</td>
+<td>923</td>
+<td>8.177757583s</td>
+<td>1.317468291s</td>
+<td>326 token(s)</td>
+<td>1.022158083s</td>
+<td>318.93 tokens/s</td>
+<td>231 token(s)</td>
+<td>5.83607775s</td>
+<td>39.58 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral:7b.html'>mistral:7b</a></td>
+<td>188</td>
+<td>1344</td>
+<td>23.557639416s</td>
+<td>2.559401125s</td>
+<td>321 token(s)</td>
+<td>2.092297709s</td>
+<td>153.42 tokens/s</td>
+<td>376 token(s)</td>
+<td>18.905030958s</td>
+<td>19.89 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3:1.7b.html'>qwen3:1.7b</a></td>
+<td>3005</td>
+<td>19380</td>
+<td>2m4.823694542s</td>
+<td>1.426229458s</td>
+<td>290 token(s)</td>
+<td>561.824125ms</td>
+<td>516.18 tokens/s</td>
+<td>4846 token(s)</td>
+<td>2m2.8343125s</td>
+<td>39.45 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td>arm</td></tr>
+<tr><td class='left'>sys memory</td><td>12G + 1514M</td></tr>
+<tr><td class='left'>sys OS</td><td>Darwin 24.5.0</td></tr>
+</table>
+<br /><br />
+<footer>
+<p>page created:   2025-06-09 15:10:56</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v4.2</p>
+</footer></body></html>

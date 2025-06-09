@@ -1,0 +1,12 @@
+Based on the given image, here are some relevant keywords that can be generated:
+
+[
+  "llama",
+  "internet",
+  "server farm",
+  "digital data center",
+  "technology",
+  "artificial intelligence",
+  "networking"
+]
+

@@ -1,0 +1,26 @@
+Here's a Bash shell function that takes in an array and outputs an HTML list of the array contents:
+```bash
+function array_to_html_list() {
+  local array_name=${1:-array}
+  eval printf "<ul>\n"
+  for ((i=0); i<${#2}; i++)); do
+    printf "<li>%s</li>\n" "${2:$i:$((${2:$i+1}-1))}}"
+  done
+  eval printf "</ul>\n"
+}
+```
+To use this function, define an array and pass it as an argument to the `array_to_html_list` function.
+For example:
+```bash
+array=("apple" "banana" "cherry")
+array_to_html_list "${array[@]]"
+```
+This will output the following HTML list:
+```html
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

@@ -1,0 +1,28 @@
+.
+#
+# - `array_to_html` function takes 1 parameter:
+#   * `data` is input array, 
+# - This function outputs a string which contains a HTML list of the data contents.
+# ```bash
+# $ array_to_html=( "a" "b" "c" )
+# $ echo ${array_to_html[@]} # prints: a b c
+#
+#   <ul>
+#     <li>a</li>
+#     <li>b</li>
+#     <li>c</li>
+#   </ul>
+# ```
+#
+# The Bash shell function `array_to_html` should be used to output an HTML list from the following data array: 
+# * array_data = ["orange", "apple"]
+
+# + [markdown] tags=[]
+# #### Solution
+
+# + jupyter={"source_hidden": true} tags=["remove-input"]
+array_to_html=( "a" "b" "c" )
+
+# %run scripts/generate_output.sh array_to_html ${array_to_html[@]}
+
+

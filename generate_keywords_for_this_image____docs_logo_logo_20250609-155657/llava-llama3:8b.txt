@@ -1,0 +1,16 @@
+{
+"image": {
+"type": "animated",
+"title": "Three pink Llamas standing by a blue wall with rows of racks and shelves behind them.",
+"rows": [
+["The leftmost llama is looking towards the camera"],
+["The middle llama's head is tilted downwards"],
+["The rightmost llama has its eyes closed"]
+],
+},
+"color": {
+"wall": "blue",
+"llamas": "pink"
+}
+}
+

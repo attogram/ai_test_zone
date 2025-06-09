@@ -1,0 +1,16 @@
+The identified 'face' regions correspond to the facial features that are most prominent on each llama, which include their eyes, noses, mouths, and ears. These markings fall within a specific range of coordinates:
+
+First Llama (left side):
+- Top-left: approximately at x=206 y=198
+- Bottom-right: around x=357 y=461
+
+Second Llama:
+- Top-left: roughly at x=304 y=168
+- Bottom-right: close to x=454 y=429
+
+Third Llama (right side):
+- Top-left: about at x=496 y=173
+- Bottom-right: near x=645 y=443
+
+These bounding boxes encapsulate the facial features of each llama, which are crucial for distinguishing their expressions and emotions.
+

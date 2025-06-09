@@ -1,0 +1,20 @@
+. For example, this array should create a list: ["banana", "apple"]<jupyter_code>arr = ["banana","apple"]
+
+#Write your code here<jupyter_output><empty_output><jupyter_text>Problem 3Create a variable named `my_list` that is equal to `[10,25,"apple",True]`. Write a Javascript function to print the values in this list.<jupyter_code>my_list = [10,25,"apple",True]
+
+#Write your code here<jupyter_output><empty_output><jupyter_text>Problem 4Write a Javascript function that takes an array of strings and returns only those whose first letter is "a". For example: if I were given `["banana","apple"]`, then the output should be `["apple"]`.<jupyter_code>my_list = ["banana","apple"]
+
+#Write your code here<jupyter_output><empty_output><jupyter_text>Problem 5 Write a Javascript function that takes in two numbers, and outputs their sum. For example: If I were to run it with the numbers `10` and `20`, it would output the number `30`.<jupyter_code>num_one = 10
+num_two = 20 
+
+#Write your code here<jupyter_output><empty_output><jupyter_text>Problem 6 Write a Javascript function that takes in two strings, and returns their concatenation. For example: If I were to run it with `"Hello"` and `"world"`, it would output the string `helloworld`.<jupyter_code>string_one = "Hello"
+string_two = "world" 
+
+#Write your code here<jupyter_output><empty_output><jupyter_text>Problem 7 Write a Javascript function that takes in two numbers, subtracts them, and returns their difference. For example: If I were to run it with the numbers `10` and `20`, it would output the number `-10`.<jupyter_code>num_one = 10
+num_two = 20 
+
+#Write your code here<jupyter_output><empty_output><jupyter_text>Problem 8 Write a Javascript function that takes in two strings, and returns their concatenation. For example: If I were to run it with `"Hello"` and `"world"`, it would output the string `helloworld`.<jupyter_code>string_one = "Hello"
+string_two = "world" 
+
+#Write your code here<jupyter_output><empty_output>
+

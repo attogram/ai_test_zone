@@ -1,0 +1,42 @@
+Sure, here's the updated script with comments to help you understand it:
+
+```bash
+#!/bin/bash
+
+# Load the data from the stats file
+stats_data=$(cat stats.txt)
+
+# Parse the data from the stats file
+stats_data=$(echo "$stats_data" | grep ": " | sed -E "s/^.*: ([^:]*).*$/ \1/g")
+
+# Load the data from the show file
+show_data=$(cat show.txt)
+
+# Parse the data from the show file
+show_data=$(echo "$show_data" | grep ": " | sed -E "s/^.*: ([^:]*).*$/ \1/g")
+
+# Split the show data into sections
+model_data=$(echo "$show_data" | grep "Model" | head -n 1)
+capabilities_data=$(echo "$show_data" | grep "Capabilities" | head -n 1)
+parameters_data=$(echo "$show_data" | grep "Parameters" | head -n 1)
+
+# Create the variables for the model, capabilities, and parameters
+model=$(echo "$model_data" | awk '{print $1}')
+capabilities=$(echo "$capabilities_data" | awk '{print $1}')
+parameters=$(echo "$parameters_data" | awk '{print $1}')
+
+# Print the variables
+echo "Model: $model"
+echo "Capabilities: $capabilities"
+echo "Parameters: $parameters"
+```
+
+**Explanation:**
+
+1. We first load the data from the `stats.txt` and `show.txt` files using `cat` and `grep` commands.
+2. We then parse the `stats.txt` data by extracting the values after the colon using `sed` and `grep` commands.
+3. We parse the `show.txt` data by extracting the values after the colon using `grep` commands and grouping them using `sed`.
+4. We split the `show_data` into three sections based on the colon character using `grep` and `head` commands.
+5. We create the variables for the model, capabilities, and parameters using `awk` commands.
+6. Finally, we print the values of these variables for each section.
+

@@ -1,0 +1,206 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>mistral:7b</b>: 20250609-151056<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./starcoder:7b.html'>starcoder:7b</a> 
+<a href='./stable-code:3b.html'>stable-code:3b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<b>mistral:7b</b> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_bash_function_to_parse_data_from_thi.prompt.yaml'>yaml</a>)
+  words:174  bytes:1514<br />
+<textarea readonly rows='10'>Help me write bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          </textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral:7b.txt'>raw</a>)<br />
+<textarea readonly rows='25'> Here is a bash function that reads the contents of `model.info.txt` and parses the sections as per your requirements. Note that this function assumes the file exists and is readable.
+
+```bash
+function parse_model_info() {
+    # Initialize variables
+    declare -A sections=(&quot;Model&quot; &quot;Capabilities&quot; &quot;System&quot; &quot;Parameters&quot; &quot;&quot;)
+    declare -a capabilities
+    local systemPrompt=&quot;&quot;
+    local tempValue=0
+    local name value
+
+    # Read file line by line
+    while IFS=&#39; &#39; read -r line; do
+        # Skip empty lines and comments (lines starting with &#39;#&#39;)
+        if [[ -z &quot;$line&quot; || ${line:0:1} == &#39;#&#39; ]]; then
+            continue
+        fi
+
+        # Extract name and value from the line
+        IFS=&#39;    &#39; read -r name value &lt;&lt;&lt;&quot;$line&quot;
+
+        # Assign name and value to variables for easier handling
+        eval &quot;name=\&quot;\${value}\&quot;&quot;
+
+        # Determine section based on the current variable name
+        if [[ ${#sections[@]} -eq 0 ]]; then
+            sections+=(&quot;$name&quot;)   # Add new section if none exist
+        else
+            # Check if the name corresponds to an existing section
+            for ((i=0; i&lt;${#sections[@]}; i++)); do
+                if [[ ${sections[$i]} == &quot;$name&quot; ]]; then
+                    # If it&#39;s a Model line, only save &#39;temperature&#39; parameter
+                    if [ &quot;${sections[0]}&quot; == &quot;Model&quot; ]; then
+                        if [ &quot;$name&quot; == &quot;parameters&quot; ]; then
+                            tempValue=$(echo $value | awk &#39;{print $2}&#39;)
+                            eval &quot;tempValue=\${tempValue}&quot;
+                        else
+                            eval &quot;name=\&quot;\${value}\&quot;&quot;    # Otherwise, save the name=value pair
+                        fi
+                    else
+                        eval &quot;name=\&quot;\${value}\&quot;&quot;       # Save all keywords in Capabilities section
+                        break                         # Break out of loop after finding a match
+                    fi
+                fi
+            done
+        fi
+    done &lt; model.info.txt
+
+    # Extract system prompt if it exists
+    if [[ ${#sections[@]} -gt 3 ]] &amp;&amp; [[ &quot;${sections[3]}&quot; != &quot;&quot; ]]; then
+        ((i=0))
+        while read -r line; do
+            if [[ &quot;$line&quot; == &quot;System&quot; ]]; then
+                ((i++))
+                break
+            fi
+            systemPrompt+=&quot;$line &quot;
+        done &lt; model.info.txt
+        systemPrompt=&quot;${systemPrompt% }&quot;   # Remove trailing space
+    fi
+
+    # Print parsed variables
+    echo &quot;Model architecture: ${architecture}&quot;
+    echo &quot;Model parameters: ${parameters}&quot;
+    echo &quot;Model context length: ${context_length}&quot;
+    echo &quot;Model embedding length: ${embedding_length}&quot;
+    echo &quot;Model quantization: ${quantization}&quot;
+    for capability in &quot;${capabilities[@]}&quot;; do
+        echo &quot;Capability: ${capability}&quot;
+    done
+    if [[ &quot;$tempValue&quot; != 0 ]]; then
+        echo &quot;Temperature: ${temperature}&quot;
+    fi
+    if [[ -n &quot;$systemPrompt&quot; ]]; then
+        echo &quot;System prompt: $systemPrompt&quot;
+    fi
+}
+```
+
+You can call this function with `parse_model_info`, and it will print the parsed variables based on the example file contents you provided.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral:7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>361</td></tr>
+<tr><td class='left'>bytes</td><td>3104</td></tr>
+<tr><td class='left'>total duration</td><td>47.556168625s</td></tr>
+<tr><td class='left'>load duration</td><td>2.579106459s</td></tr>
+<tr><td class='left'>prompt eval count</td><td>390 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.408927167s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>161.90 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>805 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>42.566917625s</td></tr>
+<tr><td class='left'>eval rate</td><td>18.91 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral:7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>11G + 812M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p>page created:   2025-06-09 15:17:49</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v4.2</p>
+</footer></body></html>

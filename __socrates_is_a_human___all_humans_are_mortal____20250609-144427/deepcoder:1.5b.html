@@ -1,0 +1,111 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepcoder:1.5b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>__socrates_is_a_human___all_humans_are_mortal___</a>: <b>deepcoder:1.5b</b>: 20250609-144427<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava:7b.html'>bakllava:7b</a> 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<b>deepcoder:1.5b</b> 
+<a href='./deepseek-r1:1.5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek-r1:8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma3:1b.html'>gemma3:1b</a> 
+<a href='./gemma3:4b.html'>gemma3:4b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.2-vision:2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./llava-llama3:8b.html'>llava-llama3:8b</a> 
+<a href='./llava-phi3:3.8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava:7b.html'>llava:7b</a> 
+<a href='./minicpm-v:8b.html'>minicpm-v:8b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./moondream:1.8b.html'>moondream:1.8b</a> 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2.5vl:3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2.5vl:7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+<a href='./stable-code:3b.html'>stable-code:3b</a> 
+<a href='./starcoder:7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./__socrates_is_a_human___all_humans_are_mortal___.prompt.yaml'>yaml</a>)
+  words:14  bytes:70<br />
+<textarea readonly rows='3'>- Socrates is a human.
+- All humans are mortal.
+- Is Socrates mortal?</textarea>
+</p>
+<p>Output: deepcoder:1.5b (<a href='./deepcoder:1.5b.txt'>raw</a>)<br />
+<textarea readonly rows='21'>&lt;think&gt;
+Okay, so I need to figure out whether Socrates is mortal based on the given statements. Let&#39;s break it down step by step.
+
+First, the statement says, &quot;Socrates is a human.&quot; That means Socrates belongs to the category of humans. Now, the second part says, &quot;All humans are mortal.&quot; This is a universal statement that applies to every single human being.
+
+So, if all humans are mortal, and Socrates is one of those humans, then logically, it follows that Socrates must be mortal. It&#39;s like a chain of reasoning where each conclusion leads to the next. Since all members of a certain group have a particular trait, any individual in that group will have that trait as well.
+
+I&#39;m pretty confident about this because it&#39;s based on logical syllogisms and the way statements are structured. There&#39;s no exception or exception case mentioned here, so I don&#39;t need to consider any special cases for Socrates.
+&lt;/think&gt;
+
+Based on the given statements:
+
+1. &quot;Socrates is a human.&quot;
+2. &quot;All humans are mortal.&quot;
+
+We can logically deduce that since all humans are mortal and Socrates is a human, it follows that Socrates is mortal.
+
+**Answer:** Yes, Socrates is mortal.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepcoder:1.5b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>197</td></tr>
+<tr><td class='left'>bytes</td><td>1160</td></tr>
+<tr><td class='left'>total duration</td><td>5.51933975s</td></tr>
+<tr><td class='left'>load duration</td><td>1.221446666s</td></tr>
+<tr><td class='left'>prompt eval count</td><td>22 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>158.46375ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>138.83 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>257 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>4.138867583s</td></tr>
+<tr><td class='left'>eval rate</td><td>62.09 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepcoder:1.5b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/deepcoder:1.5b'>deepcoder:1.5b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.1 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>1.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>1536</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 1799M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p>page created:   2025-06-09 14:44:50</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v4.2</p>
+</footer></body></html>

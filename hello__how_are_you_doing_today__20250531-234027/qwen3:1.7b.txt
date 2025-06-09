@@ -1,8 +1,0 @@
-<think>
-Okay, the user said, "Hello, how are you doing today?" Let me think about how to respond.
-
-First, I need to acknowledge their greeting. A simple "Hello" is appropriate. Then, I should mention how I'm doing. Since I'm an AI, I don't have a physical form, so I should explain that I'm always here to help. Maybe add a friendly note about being available for any questions they have. Keep the tone warm and approachable. Avoid any technical jargon. Make sure it's concise but friendly. Check for any possible misunderstandings. No need to overcomplicate it. Just a straightforward, welcoming response.
-</think>
-
-Hello! I'm doing well, thank you! I'm here to help with any questions or tasks you have. How can I assist you today? 😊
-

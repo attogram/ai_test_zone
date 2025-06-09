@@ -1,0 +1,49 @@
+Here's a Bash script that can parse data from the given `model.info.txt` file:
+
+```bash
+#!/bin/bash
+
+parse_model() {
+  local filename="$1"
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    name=$(echo $line | awk '{print $2}')
+    value=$(echo $line | awk '{print $4}')
+    if [[ -n "$name" && -n "$value" ]]; then
+      eval "${name}=${value}"
+    fi
+  done < "$filename"
+}
+
+parse_capabilities() {
+  local filename="$1"
+  IFS=$'\n' read -r -d '' capabilities << EOF
+$(<"$filename" | tr ' ' '\n' | grep -v '^$')
+EOF
+  echo "${capabilities[@]]"
+}
+
+parse_system() {
+  local filename="$1"
+  IFS=$'\n' read -r -d '' systemPrompt << EOF
+$(<"$filename" | tr ' ' '\n' | grep -v '^$')
+EOF
+  echo "$systemPrompt"
+}
+
+parse_parameters() {
+  local filename="$1"
+  IFS=$'\n' read -r -d '' params << EOF
+$(<"$filename" | tr ' ' '\n' | grep -v '^$')
+EOF
+  eval "${params[@]}"
+}
+
+# Parse the input file based on its section and content type.
+parse_model "$1"
+parse_capabilities "$1"
+parse_system "$1"
+parse_parameters "$1"
+```
+
+This script defines functions for parsing each section of the input file. The `parse_*()` functions read the contents of the input file, parse it based on its section and content type, and save the parsed data into appropriate variables or arrays. Finally, the parsed data is printed out for further processing or displaying to the user.
+

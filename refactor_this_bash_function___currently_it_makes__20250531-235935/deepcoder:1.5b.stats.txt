@@ -1,9 +1,0 @@
-total duration:       48.385620787s
-load duration:        1.593787886s
-prompt eval count:    283 token(s)
-prompt eval duration: 4.168627018s
-prompt eval rate:     67.89 tokens/s
-eval count:           919 token(s)
-eval duration:        42.622143292s
-eval rate:            21.56 tokens/s
-

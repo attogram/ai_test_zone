@@ -1,0 +1,2 @@
+I am a large language model created by Alibaba Cloud. I am called Qwen. I am designed to assist with a wide range of tasks, including answering questions, generating text, and providing information. I am trained on a large corpus of text data and can understand and generate text in many different languages. I am also able to understand and respond to natural language queries, and can be used in a variety of applications, including chatbots, virtual assistants, and language translation.
+

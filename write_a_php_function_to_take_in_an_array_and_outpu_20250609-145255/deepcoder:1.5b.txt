@@ -1,0 +1,61 @@
+<think>
+Okay, I need to write a PHP function that takes an array and outputs a HTML list of its contents. Let me think about how to approach this.
+
+First, I should consider the structure of a HTML list. It should have a head section with a title, followed by a body containing the list items. Each item is within a div element inside a paragraph.
+
+So, the function will start by creating the head section. The title can be something like 'Array Elements'. Then, in the body, each element of the array will be wrapped in a div with a class like 'array-item' and a span for the text content.
+
+I'll need to loop through each key-value pair in the input array. For each value, I'll create a string that includes the index+1 (to make it more readable) and the value itself. Then, wrap this in a div with the class 'array-item'.
+
+Putting it all together, the function will construct the HTML string by concatenating these elements. Finally, return this HTML string.
+
+I should also make sure to handle any potential issues, like empty values or non-numeric types, but since the question doesn't specify, I'll assume the array contains numeric values for simplicity.
+
+Now, let me outline the steps:
+
+1. Create the head section with a title.
+2. Initialize an empty HTML string.
+3. Loop through each element of the array:
+   a. Get the key and value.
+   b. Create a div with class 'array-item'.
+   c. Inside the div, create a span with the index+1 and the value.
+   d. Append the span to the div.
+   e. Append the div to the HTML string.
+4. Close the head section.
+5. Return the constructed HTML string.
+
+I think that's a solid plan. Now, I'll write the code accordingly.
+</think>
+
+To solve this problem, we need to create a PHP function that takes an array as input and outputs a HTML list of its contents. The goal is to represent each element of the array in a structured format using HTML tags.
+
+### Approach
+1. **HTML Structure**: We will use HTML to structure the output. The HTML will include a head section with a title and a body containing multiple `<div>` elements, each representing an item from the input array.
+2. **Loop Through Array**: For each element in the input array, we will create a corresponding `<div>` element within a `<p>` tag (to represent the body of the HTML).
+3. **Tag Styling**: Each `<div>` will contain a `<span>` element to display the item number and its value, ensuring better readability.
+4. **String Construction**: We will construct the HTML string by concatenating all these elements into a single string, which can then be returned.
+
+### Solution Code
+```php
+function array_html($array) {
+    $html = '<!DOCTYPE html>\n<html>\n<head>\n  <title>Array Elements</title>\n</head>\n<body>\n    <div class="array-list">
+      {% for $key => $value in $array %}
+        <div class="array-item" style="text-align: center;">
+          <span class="index">${key + 1}</span>
+          <span style="color: blue;">(${$value})</span>
+        </div>
+      {% endfor %}
+    </div>\n';
+    
+    return $html;
+}
+```
+
+### Explanation
+- **HTML Structure**: The function starts by creating the basic HTML structure, including a `<head>` section with a title and a `<body>` section. Each element in the array will be represented within a `<div>` inside `<p>` tags.
+- **Loop Through Array**: Using a loop, each key-value pair from the input array is processed. For each value, a `<div>` element with a class `array-item` is created.
+- **Tag Styling**: Each `<div>` contains a `<span>` for the index and another span for the value. The index starts from 1 to improve readability.
+- **String Construction**: All these elements are concatenated into a single HTML string which is then returned.
+
+This approach ensures that each element of the array is neatly formatted within a structured HTML list, making it easy to read and understand.
+

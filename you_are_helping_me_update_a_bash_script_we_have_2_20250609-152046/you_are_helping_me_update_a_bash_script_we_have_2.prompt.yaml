@@ -1,0 +1,49 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: |
+      You are helping me update a bash script.
+      We have 2 text files: stats.txt and show.txt.
+      
+      Read in and parse the stats file:
+        - save the data into bash variables
+        - each line is in format "name: value"
+        - for example line:
+          total duration:       4.687657458s
+       - is parsed so we can get the name "total duration" and the value "4.687657458s"
+       - Example stats.txt file:
+      '''
+      total duration:       4.687657458s
+      load duration:        1.174041625s
+      prompt eval count:    22 token(s)
+      prompt eval duration: 152.612625ms
+      prompt eval rate:     144.16 tokens/s
+      eval count:           209 token(s)
+      eval duration:        3.360331625s
+      eval rate:            62.20 tokens/s
+      
+      '''
+      
+      Read in a parse the show.txt file:
+        - save the data into bash variables
+        - There are 3 sections: Model, Capabilities, and Parameters
+        - For Model Section, it's in format "name   value"
+        - For Capabilities section, it's a list of 1 or more words
+        - For Parameters section, it's in format "name   value"
+        - Example show.txt file:
+      '''
+        Model
+          architecture        starcoder
+          parameters          7.5B
+          context length      8192
+          embedding length    4096
+          quantization        Q4_0
+      
+        Capabilities
+          completion
+      
+        Parameters
+          stop    "<|endoftext|>"
+      '''
+model: ''

@@ -1,0 +1,25 @@
+```json
+{
+"faces": [
+{
+"type": "animal",
+"species": "llama",
+"color": "pink",
+"position": ["0.37", "0.29", "0.53", "0.83"]
+},
+{
+"type": "animal",
+"species": "llama",
+"color": "pink",
+"position": [0.1, "0.16", 0.33, "0.94"]
+},
+{
+"type": "animal",
+"species": "llama",
+"color": "pink",
+"position": [0.52, "0.17", 0.83, 0.92]
+}
+]
+}
+```
+

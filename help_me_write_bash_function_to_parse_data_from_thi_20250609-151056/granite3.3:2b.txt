@@ -1,0 +1,58 @@
+Here are bash functions that should meet your requirements:
+
+```bash
+parse_model_info() {
+  local model_info=""
+
+  while IFS= read -r line; do
+    case "$line" in
+      Model::*)
+        if [[ $line =~ ^[[:space:]]*\w+\s*[[:space:]]*[A-Z]\w*=[^=]* ]]; then
+          name=$(echo "$line" | cut -d' ' -f2)
+          value=$(echo "$line" | cut -d' ' -f3)
+          eval "$name=\"$value\""
+        fi
+        ;;
+      Capabilities::*)
+        if [[ $line =~ ^[[:space:]]*\w+=[^=]* ]]; then
+          words=( "${line%%=*}")
+          for word in "${words[@]}"; do
+            words+=("$word")
+          done
+          array=("${words[@]}")
+        fi
+        ;;
+      System::*)
+        systemPrompt=$(echo "$line" | sed 's/^.*System:://')
+        break
+        ;;
+      Parameters::*)
+        if [[ $line =~ ^[[:space:]]*\w+=[^=]* = [0-9.]* ]]; then
+          key=$(echo "$line" | cut -d' ' -f1)
+          value=$(echo "$line" | cut -d' ' -f2 | tr -d ' ')
+          if [[ $key == "temperature" ]]; then
+            temperature="$value"
+          fi
+        fi
+        ;;
+      *)
+        # Ignore other sections or lines
+        ;;
+    esac
+  done < "/path/to/model.info.txt"
+
+  return "$model_info"
+}
+```
+
+This function reads the file line by line and processes each line based on its section header (Model, Capabilities, System, Parameters). It uses `cut`, `grep`, and `sed` commands to parse the required information. The array for Capabilities is created using a loop that splits each line into words.
+
+To use this function, save it in a bash script file or add it directly to your bash profile, then call it with the path to your model.info.txt file:
+
+```bash
+result=$(parse_model_info)
+echo $result
+```
+
+This will store the parsed data in the `result` variable, which you can then use in your script or further process as needed.
+

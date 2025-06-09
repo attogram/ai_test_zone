@@ -1,0 +1,61 @@
+Sure, I can help you with that.
+
+Here is a bash function named `parse_model_info` that will parse data from your model.info.txt file:
+
+```bash
+parse_model_info() {
+  declare -A parameters # Associative array to store the parameters
+
+  while IFS= read -r line; do
+    if [[ "$line" == "Model"* ]]; then
+      name=$(echo "$line" | cut -d' ' -f3)
+      architecture=$name
+      continue
+    elif [[ "$line" == "architecture "* ]]; then
+      architecture=${line#architecture}
+      continue
+    fi
+
+    if [[ "$line" == "Parameters"* ]]; then
+      parameters["parameters"]=$line
+      continue
+    elif [[ "$line" == "temperature "* ]]; then
+      temperature=$(echo "$line" | cut -d' ' -f2)
+      continue
+    fi
+
+    if [[ "$line" == "Capabilities"* ]]; then
+      declare -a capabilities=() # Array to store the capabilities
+      while IFS= read -r capability; do
+        capabilities+=("$capability")
+      done < <(grep '^Cap' model.info.txt)
+      break
+    elif [[ "$line" == "System"* ]]; then
+      systemPrompt="$line"
+      break
+    fi
+
+  done < model.info.txt
+
+  echo "architecture=\"$architecture\"" >&2
+  echo "temperature=\"$temperature\"" >&2
+  for capability in "${capabilities[@]}"; do
+    echo "$capability" >&2
+  done
+  echo "systemPrompt=\"$systemPrompt\"" >&2
+}
+
+parse_model_info
+```
+
+Here is an explanation of the script:
+
+- The `declare -A parameters` creates an associative array to store the parameters.
+- It reads each line from the model.info.txt file using a while loop and uses the `if` condition to check for different sections. 
+- If the section matches, it stores the necessary values in variables or arrays accordingly.
+- For the "Model" and "Parameters" sections, it takes care of lines with special formats by cutting the name/value from the line after applying appropriate string manipulations (e.g., stripping off the section title, then getting the right part).
+- In the case of the "Capabilities" section, it reads all lines starting with "Cap" using a while loop and stores them into an array.
+- The `echo` command is used to output the results directly.
+
+Please make sure that your model.info.txt file is in the same directory as where you will run this bash function.
+

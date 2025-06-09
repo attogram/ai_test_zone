@@ -1,0 +1,51 @@
+To update the bash script, you can use `grep`, `cut`, and `awk` commands to parse the files as described. Here's a sample script that should help you get started:
+
+```bash
+#!/bin/bash
+
+# Read and parse stats.txt
+stats=()
+while IFS= read -r line; do
+  name_value=$(echo $line | awk '{print $2}')
+  echo "$name_value" >> stats
+done < stats.txt
+
+# Extract specific data from stats array
+total_duration=${stats[1]}
+load_duration=${stats[3]}
+prompt_eval_count=${stats[5]}
+prompt_eval_duration=${stats[7]}
+prompt_eval_rate=${stats[9]}
+eval_count=${stats[11]}
+eval_duration=${stats[13]}
+eval_rate=${stats[15]}
+
+# Read and parse show.txt
+declare -A model_capabilitiesparams
+
+while IFS= '|' read -r line; do
+  key=$(echo $line | awk '{print $1}')
+  value=$(echo $line | awk '{print $2}')
+  case "$key" in
+    Model)
+      model_capabilitiesparms["architecture"]="${value}"
+      ;;
+    Capabilities)
+      model_capabilitiesparms["capabilities"]="${value}"
+      ;;
+    Parameters)
+      model_capabilitiesparms["name"]="${value}"
+      ;;
+  esac
+done < show.txt
+
+# Access the values
+model_architecture=${model_capabilitiesparms["architecture"]}
+model_parameters=${model_capabilitiesparms["parameters"]}
+capabilities=${model_capabilitiesparms["capabilities"]}
+```
+
+This script assumes that you want to store the parsed data in associative arrays (`stats` and `model_capabilitiesparms`) for easier access later. The script reads through each line of the input files, parses the required information using `awk`, and stores it in the appropriate variables or associative arrays.
+
+You can modify this script according to your specific needs. For example, you might want to store all parsed data in a structured format (like a JSON object) or handle errors more gracefully.
+

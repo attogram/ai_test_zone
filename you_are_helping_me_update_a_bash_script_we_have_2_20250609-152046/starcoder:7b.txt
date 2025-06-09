@@ -1,0 +1,25 @@
+
+
+
+def test_create_user():
+    user = models.User.create(email="<EMAIL>", password="password", firstname="John")
+
+    assert isinstance(user, models.User)
+
+
+def test_get_user():
+    email = "<EMAIL>"
+    user1 = models.User.create(email=email, password="password", firstname="Jane")
+    user2 = models.User.get(models.User, email=email)
+
+    assert isinstance(user1, models.User)
+    assert isinstance(user2, models.User)
+
+
+def test_update_user():
+    user1 = models.User.create(email="<EMAIL>", password="password", firstname="Jane")
+    user1.update({"firstname": "John"})
+
+    assert user1["firstname"] == "John"
+
+

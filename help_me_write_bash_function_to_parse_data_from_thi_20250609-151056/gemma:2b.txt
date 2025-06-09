@@ -1,0 +1,27 @@
+```bash
+#!/bin/bash
+
+# Function to parse the model.info.txt file
+parse_model_info() {
+  # Open the model.info.txt file
+  model_file="model.info.txt"
+  model_data=$(cat "$model_file")
+
+  # Parse the model data
+  for line in $model_data; do
+    # Extract the name and value pairs
+    name=$(echo "$line" | cut -d " " -f 1)
+    value=$(echo "$line" | cut -d " " -f 2)
+
+    # Assign the name and value to variables
+    eval "$name="$value"
+  done
+
+  # Return the variables
+  return
+}
+
+# Call the function to parse the model.info.txt file
+parse_model_info()
+```
+

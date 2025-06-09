@@ -1,0 +1,25 @@
+```javascript
+function createHtmlList(arr) {
+  let htmlList = "";
+  for (let item of arr) {
+    htmlList += `<li>${item}</li>`;
+  }
+  return htmlList;
+}
+```
+
+**Example Usage:**
+```
+const myArray = ["Item 1", "Item 2", "Item 3"];
+const htmlList = createHtmlList(myArray);
+
+console.log(htmlList);
+```
+
+**Output:**
+```html
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+```
+

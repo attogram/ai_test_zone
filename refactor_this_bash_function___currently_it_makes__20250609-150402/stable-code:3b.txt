@@ -1,0 +1,35 @@
+Here's the refactored bash function:
+```bash
+function addModelToIndexFile() {
+  local model="$1"
+  local statsFile="$2"
+  local indexFile="$3"
+
+  # Read $statsFile directly and output the values directly into the index file.
+  while IFS= read -r line; do
+    IFS=':' read -r key value <<< "$line"
+    if [[ -n "$value" ]]; then
+      echo "<td>${value}</td>" >> "$indexFile"
+    fi
+  done < "$statsFile"
+
+  # Generate the HTML for the model and stats info, and write it to the index file.
+  local responseWords=$(wc -w < "$modelFile" | awk '{print $1}'))
+  local responseBytes=$(wc -c < "$modelFile" | awk '{print $1}'))
+
+  (
+    echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td>${responseWords}</td><td>${responseBytes}</td></tr>"
+    for value in "${statsInfo[@]}"; do
+      if [[ -n "$value" ]]; then
+        echo "<td>${value}</td>"
+      fi
+    done
+  ) >> "$indexFile"
+}
+```
+The refactored function takes three arguments: `$model`, `$statsFile`, and `$indexFile`. 
+
+The function reads the `$statsFile` directly, extracts the values using the `IFS=':' read -r key value <<< "$line"` command. Then it outputs these values directly into the index file using the echo command with a redirection to the index file.
+
+After that, the function generates the HTML for the model and stats info by concatenating different strings using the `<<<` and `${variable}` syntax. Then, it writes this HTML string directly into the index file using the `>>` redirection operator.
+

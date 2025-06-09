@@ -1,0 +1,45 @@
+To read and parse the `show.txt` file, you can use the following bash script:
+
+```bash
+#!/bin/bash
+
+# Read and parse show.txt
+while IFS= read -r line; do
+  name=$(echo "$line" | awk '{print $1}')
+  value=$(echo "$line" | awk '{print $2}')
+
+  case "$name" in
+    "Model")
+      if [[ !$value =~ ^[0-9]+([.][0-9]+)?s$ ]]; then
+        echo "Invalid value format for '$name':"
+        echo "$value"
+        exit 1
+      fi
+
+      # Save data into bash variables
+      model_name="$name"
+      ;;
+    *)
+      echo "Unknown section in show.txt file:"
+      echo "$name"
+      exit 1
+      ;;
+  esac
+done < show.txt
+
+# Print parsed data
+echo -e "\nParsed Data from show.txt:"
+
+echo "Model Section"
+echo "Name: $model_name"
+
+```
+
+Make sure to save the above script into a file named `parse_show.sh`. Then, you can run this script using the following command:
+
+```bash
+bash parse_show.sh
+```
+
+This will read and parse the `stats.txt` and `show.txt` files and store the parsed data in bash variables for further processing or analysis as needed.
+

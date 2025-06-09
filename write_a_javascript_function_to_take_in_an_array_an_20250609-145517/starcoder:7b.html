@@ -1,0 +1,97 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: starcoder:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_javascript_function_to_take_in_an_array_an</a>: <b>starcoder:7b</b>: 20250609-145517<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<b>starcoder:7b</b> 
+<a href='./stable-code:3b.html'>stable-code:3b</a> 
+<a href='./deepcoder:1.5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_javascript_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:18  bytes:93<br />
+<textarea readonly rows='1'>Write a Javascript function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: starcoder:7b (<a href='./starcoder:7b.txt'>raw</a>)<br />
+<textarea readonly rows='22'>. For example, this array should create a list: [&quot;banana&quot;, &quot;apple&quot;]&lt;jupyter_code&gt;arr = [&quot;banana&quot;,&quot;apple&quot;]
+
+#Write your code here&lt;jupyter_output&gt;&lt;empty_output&gt;&lt;jupyter_text&gt;Problem 3Create a variable named `my_list` that is equal to `[10,25,&quot;apple&quot;,True]`. Write a Javascript function to print the values in this list.&lt;jupyter_code&gt;my_list = [10,25,&quot;apple&quot;,True]
+
+#Write your code here&lt;jupyter_output&gt;&lt;empty_output&gt;&lt;jupyter_text&gt;Problem 4Write a Javascript function that takes an array of strings and returns only those whose first letter is &quot;a&quot;. For example: if I were given `[&quot;banana&quot;,&quot;apple&quot;]`, then the output should be `[&quot;apple&quot;]`.&lt;jupyter_code&gt;my_list = [&quot;banana&quot;,&quot;apple&quot;]
+
+#Write your code here&lt;jupyter_output&gt;&lt;empty_output&gt;&lt;jupyter_text&gt;Problem 5 Write a Javascript function that takes in two numbers, and outputs their sum. For example: If I were to run it with the numbers `10` and `20`, it would output the number `30`.&lt;jupyter_code&gt;num_one = 10
+num_two = 20 
+
+#Write your code here&lt;jupyter_output&gt;&lt;empty_output&gt;&lt;jupyter_text&gt;Problem 6 Write a Javascript function that takes in two strings, and returns their concatenation. For example: If I were to run it with `&quot;Hello&quot;` and `&quot;world&quot;`, it would output the string `helloworld`.&lt;jupyter_code&gt;string_one = &quot;Hello&quot;
+string_two = &quot;world&quot; 
+
+#Write your code here&lt;jupyter_output&gt;&lt;empty_output&gt;&lt;jupyter_text&gt;Problem 7 Write a Javascript function that takes in two numbers, subtracts them, and returns their difference. For example: If I were to run it with the numbers `10` and `20`, it would output the number `-10`.&lt;jupyter_code&gt;num_one = 10
+num_two = 20 
+
+#Write your code here&lt;jupyter_output&gt;&lt;empty_output&gt;&lt;jupyter_text&gt;Problem 8 Write a Javascript function that takes in two strings, and returns their concatenation. For example: If I were to run it with `&quot;Hello&quot;` and `&quot;world&quot;`, it would output the string `helloworld`.&lt;jupyter_code&gt;string_one = &quot;Hello&quot;
+string_two = &quot;world&quot; 
+
+#Write your code here&lt;jupyter_output&gt;&lt;empty_output&gt;</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./starcoder:7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>252</td></tr>
+<tr><td class='left'>bytes</td><td>1988</td></tr>
+<tr><td class='left'>total duration</td><td>26.906581958s</td></tr>
+<tr><td class='left'>load duration</td><td>2.623102708s</td></tr>
+<tr><td class='left'>prompt eval count</td><td>18 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>312.394209ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>57.62 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>464 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>23.970624666s</td></tr>
+<tr><td class='left'>eval rate</td><td>19.36 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./starcoder:7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/starcoder:7b'>starcoder:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>starcoder</td></tr>
+<tr><td class='left'>size</td><td class='left'>5.9 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.5B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>8192</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>10G + 1893M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p>page created:   2025-06-09 14:56:12</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v4.2</p>
+</footer></body></html>

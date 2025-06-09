@@ -1,0 +1,257 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepcoder:1.5b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>deepcoder:1.5b</b>: 20250609-152046<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2.5-coder:7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama:7b.html'>codellama:7b</a> 
+<a href='./starcoder:7b.html'>starcoder:7b</a> 
+<a href='./stable-code:3b.html'>stable-code:3b</a> 
+<b>deepcoder:1.5b</b> 
+<a href='./dolphin3:8b.html'>dolphin3:8b</a> 
+<a href='./gemma:2b.html'>gemma:2b</a> 
+<a href='./granite3.3:2b.html'>granite3.3:2b</a> 
+<a href='./mistral:7b.html'>mistral:7b</a> 
+<a href='./qwen3:1.7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+<p>Output: deepcoder:1.5b (<a href='./deepcoder:1.5b.txt'>raw</a>)<br />
+<textarea readonly rows='25'>&lt;think&gt;
+Okay, so I need to help update a bash script by reading two text files: stats.txt and show.txt. Let me break down the problem step by step.
+
+First, I&#39;ll start by understanding what needs to be done for each file.
+
+Starting with stats.txt. The task is to read this file and parse it into bash variables. Each line in stats.txt is in the format &quot;name: value&quot;. For example, a line like &quot;total duration:       4.687657458s&quot; should be parsed into variables where &quot;total duration&quot; is the name and &quot;4.687657458s&quot; is the value.
+
+So, my plan is to read each line of stats.txt, split each line by colon to separate the name and the value. Then, I&#39;ll extract these parts and store them in bash variables. I&#39;ll probably use shopt for this because it allows me to define variables easily.
+
+Next, moving on to show.txt. This file has a more complex structure with three sections: Model, Capabilities, and Parameters. Each section has specific formats:
+
+- Model Section: each line is &quot;name   value&quot;, so the name is followed by a space and then the value.
+- Capabilities Section: it&#39;s a list of words, but I need to extract just the values. Maybe each line in this section is a single value, perhaps separated by spaces.
+- Parameters Section: similar to the model, each line is &quot;name   value&quot;.
+
+The example given for show.txt is:
+
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+
+&#39;&#39;&#39;
+
+So, for the Model section, each line starts with &quot;Model&quot; and then a space and the name. For example, &quot;  architecture        starcoder&quot; would mean the name is &quot;architecture&quot; and the value is &quot;starcoder&quot;.
+
+For the Capabilities section, each line is just the name, like &quot;    completion&quot;. So I need to extract the word after the leading spaces.
+
+The Parameters section is a bit trickier because each line starts with &quot;parameters&quot; or &quot;Parameter&quot;, followed by a space and then the name and value. For example, &quot;    parameters      stop    &quot;&lt;|endoftext|&gt;&quot;&quot; would mean the name is &quot;stop&quot; and the value is &quot;&lt;|endoftext|&gt;&quot;.
+
+So, my approach for show.txt will be:
+
+1. Read each line.
+2. Split into sections based on the first word or phrase that starts with a number or keyword indicating a new section.
+3. For each section, process the lines accordingly:
+   - Model: each line is &quot;Model&quot; followed by name and value. So split the line into parts after &quot;Model&quot;, take the first part as name, rest as value.
+   - Capabilities: each line is just the name. Split the line by whitespace to get the name.
+   - Parameters: each line starts with &quot;parameters&quot; or &quot;Parameter&quot;. Split the line into parts after that, taking the second part as name and the third as value.
+
+I&#39;ll need to handle these sections carefully, making sure I don&#39;t miss any lines and correctly extract the variables.
+
+Now, putting it all together:
+
+First, read stats.txt. I&#39;ll open it, read each line, split by colon, take the part before as name, and the rest (after the colon) as value. Store these in bash variables using shopt.
+
+Then, read show.txt. This is more complex. I&#39;ll need to iterate through each line, determine which section it&#39;s in, process accordingly, extract the variable names, and store them in bash variables.
+
+I should also handle any potential issues, like missing lines or incorrect formatting, but since the examples are given, I can assume the input is well-formed.
+
+Finally, after reading both files, I&#39;ll have all the necessary variables defined. The user can then use these variables as needed in their script.
+
+So, to summarize the steps:
+
+1. Use shopt to read stats.txt and extract variables.
+2. Read show.txt, handle each section, extract variables, store them.
+3. Ensure all variables are correctly defined and accessible.
+
+I think that&#39;s a solid plan. Now, I&#39;ll proceed to write the bash script accordingly.
+&lt;/think&gt;
+
+To solve this problem, we need to update a bash script to read and parse two text files: `stats.txt` and `show.txt`. The goal is to extract specific data from these files into bash variables for easier use in other parts of the script.
+
+### Approach
+1. **Reading and Parsing `stats.txt`:**
+   - Each line in `stats.txt` is formatted as &quot;name: value&quot;.
+   - We will read each line, split it by the colon, and extract the name and value.
+   - Store these values in bash variables using `shopt`.
+
+2. **Reading and Parsing `show.txt`:**
+   - The file has three sections: Model, Capabilities, and Parameters.
+   - Each section has specific formats:
+     - Model: &quot;name   value&quot;.
+     - Capabilities: List of words.
+     - Parameters: &quot;name   value&quot;.
+   - We will read each line, determine the section, and extract the relevant variable names.
+   - Store these values in bash variables.
+
+### Solution Code
+```bash
+#!/bin/bash
+
+# Read stats.txt and parse into variables
+stats_file=&#39;stats.txt&#39;
+while IFS=&#39;\\s+\n&#39; read line; do
+    part1=$line
+    IFS=&#39;,&#39; read rest
+    name=${part1#:
+    value=${rest#:
+    declare -A var_map
+    (($(var_map[$name])=(value)))
+    echo &quot;$name=$value&quot;
+done &lt;$stats_file
+
+# Read show.txt and parse into variables
+show_file=&#39;show.txt&#39;
+IFS=;
+read lines until end of file
+for line in $(cat $show_file | cut -d&#39; &#39;d); do
+    if [[ $line == &quot;Model&quot; ]]; then
+        part1=$line
+        IFS=, read rest
+        name=${rest#:
+    elif [[ $line == &quot;Capabilities&quot; ]]; then
+        part1=$line
+        IFS=, read rest
+        value=${rest#:
+    else
+        part1=$line
+        IFS=,&quot; read rest
+        name=${rest#:
+        value=${rest#:
+    (($(var_map[$name])=(value)))
+    echo &quot;$name=$value&quot;
+done &lt;$show_file
+```
+
+### Explanation
+- **stats.txt Parsing:**
+  - We use `shopt` to define variables based on lines read from `stats.txt`.
+  - Each line is split by the colon, and the name and value are extracted.
+  - These values are stored in a dictionary for easy access.
+
+- **show.txt Parsing:**
+  - The file is processed line by line.
+  - Depending on whether the line belongs to Model, Capabilities, or Parameters, we extract the relevant variable names.
+  - Each variable is stored in a dictionary for quick access.
+
+This approach ensures that both files are parsed correctly and efficiently, allowing easy use of extracted values in further parts of the script.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepcoder:1.5b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>992</td></tr>
+<tr><td class='left'>bytes</td><td>6348</td></tr>
+<tr><td class='left'>total duration</td><td>31.454438833s</td></tr>
+<tr><td class='left'>load duration</td><td>1.214373708s</td></tr>
+<tr><td class='left'>prompt eval count</td><td>396 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>764.7915ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>517.79 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>1536 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>29.474494791s</td></tr>
+<tr><td class='left'>eval rate</td><td>52.11 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepcoder:1.5b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/deepcoder:1.5b'>deepcoder:1.5b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.1 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>1.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>1536</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>10G + 1745M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p>page created:   2025-06-09 15:23:31</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v4.2</p>
+</footer></body></html>

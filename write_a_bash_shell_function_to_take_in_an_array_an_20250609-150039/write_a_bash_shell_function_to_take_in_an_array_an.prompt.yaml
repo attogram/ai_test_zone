@@ -1,0 +1,7 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: |
+      Write a Bash shell function to take in an array and output a html list of the array contents
+model: ''

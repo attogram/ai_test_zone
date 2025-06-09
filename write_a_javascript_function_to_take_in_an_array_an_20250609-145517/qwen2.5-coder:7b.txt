@@ -1,0 +1,29 @@
+Certainly! Below is a JavaScript function that takes an array as input and returns an HTML unordered list (`<ul>`) containing the elements of the array.
+
+```javascript
+function arrayToHTMLList(array) {
+    if (!Array.isArray(array) || array.length === 0) {
+        return '<p>No items to display.</p>';
+    }
+
+    let html = '<ul>';
+
+    for (let i = 0; i < array.length; i++) {
+        html += `<li>${array[i]}</li>`;
+    }
+
+    html += '</ul>';
+
+    return html;
+}
+
+// Example usage:
+const myArray = ['Apple', 'Banana', 'Cherry'];
+const htmlList = arrayToHTMLList(myArray);
+console.log(htmlList);
+```
+
+This function checks if the input is a valid non-empty array. If it is, it constructs an unordered list with each element of the array as a list item (`<li>`). If the input is not a valid array or is empty, it returns a simple message indicating that there are no items to display.
+
+You can use this function in your JavaScript code to dynamically generate an HTML list from any array.
+

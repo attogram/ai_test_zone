@@ -1,0 +1,7 @@
+```json
+[
+	{"bbox_2d": [135, 128, 192, 188], "label": "faces of people or animals"},
+	{"bbox_2d": [192, 128, 248, 188], "label": "faces of people or animals"}
+]
+```
+

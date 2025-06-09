@@ -1,0 +1,81 @@
+ Here is a bash function that reads the contents of `model.info.txt` and parses the sections as per your requirements. Note that this function assumes the file exists and is readable.
+
+```bash
+function parse_model_info() {
+    # Initialize variables
+    declare -A sections=("Model" "Capabilities" "System" "Parameters" "")
+    declare -a capabilities
+    local systemPrompt=""
+    local tempValue=0
+    local name value
+
+    # Read file line by line
+    while IFS=' ' read -r line; do
+        # Skip empty lines and comments (lines starting with '#')
+        if [[ -z "$line" || ${line:0:1} == '#' ]]; then
+            continue
+        fi
+
+        # Extract name and value from the line
+        IFS='    ' read -r name value <<<"$line"
+
+        # Assign name and value to variables for easier handling
+        eval "name=\"\${value}\""
+
+        # Determine section based on the current variable name
+        if [[ ${#sections[@]} -eq 0 ]]; then
+            sections+=("$name")   # Add new section if none exist
+        else
+            # Check if the name corresponds to an existing section
+            for ((i=0; i<${#sections[@]}; i++)); do
+                if [[ ${sections[$i]} == "$name" ]]; then
+                    # If it's a Model line, only save 'temperature' parameter
+                    if [ "${sections[0]}" == "Model" ]; then
+                        if [ "$name" == "parameters" ]; then
+                            tempValue=$(echo $value | awk '{print $2}')
+                            eval "tempValue=\${tempValue}"
+                        else
+                            eval "name=\"\${value}\""    # Otherwise, save the name=value pair
+                        fi
+                    else
+                        eval "name=\"\${value}\""       # Save all keywords in Capabilities section
+                        break                         # Break out of loop after finding a match
+                    fi
+                fi
+            done
+        fi
+    done < model.info.txt
+
+    # Extract system prompt if it exists
+    if [[ ${#sections[@]} -gt 3 ]] && [[ "${sections[3]}" != "" ]]; then
+        ((i=0))
+        while read -r line; do
+            if [[ "$line" == "System" ]]; then
+                ((i++))
+                break
+            fi
+            systemPrompt+="$line "
+        done < model.info.txt
+        systemPrompt="${systemPrompt% }"   # Remove trailing space
+    fi
+
+    # Print parsed variables
+    echo "Model architecture: ${architecture}"
+    echo "Model parameters: ${parameters}"
+    echo "Model context length: ${context_length}"
+    echo "Model embedding length: ${embedding_length}"
+    echo "Model quantization: ${quantization}"
+    for capability in "${capabilities[@]}"; do
+        echo "Capability: ${capability}"
+    done
+    if [[ "$tempValue" != 0 ]]; then
+        echo "Temperature: ${temperature}"
+    fi
+    if [[ -n "$systemPrompt" ]]; then
+        echo "System prompt: $systemPrompt"
+    fi
+}
+```
+
+You can call this function with `parse_model_info`, and it will print the parsed variables based on the example file contents you provided.
+
