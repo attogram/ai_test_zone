@@ -1,0 +1,12 @@
+Based on the description, here are some generated keywords:
+{
+  "keywords": [
+    "llama",
+    "computer",
+    "server rack",
+    "networking",
+    "cybersecurity",
+    "data center"
+  ]
+}
+

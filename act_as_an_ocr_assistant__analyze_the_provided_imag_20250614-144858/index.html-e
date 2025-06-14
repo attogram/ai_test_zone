@@ -1,0 +1,208 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: act_as_an_ocr_assistant__analyze_the_provided_imag</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>act_as_an_ocr_assistant__analyze_the_provided_imag</b>: 20250614-144858<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./act_as_an_ocr_assistant__analyze_the_provided_imag.prompt.yaml'>yaml</a>)
+  words:59  bytes:400<br />
+<textarea readonly rows='9'>Act as an OCR assistant. Analyze the provided image and:
+
+1. Recognize all visible text and numbers in the image as accurately as possible.
+2. Maintain the original structure and formatting of the text.
+3. If any words or phrases are unclear, indicate this with [unclear] in your transcription.
+
+Provide only the transcription without any additional comments.
+
+Image: ./docs/screenshots/run.page.png</textarea>
+</p>
+<!-- IMAGES -->
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a></td>
+<td>25</td>
+<td>273</td>
+<td>1m21.003448042s</td>
+<td>21.268792ms</td>
+<td>7426 token(s)</td>
+<td>1m9.828554167s</td>
+<td>106.35 tokens/s</td>
+<td>133 token(s)</td>
+<td>11.14637225s</td>
+<td>11.93 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./minicpm_v_8b.html'>minicpm-v:8b</a></td>
+<td>2062</td>
+<td>33122</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a></td>
+<td>383</td>
+<td>2471</td>
+<td>2m8.185215959s</td>
+<td>25.018959ms</td>
+<td>1357 token(s)</td>
+<td>1m20.408666791s</td>
+<td>16.88 tokens/s</td>
+<td>1401 token(s)</td>
+<td>47.74676975s</td>
+<td>29.34 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a></td>
+<td>359</td>
+<td>2394</td>
+<td>2m52.747582958s</td>
+<td>26.244041ms</td>
+<td>1357 token(s)</td>
+<td>1m24.454187541s</td>
+<td>16.07 tokens/s</td>
+<td>1409 token(s)</td>
+<td>1m28.2625735s</td>
+<td>15.96 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3_4b.html'>gemma3:4b</a></td>
+<td>164</td>
+<td>1053</td>
+<td>16.8024505s</td>
+<td>31.33575ms</td>
+<td>347 token(s)</td>
+<td>8.954589083s</td>
+<td>38.75 tokens/s</td>
+<td>226 token(s)</td>
+<td>7.811937083s</td>
+<td>28.93 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_7b.html'>llava:7b</a></td>
+<td>873</td>
+<td>14577</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_llama3_8b.html'>llava-llama3:8b</a></td>
+<td>4768</td>
+<td>28685</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a></td>
+<td>64</td>
+<td>370</td>
+<td>10.064836875s</td>
+<td>19.186083ms</td>
+<td>682 token(s)</td>
+<td>3.0589875s</td>
+<td>222.95 tokens/s</td>
+<td>188 token(s)</td>
+<td>6.979119459s</td>
+<td>26.94 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./bakllava_7b.html'>bakllava:7b</a></td>
+<td>12</td>
+<td>60</td>
+<td>5.430265583s</td>
+<td>15.160583ms</td>
+<td>684 token(s)</td>
+<td>4.518544292s</td>
+<td>151.38 tokens/s</td>
+<td>18 token(s)</td>
+<td>890.619708ms</td>
+<td>20.21 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./moondream_1_8b.html'>moondream:1.8b</a></td>
+<td>4</td>
+<td>27</td>
+<td>5.331924292s</td>
+<td>20.888667ms</td>
+<td>824 token(s)</td>
+<td>5.00728925s</td>
+<td>164.56 tokens/s</td>
+<td>19 token(s)</td>
+<td>296.521292ms</td>
+<td>64.08 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1026M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>act_as_an_ocr_assistant__analyze_the_provided_imag</b>: 20250614-144858</p>
+<p>page created:   2025-06-14 15:35:21</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

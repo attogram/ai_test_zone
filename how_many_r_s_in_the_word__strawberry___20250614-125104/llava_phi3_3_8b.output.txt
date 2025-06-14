@@ -1,0 +1,2 @@
+The word "Strawberry" does not contain any letter "r". Therefore, the number of "r" letters in "Strawberry" is 0.
+

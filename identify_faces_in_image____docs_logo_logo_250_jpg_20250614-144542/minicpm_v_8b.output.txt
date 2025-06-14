@@ -1,0 +1,16 @@
+The identified "face" regions correspond to the facial features of anthropomorphized llamas. Here are the details:
+
+1. The face on the far-left llama:
+   - Top Left (x, y): [Approximately 0.36, 0.28]
+   - Bottom Right (x, y): [Approximately 0.54, 0.7]
+
+2. The face of the middle llama:
+   - Top Left (x, y): [Approximately 0.39, 0.31]
+   - Bottom Right (x, y): [Approximately 0.61, 0.8]
+
+3. The face on the far-right llama:
+   - Top Left (x, y): [Approximately 0.52, 0.27]
+   - Bottom Right (x, y): [Approximately 0.69, 0.84]
+
+Please note that these bounding boxes are approximations based on visible facial features and may not be precise due to the stylized nature of the illustration.
+

@@ -1,0 +1,28 @@
+Here's a simple JavaScript function that will convert an array into an HTML unordered list:
+
+```javascript
+function arrayToHtmlList(array) {
+  var ul = document.createElement('ul');
+  
+  for (var i = 0; i < array.length; i++) {
+    var li = document.createElement('li');
+    li.textContent = array[i];
+    
+    ul.appendChild(li);
+  }
+  
+  return ul;
+}
+```
+
+To use this function, you would pass in an array of strings. The function will create a new unordered list element (`<ul>`), then iterate over the array and create a new list item element (`<li>`) for each item. It sets the text content of the `<li>` to be whatever value is currently iterated over in the array.
+
+Finally, it appends each `<li>` to the `<ul>`, then returns the finished unordered list. You can append this returned element to your document wherever you like. For example:
+
+```javascript
+var myArray = ['Apple', 'Banana', 'Cherry'];
+document.body.appendChild(arrayToHtmlList(myArray));
+```
+
+This will create an HTML unordered list with items "Apple", "Banana" and "Cherry" in the body of your document.
+

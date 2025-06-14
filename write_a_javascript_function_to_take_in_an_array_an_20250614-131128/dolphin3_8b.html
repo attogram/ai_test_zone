@@ -1,0 +1,106 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_javascript_function_to_take_in_an_array_an</a>: <b>dolphin3:8b</b>: 20250614-131128<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_javascript_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:18  bytes:93<br />
+<textarea readonly rows='1'>Write a Javascript function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Here&#39;s a simple JavaScript function that will convert an array into an HTML unordered list:
+
+```javascript
+function arrayToHtmlList(array) {
+  var ul = document.createElement(&#39;ul&#39;);
+  
+  for (var i = 0; i &lt; array.length; i++) {
+    var li = document.createElement(&#39;li&#39;);
+    li.textContent = array[i];
+    
+    ul.appendChild(li);
+  }
+  
+  return ul;
+}
+```
+
+To use this function, you would pass in an array of strings. The function will create a new unordered list element (`&lt;ul&gt;`), then iterate over the array and create a new list item element (`&lt;li&gt;`) for each item. It sets the text content of the `&lt;li&gt;` to be whatever value is currently iterated over in the array.
+
+Finally, it appends each `&lt;li&gt;` to the `&lt;ul&gt;`, then returns the finished unordered list. You can append this returned element to your document wherever you like. For example:
+
+```javascript
+var myArray = [&#39;Apple&#39;, &#39;Banana&#39;, &#39;Cherry&#39;];
+document.body.appendChild(arrayToHtmlList(myArray));
+```
+
+This will create an HTML unordered list with items &quot;Apple&quot;, &quot;Banana&quot; and &quot;Cherry&quot; in the body of your document.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./dolphin3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>159</td></tr>
+<tr><td class='left'>bytes</td><td>1078</td></tr>
+<tr><td class='left'>total duration</td><td>15.110019833s</td></tr>
+<tr><td class='left'>load duration</td><td>20.064375ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>41 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>592.217667ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>69.23 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>256 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>14.49715675s</td></tr>
+<tr><td class='left'>eval rate</td><td>17.66 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./dolphin3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 732M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_javascript_function_to_take_in_an_array_an</a>: <b>dolphin3:8b</b>: 20250614-131128</p>
+<p>page created:   2025-06-14 13:13:27</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

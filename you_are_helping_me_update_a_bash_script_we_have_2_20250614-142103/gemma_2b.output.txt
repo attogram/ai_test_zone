@@ -1,0 +1,36 @@
+# Define variables for reading the stats and show files
+stats_file="stats.txt"
+show_file="show.txt"
+
+# Read the stats file
+stats_data=$(cat "$stats_file" | grep -E "total duration:|load duration:|prompt eval:|eval count:|eval duration:|eval rate:|")
+
+# Parse the stats data
+stats_data_parsed=$(awk -F ':' '{print $2}' <<< "$stats_data"
+
+# Read the show file
+show_data=$(cat "$show_file" | grep -E "Model|Capabilities|Parameters")
+
+# Parse the show data
+show_data_parsed=$(awk -F ':' '{print $2}' <<< "$show_data")
+
+# Create a hash table of stats and show data
+data_hash = {}
+for line in $stats_data_parsed; do
+  name=$(echo "$line" | awk '{print $1}')
+  value=$(echo "$line" | awk '{print $2}')
+  data_hash[$name]="$value"
+done
+
+# Print the data in the specified format
+echo "Model: ${data_hash['Model']}"
+echo "Capabilities: ${data_hash['Capabilities']}"
+echo "Parameters: ${data_hash['Parameters']}"
+```
+
+**Note:**
+
+* The regular expressions used in the `grep` commands may need to be adjusted based on the actual format of your files.
+* The `awk` commands used in the script are also just an example, and you may need to modify them to suit your specific data format.
+* This script assumes that the files `stats.txt` and `show.txt` exist in the same directory as the script. If this is not the case, you can use the `-i` flag with the `grep` and `awk` commands to search in the specified paths.
+

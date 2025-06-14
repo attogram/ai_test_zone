@@ -1,0 +1,156 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gemma:2b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>gemma:2b</b>: 20250614-142103<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<b>gemma:2b</b> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+<p>Output: gemma:2b (<a href='./gemma_2b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'># Define variables for reading the stats and show files
+stats_file=&quot;stats.txt&quot;
+show_file=&quot;show.txt&quot;
+
+# Read the stats file
+stats_data=$(cat &quot;$stats_file&quot; | grep -E &quot;total duration:|load duration:|prompt eval:|eval count:|eval duration:|eval rate:|&quot;)
+
+# Parse the stats data
+stats_data_parsed=$(awk -F &#39;:&#39; &#39;{print $2}&#39; &lt;&lt;&lt; &quot;$stats_data&quot;
+
+# Read the show file
+show_data=$(cat &quot;$show_file&quot; | grep -E &quot;Model|Capabilities|Parameters&quot;)
+
+# Parse the show data
+show_data_parsed=$(awk -F &#39;:&#39; &#39;{print $2}&#39; &lt;&lt;&lt; &quot;$show_data&quot;)
+
+# Create a hash table of stats and show data
+data_hash = {}
+for line in $stats_data_parsed; do
+  name=$(echo &quot;$line&quot; | awk &#39;{print $1}&#39;)
+  value=$(echo &quot;$line&quot; | awk &#39;{print $2}&#39;)
+  data_hash[$name]=&quot;$value&quot;
+done
+
+# Print the data in the specified format
+echo &quot;Model: ${data_hash[&#39;Model&#39;]}&quot;
+echo &quot;Capabilities: ${data_hash[&#39;Capabilities&#39;]}&quot;
+echo &quot;Parameters: ${data_hash[&#39;Parameters&#39;]}&quot;
+```
+
+**Note:**
+
+* The regular expressions used in the `grep` commands may need to be adjusted based on the actual format of your files.
+* The `awk` commands used in the script are also just an example, and you may need to modify them to suit your specific data format.
+* This script assumes that the files `stats.txt` and `show.txt` exist in the same directory as the script. If this is not the case, you can use the `-i` flag with the `grep` and `awk` commands to search in the specified paths.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gemma_2b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>205</td></tr>
+<tr><td class='left'>bytes</td><td>1399</td></tr>
+<tr><td class='left'>total duration</td><td>9.573861083s</td></tr>
+<tr><td class='left'>load duration</td><td>22.31575ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>430 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>748.916917ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>574.16 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>398 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>8.802140458s</td></tr>
+<tr><td class='left'>eval rate</td><td>45.22 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gemma_2b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/gemma:2b'>gemma:2b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>gemma</td></tr>
+<tr><td class='left'>size</td><td class='left'>3.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>2.5B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>8192</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2048</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 625M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>gemma:2b</b>: 20250614-142103</p>
+<p>page created:   2025-06-14 14:25:49</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

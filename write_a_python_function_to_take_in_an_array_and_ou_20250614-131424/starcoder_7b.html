@@ -1,0 +1,418 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: starcoder:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>starcoder:7b</b>: 20250614-131424<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<b>starcoder:7b</b> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_python_function_to_take_in_an_array_and_ou.prompt.yaml'>yaml</a>)
+  words:18  bytes:89<br />
+<textarea readonly rows='1'>Write a python function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: starcoder:7b (<a href='./starcoder_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>.
+
+# + id=&quot;183029f7&quot; outputId=&quot;618548a3-93b5-45e3-9e3d-5c516132f940&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def makeHTMLList(thelist):
+    html = &quot;&lt;ul&gt;&quot;
+    for item in thelist:
+        html += f&quot;&lt;li&gt;{item}&lt;/li&gt;&quot;
+    html += &quot;&lt;/ul&gt;&quot;
+    
+    return html
+    
+print (makeHTMLList([&quot;this&quot;, &quot;is&quot;, &quot;my&quot;, &quot;first&quot;, &quot;python&quot;]))
+
+
+# + [markdown] id=&quot;20946c58&quot;
+# #### Write a function to take in two lists of the same length and produce another list with each element of the first added to the corresponding element of the second.
+
+# + id=&quot;e1f77743&quot; outputId=&quot;d31a33af-46b1-480c-f579-2cc120365bb0&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def addLists(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    newList = []
+    for i in range(len(listA)):
+        newList.append (listA[i] + listB[i])
+        
+    return newList
+
+print (addLists([1, 2], [3,4]))
+
+
+# + [markdown] id=&quot;56c3d908&quot;
+# #### Write a function that computes the dot product of two lists.
+
+# + id=&quot;9fb3a05b&quot; outputId=&quot;f84d587a-1f1e-42eb-bfda-623033ffbd80&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return product
+
+print (dotProduct([1,2], [3,4]))
+
+
+# + id=&quot;1f57c869&quot; outputId=&quot;038d6d8b-0a8e-4024-a7d0-511c18d9e2eb&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;
+
+print (dotProduct([1,2], [3,4]))
+
+
+# + id=&quot;b547e3a6&quot; outputId=&quot;38593d08-9d84-4d60-b6ed-2d54c4940c6f&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,2], [3,4]))
+
+
+# + id=&quot;7e978c96&quot; outputId=&quot;0b45d2dc-774a-4936-ad4b-a9c3f308ceae&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;b08b96d7&quot; outputId=&quot;14a8d7dc-c5fe-429e-8679-2427953618df&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;c7696a40&quot; outputId=&quot;d8b307e1-b420-47ce-ac60-616210f07318&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;c796a20d&quot; outputId=&quot;78b1b8e6-e20e-4238-ef62-1c5d75fbca7a&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;23698e70&quot; outputId=&quot;b8997af6-3a6c-46d8-9e89-e30f207df5de&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;6d7b0022&quot; outputId=&quot;b18d1336-98cf-423b-cb2a-5e611f1112bd&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;67d0689e&quot; outputId=&quot;ebce15a4-d4c2-43b4-cccb-693e2d72165f&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;a78a0b6e&quot; outputId=&quot;0d91c9af-b717-4ca6-efeb-6856d99826df&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;c968a017&quot; outputId=&quot;b3e2efcb-95d8-45ad-d9b5-57b836f81af8&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;6a790d28&quot; outputId=&quot;c56b9590-6f7b-495e-fe8c-37352ff0a5cf&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;8c7b0e8a&quot; outputId=&quot;96d82e33-06cf-43de-f82a-88697af9c399&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;8f9056af&quot; outputId=&quot;76b3a73f-d5e1-49ef-c716-c3d21caec676&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;9a23086c&quot; outputId=&quot;6d3e70b5-b253-4d94-dfba-b69cf6f03b2a&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;b8d172fd&quot; outputId=&quot;610e69bf-a7c9-427a-dfdc-0fb11ef97f51&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;c87996d0&quot; outputId=&quot;d7a87b90-1453-43fa-e8da-9fbec296f1ad&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;e728b0a5&quot; outputId=&quot;d96ef8da-2801-4fb8-b7bd-0170b945f6c1&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;d97e09b8&quot; outputId=&quot;6a7c3d82-ef17-4bd6-8b8a-2196f32729cb&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;4e87c0b2&quot; outputId=&quot;a91f6d0c-35af-4342-bb1c-eb6ce3c616bd&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;c93e068b&quot; outputId=&quot;72d3c9bc-96bd-4a13-bebb-4fe782ec3f9b&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;98e7a0d6&quot; outputId=&quot;9bbec538-64b8-4b32-f78b-c01748c04bc6&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f&quot;{product:.2f}&quot;.replace(&#39;.&#39;, &#39;,&#39;)
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id=&quot;7e9a8561&quot; outputId=&quot;b01453b6-f0d2-44c7-ae07-b1a3978e3d76&quot; colab={&quot;base_uri&quot;: &quot;https://localhost:8080/&quot;}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), &#39;Lists not the same length&#39;
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] *265&quot;1.9&quot;,18111101111111111111111111111111111111</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./starcoder_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>1023</td></tr>
+<tr><td class='left'>bytes</td><td>10308</td></tr>
+<tr><td class='left'>total duration</td><td></td></tr>
+<tr><td class='left'>load duration</td><td></td></tr>
+<tr><td class='left'>prompt eval count</td><td></td></tr>
+<tr><td class='left'>prompt eval duration</td><td></td></tr>
+<tr><td class='left'>prompt eval rate</td><td></td></tr>
+<tr><td class='left'>eval count</td><td></td></tr>
+<tr><td class='left'>eval duration</td><td></td></tr>
+<tr><td class='left'>eval rate</td><td></td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./starcoder_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/starcoder:7b'>starcoder:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>starcoder</td></tr>
+<tr><td class='left'>size</td><td class='left'>5.9 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.5B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>8192</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 636M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>starcoder:7b</b>: 20250614-131424</p>
+<p>page created:   2025-06-14 13:19:53</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

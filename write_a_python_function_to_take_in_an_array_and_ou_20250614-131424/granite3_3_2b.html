@@ -1,0 +1,109 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: granite3.3:2b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>granite3.3:2b</b>: 20250614-131424<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<b>granite3.3:2b</b> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_python_function_to_take_in_an_array_and_ou.prompt.yaml'>yaml</a>)
+  words:18  bytes:89<br />
+<textarea readonly rows='1'>Write a python function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: granite3.3:2b (<a href='./granite3_3_2b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Here is a Python function that takes in an array and outputs a string in HTML format, which represents a list:
+
+```python
+def array_to_html_list(array):
+    html_list = &quot;&lt;ul&gt;\n&quot;
+    for item in array:
+        html_list += &quot;  &lt;li&gt;&quot; + str(item) + &quot;&lt;/li&gt;\n&quot;
+    html_list += &quot;&lt;/ul&gt;&quot;
+    return html_list
+```
+
+You can use this function like so:
+
+```python
+array = [1, 2, 3, 4, 5]
+html_list = array_to_html_list(array)
+print(html_list)
+```
+
+This will output:
+
+```html
+&lt;ul&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+  &lt;li&gt;3&lt;/li&gt;
+  &lt;li&gt;4&lt;/li&gt;
+  &lt;li&gt;5&lt;/li&gt;
+&lt;/ul&gt;
+```</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./granite3_3_2b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>77</td></tr>
+<tr><td class='left'>bytes</td><td>544</td></tr>
+<tr><td class='left'>total duration</td><td>5.277320125s</td></tr>
+<tr><td class='left'>load duration</td><td>15.139291ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>61 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>287.3315ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>212.30 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>208 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>4.973764875s</td></tr>
+<tr><td class='left'>eval rate</td><td>41.82 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./granite3_3_2b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/granite3.3:2b'>granite3.3:2b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>granite</td></tr>
+<tr><td class='left'>size</td><td class='left'>3.3 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>2.5B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2048</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 628M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>granite3.3:2b</b>: 20250614-131424</p>
+<p>page created:   2025-06-14 13:21:19</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

@@ -1,0 +1,248 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: help_me_write_bash_function_to_parse_data_from_thi</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>help_me_write_bash_function_to_parse_data_from_thi</b>: 20250614-133224<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_bash_function_to_parse_data_from_thi.prompt.yaml'>yaml</a>)
+  words:174  bytes:1514<br />
+<textarea readonly rows='10'>Help me write bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          </textarea>
+</p>
+<!-- IMAGES -->
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>379</td>
+<td>3131</td>
+<td>48.187395s</td>
+<td>20.302875ms</td>
+<td>364 token(s)</td>
+<td>2.472763042s</td>
+<td>147.20 tokens/s</td>
+<td>752 token(s)</td>
+<td>45.693215s</td>
+<td>16.46 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>163</td>
+<td>1685</td>
+<td>27.490727292s</td>
+<td>10.352458ms</td>
+<td>403 token(s)</td>
+<td>2.660710542s</td>
+<td>151.46 tokens/s</td>
+<td>459 token(s)</td>
+<td>24.819049667s</td>
+<td>18.49 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>5</td>
+<td>41</td>
+<td>3.076974583s</td>
+<td>15.280541ms</td>
+<td>340 token(s)</td>
+<td>2.207871208s</td>
+<td>153.99 tokens/s</td>
+<td>16 token(s)</td>
+<td>853.148458ms</td>
+<td>18.75 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>187</td>
+<td>1452</td>
+<td>13.66071s</td>
+<td>12.232042ms</td>
+<td>370 token(s)</td>
+<td>1.496321291s</td>
+<td>247.27 tokens/s</td>
+<td>448 token(s)</td>
+<td>12.15092875s</td>
+<td>36.87 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>7494</td>
+<td>50791</td>
+<td>4m29.892982084s</td>
+<td>19.564709ms</td>
+<td>338 token(s)</td>
+<td>494.040958ms</td>
+<td>684.15 tokens/s</td>
+<td>10706 token(s)</td>
+<td>4m29.378616s</td>
+<td>39.74 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>234</td>
+<td>2132</td>
+<td>32.749174583s</td>
+<td>20.766667ms</td>
+<td>343 token(s)</td>
+<td>2.271283708s</td>
+<td>151.02 tokens/s</td>
+<td>521 token(s)</td>
+<td>30.456514542s</td>
+<td>17.11 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>85</td>
+<td>721</td>
+<td>5.764732417s</td>
+<td>20.422209ms</td>
+<td>382 token(s)</td>
+<td>769.772959ms</td>
+<td>496.25 tokens/s</td>
+<td>232 token(s)</td>
+<td>4.973976875s</td>
+<td>46.64 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>210</td>
+<td>1778</td>
+<td>14.595940208s</td>
+<td>15.545833ms</td>
+<td>373 token(s)</td>
+<td>1.014329959s</td>
+<td>367.73 tokens/s</td>
+<td>499 token(s)</td>
+<td>13.565189375s</td>
+<td>36.79 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>204</td>
+<td>1917</td>
+<td>28.0992415s</td>
+<td>14.178167ms</td>
+<td>390 token(s)</td>
+<td>2.426249041s</td>
+<td>160.74 tokens/s</td>
+<td>501 token(s)</td>
+<td>25.658002209s</td>
+<td>19.53 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>30179</td>
+<td>233220</td>
+<td>40m41.408850875s</td>
+<td>19.119ms</td>
+<td>345 token(s)</td>
+<td>692.145792ms</td>
+<td>498.45 tokens/s</td>
+<td>81920 token(s)</td>
+<td>40m40.69706375s</td>
+<td>33.56 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 601M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>help_me_write_bash_function_to_parse_data_from_thi</b>: 20250614-133224</p>
+<p>page created:   2025-06-14 14:21:03</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

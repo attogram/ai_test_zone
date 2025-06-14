@@ -1,0 +1,70 @@
+Here is a bash function that will parse data from your model.info.txt file according to the format and sections you described:
+
+```bash
+parse_model_info() {
+    declare -A model_vars=(models_params context_length embedding_length quantization)
+    declare -a capabilities=()
+    declare systemPrompt=""
+    declare temperature=""
+
+    while IFS= read -r line; do
+        if [[ "$line" == "Model"* ]]; then
+            name=$(echo "$line" | sed 's/.*:\s//' | tr -d '[:space:]')
+            value=$(echo "$line" | sed 's/^.*: \+//' | tr -d '[:space:]')
+            model_vars["$name"]=$value
+        elif [[ "$line" == "Parameters"* ]]; then
+            continue
+        else
+            parameters=$(echo "$line" | sed 's/.*:\s//' | tr -d '[:space:]')
+            if [[ "$parameters" == 2.5B ]]; then
+                model_vars["parameters"]=$parameters
+            fi
+        fi
+
+        # capabilities section
+        elif [[ "$line" == "Capabilities"* ]]; then
+            continue
+        else
+            capabilities+=("$line")
+        fi
+
+        # system prompt
+        elif [[ "$line" == "System"* ]]; then
+            systemPrompt="$line"
+        fi
+
+        # parameters section
+        elif [[ "$line" == "Parameters"* ]]; then
+            continue
+        else
+            name=$(echo "$line" | sed 's/.*:\s//' | tr -d '[:space:]')
+            value=$(echo "$line" | sed 's/^.*: \+//' | tr -d '[:space:]')
+            if [[ "$name" == "temperature" ]]; then
+                temperature="$value"
+            fi
+        fi
+
+        # Model and Parameters section parsing completed
+        elif [[ "${model_vars[$1]}" == parameters ]]; then
+            break
+        fi
+    done < model.info.txt
+
+    echo "Model data:"
+    for name in "${!model_vars[@]}"; do
+        echo "$name=\"$model_vars[$name]\""
+    done
+
+    echo "Capabilities array:"
+    echo "${capabilities[@]}"
+
+    echo "System prompt: $systemPrompt"
+
+    echo "Temperature value: $temperature"
+}
+
+parse_model_info
+```
+
+Please note that you need to source this function (source parse_model_info.sh) after saving it into a file, for the variables to be set.
+

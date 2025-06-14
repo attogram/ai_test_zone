@@ -1,0 +1,29 @@
+ Here's a simple JavaScript function that takes an array as input and returns HTML for an unordered list (`<ul>`) containing the array items:
+
+```javascript
+function arrayToHtmlList(arr) {
+    // Check if the input is an array, otherwise return an error message
+    if (!Array.isArray(arr)) {
+        return '<p>Error: Input must be an array.</p>';
+    }
+
+    let htmlList = '<ul>';
+
+    // Iterate through the array and append each item as a list item (`<li>`) to the HTML string
+    for (let i = 0; i < arr.length; i++) {
+        htmlList += `<li>${arr[i]}</li>`;
+    }
+
+    // Close the unordered list tag and return the complete HTML string
+    return htmlList + '</ul>';
+}
+```
+
+You can use this function like so:
+
+```javascript
+let myArray = ['Apple', 'Banana', 'Cherry'];
+console.log(arrayToHtmlList(myArray));
+// Outputs: '<ul><li>Apple</li><li>Banana</li><li>Cherry</li></ul>'
+```
+

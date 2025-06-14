@@ -1,0 +1,26 @@
+```
+#!/bin/bash
+
+html_list() {
+  local arr=("$@")
+  local len=${#arr[@]}
+  echo "<ul>"
+  for ((i=0; i<len; i++)); do
+    echo "<li>${arr[i]}</li>"
+  done
+  echo "</ul>"
+}
+```
+This function takes an array as input and outputs a HTML list of the array contents. The function first declares a local variable `arr` to hold the input array, and then uses the `${#arr[@]}` syntax to get the length of the array.
+
+The function then uses a for loop to iterate over the elements of the array, printing each element as an HTML list item with the `echo "<li>${arr[i]}</li>"`. The `for` loop runs until the index `i` reaches the length of the array, which is stored in the variable `len`.
+
+Finally, the function outputs the closing `</ul>` tag to complete the HTML list.
+
+To use this function, you can call it like this:
+```
+arr=("apple" "banana" "cherry")
+html_list "${arr[@]}"
+```
+This will output a HTML list with three items: `apple`, `banana`, and `cherry`.
+

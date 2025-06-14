@@ -1,0 +1,50 @@
+Certainly! Below is a simple PHP function that takes an array as input and outputs an HTML unordered list (`<ul>`) of the array's contents.
+
+```php
+<?php
+function displayArrayAsList($array) {
+    // Check if the input is an array
+    if (!is_array($array)) {
+        echo "Invalid input. Please provide an array.";
+        return;
+    }
+
+    // Start the unordered list
+    echo "<ul>";
+
+    // Loop through each element in the array and create a list item
+    foreach ($array as $item) {
+        echo "<li>$item</li>";
+    }
+
+    // Close the unordered list
+    echo "</ul>";
+}
+
+// Example usage:
+$myArray = ['Apple', 'Banana', 'Cherry'];
+displayArrayAsList($myArray);
+?>
+```
+
+### Explanation:
+1. **Function Definition**: The function `displayArrayAsList` is defined to take one parameter, `$array`.
+2. **Input Validation**: It checks if the input is an array using `is_array()`. If not, it outputs an error message and returns.
+3. **HTML List Creation**:
+   - It starts by echoing an unordered list tag (`<ul>`).
+   - It then loops through each element in the array using a `foreach` loop and echoes a list item (`<li>`) for each element.
+   - Finally, it closes the unordered list tag (`</ul>`).
+
+### Example Usage:
+The example usage at the bottom demonstrates how to call the function with an array of fruits. When you run this script, it will output:
+
+```html
+<ul>
+<li>Apple</li>
+<li>Banana</li>
+<li>Cherry</li>
+</ul>
+```
+
+You can test this function with different arrays to see how it handles various inputs.
+

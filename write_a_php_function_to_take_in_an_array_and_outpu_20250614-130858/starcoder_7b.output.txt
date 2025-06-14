@@ -1,0 +1,23 @@
+ with indents.
+
+### Input Format:
+The first line contains N, the number of elements in the list. The second line contains the space separated elements of the list. 
+
+### Output Format:
+Print a formatted list with proper indentations.
+
+### Sample Input:
+    5 
+    1 2 3 4 5
+### Sample Output:
+    * 
+        1
+        2
+    * 
+        3
+        4
+        5
+
+### Explanation
+The input list has 5 elements, so your program should output 5 lines of output with proper indentation.
+

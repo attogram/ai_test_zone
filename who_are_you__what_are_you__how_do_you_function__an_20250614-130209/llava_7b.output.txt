@@ -1,0 +1,6 @@
+ I am a language model, specifically the GPT-3.5 version, developed by OpenAI. I am designed to understand and generate human-like text based on the input data provided to me. 
+
+I function by taking in text as input and generating coherent and relevant responses using my training on vast amounts of data. My output is determined by a combination of context, language models, and algorithms that optimize the likelihood of the given output being generated based on the input. 
+
+In terms of what I can do, I am capable of answering questions, providing information, generating text for various tasks such as writing articles or stories, and assisting with a wide range of language-related tasks. However, it is important to note that while my training data allows me to generate coherent and relevant responses, I may not always be able to provide the most accurate or up-to-date information, particularly in rapidly changing fields or on specific topics where my training data was limited. 
+

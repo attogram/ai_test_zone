@@ -1,0 +1,25 @@
+```bash
+#!/bin/bash
+
+# Open the model.info.txt file for reading
+model_info=$(cat model.info.txt)
+
+# Parse the model section
+model_data=$(echo "$model_info" | grep "Model" | sed -E 's/Model\s+(.*)/\1/')
+
+# Parse the capabilities section
+capabilities_data=$(echo "$model_info" | grep "Capabilities" | sed -E 's/Capabilities\s+(.*)/\1/')
+
+# Parse the system section
+system_data=$(echo "$model_info" | grep "System" | sed -E 's/System\s+(.*)/\1/')
+
+# Parse the parameters section
+params_data=$(echo "$model_info" | grep "Parameters" | sed -E 's/Parameters\s+(.*)/\1/')
+
+# Print the parsed data
+echo "Model: $model_data"
+echo "Capabilities: $capabilities_data"
+echo "System: $system_data"
+echo "Parameters: $params_data"
+```
+

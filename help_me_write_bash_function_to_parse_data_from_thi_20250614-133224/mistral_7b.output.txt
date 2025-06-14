@@ -1,0 +1,60 @@
+ Here is a bash function that parses the given file format as per your specifications:
+
+```bash
+parse_model_info() {
+    # Initialize variables and arrays
+    local architecture=""
+    local capabilities=()
+    local systemPrompt=""
+    local temperature=""
+    local params=("context length" "embedding length" "quantization")
+
+    # Read the file line by line
+    while IFS="	" read -r key value; do
+        case $key in
+            Model)
+                section="Model";;
+            Parameters)
+                section="Parameters";;
+            System)
+                section="System";;
+            License)
+                section="License";;
+            Capabilities)
+                section="Capabilities";;
+            *)
+                if [[ ${params[*]} =~ "^( ${key} )$" ]] && [ -n "$value" ]; then
+                    if [ "$section" = "Parameters" ]; then
+                        key="temperature";
+                    fi
+                    eval $key="$value"
+                elif [[ $key != "" ]]; then
+                    eval $key="$value"
+                fi
+                ;;
+        esac
+    done < "$1"
+
+    # Save capabilities in an array and remove duplicates
+    capabilities=( "${capabilities[@]}" ${capabilities[@]} )
+    capabilities=("${capabilities[@]/ /}")
+
+    echo "Model:"
+    declare -p architecture
+    echo "Capabilities: ${capabilities[@]}"
+    if [ -n "$temperature" ]; then
+        echo "Parameters (Temperature): $temperature"
+    fi
+    if [ -n "$systemPrompt" ]; then
+        echo "System Prompt:"
+        echo "$systemPrompt"
+    fi
+}
+```
+
+This script parses the given file line by line and saves each variable using the `eval` command. It also handles missing sections or lines gracefully. The capabilities are stored in an array to remove duplicates later on. Call this function with your model.info.txt file as argument:
+
+```bash
+parse_model_info model.info.txt
+```
+

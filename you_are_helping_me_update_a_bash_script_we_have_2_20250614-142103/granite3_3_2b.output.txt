@@ -1,0 +1,78 @@
+To achieve this, you can use `grep`, `sed`, and `cut` commands in bash for parsing the files. Here's a script that reads and parses both files as per your requirements:
+
+```bash
+#!/bin/bash
+
+# Function to parse stats.txt
+parse_stats() {
+  local -a stats=()
+
+  while IFS=, read -r line; do
+    # Remove leading/trailing whitespaces and colon
+    line=$(echo "$line" | sed 's/ //g')
+
+    # Split line into name and value using first occurrence of ':'
+    name=$(echo "$line" | cut -d':' )
+    value=$(echo "$line" | cut -d':' -f2-)
+
+    # Handle multiple spaces in the value
+    value=${value// /}
+
+    stats+=("${name}:${value}")
+  done < <(grep '^' stats.txt | sed 's/'//g')
+
+  echo "${stats[@]}"
+}
+
+# Get parsed stats from stats.txt
+parsed_stats=$(parse_stats)
+
+# Function to parse show.txt
+parse_show() {
+  local -A show
+
+  while IFS=,' read -r line; do
+    # Remove leading/trailing whitespaces and ' '
+    line=$(echo "$line" | sed 's/ //g')
+
+    case "$line" in
+      Model)
+        name=$(echo "$line" | cut -d' ' -f1)
+        value=$(echo "$line" | cut -d' ' -f2-)
+        show[$name]="$value"
+        ;;
+      Capabilities)
+        capabilities=($(echo "$line" | sed 's/ //g'))
+        ;;
+      Parameters)
+        name_value=$(echo "$line" | sed 's/ //g')
+        name=$(echo "$name_value" | cut -d':' -f1)
+        value=$(echo "$name_value" | cut -d':' -f2-)
+        show[$name]="$value"
+        ;;
+    esac
+  done < <(grep '^' show.txt)
+
+  echo "${show[@]}"
+}
+
+# Get parsed data from show.txt
+parsed_show=$(parse_show)
+
+# Display the results
+echo "Parsed stats:"
+for entry in "${parsed_stats[@]}"; do
+  name,value=${entry%%:*}
+  echo "$name: $value"
+done
+
+echo "Parsed show data:"
+for name in "${!parsed_show[@)]"; do
+  echo "$name: ${parsed_show[$name]}"
+done
+```
+
+This script separates the functionality into two functions, `parse_stats()` and `parse_show()`, for clarity. The `parse_stats()` function reads stats.txt, while the `parse_show()` function parses show.txt. Both scripts use a combination of `grep`, `sed`, and `cut` commands to extract and format the required information.
+
+The parsed data is then stored in bash arrays (for statistics) or associative arrays (for show data), making it easy to access individual entries by their names. The script finally displays the parsed stats and show data.
+

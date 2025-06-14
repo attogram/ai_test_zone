@@ -1,6 +1,0 @@
- ```json
-{
-  "response": "The provided script is designed to automate the process of running multiple machine learning models using the Ollama tool with a specified prompt. It generates HTML files for each model's output, stats, and system information, as well as an index file summarizing all results. The script includes functions to parse command line arguments, set up the environment, save the prompt, run the models, collect statistics, and generate HTML reports. The process involves running each model with the given prompt, capturing both the output and statistics, and then generating detailed reports for each model as well as an overall index file."
-}
-```
-

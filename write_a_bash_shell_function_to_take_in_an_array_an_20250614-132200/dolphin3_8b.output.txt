@@ -1,0 +1,29 @@
+Here's an example of a Bash shell function that takes an array as input and outputs an HTML list:
+
+```bash
+html_list() {
+  local -a arr=( "$@" )
+  
+  # Start building the HTML list
+  
+  printf '<ul>\n'
+  
+  for i in "${arr[@]}"; do
+    printf '<li>'"$i"</li>\n'
+  done
+  
+  # End building the HTML list
+  
+  printf '</ul>'
+}
+```
+
+To use this function, simply pass your array as arguments to it:
+
+```bash
+my_array=("Item 1" "Item 2" "Item 3")
+html_list "${my_array[@]}"
+```
+
+This will output an HTML unordered list (`<ul>`) with each element of the array as a list item (`<li>`).
+

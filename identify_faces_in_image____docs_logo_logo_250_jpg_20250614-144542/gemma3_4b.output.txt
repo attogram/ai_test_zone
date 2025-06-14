@@ -1,0 +1,32 @@
+```json
+[
+  {
+    "label": "llama",
+    "bounding_box": [
+      170,
+      170,
+      410,
+      410
+    ]
+  },
+  {
+    "label": "llama",
+    "bounding_box": [
+      580,
+      170,
+      820,
+      410
+    ]
+  },
+  {
+    "label": "llama",
+    "bounding_box": [
+      780,
+      170,
+      980,
+      410
+    ]
+  }
+]
+```
+

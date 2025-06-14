@@ -1,0 +1,49 @@
+
+To read and parse the contents of the `stats.txt` file in a bash script, you can use the `awk` command to extract specific data from the file. For example:
+```bash
+#!/bin/bash
+
+# Read the stats.txt file
+while IFS= read -r line; do
+  # Split the line into name and value using colon as a delimiter
+  name=$(echo $line | cut -d':' -f1)
+  value=$(echo $line | cut -d':' -f2)
+  echo "Name: $name"
+  echo "Value: $value"
+done < stats.txt
+```
+This script uses the `cut` command to split each line of the `stats.txt` file into two parts using the colon as a delimiter. The `while` loop then reads each line and extracts the name and value from the split line, printing them out to the console.
+
+To parse the contents of the `show.txt` file in a similar way, you can use the same approach:
+```bash
+#!/bin/bash
+
+# Read the show.txt file
+while IFS= read -r line; do
+  # Split the line into name and value using colon as a delimiter
+  name=$(echo $line | cut -d':' -f1)
+  value=$(echo $line | cut -d':' -f2)
+  echo "Name: $name"
+  echo "Value: $value"
+done < show.txt
+```
+This script also uses the `cut` command to split each line of the `show.txt` file into two parts using the colon as a delimiter, and then reads each line and extracts the name and value from the split line, printing them out to the console.
+
+You can modify these scripts to store the extracted data in bash variables instead of printing it to the console by adding the `-v` option to the `read` command, followed by the variable name you want to assign the data to. For example:
+```bash
+#!/bin/bash
+
+# Read the stats.txt file
+while IFS= read -r line; do
+  # Split the line into name and value using colon as a delimiter
+  name=$(echo $line | cut -d':' -f1)
+  value=$(echo $line | cut -d':' -f2)
+  echo "Name: $name"
+  echo "Value: $value"
+  total_duration=$value
+done < stats.txt
+```
+This script reads the `stats.txt` file and assigns the value of the `total duration` field to the `total_duration` variable after parsing it from the line using the `cut` command.
+
+You can modify these scripts to handle different formats for the data in the `show.txt` file by adjusting the regular expression used with the `sed` command, or by adding additional `case` statements to handle different formats.
+

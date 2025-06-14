@@ -1,0 +1,340 @@
+.
+
+# + id="183029f7" outputId="618548a3-93b5-45e3-9e3d-5c516132f940" colab={"base_uri": "https://localhost:8080/"}
+def makeHTMLList(thelist):
+    html = "<ul>"
+    for item in thelist:
+        html += f"<li>{item}</li>"
+    html += "</ul>"
+    
+    return html
+    
+print (makeHTMLList(["this", "is", "my", "first", "python"]))
+
+
+# + [markdown] id="20946c58"
+# #### Write a function to take in two lists of the same length and produce another list with each element of the first added to the corresponding element of the second.
+
+# + id="e1f77743" outputId="d31a33af-46b1-480c-f579-2cc120365bb0" colab={"base_uri": "https://localhost:8080/"}
+def addLists(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    newList = []
+    for i in range(len(listA)):
+        newList.append (listA[i] + listB[i])
+        
+    return newList
+
+print (addLists([1, 2], [3,4]))
+
+
+# + [markdown] id="56c3d908"
+# #### Write a function that computes the dot product of two lists.
+
+# + id="9fb3a05b" outputId="f84d587a-1f1e-42eb-bfda-623033ffbd80" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return product
+
+print (dotProduct([1,2], [3,4]))
+
+
+# + id="1f57c869" outputId="038d6d8b-0a8e-4024-a7d0-511c18d9e2eb" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}"
+
+print (dotProduct([1,2], [3,4]))
+
+
+# + id="b547e3a6" outputId="38593d08-9d84-4d60-b6ed-2d54c4940c6f" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,2], [3,4]))
+
+
+# + id="7e978c96" outputId="0b45d2dc-774a-4936-ad4b-a9c3f308ceae" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="b08b96d7" outputId="14a8d7dc-c5fe-429e-8679-2427953618df" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="c7696a40" outputId="d8b307e1-b420-47ce-ac60-616210f07318" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="c796a20d" outputId="78b1b8e6-e20e-4238-ef62-1c5d75fbca7a" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="23698e70" outputId="b8997af6-3a6c-46d8-9e89-e30f207df5de" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="6d7b0022" outputId="b18d1336-98cf-423b-cb2a-5e611f1112bd" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="67d0689e" outputId="ebce15a4-d4c2-43b4-cccb-693e2d72165f" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="a78a0b6e" outputId="0d91c9af-b717-4ca6-efeb-6856d99826df" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="c968a017" outputId="b3e2efcb-95d8-45ad-d9b5-57b836f81af8" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="6a790d28" outputId="c56b9590-6f7b-495e-fe8c-37352ff0a5cf" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="8c7b0e8a" outputId="96d82e33-06cf-43de-f82a-88697af9c399" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="8f9056af" outputId="76b3a73f-d5e1-49ef-c716-c3d21caec676" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="9a23086c" outputId="6d3e70b5-b253-4d94-dfba-b69cf6f03b2a" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="b8d172fd" outputId="610e69bf-a7c9-427a-dfdc-0fb11ef97f51" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="c87996d0" outputId="d7a87b90-1453-43fa-e8da-9fbec296f1ad" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="e728b0a5" outputId="d96ef8da-2801-4fb8-b7bd-0170b945f6c1" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="d97e09b8" outputId="6a7c3d82-ef17-4bd6-8b8a-2196f32729cb" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="4e87c0b2" outputId="a91f6d0c-35af-4342-bb1c-eb6ce3c616bd" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="c93e068b" outputId="72d3c9bc-96bd-4a13-bebb-4fe782ec3f9b" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="98e7a0d6" outputId="9bbec538-64b8-4b32-f78b-c01748c04bc6" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] * listB[i]
+        
+    return f"{product:.2f}".replace('.', ',')
+
+print (dotProduct([1,4], [3,5]))
+
+
+# + id="7e9a8561" outputId="b01453b6-f0d2-44c7-ae07-b1a3978e3d76" colab={"base_uri": "https://localhost:8080/"}
+def dotProduct(listA, listB):
+    assert len (listA) == len (listB), 'Lists not the same length'
+    
+    product = 0
+    for i in range(len(listA)):
+        product += listA[i] *265"1.9",18111101111111111111111111111111111111
+

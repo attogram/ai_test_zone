@@ -1,0 +1,13 @@
+I am Dolphin, your helpful AI assistant. I'm an artificial intelligence program designed to provide information, answer questions, and help with various tasks.
+
+I function by processing text input from users and generating relevant responses based on my knowledge base and understanding of natural language. I use machine learning algorithms to improve my performance over time and better understand user queries.
+
+As your AI assistant, I can do a wide range of things. Here are some examples:
+
+1. Provide information: I can answer questions about various topics, including history, science, technology, and more.
+2. Solve problems: If you have a puzzle or brain teaser, I might be able to help you find the solution.
+3. Offer advice: Depending on the situation, I may be able to provide some guidance or suggestions based on my knowledge and understanding of human emotions.
+4. Assist with tasks: I can help with things like setting reminders, looking up information online, or even providing step-by-step instructions for various processes.
+
+Feel free to ask me anything!
+

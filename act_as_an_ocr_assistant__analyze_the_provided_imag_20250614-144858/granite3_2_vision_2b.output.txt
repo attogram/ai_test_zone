@@ -1,0 +1,8 @@
+
+```
+ollama-multirun: describe this image docs/logo_logo_250.jpg: 20250609-155320
+models: granite3.2-vision2b minicpm-v1.8b qwen2.5vl3b gemma3:4b lava:7b llava-llama3:8b moondream:1.8b
+Prompt: (raw) (yaml) words:4 bytes:46
+Describe this image: /docs/logo/logo-250.jpg
+```
+

@@ -1,0 +1,72 @@
+<think>
+Okay, I need to write a PHP function that takes an array and outputs a HTML list of its contents. Let me think about how to approach this.
+
+First, I should consider the structure of a HTML list. A list in HTML is created using <ul> tags, which contain <li> elements for each item. Each <li> can have either a single content or multiple lines.
+
+So, the function will take an array as input. Let's call it $array. The goal is to convert this array into a HTML list string.
+
+I'll start by initializing an empty string for the HTML list. Then, loop through each element in the array. For each element, I'll create a <li> tag and append the element's content. If the element has multiple lines, I can separate them with newlines.
+
+Wait, but what if some elements are strings? Maybe it's better to just include them as is within the <li>. So for each $element in $array, I'll add "<li>" followed by the $element, and then "</li>" at the end of each loop iteration.
+
+Putting it all together, the function will construct a string that looks like:
+
+<ul>
+  <li>Element1</li>
+  <li>Element2</li>
+  ...
+</ul>
+
+I should also make sure that if an element is null or not present, it's handled correctly. But since the function takes an array, perhaps it's assumed that all elements are valid.
+
+Now, let's structure the code. The function will start by checking if the array is empty. If it is, return an empty string. Otherwise, build each <li> and concatenate them into a single string with <ul> at the beginning and </ul> at the end.
+
+So the code outline would be:
+
+function array_to_html($array) {
+    $html = '<ul>';
+    foreach ($array as $element) {
+        $html .= '<li>' . $element . '</li>';
+        // Alternatively, append each li directly
+        // But perhaps using a loop is better.
+    }
+    $html .= '</ul>';
+    return $html;
+}
+
+Wait, no. The above code would create a single <ul> with each element as <li>. So for example, if the array is ['a', 'b'], it would output <ul><li>a</li><li>b</li></ul>.
+
+But perhaps some elements are arrays themselves, but in this case, since the function takes an array and outputs HTML, maybe each element is a string. So the code should work.
+
+Testing with an example: if $array is ['a', 'b'], the function would return '<ul><li>a</li><li>b</li></ul>'.
+
+I think that's correct. Now, I'll write the PHP function accordingly.
+</think>
+
+To solve this problem, we need to create a PHP function that takes an array and outputs a HTML list representation of the array contents. The HTML list will be structured using `<ul>` tags containing `<li>` elements for each item in the array.
+
+### Approach
+1. **Initialize an empty string**: Start by initializing an empty string to build the HTML content.
+2. **Loop through each element**: Iterate over each element in the input array.
+3. **Create <li> tags**: For each element, create a `<li>` tag and append the element's content within this tag.
+4. **Construct the entire HTML list**: Combine all the `<li>` elements into an `<ul>` containing all these `<li>` elements. Close the outer `<ul>` tag at the end.
+
+### Solution Code
+```php
+function array_to_html($array) {
+    $html = '<ul>';
+    foreach ($array as $element) {
+        $html .= '<li>' . $element . '</li>';
+    }
+    $html .= '</ul>';
+    return $html;
+}
+```
+
+### Explanation
+- **Initialization**: The function starts by initializing an empty string `$html` to build the HTML content.
+- **Loop Through Elements**: Each element from the input array is processed in a loop. For each element, a `<li>` tag is created and the element's content is appended within this tag.
+- **Constructing the HTML List**: After processing all elements, the outer `<ul>` tag is closed with `</ul>`. This results in an HTML list structure where each item from the array is displayed as a separate `<li>` element inside the `<ul>`.
+
+This approach ensures that the function correctly converts any given array into its corresponding HTML list representation, making it easy to display arrays in a structured format using web pages.
+

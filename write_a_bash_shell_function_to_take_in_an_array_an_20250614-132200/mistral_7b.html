@@ -1,0 +1,122 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>mistral:7b</b>: 20250614-132200<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<b>mistral:7b</b> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_bash_shell_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:19  bytes:93<br />
+<textarea readonly rows='1'>Write a Bash shell function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'> Here&#39;s a Bash shell function that takes an array as input and outputs an HTML unordered list (ul) of the array contents:
+
+```bash
+print_array_to_html_list() {
+    local array_name=&quot;$1&quot;
+    local html=&quot;&lt;ul&gt;&quot;
+
+    # Iterate through each element in the array using a for loop
+    declare -a &quot;${!array_name}&quot;
+    for element in &quot;${!(@) ${array_name}@}&quot;; do
+        # Escape any HTML special characters (&lt;, &gt;, &amp;, &quot;, &#39;, and ) within the element
+        escaped_element=$(echo &quot;$element&quot; | sed &#39;s/&amp;/\&amp;amp;\|&lt;\/?[^&gt;]*&gt;/&amp;lt;!\1!/g&#39;)
+        html+=&quot;&lt;li&gt;${escaped_element}&lt;/li&gt;&quot;
+    done
+
+    # Close the unordered list and print the final HTML string
+    html+=&quot;&lt;/ul&gt;&quot;
+    echo &quot;$html&quot;
+}
+```
+
+To use this function, first define an array with some contents:
+
+```bash
+my_array=(Apples Bananas Oranges Grapes)
+```
+
+Then call the `print_array_to_html_list()` function to print the HTML unordered list:
+
+```bash
+echo $(print_array_to_html_list &quot;my_array&quot;)
+```
+
+This will output the following HTML code:
+
+```html
+&lt;ul&gt;
+    &lt;li&gt;Apples&lt;/li&gt;
+    &lt;li&gt;Bananas&lt;/li&gt;
+    &lt;li&gt;Oranges&lt;/li&gt;
+    &lt;li&gt;Grapes&lt;/li&gt;
+&lt;/ul&gt;
+```</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>137</td></tr>
+<tr><td class='left'>bytes</td><td>1096</td></tr>
+<tr><td class='left'>total duration</td><td>19.135474s</td></tr>
+<tr><td class='left'>load duration</td><td>14.047959ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>25 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>374.381792ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>66.78 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>384 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>18.746266083s</td></tr>
+<tr><td class='left'>eval rate</td><td>20.48 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 672M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>mistral:7b</b>: 20250614-132200</p>
+<p>page created:   2025-06-14 13:24:06</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

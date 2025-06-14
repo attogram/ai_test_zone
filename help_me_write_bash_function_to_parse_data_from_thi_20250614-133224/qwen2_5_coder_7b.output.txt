@@ -1,0 +1,84 @@
+Certainly! Below is a bash function that reads `model.info.txt` and parses it according to the specified sections and lines:
+
+```bash
+parse_model_info() {
+    local model_file="$1"
+    declare -A model_params
+    declare -a capabilities
+    local systemPrompt=""
+    local temperature=""
+
+    # Read the file line by line
+    while IFS= read -r line; do
+        if [[ "$line" == "Model"* ]]; then
+            continue
+        elif [[ "$line" == "Capabilities"* ]]; then
+            continue
+        elif [[ "$line" == "System"* ]]; then
+            systemPrompt+="$line\n"
+        elif [[ "$line" == "Parameters"* ]]; then
+            continue
+        else
+            line=$(echo "$line" | xargs)  # Remove leading/trailing spaces and tabs
+
+            if [[ -n "$systemPrompt" && "$line" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+                systemPrompt+="$line\n"
+            elif [[ "$line" =~ ^[a-zA-Z0-9_-]+[[:space:]]+.*$ ]]; then
+                IFS=':' read -r key value <<< "$line"
+                key=$(echo $key | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9_]/_/g')
+                value=$(echo $value | xargs)  # Trim leading/trailing spaces
+                if [[ "$key" == "temperature" ]]; then
+                    temperature="$value"
+                else
+                    model_params[$key]="$value"
+                fi
+            elif [[ "$line" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+                capabilities+=("$line")
+            fi
+        fi
+    done < "$model_file"
+
+    # Output the parsed data
+    echo "Model Parameters:"
+    for key in "${!model_params[@]}"; do
+        echo "$key=${model_params[$key]}"
+    done
+
+    echo "\nCapabilities:"
+    printf "%s\n" "${capabilities[@]}"
+
+    echo "\nSystem Prompt:"
+    echo -e "$systemPrompt"
+
+    echo "\nTemperature: $temperature"
+}
+
+# Example usage:
+# parse_model_info "model.info.txt"
+```
+
+### Explanation:
+
+1. **Initialization**:
+   - `declare -A model_params`: An associative array to store parameters from the Model section.
+   - `declare -a capabilities`: An array to store keywords from the Capabilities section.
+   - `local systemPrompt=""`: A variable to accumulate the System prompt lines.
+   - `local temperature=""`: A variable to store the temperature value from the Parameters section.
+
+2. **Reading and Parsing**:
+   - The script reads the file line by line.
+   - It skips the header sections (`Model`, `Capabilities`, `System`, and `Parameters`).
+   - For lines in the Model, System, or Capabilities sections, it processes them accordingly.
+   - For lines in the Parameters section, it checks if the line contains a keyword for temperature and stores it.
+
+3. **Output**:
+   - The parsed data is printed out with headers indicating the type of information being displayed (Model Parameters, Capabilities, System Prompt, Temperature).
+
+### Usage:
+
+- Save the script in a file, e.g., `parse_model.sh`.
+- Make the script executable: `chmod +x parse_model.sh`.
+- Run the script and provide the path to your `model.info.txt` file as an argument: `./parse_model.sh model.info.txt`.
+
+This function will output the parsed data neatly organized into sections.
+

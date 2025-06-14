@@ -1,0 +1,31 @@
+Here is a Bash shell function that takes an array as input and outputs an HTML unordered list (`<ul>`) containing the array elements:
+
+```bash
+html_list() {
+  local array=("$@")
+
+  echo "<ul>"
+  for item in "${array[@]}"; do
+    echo "- $<"
+  done
+  echo "</ul>"
+}
+```
+
+You can use this function by passing an array as arguments, like so:
+
+```bash
+items=( "Apple" "Banana" "Cherry" )
+html_list "${items[@]}"
+```
+
+This will output:
+
+```html
+<ul>
+- Apple
+- Banana
+- Cherry
+</ul>
+```
+

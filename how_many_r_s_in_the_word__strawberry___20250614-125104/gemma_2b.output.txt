@@ -1,0 +1,2 @@
+The word "Strawberry" contains 3 r's. They appear in the first, middle, and last letters of the word.
+

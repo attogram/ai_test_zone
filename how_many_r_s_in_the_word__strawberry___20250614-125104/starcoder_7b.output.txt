@@ -1,0 +1,8 @@
+<jupyter_code># Enter your code here
+count = 0
+for i, letter in enumerate(word):
+    if (letter == 'r'):
+        count +=1
+        
+print('The number of rs is ',count)<jupyter_output>The number of rs is  3
+

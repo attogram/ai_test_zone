@@ -1,0 +1,19 @@
+<think>
+Okay, so I need to figure out whether Socrates is mortal based on the given statements. Let's break it down step by step.
+
+First, the statement says "Socrates is a human." That means Socrates belongs to the category of humans. Now, the next part is "All humans are mortal." So, this seems like a general rule that applies to all humans. If I apply this rule to Socrates, since he is a human, it should mean that he is also mortal.
+
+Wait, let me make sure I'm not missing anything. The first statement is just stating that Socrates is a human, so no problem there. The second statement is a universal affirmative, meaning every member of the category "humans" has the property of being mortal. Since Socrates is a human, it logically follows that he must be mortal.
+
+I don't think there's any exception or special case here because these are general statements. So putting it all together, since Socrates is human and all humans are mortal, Socrates must be mortal.
+</think>
+
+Based on the given statements:
+
+1. **Socrates is a human.**
+2. **All humans are mortal.**
+
+We can conclude that **Socrates is mortal** because if every human is mortal and Socrates is a human, then by the rule of inference, he must be mortal.
+
+**Answer:** Yes, Socrates is mortal.
+

@@ -1,0 +1,23 @@
+ Here's the refactored version of your function that reads `$statsFile` directly and outputs the values directly into the `indexFile`. It also eliminates the temporary array `statsInfo`.
+
+```bash
+function addModelToIndexFile {
+    responseWords=$(wc -w < "$modelFile")
+    responseBytes=$(wc -c < "$modelFile")
+
+    IFS=':' read -r _ model _ <<< $(tail -n +2 "$statsFile")  # read stats file line by line, skipping the first one (header), and set model variable
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$responseWords</td><td>${responseBytes}</td>"
+        while IFS=':' read -r _ stat; do
+            if [[ -n "$stat" ]]; then
+              echo "<td>${stat}</td>";
+            fi
+        done <<< "$statsFile"  # read stats file line by line, skipping the first one (header)
+        echo "</tr>"
+    ) >> "$indexFile"
+}
+```
+
+This function reads the `$statsFile` file twice: once to get the model name and the second time to iterate through the statistics. If you'd like to improve this further, you can consider reading the `$statsFile` only once and storing the contents in a variable or array before processing it twice. However, this could consume more memory if the file is very large.
+

@@ -1,0 +1,235 @@
+. I was never told what to expect, but after my first week there, I had a lot of fun with the baby! She cried when we were out late on Sunday and would take naps whenever I didn’t have anything else to do. She is really excited about me, but doesn’t want to stay in one place forever.</p>
+<h3 id="kathy">Kathy</h3>
+<ul>
+  <li><em>Name: </em> <NAME></li>
+  <li><em>Age: </em> 18 months old</li>
+  <li><em>Gender: </em> female, Caucasian</li>
+  <li><em>Height: </em> 5 foot 7 inches</li>
+  <li><em>Weight: </em> 9 pounds</li>
+</ul>
+<p>Kathy is my daughter. She was born on April 14, 2016 and we started to travel together about a month after we moved into her new apartment. We were in our first home for about two weeks and found that Kathy really didn’t like being alone. She wasn’t super excited about all the different people around her, so she was worried about how I would handle the situation.</p>
+<p><strong><em>Things we did in this trip:</em></strong></p>
+<ul>
+  <li><a href="https://www.nps.gov/tusk/index.htm">Tuscany</a> (about 12 hours of driving)</li>
+  <li><a href="https://en.wikipedia.org/wiki/Saint-Petersburg_National_Park">St Petersburg National Park</a></li>
+  <li><a href="https://www.nationalparks.org/visit/s-falls/">San Francisco Falls</a>, California (5 hours of driving)</li>
+</ul>
+<p><em>What did we do?</em></p>
+<p>I took her along to Tuscany, which was about 12 hours of driving, and took her to St Petersburg National Park. She had a lot of fun there with the other animals in the park, especially the <a href="https://en.wikipedia.org/wiki/Kangaroo_Rider">Kangaroo Riders</a>. When we got back home after Tuscany and St Petersburg National Park, we took her to San Francisco Falls, which was about 5 hours of driving.</p>
+<h3 id="steve-and-mommy">Steve and Mommy</h3>
+<ul>
+  <li><em>Name: </em> <NAME></li>
+  <li><em>Age: </em> 6 months old</li>
+  <li><em>Gender: </em> male, Caucasian</li>
+  <li><em>Height: </em> 5 foot 7 inches</li>
+  <li><em>Weight: </em> 8 pounds</li>
+</ul>
+<p>Steve was my mommy. We had been on a few vacation to Canada before this trip, but Steve and I both hadn’t moved in to our first home yet so we were only really able to stay with us for about two days before we decided to move into her new apartment.</p>
+<h3 id="jordan">Jordan</h3>
+<ul>
+  <li><em>Name: </em> Jordan</li>
+  <li><em>Age: </em> 20 months old</li>
+  <li><em>Gender: </em> male, Caucasian</li>
+  <li><em>Height: </em> 5 foot 7 inches</li>
+  <li><em>Weight: </em> 16 pounds</li>
+</ul>
+<p>Jordan is the best boy of our family! He was born on October 29, 2015 and we moved into his new apartment when he was only a couple months old. We were in his first home for about two weeks before we decided to move out. Jordan had never gone outside before this trip so it was really exciting to see how far we’d come together! He is super loyal to me and has been doing everything I ask of him.</p>
+<h3 id="jesse">Jesse</h3>
+<ul>
+  <li><em>Name: </em> Jesse</li>
+  <li><em>Age: </em> 14 months old</li>
+  <li><em>Gender: </em> male, Caucasian</li>
+  <li><em>Height: </em> 5 foot 7 inches</li>
+  <li><em>Weight: </em> 9 pounds</li>
+</ul>
+<p>Jesse is my older brother. He was born on September 23, 2014 and we moved into his new apartment when he was only a few months old.</p>
+
+
+        <div class="PageNavigation">
+          
+            <a class="prev" href="/posts/family-fun-weekend-in-tuscany.html">&laquo; Family Fun Weekend in Tuscany</a>
+          
+          
+            <a class="next" href="/posts/new-york-trip.html">New York Trip &raquo;</a>
+          
+        </div>
+
+      <div class="disqus-comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'ryanhaber';
+
+  (function() {
+     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+      </div>
+
+    </div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="/assets/javascripts/vendor/jquery-1.11.3.min.js"><\/script>')</script>
+
+    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="/assets/javascripts/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+
+    <!-- When no internet access, load JQuery from local -->
+    <script>if (typeof jQuery == 'undefined') { document.write('<script src="/assets/javascripts/vendor/jquery-1.10.2.min.js"><\/script>'); }</script>
+
+    <!-- Twitter Bootstrap Javascript -->
+    <!--  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script> -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+    <!-- Google Analytics Javascript -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52988647-3', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+  </body>
+</html><commit_msg>Revert "added more content to the family page"<commit_after><!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <!-- Basic Page Needs -->
+    <meta charset="utf-8" />
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+
+    <title>Family | My Eleventy Site</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Load Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300italic,700italic,700,400italic|Merriweather:400,300italic,700italic,700,400italic" rel="stylesheet" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/stylesheets/blog.css">
+
+  </head>
+  <body class="home-template">
+    
+    <header role="banner" id="top">
+      <div class="wrap">
+        <h1><a title="<NAME>" href="/">My Eleventy Site</a></h1>
+
+        <nav role="navigation">
+          <!-- <ul id="js-navigation-menu" class="navigation-menu show"> -->
+            <div class="Navigation">
+              <p class="intro"><em>Family</em><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><strong><a href="/posts/family.html">&nbsp;My Family</a></strong><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="#about" class="scrollto">&nbsp;About Me</a> <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="https://www.youtube.com/channel/UCRsJ7-0v2_8f9-zF4g1H-oQ?view_as=subscriber" target="_blank"><i class="fa fa-youtube"></i></a> <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="https://www.facebook.com/ryan.haber.352" target="_blank"><i class="fa fa-facebook"></i></a></p>
+            </div>
+          <!-- </ul> -->
+        </nav>
+      </div>
+    </header><!-- /.banner -->
+
+    <main id="main" role="main">
+      <article>
+        
+  <section class="page-heading">
+    
+    <div class="wrap">
+      <h1>My Family</h1>
+
+      <!-- Post Meta -->
+      
+      <ul class="list-unstyled list-inline">
+      
+        <li><i class="fa fa-calendar"></i>&nbsp;<time datetime="2016-11-27T09:58:43-07:00" itemprop="datePublished">November 27, 2016</time></li>
+        <li><a href="/posts/category/family/" title="Family"><i class="fa fa-folder"></i>&nbsp;Family</a></li>
+      </ul><!-- /.list-unstyled -->
+
+      <!-- Post Tags and Categories -->
+      
+      <ul class="tag_box inline">
+      
+      
+        <li><i class="fa fa-tags"></i></li>
+        <li>
+          
+          <a href="/tags/family/">family</a>
+          
+        </li>
+        
+        <li>
+          &nbsp;
+        </li>
+      </ul><!-- /.tag_box -->
+      
+    </div>
+  </section>
+
+  <p>Our family is really big! We have a lot of kids together. My parents, Kathy and Steve were born in San Francisco and I was born in Tuscany.</p>
+<h3 id="kathryn">Kathryn</h3>
+<ul>
+  <li><em>Name: </em> Kathryn</li>
+  <li><em>Age: </em> 14 months old</li>
+  <li><em>Gender: </em> female, Caucasian</li>
+  <li><em>Height: </em> 5 foot 7 inches</li>
+  <li><em>Weight: </em> 9 pounds</li>
+</ul>
+<p>Kathryn is my younger sister. She was born on April 1, 2016 and we moved into her new apartment when she was only about a month old.</p>
+
+
+        <div class="PageNavigation">
+          
+            <a class="prev" href="/posts/family-fun-weekend-in-tuscany.html">&laquo; Family Fun Weekend in Tuscany</a>
+          
+          
+            <a class="next" href="/posts/new-york-trip.html">New York Trip &raquo;</a>
+          
+        </div>
+
+      <div class="disqus-comments">
+        <div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'ryanhaber';
+
+  (function() {
+     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+      </div>
+
+    </div>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="/assets/javascripts/vendor/jquery-1.11.3.min.js"><\/script>')</script>
+
+    <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <script>window.jQuery || document.write('<script src="/assets/javascripts/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+
+    <!-- When no internet access, load JQuery from local -->
+    <script>if (typeof jQuery == 'undefined') { document.write('<script src="/assets/javascripts/vendor/jquery-1.10.2.min.js"><\/script>'); }</script>
+
+    <!-- Twitter Bootstrap Javascript -->
+    <!--  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script> -->
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+    <!-- Google Analytics Javascript -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-52988647-3', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+  </body>
+</html>
+

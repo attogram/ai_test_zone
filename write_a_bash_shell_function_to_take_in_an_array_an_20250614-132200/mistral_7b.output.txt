@@ -1,0 +1,44 @@
+ Here's a Bash shell function that takes an array as input and outputs an HTML unordered list (ul) of the array contents:
+
+```bash
+print_array_to_html_list() {
+    local array_name="$1"
+    local html="<ul>"
+
+    # Iterate through each element in the array using a for loop
+    declare -a "${!array_name}"
+    for element in "${!(@) ${array_name}@}"; do
+        # Escape any HTML special characters (<, >, &, ", ', and ) within the element
+        escaped_element=$(echo "$element" | sed 's/&/\&amp;\|<\/?[^>]*>/&lt;!\1!/g')
+        html+="<li>${escaped_element}</li>"
+    done
+
+    # Close the unordered list and print the final HTML string
+    html+="</ul>"
+    echo "$html"
+}
+```
+
+To use this function, first define an array with some contents:
+
+```bash
+my_array=(Apples Bananas Oranges Grapes)
+```
+
+Then call the `print_array_to_html_list()` function to print the HTML unordered list:
+
+```bash
+echo $(print_array_to_html_list "my_array")
+```
+
+This will output the following HTML code:
+
+```html
+<ul>
+    <li>Apples</li>
+    <li>Bananas</li>
+    <li>Oranges</li>
+    <li>Grapes</li>
+</ul>
+```
+

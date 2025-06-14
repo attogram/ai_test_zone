@@ -1,0 +1,44 @@
+```bash
+#!/bin/bash
+
+# Function to create an HTML list of array contents
+create_html_list() {
+  # Convert the array to a string using the IFS variable
+  array_string=$(IFS=, echo "${1[@]}")
+
+  # Remove any empty strings from the string
+  array_string=$(tr -d '' <<< "$array_string")
+
+  # Remove the first and last character from the string (,)
+  array_string=${array_string:1:-1}
+
+  # Return the HTML list
+  echo "<ul><li>${array_string}</li></ul>"
+}
+
+# Call the function with the array as an argument
+html_list=$(create_html_list "${1[@]}")
+
+# Print the HTML list
+echo "$html_list"
+```
+
+**Usage:**
+
+```bash
+# Pass an array of strings as an argument
+array=("hello", "world", "coding", "life")
+
+# Run the function with the array as an argument
+html_list=$(create_html_list "${array[@]}")
+
+# Print the HTML list
+echo "$html_list"
+```
+
+**Output:**
+
+```html
+<ul><li>hello</li><li>world</li><li>coding</li><li>life</li></ul>
+```
+

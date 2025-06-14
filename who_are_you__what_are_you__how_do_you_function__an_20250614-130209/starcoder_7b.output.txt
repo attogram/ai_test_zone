@@ -1,0 +1,105 @@
+
+
+So, what do we have here is a class called `Squirrel` which has a property of type string called `Name`. The property is not private. We can read that property from the outside world by calling the method `GetName()`. But we can also change it through some other methods, and then call those methods from the outside world as well.
+
+In this example, you’ll learn:
+
+* That a class can have public properties and set of private methods
+* How to create an instance of a class
+* How to use that instance to access the different members
+
+## Accessing Properties and Methods
+Now, let's get back to our Squirrel. In it we are going to add some more functionality using some properties and methods. First, add the following code inside the `Squirrel` class:
+```cs
+  public string Color { get; set;} = "Green";
+
+  private void Play() => Console.WriteLine($"{Name} is playing!");
+```
+Here you can see that we have two new properties added to our Squirrel class called `Color`, and a method called `Play()`. You also noticed, we are setting the default value for `Color` property as `"Green"`. We will use this later when we create instances of our Squirrel.
+
+So far you've created an instance of your Squirrel and set some properties on it like its name or color using the constructor that takes in a string argument. Now, let's take a look at how to access those properties and methods:
+```cs
+  class Program
+  {
+      static void Main(string[] args)
+      {
+          var squirrel = new Squirrel("Hazelnut");
+
+          // Change Name property
+          Console.WriteLine($"Before changing the name property value of Hazelnut, its color is {squirrel.Color}");
+          squirrel.Name = "Sam";
+          Console.WriteLine($"After changing the name property value of Hazelnut, its color is {squirrel.Color}");
+
+          // Change Color property
+          Console.WriteLine($"{squirrel.GetName()} before changing color to red");
+          squirrel.Color = "Red";
+          Console.WriteLine($"{squirrel.GetName()} after changing color to red");
+
+          // Call Play method
+          squirrel.Play();
+      }
+  }
+```
+Now, when we run the code you should see a similar output as this:
+```
+Before changing the name property value of Hazelnut, its color is Green
+After changing the name property value of Hazelnut, its color is Red
+Hazelnut before changing color to red
+Sam after changing color to red
+Hazelnut is playing!
+```
+Here you can see that we are accessing both public properties and private methods using a dot operator on our instance `squirrel`. You may also notice that when we change the name property, it doesn’t affect its color. Why? Because the `Color` property was set to `"Green"` during construction of an instance. If you want to update the color property then, you have to do so explicitly using a setter method called `SetColor()`.
+
+## Private vs Public Properties and Methods
+Now, let's look at some examples when properties or methods can be made private:
+```cs
+  class Program
+  {
+      static void Main(string[] args)
+      {
+          var squirrel = new Squirrel("Hazelnut");
+
+          // Accessing a public property using dot operator on instance variable (Public Property)
+          Console.WriteLine($"Public property value is :{squirrel.Name}");
+
+          // Trying to access Private property using dot operator on instance variable (Private Property)
+          try
+          {
+              var color = squirrel.Color;
+              Console.WriteLine("This shouldn't run");
+          }
+          catch(Exception ex)
+          {
+              Console.WriteLine($"The exception that was thrown: {ex}");
+          }
+
+          // Accessing a private method using dot operator on instance variable (Private Method)
+          try
+          {
+              var play = squirrel.Play;
+              Console.WriteLine("This shouldn't run");
+          }
+          catch(Exception ex)
+          {
+            Console.WriteLine($"The exception that was thrown: {ex}");
+          }
+
+          // Calling a private method through its public method (Public Method)
+          PlaySquirrel();
+      }
+
+      static void PlaySquirrel() => Console.WriteLine("Hazelnut is playing!");
+  }
+```
+When you run the code, you should get something similar to this:
+```
+Public property value is : Hazelnut
+The exception that was thrown: System.Exception: Property or method 'Color' in type 'Squirrel' cannot be accessed with an instance reference because it is not public
+   at Squirrel..ctor(String name) in C:\Users\Admin\Documents\GitHub\csharp-fundamentals\14\AccessProperties\Program.cs:line 29
+Hazelnut is playing!
+```
+You'll also notice that if you try to access the `Color` or the `Play()` method using dot operator on our instance variable, then it throws an exception saying "Property or method `Color` cannot be accessed with an instance reference because it is not public" and "Property or method `Play()` in type 'Squirrel' cannot be accessed with an instance reference because it is not public".
+
+## Conclusion
+In this article you learned how to access properties and methods of a class. You also learnt about the difference between private, protected, internal, and public properties and methods.
+

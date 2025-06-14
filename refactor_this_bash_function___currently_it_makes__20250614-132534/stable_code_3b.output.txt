@@ -1,0 +1,23 @@
+Here is the refactored bash function:
+
+```bash
+function addModelToIndexFile {
+
+  local model="$1"
+  shift
+
+  # read $statsFile directly and output the values directly into the index file.
+  grep -v '^[[:space:]]*$' "$modelFile" | awk '{print $2}' | grep -v "^[[:space:]]*$" >> "$indexFile"
+
+  echo "<tr><td class='left'><a href='./$model.html'>$model</a></td>" >> "$indexFile"
+  grep -v '^[[:space:]]*$' "$modelFile" | awk '{print $2}' | grep -v "^[[:space:]]*$" | while read value; do
+    echo "<td>${value}</td>";
+  done >> "$indexFile"
+  echo "</tr>" >> "$indexFile"
+}
+```
+
+The refactored function has been simplified to avoid unnecessary array usage and logic. The function now reads the `$modelFile` directly, extracts the required values using `grep`, `awk`, and other command-line utilities, outputs these values directly into the `$indexFile`, and finally closes the file.
+
+This refactoring simplifies the code by eliminating unnecessary array usage, improving readability, and reducing execution time.
+

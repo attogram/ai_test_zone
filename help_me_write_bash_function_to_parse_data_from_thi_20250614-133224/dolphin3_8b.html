@@ -1,0 +1,196 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>dolphin3:8b</b>: 20250614-133224<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_bash_function_to_parse_data_from_thi.prompt.yaml'>yaml</a>)
+  words:174  bytes:1514<br />
+<textarea readonly rows='10'>Help me write bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          </textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Here is a bash function that will parse data from your model.info.txt file according to the format and sections you described:
+
+```bash
+parse_model_info() {
+    declare -A model_vars=(models_params context_length embedding_length quantization)
+    declare -a capabilities=()
+    declare systemPrompt=&quot;&quot;
+    declare temperature=&quot;&quot;
+
+    while IFS= read -r line; do
+        if [[ &quot;$line&quot; == &quot;Model&quot;* ]]; then
+            name=$(echo &quot;$line&quot; | sed &#39;s/.*:\s//&#39; | tr -d &#39;[:space:]&#39;)
+            value=$(echo &quot;$line&quot; | sed &#39;s/^.*: \+//&#39; | tr -d &#39;[:space:]&#39;)
+            model_vars[&quot;$name&quot;]=$value
+        elif [[ &quot;$line&quot; == &quot;Parameters&quot;* ]]; then
+            continue
+        else
+            parameters=$(echo &quot;$line&quot; | sed &#39;s/.*:\s//&#39; | tr -d &#39;[:space:]&#39;)
+            if [[ &quot;$parameters&quot; == 2.5B ]]; then
+                model_vars[&quot;parameters&quot;]=$parameters
+            fi
+        fi
+
+        # capabilities section
+        elif [[ &quot;$line&quot; == &quot;Capabilities&quot;* ]]; then
+            continue
+        else
+            capabilities+=(&quot;$line&quot;)
+        fi
+
+        # system prompt
+        elif [[ &quot;$line&quot; == &quot;System&quot;* ]]; then
+            systemPrompt=&quot;$line&quot;
+        fi
+
+        # parameters section
+        elif [[ &quot;$line&quot; == &quot;Parameters&quot;* ]]; then
+            continue
+        else
+            name=$(echo &quot;$line&quot; | sed &#39;s/.*:\s//&#39; | tr -d &#39;[:space:]&#39;)
+            value=$(echo &quot;$line&quot; | sed &#39;s/^.*: \+//&#39; | tr -d &#39;[:space:]&#39;)
+            if [[ &quot;$name&quot; == &quot;temperature&quot; ]]; then
+                temperature=&quot;$value&quot;
+            fi
+        fi
+
+        # Model and Parameters section parsing completed
+        elif [[ &quot;${model_vars[$1]}&quot; == parameters ]]; then
+            break
+        fi
+    done &lt; model.info.txt
+
+    echo &quot;Model data:&quot;
+    for name in &quot;${!model_vars[@]}&quot;; do
+        echo &quot;$name=\&quot;$model_vars[$name]\&quot;&quot;
+    done
+
+    echo &quot;Capabilities array:&quot;
+    echo &quot;${capabilities[@]}&quot;
+
+    echo &quot;System prompt: $systemPrompt&quot;
+
+    echo &quot;Temperature value: $temperature&quot;
+}
+
+parse_model_info
+```
+
+Please note that you need to source this function (source parse_model_info.sh) after saving it into a file, for the variables to be set.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./dolphin3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>234</td></tr>
+<tr><td class='left'>bytes</td><td>2132</td></tr>
+<tr><td class='left'>total duration</td><td>32.749174583s</td></tr>
+<tr><td class='left'>load duration</td><td>20.766667ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>343 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.271283708s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>151.02 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>521 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>30.456514542s</td></tr>
+<tr><td class='left'>eval rate</td><td>17.11 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./dolphin3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 738M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>dolphin3:8b</b>: 20250614-133224</p>
+<p>page created:   2025-06-14 13:39:22</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

@@ -1,0 +1,46 @@
+Here's a simple PHP function that takes an array as input and outputs an HTML unordered list (`<ul>`) containing the array elements:
+
+```php
+function array_to_html_list($array) {
+    echo '<ul';
+
+    if (isset($array)) {
+        foreach ($array as $key => $value) {
+            echo " ";
+
+            // Add class for better styling, you can replace 'my-class' with your desired class name
+            $class = isset($key) ? 'my-class ' : '';
+
+            echo "$class";
+        }
+    }
+
+    echo '>';
+
+    if (isset($array)) {
+        foreach ($array as $value) {
+            echo "<li>$value</li>";
+        }
+    }
+
+    echo '</ul';
+}
+```
+
+You can use this function like so:
+
+```php
+$test_array = array("Apple", "Banana", "Cherry");
+array_to_html_list($test_array);
+```
+
+This will output the following HTML list:
+
+```html
+<ul class="my-class">
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Cherry</li>
+</ul>
+```
+

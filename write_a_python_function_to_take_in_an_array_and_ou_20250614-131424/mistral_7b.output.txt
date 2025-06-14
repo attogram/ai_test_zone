@@ -1,0 +1,29 @@
+ To create a Python function that takes an array and returns an HTML unordered list (<ul>), you can use the following code:
+
+```python
+def array_to_html_list(array):
+    html_list = '<ul>'
+    for item in array:
+        html_list += f'<li>{item}</li>'
+    html_list += '</ul>'
+    return html_list
+
+# Example usage:
+numbers = [1, 2, 3, 4, 5]
+print(array_to_html_list(numbers))
+```
+
+This function takes an array as input and creates an empty HTML unordered list. Then it iterates through each element in the array, appending a new list item (<li>) containing the element to the HTML string. Finally, it returns the complete HTML string with the unordered list and all its items.
+
+In this example, when you call `array_to_html_list(numbers)`, it will return:
+
+```html
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+```
+

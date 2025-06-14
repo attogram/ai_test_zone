@@ -1,0 +1,194 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: stable-code:3b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>stable-code:3b</b>: 20250614-142103<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<b>stable-code:3b</b> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+<p>Output: stable-code:3b (<a href='./stable_code_3b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>To parse the stats and show.txt files, we can use bash scripting along with some parsing techniques. Here&#39;s an example of how you can approach this task:
+
+1. Read in and parse the stats file (stats.txt).
+
+   a. Save the data into bash variables.
+   b. Each line is in the format &quot;name: value&quot;. Parse the file so that each line has a name (&quot;total duration&quot;, etc.) and a value (&quot;4.687657458s&quot;, etc.).
+   c. Example of parsing the stats.txt file:
+
+    ```bash
+    #!/bin/bash
+
+    while IFS= read -r line; do
+        name=&quot;${line%% *}&quot;
+        value=&quot;${line##* }&quot;
+        echo &quot;Name: $name, Value: $value&quot;
+    done &lt; stats.txt
+    ```
+
+2. Read in and parse the show.txt file (show.txt)).
+
+   a. Save the data into bash variables.
+   b. There are three sections: Model, Capabilities, and Parameters. Parse each section separately.
+   c. For the Model Section, it&#39;s in the format &quot;name   value&quot;. Example of parsing the show.txt file for this section:
+
+    ```bash
+    #!/bin/bash
+
+    section=&quot;Model&quot;
+    echo &quot;Parsing $section section...&quot;
+    while IFS= read -r line; do
+        if [[ &quot;$line&quot; =~ ^[a-zA-Z0-9_]+:[ ]*[a-zA-Z0-9_]+$ ]]; then
+            name=&quot;${line%% *}&quot;
+            value=&quot;${line##* }&quot;
+            echo &quot;Name: $name, Value: $value&quot;
+        fi
+    done &lt; show.txt
+    ```
+
+3. Save the data into bash variables.
+4. Parse the file so that each line has a name (&quot;total duration&quot;, etc.) and a value (&quot;4.687657458s&quot;, etc.).
+5. Display the parsed information for each section (Model, Capabilities, Parameters).
+
+   a. Example of parsing the show.txt file for each section:
+
+    ```bash
+    #!/bin/bash
+
+    parse_file() {
+        section=&quot;$1&quot;
+        echo &quot;Parsing $section section...&quot;
+        while IFS= read -r line; do
+            if [[ &quot;$line&quot; =~ ^[a-zA-Z0-9_]+:[ ]*[a-zA-Z0-9_]+$ ]]; then
+                name=&quot;${line%% *}&quot;
+                value=&quot;${line##* }&quot;
+                echo &quot;Name: $name, Value: $value&quot;
+            fi
+        done &lt; &quot;$2&quot;
+    }
+
+    # Parse the Model section
+    parse_file &quot;Model&quot; show.txt
+    unset parse_file
+
+    # Parse the Capabilities section
+    parse_file &quot;Capabilities&quot; show.txt
+    unset parse_file
+
+    # Parse the Parameters section
+    parse_file &quot;Parameters&quot; show.txt
+    unset parse_file
+    ```
+
+This script will read in and parse both the stats.txt and show.txt files. The parsed information for each section will be displayed.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./stable_code_3b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>319</td></tr>
+<tr><td class='left'>bytes</td><td>2380</td></tr>
+<tr><td class='left'>total duration</td><td>21.64419075s</td></tr>
+<tr><td class='left'>load duration</td><td>9.751833ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>379 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>1.436520583s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>263.83 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>703 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>20.197356583s</td></tr>
+<tr><td class='left'>eval rate</td><td>34.81 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./stable_code_3b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/stable-code:3b'>stable-code:3b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>stablelm</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.8 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>2.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>16384</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2560</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 663M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>stable-code:3b</b>: 20250614-142103</p>
+<p>page created:   2025-06-14 14:23:11</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

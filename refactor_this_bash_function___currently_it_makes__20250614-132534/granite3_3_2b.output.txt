@@ -1,0 +1,21 @@
+Here's the refactored function that reads $statsFile directly and outputs values into the index file without using an array:
+
+```bash
+function addModelToIndexFile {
+    responseWords=$(wc -w < "$modelFile" | awk '{print $1}')
+    responseBytes=$(wc -c < "$modelFile" | awk '{print $1}')
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$responseWords</td><td>${responseBytes}</td>"
+        # read stats file directly and output values
+        while read -r line; do
+            value=$(echo "$line" | cut -d ':' -f2)
+            echo "<td>${value}</td>"
+        done < "$statsFile"
+        echo "</tr>"
+    ) >> "$indexFile"
+}
+```
+
+This refactored function reads the $statsFile and processes each line, extracting the second part of each line using `cut`, then outputs it directly into the index file. The rest of the original functionality remains unchanged.
+

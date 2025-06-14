@@ -1,0 +1,14 @@
+[PYTHON]
+def htmlify(arr):
+    return "<html><body><ul>{}</ul></body></html>".format("".join(["<li>{}</li>".format(x) for x in arr]))
+[/PYTHON]
+[TESTS]
+# Test case 1:
+assert htmlify([]) == "<html><body><ul></ul></body></html>"
+# Test case 2:
+assert htmlify([1]) == "<html><body><ul><li>1</li></ul></body></html>"
+# Test case 3:
+assert htmlify([1, 2, 3]) == "<html><body><ul><li>1</li><li>2</li><li>3</li></ul></body></html>"
+[/TESTS]
+
+

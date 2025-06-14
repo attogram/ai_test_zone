@@ -1,6 +1,0 @@
-<think>
-I'm DeepSeek-R1, an AI assistant created specifically to provide helpful responses. I'm focused on helping you with various tasks, whether it's answering questions, providing information, or offering guidance. I'll do my best to assist you with your queries and needs.
-</think>
-
-I'm DeepSeek-R1, an AI assistant created specifically to provide helpful responses. I'm focused on aiding you with various tasks, whether it's answering questions, providing information, or offering guidance. I'll do my best to assist you with your queries and needs.
-

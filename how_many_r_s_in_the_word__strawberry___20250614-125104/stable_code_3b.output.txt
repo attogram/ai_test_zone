@@ -1,0 +1,8 @@
+The Python string literal "Strawberry" doesn't contain any 'r' characters.Searching for specific character in a string is quite simple with Python. Here's how you can do it:
+```python
+word = "Strawberry"
+count = word.count('r')
+print(count)
+```
+This script will output the number of times 'r' appears in the string "Strawberry". The `count()` method is a built-in function of Python that counts how many times a specified value appears in a sequence (string, list, tuple etc.).
+

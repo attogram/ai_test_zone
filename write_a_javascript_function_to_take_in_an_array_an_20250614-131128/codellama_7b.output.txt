@@ -1,0 +1,26 @@
+```
+function createList(arr) {
+  return `
+    <ul>
+      ${arr.map((item) => `<li>${item}</li>`).join("")}
+    </ul>
+  `;
+}
+```
+This function takes in an array as input and outputs a HTML list of the array contents. It uses the `map()` method to iterate over the array and create a new array with the same elements, but wrapped in `<li>` tags. The resulting array is then joined using the `join()` method to create a string of HTML code.
+
+Here's an example usage:
+```
+const arr = ["apple", "banana", "cherry"];
+const list = createList(arr);
+console.log(list);
+```
+This would output the following HTML:
+```
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

@@ -1,0 +1,5 @@
+{
+"image_description": "Three alpacas standing next to each other with their mouths open wide and looking towards the right. The setting is a dark blue room containing multiple shelves with electronic devices on top of them.",
+"keywords": ["alpaca", "shelf", "device", "blue", "electronic"]
+}
+

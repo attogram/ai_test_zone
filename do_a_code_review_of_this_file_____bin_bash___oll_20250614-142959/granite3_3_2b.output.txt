@@ -1,0 +1,16 @@
+This is a Bash script for running language models using the OLLAMA API. Here's a breakdown of what it does:
+
+1. Parses command-line arguments and sets up necessary variables.
+2. Defines functions to create various HTML pages, including model run results, index pages, and system stats.
+3. Sets up output directories for models and their results.
+4. Creates the main index page (`index.html`) listing all available models and linking to individual model runs.
+5. Creates a model run details page (`model_run_name.html`), displaying text output, statistics, and other relevant information.
+6. Generates a system stats page (`system_stats.html`), including CPU usage, memory consumption, and OLLAMA API calls.
+7. Generates a model overview page (`models_overview.html`), listing all used models in the run and linking to their individual output pages.
+8. Runs language models for each specified prompt using the OLLAMA API. It saves the text output and statistics in separate files, sets up system stats, generates model-specific HTML pages, and adds the model to the index page.
+9. After all runs are completed, it generates the main index page (`index.html`) for the complete results and creates a model run index page (`models.html`).
+10. Saves the current shell session (prompt) in `saved_prompt.txt`.
+11. Reloads the shell session using `source saved_prompt.txt`.
+
+To use this script, you need to have OLLAMA installed and accessible via command line. You should also provide the required arguments for model names and prompts when executing the script with `bash script.sh <model1> <prompt1> <model2> <prompt2> ...`.
+

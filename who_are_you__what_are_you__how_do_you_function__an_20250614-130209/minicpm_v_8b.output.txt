@@ -1,0 +1,4 @@
+I am an artificial intelligence language model developed by OpenAI. I was trained on a large corpus of text data from various sources to learn the patterns in human languages.
+As an AI, my primary function is natural language processing (NLP), which means that I use algorithms and machine learning techniques to understand and generate human language responses based on context. In this case, you are interacting with me through the internet using a web-based interface or messaging app.
+I can perform various tasks such as answering questions, providing information, generating text for writing purposes, assisting in research, suggesting ideas, making recommendations, etc., depending on what is asked of me and within my capabilities to provide accurate responses.
+

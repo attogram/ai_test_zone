@@ -1,0 +1,81 @@
+Certainly! Below is a bash script that reads and parses the `stats.txt` and `show.txt` files as described. The script will save the parsed data into bash variables.
+
+```bash
+#!/bin/bash
+
+# Function to parse stats.txt
+parse_stats() {
+    while IFS=: read -r line; do
+        key=$(echo $line | awk '{print $1}' | sed 's/ //g')
+        value=$(echo $line | awk '{$1=""; print substr($0,2)}' | xargs)
+        eval "${key// /_}"="'${value}'"
+    done < stats.txt
+}
+
+# Function to parse show.txt
+parse_show() {
+    section=""
+    while IFS= read -r line; do
+        case $line in
+            Model|Capabilities|Parameters) section="$line";;
+            *) 
+                if [ "$section" == "Model" ] || [ "$section" == "Parameters" ]; then
+                    key=$(echo $line | awk '{print $1}' | sed 's/ //g')
+                    value=$(echo $line | awk '{$1=""; print substr($0,2)}' | xargs)
+                    eval "${section,,}_${key// /_}"="'${value}'"
+                elif [ "$section" == "Capabilities" ]; then
+                    capability=$(echo $line | xargs)
+                    eval "${section,,}_capabilities+=('$capability')"
+                fi;;
+        esac
+    done < show.txt
+}
+
+# Parse the files
+parse_stats
+parse_show
+
+# Print variables for verification
+echo "Total Duration: ${total_duration}s"
+echo "Load Duration: ${load_duration}s"
+echo "Prompt Eval Count: ${prompt_eval_count} token(s)"
+echo "Prompt Eval Duration: ${prompt_eval_duration}ms"
+echo "Prompt Eval Rate: ${prompt_eval_rate} tokens/s"
+echo "Eval Count: ${eval_count} token(s)"
+echo "Eval Duration: ${eval_duration}s"
+echo "Eval Rate: ${eval_rate} tokens/s"
+
+echo "Model Architecture: ${model_architecture}"
+echo "Model Parameters: ${model_parameters}"
+echo "Model Context Length: ${model_context_length}"
+echo "Model Embedding Length: ${model_embedding_length}"
+echo "Model Quantization: ${model_quantization}"
+
+for capability in "${show_capabilities[@]}"; do
+    echo "Capability: $capability"
+done
+
+echo "Parameters Stop: ${parameters_stop}"
+```
+
+### Explanation:
+
+1. **parse_stats Function**:
+   - Reads each line of `stats.txt`.
+   - Extracts the key and value using `awk` and `sed`.
+   - Assigns the values to bash variables with names in all lowercase and underscores for consistency.
+
+2. **parse_show Function**:
+   - Initializes a variable to keep track of the current section (`Model`, `Capabilities`, or `Parameters`).
+   - Reads each line of `show.txt`.
+   - Depending on the section, it extracts keys and values and assigns them to bash variables.
+   - For the `Capabilities` section, it stores each capability in an array.
+
+3. **Variable Naming**:
+   - Variables are named in all lowercase with underscores for readability and consistency.
+
+4. **Output**:
+   - The script prints out some of the parsed variables to verify that they have been correctly assigned.
+
+You can run this script by saving it to a file (e.g., `parse_files.sh`), making it executable (`chmod +x parse_files.sh`), and then running it (`./parse_files.sh`).
+

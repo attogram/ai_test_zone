@@ -1,0 +1,196 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: starcoder:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_function__an</a>: <b>starcoder:7b</b>: 20250614-130209<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<b>starcoder:7b</b> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./who_are_you__what_are_you__how_do_you_function__an.prompt.yaml'>yaml</a>)
+  words:15  bytes:69<br />
+<textarea readonly rows='1'>Who are you, What are you, How do you function, and What can you do?</textarea>
+</p>
+<p>Output: starcoder:7b (<a href='./starcoder_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+
+So, what do we have here is a class called `Squirrel` which has a property of type string called `Name`. The property is not private. We can read that property from the outside world by calling the method `GetName()`. But we can also change it through some other methods, and then call those methods from the outside world as well.
+
+In this example, you’ll learn:
+
+* That a class can have public properties and set of private methods
+* How to create an instance of a class
+* How to use that instance to access the different members
+
+## Accessing Properties and Methods
+Now, let&#39;s get back to our Squirrel. In it we are going to add some more functionality using some properties and methods. First, add the following code inside the `Squirrel` class:
+```cs
+  public string Color { get; set;} = &quot;Green&quot;;
+
+  private void Play() =&gt; Console.WriteLine($&quot;{Name} is playing!&quot;);
+```
+Here you can see that we have two new properties added to our Squirrel class called `Color`, and a method called `Play()`. You also noticed, we are setting the default value for `Color` property as `&quot;Green&quot;`. We will use this later when we create instances of our Squirrel.
+
+So far you&#39;ve created an instance of your Squirrel and set some properties on it like its name or color using the constructor that takes in a string argument. Now, let&#39;s take a look at how to access those properties and methods:
+```cs
+  class Program
+  {
+      static void Main(string[] args)
+      {
+          var squirrel = new Squirrel(&quot;Hazelnut&quot;);
+
+          // Change Name property
+          Console.WriteLine($&quot;Before changing the name property value of Hazelnut, its color is {squirrel.Color}&quot;);
+          squirrel.Name = &quot;Sam&quot;;
+          Console.WriteLine($&quot;After changing the name property value of Hazelnut, its color is {squirrel.Color}&quot;);
+
+          // Change Color property
+          Console.WriteLine($&quot;{squirrel.GetName()} before changing color to red&quot;);
+          squirrel.Color = &quot;Red&quot;;
+          Console.WriteLine($&quot;{squirrel.GetName()} after changing color to red&quot;);
+
+          // Call Play method
+          squirrel.Play();
+      }
+  }
+```
+Now, when we run the code you should see a similar output as this:
+```
+Before changing the name property value of Hazelnut, its color is Green
+After changing the name property value of Hazelnut, its color is Red
+Hazelnut before changing color to red
+Sam after changing color to red
+Hazelnut is playing!
+```
+Here you can see that we are accessing both public properties and private methods using a dot operator on our instance `squirrel`. You may also notice that when we change the name property, it doesn’t affect its color. Why? Because the `Color` property was set to `&quot;Green&quot;` during construction of an instance. If you want to update the color property then, you have to do so explicitly using a setter method called `SetColor()`.
+
+## Private vs Public Properties and Methods
+Now, let&#39;s look at some examples when properties or methods can be made private:
+```cs
+  class Program
+  {
+      static void Main(string[] args)
+      {
+          var squirrel = new Squirrel(&quot;Hazelnut&quot;);
+
+          // Accessing a public property using dot operator on instance variable (Public Property)
+          Console.WriteLine($&quot;Public property value is :{squirrel.Name}&quot;);
+
+          // Trying to access Private property using dot operator on instance variable (Private Property)
+          try
+          {
+              var color = squirrel.Color;
+              Console.WriteLine(&quot;This shouldn&#39;t run&quot;);
+          }
+          catch(Exception ex)
+          {
+              Console.WriteLine($&quot;The exception that was thrown: {ex}&quot;);
+          }
+
+          // Accessing a private method using dot operator on instance variable (Private Method)
+          try
+          {
+              var play = squirrel.Play;
+              Console.WriteLine(&quot;This shouldn&#39;t run&quot;);
+          }
+          catch(Exception ex)
+          {
+            Console.WriteLine($&quot;The exception that was thrown: {ex}&quot;);
+          }
+
+          // Calling a private method through its public method (Public Method)
+          PlaySquirrel();
+      }
+
+      static void PlaySquirrel() =&gt; Console.WriteLine(&quot;Hazelnut is playing!&quot;);
+  }
+```
+When you run the code, you should get something similar to this:
+```
+Public property value is : Hazelnut
+The exception that was thrown: System.Exception: Property or method &#39;Color&#39; in type &#39;Squirrel&#39; cannot be accessed with an instance reference because it is not public
+   at Squirrel..ctor(String name) in C:\Users\Admin\Documents\GitHub\csharp-fundamentals\14\AccessProperties\Program.cs:line 29
+Hazelnut is playing!
+```
+You&#39;ll also notice that if you try to access the `Color` or the `Play()` method using dot operator on our instance variable, then it throws an exception saying &quot;Property or method `Color` cannot be accessed with an instance reference because it is not public&quot; and &quot;Property or method `Play()` in type &#39;Squirrel&#39; cannot be accessed with an instance reference because it is not public&quot;.
+
+## Conclusion
+In this article you learned how to access properties and methods of a class. You also learnt about the difference between private, protected, internal, and public properties and methods.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./starcoder_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>732</td></tr>
+<tr><td class='left'>bytes</td><td>5215</td></tr>
+<tr><td class='left'>total duration</td><td>1m4.683214166s</td></tr>
+<tr><td class='left'>load duration</td><td>17.093ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>19 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>308.970417ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>61.49 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>1169 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>1m4.356414875s</td></tr>
+<tr><td class='left'>eval rate</td><td>18.16 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./starcoder_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/starcoder:7b'>starcoder:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>starcoder</td></tr>
+<tr><td class='left'>size</td><td class='left'>5.9 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.5B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>8192</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 668M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_function__an</a>: <b>starcoder:7b</b>: 20250614-130209</p>
+<p>page created:   2025-06-14 13:08:57</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

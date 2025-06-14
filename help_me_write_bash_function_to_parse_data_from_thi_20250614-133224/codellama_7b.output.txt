@@ -1,0 +1,64 @@
+
+function parse_model_info() {
+    # Check if input file exists
+    if [[ ! -f "$1" ]]; then
+        echo "Error: Input file '$1' does not exist."
+        return 1
+    fi
+
+    # Parse the Model section
+    while IFS= read -r line; do
+        name="${line%% *}"
+        value="${line#* }"
+        case "$name" in
+            architecture)
+                architecture="$value"
+                ;;
+            parameters)
+                parameters="$value"
+                ;;
+            context length)
+                context_length="$value"
+                ;;
+            embedding length)
+                embedding_length="$value"
+                ;;
+            quantization)
+                quantization="$value"
+                ;;
+        esac
+    done < "$1"
+
+    # Parse the Capabilities section
+    capabilities=()
+    while IFS= read -r line; do
+        capabilities+=("$line")
+    done < <(grep -o '[a-zA-Z]*' "$1" | grep -v '^$')
+
+    # Parse the System section
+    system_prompt=$(awk '/System/ { print $0 }' "$1")
+
+    # Parse the Parameters section (has same format as Model section)
+    while IFS= read -r line; do
+        name="${line%% *}"
+        value="${line#* }"
+        case "$name" in
+            num_ctx)
+                num_ctx="$value"
+                ;;
+            temperature)
+                temperature="$value"
+                ;;
+        esac
+    done < <(grep -B 1 '^Parameters' "$1")
+
+    # Print the results
+    echo "Architecture: $architecture"
+    echo "Capabilities: ${capabilities[@]}"
+    echo "System prompt: $system_prompt"
+    echo "Parameters: num_ctx=$num_ctx, temperature=$temperature"
+}
+
+# Example usage:
+parse_model_info model.info.txt
+

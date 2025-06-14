@@ -1,0 +1,15 @@
+
+
+
+
+Code:
+- Use sed to search for a pattern in the file, replace that line with text.
+- The grep command is used to find the first line in which the word “model” exists and then use sed to replace all of it’s contents with another string.
+```bash
+sed -i '10 s/.*/<tr><td class="left"><a href="./$model.html">$model</a></td><td>$responseWords</td><td>$responseBytes</td><td>./g' "$indexFile"
+grep model "$indexFile" | sed 's/<tr>/<tr><th>Model</th>/g; s/<td class="left">/<td><th>Response Words<\/th>/g; s/<a href="./$model.html">$model<\/a>/<td>\n\t<td>$responseWords<\/td>\n\t<td>$responseBytes<\/td>\n\t<td>\n\t./g' > "$indexFile"
+```
+
+
+
+

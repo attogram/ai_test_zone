@@ -1,0 +1,185 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>mistral:7b</b>: 20250614-142103<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<b>mistral:7b</b> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'> To achieve your requirements, I&#39;ve written a bash script that reads and parses both `stats.txt` and `show.txt` files. Here&#39;s the code:
+
+```bash
+#!/bin/bash
+
+# Function to parse stats file and store in associative array
+parse_stats_file() {
+  local -n res=(&quot;${@}&quot;)
+  IFS=&quot;:&quot; read -r key val &lt;&lt;&lt; &quot;$1&quot;
+  res[$key]=$val
+  shift
+  [ &quot;$#&quot; -ne 0 ] &amp;&amp; parse_stats_file res &quot;$@&quot;
+}
+
+# Read stats.txt and store values in an associative array
+declare -A stats
+while IFS=&quot;:&quot; read -r line; do
+  parse_stats_file stats &lt;&lt;&lt; &quot;$line&quot;
+done &lt; stats.txt
+
+# Function to parse show file and store in variables
+parse_show_file() {
+  local section=&quot;$1&quot;; shift
+  declare -A $section
+  while IFS=&quot; &quot; read -r line; do
+    if [[ $line == *&quot;:&quot;* ]]; then
+      IFS=&quot;:&quot; read -r key val &lt;&lt;&lt; &quot;$line&quot;
+      eval &quot;${section[$key]=$val}&quot;
+    else
+      eval &quot;${section[capabilities]=&#39;($line)}&quot;
+    fi
+  done &lt; show.txt
+}
+
+# Read and parse show.txt into variables
+declare -A model
+declare -a capabilities
+declare -A parameters
+parse_show_file &quot;model&quot;
+parse_show_file &quot;capabilities&quot;
+parse_show_file &quot;parameters&quot;
+
+# Access the parsed data from variables
+echo &quot;Parsed stats:&quot;
+for key in &quot;${!stats[@]}&quot;; do
+  echo &quot;$key: ${stats[$key]}&quot;
+done
+
+echo &quot;Parsed show file:&quot;
+echo &quot;Model architecture: ${model[architecture]}&quot;
+echo &quot;Model parameters: ${model[parameters]}&quot;
+echo &quot;Model context length: ${model[context_length]}&quot;
+echo &quot;Model embedding length: ${model[embedding_length]}&quot;
+echo &quot;Model quantization: ${model[quantization]}&quot;
+echo &quot;Capabilities: ${capabilities[@]}&quot;
+echo &quot;Parameters stop: ${parameters[stop]}&quot;
+```
+
+The script uses two functions, `parse_stats_file` and `parse_show_file`, to read and parse the files. It stores the parsed data into associative arrays (for stats) and variables (for show). You can access the parsed values using these structures. Save this code in a file named `process.sh` or any name you prefer, then run it with:
+
+```bash
+chmod +x process.sh
+./process.sh
+```</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>268</td></tr>
+<tr><td class='left'>bytes</td><td>1954</td></tr>
+<tr><td class='left'>total duration</td><td>34.668737209s</td></tr>
+<tr><td class='left'>load duration</td><td>15.076834ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>428 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.604870167s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>164.31 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>614 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>32.047974458s</td></tr>
+<tr><td class='left'>eval rate</td><td>19.16 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 611M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>mistral:7b</b>: 20250614-142103</p>
+<p>page created:   2025-06-14 14:26:49</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

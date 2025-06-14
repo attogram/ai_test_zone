@@ -1,0 +1,4 @@
+.
+#   - [ ] Write a Bash shell script that uses these two functions, including a call to your BMI_calc() function from within your script, to calculate the BMIs for 5 people using random data (your choice on how many).
+
+

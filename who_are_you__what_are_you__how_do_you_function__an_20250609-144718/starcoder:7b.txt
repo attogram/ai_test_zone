@@ -1,7 +1,0 @@
-
-#
-# I am the one who created this course. And what I do is teach people about the way they can use data to help them achieve their goals. The best part of it is that if there’s one thing I learned in school or on your journey to becoming a coder, it is how valuable all of those data points are and how important it is for you to have access to as much information as possible from the start of your coding career.
-#
-# We do this by teaching you about Python programming language. To know more about me, follow me on LinkedIn.
-
-

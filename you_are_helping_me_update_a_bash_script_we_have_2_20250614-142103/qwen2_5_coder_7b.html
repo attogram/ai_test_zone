@@ -1,0 +1,201 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen2.5-coder:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>qwen2.5-coder:7b</b>: 20250614-142103<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<b>qwen2.5-coder:7b</b> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+<p>Output: qwen2.5-coder:7b (<a href='./qwen2_5_coder_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Certainly! Below is a bash script that reads and parses the `stats.txt` and `show.txt` files as described. The script will save the parsed data into bash variables.
+
+```bash
+#!/bin/bash
+
+# Function to parse stats.txt
+parse_stats() {
+    while IFS=: read -r line; do
+        key=$(echo $line | awk &#39;{print $1}&#39; | sed &#39;s/ //g&#39;)
+        value=$(echo $line | awk &#39;{$1=&quot;&quot;; print substr($0,2)}&#39; | xargs)
+        eval &quot;${key// /_}&quot;=&quot;&#39;${value}&#39;&quot;
+    done &lt; stats.txt
+}
+
+# Function to parse show.txt
+parse_show() {
+    section=&quot;&quot;
+    while IFS= read -r line; do
+        case $line in
+            Model|Capabilities|Parameters) section=&quot;$line&quot;;;
+            *) 
+                if [ &quot;$section&quot; == &quot;Model&quot; ] || [ &quot;$section&quot; == &quot;Parameters&quot; ]; then
+                    key=$(echo $line | awk &#39;{print $1}&#39; | sed &#39;s/ //g&#39;)
+                    value=$(echo $line | awk &#39;{$1=&quot;&quot;; print substr($0,2)}&#39; | xargs)
+                    eval &quot;${section,,}_${key// /_}&quot;=&quot;&#39;${value}&#39;&quot;
+                elif [ &quot;$section&quot; == &quot;Capabilities&quot; ]; then
+                    capability=$(echo $line | xargs)
+                    eval &quot;${section,,}_capabilities+=(&#39;$capability&#39;)&quot;
+                fi;;
+        esac
+    done &lt; show.txt
+}
+
+# Parse the files
+parse_stats
+parse_show
+
+# Print variables for verification
+echo &quot;Total Duration: ${total_duration}s&quot;
+echo &quot;Load Duration: ${load_duration}s&quot;
+echo &quot;Prompt Eval Count: ${prompt_eval_count} token(s)&quot;
+echo &quot;Prompt Eval Duration: ${prompt_eval_duration}ms&quot;
+echo &quot;Prompt Eval Rate: ${prompt_eval_rate} tokens/s&quot;
+echo &quot;Eval Count: ${eval_count} token(s)&quot;
+echo &quot;Eval Duration: ${eval_duration}s&quot;
+echo &quot;Eval Rate: ${eval_rate} tokens/s&quot;
+
+echo &quot;Model Architecture: ${model_architecture}&quot;
+echo &quot;Model Parameters: ${model_parameters}&quot;
+echo &quot;Model Context Length: ${model_context_length}&quot;
+echo &quot;Model Embedding Length: ${model_embedding_length}&quot;
+echo &quot;Model Quantization: ${model_quantization}&quot;
+
+for capability in &quot;${show_capabilities[@]}&quot;; do
+    echo &quot;Capability: $capability&quot;
+done
+
+echo &quot;Parameters Stop: ${parameters_stop}&quot;
+```
+
+### Explanation:
+
+1. **parse_stats Function**:
+   - Reads each line of `stats.txt`.
+   - Extracts the key and value using `awk` and `sed`.
+   - Assigns the values to bash variables with names in all lowercase and underscores for consistency.
+
+2. **parse_show Function**:
+   - Initializes a variable to keep track of the current section (`Model`, `Capabilities`, or `Parameters`).
+   - Reads each line of `show.txt`.
+   - Depending on the section, it extracts keys and values and assigns them to bash variables.
+   - For the `Capabilities` section, it stores each capability in an array.
+
+3. **Variable Naming**:
+   - Variables are named in all lowercase with underscores for readability and consistency.
+
+4. **Output**:
+   - The script prints out some of the parsed variables to verify that they have been correctly assigned.
+
+You can run this script by saving it to a file (e.g., `parse_files.sh`), making it executable (`chmod +x parse_files.sh`), and then running it (`./parse_files.sh`).</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen2_5_coder_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>377</td></tr>
+<tr><td class='left'>bytes</td><td>3029</td></tr>
+<tr><td class='left'>total duration</td><td>47.05985225s</td></tr>
+<tr><td class='left'>load duration</td><td>22.201ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>418 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>3.164841167s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>132.08 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>731 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>43.872189583s</td></tr>
+<tr><td class='left'>eval rate</td><td>16.66 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen2_5_coder_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/qwen2.5-coder:7b'>qwen2.5-coder:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.6B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>3584</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br />insert<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 665M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>qwen2.5-coder:7b</b>: 20250614-142103</p>
+<p>page created:   2025-06-14 14:21:56</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

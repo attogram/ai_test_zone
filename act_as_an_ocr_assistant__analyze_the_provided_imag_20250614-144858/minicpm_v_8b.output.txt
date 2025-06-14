@@ -1,0 +1,731 @@
+Title:
+```
+model3: granite3.2-vision:2b minicpm-v:8b qwen2.5v1:3b qweng2.5v1:7b gemlass3:4b lllava:7b llava-l1ama3:8b llava-llama-phili3:3.8b baklava:7b moondream:1.8b
+```
+
+Subtitle:
+```
+Prompt: (raw) (yamal) words:4 bytes:46
+
+Describe this image: ./docs/Logo/logo-250.jpg
+```
+
+Body Text/Table Header:
+```
+model            |  total duration   |    load     | prompt eval      | prompt eval          |
+                   |                    |             |                  |                       |
+model3: granite3.2-vision:2b | model3:4b | [unclear] bytes| [unclear] seconds|
+minicpm-v1:8b               | 09567f14e              |   n/a        |                |
+qwen2.5v1:3b                 |    qweng2.5v1:7b     |      27         |       [unclear] seconds|
+llava-7b                       |             lllava-l1ama3|               |
+gammlass3:4b                |              qwen2.5v1:3b|
+lava8            |                        qweng2.5v1:7b    gemlass3:4b   |
+
+table Row:
+model3: granite3.2-vision:2b             | 09567f14e      | n/a              |
+minicpm-v1:8b                             |                qweng2.5v1:3b|
+qwen2.5v1:3b                              |    qweng2.5v1:7b|     09567f14e   |
+
+table Row:
+model3: granite3.2-vision:2b             |                |
+minicpm-v1:8b                             |      [unclear]|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3: granite3.2-visor                  |    qweng2.5v1:7b|     09567f14e   |
+minicpm-v1:8b                             |                qweng2.5v1:7b|
+qwen2.5v1:3b                              |                 |
+
+table Row:
+model3
+

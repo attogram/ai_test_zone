@@ -1,0 +1,28 @@
+
+Here is an example of how you can create a PHP function that takes in an array and outputs a HTML list of its contents:
+```
+function arrayToList($array) {
+  $list = '<ul>';
+  foreach ($array as $item) {
+    $list .= '<li>' . $item . '</li>';
+  }
+  $list .= '</ul>';
+  return $list;
+}
+```
+This function takes in an array as input, and uses a loop to iterate over the items in the array. For each item, it creates a new list element (`<li>`) that contains the item's value. The resulting list is then returned as a string.
+
+Here is an example of how you can use this function:
+```
+$array = array('apple', 'banana', 'cherry');
+echo arrayToList($array);
+```
+This will output the following HTML:
+```
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

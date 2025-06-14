@@ -1,5 +1,0 @@
-.
-// 	Write a PHP function to convert HTML code to plain text.
-// 	Write a PHP function to get the type of variable passed to it as parameter.
-?>
-

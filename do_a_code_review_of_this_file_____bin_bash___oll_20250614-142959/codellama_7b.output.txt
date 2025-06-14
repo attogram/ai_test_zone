@@ -1,0 +1,93 @@
+[PYTHON]
+def parse_command_line(argv):
+    """
+    Parse the command line arguments.
+    :param argv: The command line arguments
+    """
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--prompt", help="The prompt to use")
+    parser.add_argument("-m", "--models", nargs="+", help="The models to run")
+    parser.add_argument("-o", "--output", help="The output directory")
+    return parser.parse_args(argv)
+
+def set_prompt(args):
+    """
+    Set the prompt.
+    :param args: The command line arguments
+    """
+    global prompt
+    if args.prompt is not None:
+        prompt = args.prompt
+    else:
+        prompt = input("Enter a prompt: ")
+
+def set_models(args):
+    """
+    Set the models to run.
+    :param args: The command line arguments
+    """
+    global models
+    if args.models is not None:
+        models = args.models
+    else:
+        models = [input("Enter a model name: ")]
+
+def set_output(args):
+    """
+    Set the output directory.
+    :param args: The command line arguments
+    """
+    global output
+    if args.output is not None:
+        output = args.output
+    else:
+        output = input("Enter an output directory: ")
+[/PYTHON]
+[TESTS]
+# Test the parse_command_line function
+def test_parse_command_line():
+    import argparse
+    from ollamascii.ollama import parse_command_line
+    
+    # Test with no arguments
+    args = parse_command_line([])
+    assert args.prompt is None
+    assert args.models is None
+    assert args.output is None
+    
+    # Test with prompt argument only
+    args = parse_command_line(["-p", "Hello, world!"])
+    assert args.prompt == "Hello, world!"
+    assert args.models is None
+    assert args.output is None
+    
+    # Test with models argument only
+    args = parse_command_line(["-m", "hello", "world"])
+    assert args.prompt is None
+    assert args.models == ["hello", "world"]
+    assert args.output is None
+    
+    # Test with output argument only
+    args = parse_command_line(["-o", "/tmp/ollama-output"])
+    assert args.prompt is None
+    assert args.models is None
+    assert args.output == "/tmp/ollama-output"
+    
+    # Test with all arguments
+    args = parse_command_line(["-p", "Hello, world!", "-m", "hello", "world", "-o", "/tmp/ollama-output"])
+    assert args.prompt == "Hello, world!"
+    assert args.models == ["hello", "world"]
+    assert args.output == "/tmp/ollama-output"
+    
+    # Test with too many arguments
+    try:
+        parse_command_line(["too", "many", "arguments"])
+    except argparse.ArgumentError as e:
+        assert str(e) == "unrecognized arguments: too many arguments"
+    else:
+        assert False
+[/TESTS]
+
+

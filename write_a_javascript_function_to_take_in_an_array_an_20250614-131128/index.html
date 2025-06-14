@@ -1,0 +1,200 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: write_a_javascript_function_to_take_in_an_array_an</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>write_a_javascript_function_to_take_in_an_array_an</b>: 20250614-131128<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_javascript_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:18  bytes:93<br />
+<textarea readonly rows='1'>Write a Javascript function to take in an array and output a html list of the array contents</textarea>
+</p>
+
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>265</td>
+<td>1739</td>
+<td>23.536309s</td>
+<td>16.191583ms</td>
+<td>47 token(s)</td>
+<td>546.846875ms</td>
+<td>85.95 tokens/s</td>
+<td>431 token(s)</td>
+<td>22.972710084s</td>
+<td>18.76 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>102</td>
+<td>675</td>
+<td>10.854038958s</td>
+<td>11.490208ms</td>
+<td>38 token(s)</td>
+<td>706.149334ms</td>
+<td>53.81 tokens/s</td>
+<td>217 token(s)</td>
+<td>10.135665583s</td>
+<td>21.41 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>12</td>
+<td>98</td>
+<td>3.12374475s</td>
+<td>15.759542ms</td>
+<td>18 token(s)</td>
+<td>351.420583ms</td>
+<td>51.22 tokens/s</td>
+<td>53 token(s)</td>
+<td>2.755804042s</td>
+<td>19.23 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>84</td>
+<td>580</td>
+<td>4.845267375s</td>
+<td>11.128125ms</td>
+<td>27 token(s)</td>
+<td>250.124084ms</td>
+<td>107.95 tokens/s</td>
+<td>200 token(s)</td>
+<td>4.583465875s</td>
+<td>43.64 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>1490</td>
+<td>9272</td>
+<td>38.574145208s</td>
+<td>19.1925ms</td>
+<td>21 token(s)</td>
+<td>95.0875ms</td>
+<td>220.85 tokens/s</td>
+<td>2088 token(s)</td>
+<td>38.459235375s</td>
+<td>54.29 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>159</td>
+<td>1078</td>
+<td>15.110019833s</td>
+<td>20.064375ms</td>
+<td>41 token(s)</td>
+<td>592.217667ms</td>
+<td>69.23 tokens/s</td>
+<td>256 token(s)</td>
+<td>14.49715675s</td>
+<td>17.66 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>83</td>
+<td>613</td>
+<td>4.464151083s</td>
+<td>20.826083ms</td>
+<td>40 token(s)</td>
+<td>189.873833ms</td>
+<td>210.67 tokens/s</td>
+<td>201 token(s)</td>
+<td>4.252933167s</td>
+<td>47.26 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>88</td>
+<td>695</td>
+<td>5.04503725s</td>
+<td>16.258583ms</td>
+<td>61 token(s)</td>
+<td>310.404167ms</td>
+<td>196.52 tokens/s</td>
+<td>197 token(s)</td>
+<td>4.717530208s</td>
+<td>41.76 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>124</td>
+<td>890</td>
+<td>14.246418792s</td>
+<td>14.18375ms</td>
+<td>25 token(s)</td>
+<td>379.633458ms</td>
+<td>65.85 tokens/s</td>
+<td>285 token(s)</td>
+<td>13.851877667s</td>
+<td>20.57 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>759</td>
+<td>4804</td>
+<td>22.393906792s</td>
+<td>19.320083ms</td>
+<td>28 token(s)</td>
+<td>149.757667ms</td>
+<td>186.97 tokens/s</td>
+<td>1170 token(s)</td>
+<td>22.224173s</td>
+<td>52.65 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 721M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>write_a_javascript_function_to_take_in_an_array_an</b>: 20250614-131128</p>
+<p>page created:   2025-06-14 13:14:24</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

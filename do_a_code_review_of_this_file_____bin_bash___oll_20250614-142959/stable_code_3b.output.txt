@@ -1,0 +1,43 @@
+```python
+def add_model_to_output_index(models_directory):
+    # Create table of contents: list all models used in all run results, and links to every individual model run
+    models = []
+    for item in os.listdir(models_directory)):
+        if item.endswith(".html"):
+            model = item[:-len(".html")}]
+            models.append({"name": model}})
+    return models
+
+def create_main_index_html(results_directory):
+    # Create a main index page for all the models used in all run results.
+    with open(f"{results_directory}/index.html", "w") as file:
+        file.write("<h1>All Model Runs</h1>\n")
+        file.write("<ul>\n")
+        models = add_model_to_output_index(results_directory))
+        for model in models:
+            file.write(f" <li><a href='{results_directory}/{model['name']}.html'>{model['name']}</a></li>\n")
+        file.write("</ul>\n")
+        file.write("<p><a href='#top'>Top</a></p>\n")
+        file.write("</body>\n")
+        file.write("</html>\n")
+
+def create_output_index(results_directory):
+    # Create a main index page for all the models used in all run results.
+    with open(f"{results_directory}/index.html", "w") as file:
+        file.write("<html>\n")
+        file.write("<head>\n")
+        file.write("<title>All Model Runs</title>\n")
+        file.write("</head>\n")
+        file.write("<body>\n")
+        file.write(f"<h1>All Model Runs in {results_directory}</h1>\n")
+        file.write("<ul>\n")
+        for item in os.listdir(results_directory)):
+            if item.endswith(".html"):
+                model = item[:-len(".html")}]
+                file.write(f" <li><a href='{results_directory}/{model['name']}.html'>{model['name']}</a></li>\n")
+        file.write("</ul>\n")
+        file.write("<p><a href='#top'>Top</a></p>\n")
+        file.write("</body>\n")
+        file.write("</html>\n")
+```
+

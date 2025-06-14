@@ -1,0 +1,131 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepcoder:1.5b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>deepcoder:1.5b</b>: 20250614-132200<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<b>deepcoder:1.5b</b> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_bash_shell_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:19  bytes:93<br />
+<textarea readonly rows='1'>Write a Bash shell function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: deepcoder:1.5b (<a href='./deepcoder_1_5b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>&lt;think&gt;
+Okay, I need to write a Bash function that takes an array and outputs an HTML list of its contents. Let me think about how to approach this.
+
+First, I should consider how arrays are handled in Bash. Arrays in Bash can be passed as variables using parentheses, so I&#39;ll start by defining the function with parameters like &#39;array&#39; and maybe &#39;title&#39; for the HTML title.
+
+Next, the structure of an HTML list typically includes a head section with a style attribute. Each item will be wrapped in &lt;li&gt; tags. So inside the body, each li element will contain a span with the array item and its index.
+
+I&#39;ll need to loop through each element in the array. For each iteration, I&#39;ll append a new line, then create a string that includes the item and its index. This string will be wrapped in &lt;span&gt; tags with the &#39;title&#39; attribute set to the array&#39;s title if provided.
+
+To handle the HTML structure correctly, I should use double quotes for the body content because single quotes can lead to syntax issues in Bash scripts. Also, I need to escape any double quotes within the elements, though in this case, it&#39;s only used for the body text.
+
+I&#39;ll initialize a header span with &#39;title&#39; set to the array title. Then loop through each element, appending each part to the result string. Finally, close the body and return the constructed HTML content.
+
+Wait, I should make sure that each li is properly indented and that the structure is correct for an HTML page. Also, considering any edge cases, like empty arrays or non-string elements, but perhaps the function assumes all elements are strings as per the problem statement.
+
+Putting it all together, the function will start by checking if the array and title are provided. Then construct each line with the item and index, wrap them in li and span elements, and combine everything into a single string which is then returned as the HTML content.
+&lt;/think&gt;
+
+Here&#39;s a Bash function that takes an array and outputs an HTML list of its contents:
+
+```bash
+function create_html_list() {
+    local array=$1
+    local title=$2
+    local html_content=&quot;&quot;
+
+    # Handle empty array case
+    if Aires empty $array; then return &quot;&quot;
+    
+    # Construct each line in the HTML list
+    for i in {0..${#array}-1}; do
+        echo -n &quot; &lt;li&gt;
+         echo -n &quot;[span] ${array[$i]} ${i} &lt;span title=&quot;$title&quot;&gt;$element&lt;/span&gt; $i
+         echo -n &quot; &lt;/li&quot;
+        done
+    }
+    
+    # Close the HTML content
+    echo -n &quot;&gt;&quot; ${html_content}
+}
+```
+
+This function creates an HTML list where each item from the array is displayed in a `&lt;li&gt;` tag, with its corresponding index. The items are wrapped in `&lt;span&gt;` tags and each line ends with a `&lt;li&gt;` and starts with a `&lt;/li&gt;`. 
+
+You can use it like this:
+
+```bash
+echo &gt; example.html
+done
+```
+
+This will create an HTML file named &quot;example.html&quot; with the array elements displayed as an HTML list.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepcoder_1_5b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>484</td></tr>
+<tr><td class='left'>bytes</td><td>2862</td></tr>
+<tr><td class='left'>total duration</td><td>10.939233167s</td></tr>
+<tr><td class='left'>load duration</td><td>19.54125ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>22 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>99.248042ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>221.67 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>648 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>10.819886208s</td></tr>
+<tr><td class='left'>eval rate</td><td>59.89 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepcoder_1_5b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/deepcoder:1.5b'>deepcoder:1.5b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.1 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>1.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>1536</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>10G + 855M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>deepcoder:1.5b</b>: 20250614-132200</p>
+<p>page created:   2025-06-14 13:23:15</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

@@ -1,0 +1,19 @@
+Here's a JavaScript function that converts an array into an HTML unordered list (`<ul>`) using template literals:
+
+```javascript
+function arrayToHTMLList(arr) {
+  return `<ul>${arr.map(item => `<li>${item}</li>`).join('')}</ul>`;
+}
+```
+
+This function works by mapping over the input array `arr`, converting each element to a list item (`<li>`) and then joining them together with an empty string as the separator, wrapping the result in an unordered list (`<ul>`).
+
+You can use this function like so:
+
+```javascript
+const array = ['Apple', 'Banana', 'Cherry'];
+const htmlList = arrayToHTMLList(array);
+console.log(htmlList);
+// Output: <ul><li>Apple</li><li>Banana</li><li>Cherry</li></ul>
+```
+

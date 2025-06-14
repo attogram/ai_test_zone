@@ -1,0 +1,26 @@
+This script appears to be a comprehensive shell or bash script designed for running and managing results from Ollama, an AI model presumably used for generating text based on prompts. Here's what the script does step by step:
+
+1. **Command Line Parsing:** It starts by parsing command line arguments using `parseCommandLine "$@"`.
+
+2. **Setting Up Models and Prompt:** The script sets up arrays of models and a prompt provided through the command line.
+
+3. **Output Directories Creation:** Creates output directories for storing generated files.
+
+4. **Creating Main Index HTML File:** Generates an HTML file (`index.html`) that links to all model results in the main result directory.
+
+5. **Running Each Model:** Loops over each specified model, runs them with a prompt using `ollama run`, and saves both the output text and statistics about the running process.
+
+6. **Statistics Collection:** The script calculates various statistics related to the performance of running the models including words/bytes processed, time taken, etc.
+
+7. **Generating Model Output Pages:** For each model, it generates an HTML summary page (`index.html`) that includes the output, statistics, and metadata about the model run.
+
+8. **Updating Results Index HTML:** Adds a new line for the current model to the overall results index HTML file, linking to its detailed report.
+
+9. **Finalizing Output Index HTML File:** After all models have been processed, it finalizes the main index HTML page by adding any missing images and generating a link to a model run index.
+
+10. **Creating Model Run Index Page:** Generates an HTML page listing all model runs and links back to individual results.
+
+11. **Completion Notice:** Finally, the script prints a message indicating that the process is complete along with the directory where the output has been saved.
+
+The script uses several shell scripting features such as loops, conditional statements, file manipulation (creating directories, writing files), and system commands (`ollama run`, `echo`, `sed`, etc.). It's well-structured to automate the execution and reporting of multiple iterations through an AI model.
+

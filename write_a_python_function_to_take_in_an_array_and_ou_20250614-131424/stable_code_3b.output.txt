@@ -1,0 +1,40 @@
+Here's a Python function that takes in an array and outputs an HTML list of the array contents:
+```python
+def array_to_html_list(array):
+    """Converts an array to an HTML list.
+
+    Args:
+        array (list): The input array.
+
+    Returns:
+        str: An HTML list containing the array elements.
+    """
+    # Initialize an empty HTML list
+    html_list = "<ul>\n"
+
+    # Iterate over each element in the array
+    for element in array:
+        # Add a list item to the HTML list for this element
+        html_list += f"  <li>{element}</li>\n"
+
+    # Close the HTML list
+    html_list += "</ul>"
+
+    # Return the HTML list
+    return html_list
+```
+Here's an example of how you can use this function to convert an array to an HTML list:
+```python
+array = ["apple", "banana", "cherry"]
+html_list = array_to_html_list(array)
+print(html_list)
+```
+This will output the following HTML list:
+```html
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

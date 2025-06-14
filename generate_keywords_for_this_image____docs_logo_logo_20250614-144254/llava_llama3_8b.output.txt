@@ -1,0 +1,46 @@
+{
+"image": {
+"width": "3.0",
+"height": "3.0"
+},
+"artwork": [
+{
+"color": "#D5D9E",
+"count": "1",
+"object": "Alpaca"
+},
+{
+"color": "#D5D9E",
+"count": "1",
+"object": "Alpaca"
+},
+{
+"color": "#D5D9E",
+"count": "3",
+"object": "Alpacas"
+}
+],
+"artwork": [
+{
+"color": "#D5D9E",
+"count": "4",
+"object": "Llama's"
+},
+{
+"color": "#D5D9E",
+"count": "0",
+"object": "Clouds"
+},
+{
+"color": "#D5D9E",
+"count": "1",
+"object": "Llama's"
+},
+{
+"color": "#D5D9E",
+"count": "2",
+"object": "Alpaca's"
+}
+]
+}
+

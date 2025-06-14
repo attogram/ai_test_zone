@@ -1,0 +1,49 @@
+This script appears to be designed for running a series of text generation tasks using the Ollama model and generating reports on their performance. Here's a breakdown of what each part of the script does:
+
+1. **Command Line Parsing**: The `parseCommandLine` function processes command-line arguments to determine which models to run, the prompt to use, and other settings.
+
+2. **Model Setup**: 
+   - `setModels` initializes the list of models that will be used.
+   - `setPrompt` reads or generates a prompt for the text generation task.
+
+3. **Output Directory Creation**: The script creates a directory structure to store results (`createOutputDirectory`).
+
+4. **Main Index HTML**: An index page is created to provide an overview of all runs and models (`createMainIndexHtml`).
+
+5. **Model-Specific Files**:
+   - `savePrompt`: Saves the prompt to a file for record-keeping.
+   - `createModelInfoTxt`: Generates a file with information about each model.
+
+6. **Run Models**:
+   - The script loops through each model, clears it (if necessary), runs it using Ollama, and captures output and statistics (`setStats`, `createModelOutputHtml`).
+
+7. **Results Aggregation**:
+   - Results are added to the main index page as they complete (`addModelToOutputIndexHtml`).
+   - After all models have been run, the final index page is completed with system stats and other summary information (`finishOutputIndexHtml`).
+   - A model index page is created to provide a hierarchical view of results by model (`createMainModelIndexHtml`).
+
+8. **System Statistics**:
+   - The script measures and records various statistics during and after each run, such as total duration, load time, prompt eval counts, etc.
+
+9. **HTML Output**: The script generates HTML pages for each model run to provide detailed reports on the results.
+
+### Usage
+
+To use this script, you would typically call it from the command line with appropriate arguments. For example:
+
+```sh
+./run_ollama.sh --models model1 model2 model3 --prompt "Your prompt here"
+```
+
+This would initiate runs for `model1`, `model2`, and `model3` using the specified prompt.
+
+### Dependencies
+
+Ensure that Ollama is installed and accessible from your system. The script assumes that `ollama run` can be called directly from the command line.
+
+### Notes
+
+- The script uses some custom HTML templates (like `showHeader`, `showFooter`) which are not provided in this snippet but should be defined elsewhere in the script.
+- Error handling is minimal; you might want to add more robust error checking depending on your use case.
+- The script assumes that all models and their associated files are available and correctly configured.
+

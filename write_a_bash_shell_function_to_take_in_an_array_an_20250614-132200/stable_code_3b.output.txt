@@ -1,0 +1,30 @@
+Here's a Bash shell function that takes in an array and outputs an HTML list of the array contents:
+```bash
+function array_to_html_list() {
+  local array_name="$1"
+  local array="${!array_name}"
+  local html_list='<ul>'
+  for ((i=0); i < ${#array[@]}}; do
+    local list_item="<li>${array[i]}</li>"
+    html_list+="$list_item"
+  done
+  html_list+='</ul>'
+  echo "$html_list"
+}
+```
+To use this function, define an array and pass the array name as an argument to the `array_to_html_list` function.The function will output an HTML list of the array contents.
+
+Here's an example usage:
+```bash
+local my_array=("apple" "banana" "cherry")
+array_to_html_list my_array
+```
+This will output the following HTML list:
+```html
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

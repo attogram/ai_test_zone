@@ -1,0 +1,29 @@
+```json
+{
+  "keywords": [
+    "llama",
+    "llamas",
+    "servers",
+    "data center",
+    "digital",
+    "cyberpunk",
+    "futuristic",
+    "neon",
+    "orange",
+    "pink",
+    "red",
+    "blue",
+    "digital art",
+    "illustration",
+    "sci-fi",
+    "technology",
+    "cute",
+    "kawaii",
+    "internet",
+    "data",
+    "server room"
+  ],
+  "style": "digital art, illustration, cyberpunk"
+}
+```
+

@@ -1,0 +1,65 @@
+ To achieve your requirements, I've written a bash script that reads and parses both `stats.txt` and `show.txt` files. Here's the code:
+
+```bash
+#!/bin/bash
+
+# Function to parse stats file and store in associative array
+parse_stats_file() {
+  local -n res=("${@}")
+  IFS=":" read -r key val <<< "$1"
+  res[$key]=$val
+  shift
+  [ "$#" -ne 0 ] && parse_stats_file res "$@"
+}
+
+# Read stats.txt and store values in an associative array
+declare -A stats
+while IFS=":" read -r line; do
+  parse_stats_file stats <<< "$line"
+done < stats.txt
+
+# Function to parse show file and store in variables
+parse_show_file() {
+  local section="$1"; shift
+  declare -A $section
+  while IFS=" " read -r line; do
+    if [[ $line == *":"* ]]; then
+      IFS=":" read -r key val <<< "$line"
+      eval "${section[$key]=$val}"
+    else
+      eval "${section[capabilities]='($line)}"
+    fi
+  done < show.txt
+}
+
+# Read and parse show.txt into variables
+declare -A model
+declare -a capabilities
+declare -A parameters
+parse_show_file "model"
+parse_show_file "capabilities"
+parse_show_file "parameters"
+
+# Access the parsed data from variables
+echo "Parsed stats:"
+for key in "${!stats[@]}"; do
+  echo "$key: ${stats[$key]}"
+done
+
+echo "Parsed show file:"
+echo "Model architecture: ${model[architecture]}"
+echo "Model parameters: ${model[parameters]}"
+echo "Model context length: ${model[context_length]}"
+echo "Model embedding length: ${model[embedding_length]}"
+echo "Model quantization: ${model[quantization]}"
+echo "Capabilities: ${capabilities[@]}"
+echo "Parameters stop: ${parameters[stop]}"
+```
+
+The script uses two functions, `parse_stats_file` and `parse_show_file`, to read and parse the files. It stores the parsed data into associative arrays (for stats) and variables (for show). You can access the parsed values using these structures. Save this code in a file named `process.sh` or any name you prefer, then run it with:
+
+```bash
+chmod +x process.sh
+./process.sh
+```
+

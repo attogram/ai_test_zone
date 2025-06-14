@@ -1,0 +1,77 @@
+To read and parse the two text files, `stats.txt` and `show.txt`, into bash variables, we can use a combination of loops, string manipulation, and built-in shell utilities like `awk`, `grep`, or `IFS` (Internal Field Separator).
+
+First, let's create two functions in our script: `parse_stats.sh` and `parse_show.sh`. Each function will read their respective file, parse the content into variables, and then return them.
+
+Here is a sample implementation:
+
+```bash
+#!/bin/bash
+
+# Function to parse stats.txt
+parse_stats() {
+    # Clear IFS so we can split on any whitespace by default
+    IFS=' '
+    
+    # Read in the stats file line by line using a while loop
+    while read -r name value; do
+        # Set the variable with the name and value from each line
+        declare "$name=${value}"
+    done < stats.txt
+    
+    # Print all variables for verification purposes
+    printf "\n%-20s %-10s\n" "Name" "Value"
+    print_vars()
+}
+
+# Function to parse show.txt
+parse_show() {
+    # Clear IFS so we can split on any whitespace by default
+    IFS=' '
+    
+    section=""
+    while read -r line; do
+        if [[ $line == Model* ]]; then
+            section="Model"
+        elif [[ $line == Capabilities* ]]; then
+            section="Capabilities"
+        elif [[ $line == Parameters* ]]; then
+            section="Parameters"
+        else
+            continue
+        fi
+        
+        # Process the remaining lines of this section until we reach another section or the end of the file
+        while true; do
+            read -r line || break
+            
+            if [[ ${line:0:1} == *'#'* ]]; then
+                break  # If a comment is found, exit the current loop
+            elif [[ $section == Model* ]]; then
+                # For the Model section, we split on whitespace and take the second value (assuming that's where the description starts)
+                IFS=' ' read -r _ model_info <<< "$line"
+                echo "Model Info: ${model_info##*[![:space:]]}"
+                
+            elif [[ $section == Parameters* ]]; then
+                # For the Parameters section, we split on whitespace and assign the first value to a variable (assuming that's where the name starts)
+                IFS=' ' read -r param_name param_value <<< "$line"
+                declare "$param_name=${param_value}"
+                
+            else  # Capabilities section
+                echo "Capability: $line"
+            fi
+            
+        done | while IFS= read -r capability; do
+            echo "Capability: $capability"
+        done << <EOF
+
+# Call the functions to parse and print the contents of the files
+parse_stats
+parse_show < show.txt
+```
+
+This script should be saved as `main.sh`, and it will read in each file, parse the content into bash variables, and then display them. The parsing logic assumes that the format is strictly followed for each section (Model, Capabilities, Parameters), which may not always be reliable.
+
+Please note that this is a simplified example to give you an idea of how you can approach the problem. Depending on the actual contents of your files, the specific parsing logic might need adjustments. For instance, if the sections are not clearly marked as shown in your examples (i.e., they don't start with "Model", "Capabilities", and "Parameters"), then you'd have to adjust the code accordingly.
+
+Also, be cautious when using variables from untrusted sources since `read` without `-r` can cause word splitting and globbing, which could lead to unexpected behavior or vulnerabilities. Always use `-r` when reading files to prevent these issues.
+

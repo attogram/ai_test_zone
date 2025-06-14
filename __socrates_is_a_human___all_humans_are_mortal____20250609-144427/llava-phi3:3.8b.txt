@@ -1,7 +1,0 @@
-```css
-1. Socrates is a human.
-2. All humans are mortal.
-3. Therefore, Socrates is mortal.
-```
-Socrates is a human and all humans are mortal, therefore Socrates must be mortal. This is an example of deductive reasoning where the conclusion follows necessarily from the premises.
-

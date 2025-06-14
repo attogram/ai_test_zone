@@ -1,0 +1,2 @@
+ Yes, according to the given statements. If Socrates is a human and all humans are mortal, then Socrates is mortal.
+

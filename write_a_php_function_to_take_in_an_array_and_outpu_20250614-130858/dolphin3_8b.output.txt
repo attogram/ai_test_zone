@@ -1,0 +1,36 @@
+Sure! Here's a PHP function that takes in an array and outputs an HTML unordered list:
+
+```php
+function createHtmlList($array) {
+  $list = '<ul>';
+  
+  foreach ($array as $item) {
+    $list .= '<li>' . htmlspecialchars($item) . '</li>';
+  }
+  
+  $list .= '</ul>';
+  
+  return $list;
+}
+```
+
+To use this function, you can pass an array to it and assign the returned value to a variable or directly echo it:
+
+```php
+$array = ['Item 1', 'Item 2', 'Item 3'];
+
+$htmlList = createHtmlList($array);
+echo $htmlList;
+```
+
+This will output:
+```html
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+```
+
+Note: The `htmlspecialchars()` function is used to escape special characters in the array items, ensuring that they are properly displayed as HTML content.
+

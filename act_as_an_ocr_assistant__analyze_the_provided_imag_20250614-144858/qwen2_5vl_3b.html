@@ -1,0 +1,115 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen2.5vl:3b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_ocr_assistant__analyze_the_provided_imag</a>: <b>qwen2.5vl:3b</b>: 20250614-144858<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<b>qwen2.5vl:3b</b> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./act_as_an_ocr_assistant__analyze_the_provided_imag.prompt.yaml'>yaml</a>)
+  words:59  bytes:400<br />
+<textarea readonly rows='9'>Act as an OCR assistant. Analyze the provided image and:
+
+1. Recognize all visible text and numbers in the image as accurately as possible.
+2. Maintain the original structure and formatting of the text.
+3. If any words or phrases are unclear, indicate this with [unclear] in your transcription.
+
+Provide only the transcription without any additional comments.
+
+Image: ./docs/screenshots/run.page.png</textarea>
+</p>
+<div class='box'><a target='image' href='run.page.png'><img src='run.page.png' alt='./docs/screenshots/run.page.png' width='250' /></a></div><br /><p>Output: qwen2.5vl:3b (<a href='./qwen2_5vl_3b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>ollama-multirun: describe this image docs_logo_logo_logo_250.jpg 20250609-155320
+
+models: granite3.2-vision:2b minicpm-v:8b qwen2.5vl:3b qwen2.5vl:7b gemma3:4b llava:7b llava-llama3:8b llava-phi3:3.8b bakllava:7b moondream:1.8b
+
+Prompt: (raw) (yaml) words:4 bytes:46
+Describe this image: ./docs/logo/logo-250.jpg
+
+| model | words | bytes | total duration | load duration | prompt eval count | prompt eval duration | prompt eval rate | prompt eval count | prompt eval duration | eval count | eval duration | eval rate |
+|--------|--------|--------|----------------|----------------|-------------------|----------------------|------------------|-------------------|----------------------|------------|-------------|-----------|
+| granite3.2-vision:2b | 395 | 2440 | 45.746719875s | 2.09596675s | 2240 token(s) | 18.96184625s | 118.13 tokens/s | 576 token(s) | 24.683443166s | 23.34 tokens/s |
+| minicpm-v:8b | 245 | 1571 | 23.810541s | 3.447644708s | 77 token(s) | 6.474543542s | 11.89 tokens/s | 279 token(s) | 13.886243375s | 20.09 tokens/s |
+| qwen2.5vl:3b | 59 | 373 | 6.408172125s | 2.098111875s | 114 token(s) | 2.410653792s | 47.29 tokens/s | 73 token(s) | 1.896480458s | 38.49 tokens/s |
+| qwen2.5vl:7b | 82 | 501 | 11.48010775s | 2.830315041s | 114 token(s) | 3.596021334s | 31.70 tokens/s | 97 token(s) | 5.05281025s | 19.20 tokens/s |
+| gemma3:4b | 210 | 1352 | 53.944822833s | 1.896895416s | 274 token(s) | 42.443026542s | 6.46 tokens/s | 279 token(s) | 9.6033185s | 29.05 tokens/s |
+| llava:7b | 130 | 796 | 15.796686167s | 2.804927s | 592 token(s) | 3.823676541s | 154.82 tokens/s | 173 token(s) | 9.167031875s | 18.87 tokens/s |
+| llava-llama3:8b | 152 | 932 | 19.004730792s | 3.738086625s | 591 token(s) | 4.476052833s | 132.04 tokens/s | 184 token(s) | 10.7814775s | 17.06 tokens/s |
+| llava-phi3:3.8b | 184 | 1076 | 13.72408542s | 2.34655775s | 594 token(s) | 2.761284s | 215.12 tokens/s | 246 token(s) | 8.612514417s | 28.56 tokens/s |
+| bakllava:7b | 71 | 384 | 11.141021708s | 2.844715083s | 596 token(s) | 3.912097375s | 152.35 tokens/s | 87 token(s) | 4.383299791s | 19.85 tokens/s |
+| moondream:1.8b | 52 | 329 | 7.634338541s | 1.650736458s | 743 token(s) | 4.982575416s | 149.12 tokens/s | 63 token(s) | 997.683875s | 63.15 tokens/s |
+
+ollama proc | 100% GPU |
+ollama-llama proc | 100% GPU |
+ollama version | 0.9.0 |
+sys arch | arm64 |
+sys processor | arm |
+sys memory | 13G + 1357M |
+sys OS | Darwin 24.5.0 |
+Generated with: ollama-multirun v4.2</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen2_5vl_3b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>383</td></tr>
+<tr><td class='left'>bytes</td><td>2471</td></tr>
+<tr><td class='left'>total duration</td><td>2m8.185215959s</td></tr>
+<tr><td class='left'>load duration</td><td>25.018959ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>1357 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>1m20.408666791s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>16.88 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>1401 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>47.74676975s</td></tr>
+<tr><td class='left'>eval rate</td><td>29.34 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen2_5vl_3b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/qwen2.5vl:3b'>qwen2.5vl:3b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen25vl</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.2 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>3.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>128000</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2048</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />vision<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1120M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_ocr_assistant__analyze_the_provided_imag</a>: <b>qwen2.5vl:3b</b>: 20250614-144858</p>
+<p>page created:   2025-06-14 15:05:40</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

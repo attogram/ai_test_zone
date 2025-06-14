@@ -1,0 +1,16 @@
+
+
+class Tester(object):
+
+    def __init__(self, model):
+        self.model = model
+
+    def test(self):
+        print "running tests..."
+
+
+if __name__ == "__main__":
+    tester = Tester()
+    tester.test()
+
+

@@ -1,0 +1,200 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: write_a_php_function_to_take_in_an_array_and_outpu</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>write_a_php_function_to_take_in_an_array_and_outpu</b>: 20250614-130858<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_php_function_to_take_in_an_array_and_outpu.prompt.yaml'>yaml</a>)
+  words:18  bytes:86<br />
+<textarea readonly rows='1'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
+</p>
+<!-- IMAGES -->
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>229</td>
+<td>1516</td>
+<td>21.419840125s</td>
+<td>19.034083ms</td>
+<td>47 token(s)</td>
+<td>630.240584ms</td>
+<td>74.57 tokens/s</td>
+<td>377 token(s)</td>
+<td>20.769986625s</td>
+<td>18.15 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>129</td>
+<td>765</td>
+<td>12.009221959s</td>
+<td>13.642084ms</td>
+<td>38 token(s)</td>
+<td>778.22375ms</td>
+<td>48.83 tokens/s</td>
+<td>240 token(s)</td>
+<td>11.216579333s</td>
+<td>21.40 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>77</td>
+<td>479</td>
+<td>6.402323208s</td>
+<td>13.463375ms</td>
+<td>18 token(s)</td>
+<td>313.930875ms</td>
+<td>57.34 tokens/s</td>
+<td>119 token(s)</td>
+<td>6.074345291s</td>
+<td>19.59 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>80</td>
+<td>554</td>
+<td>4.576794875s</td>
+<td>11.674958ms</td>
+<td>27 token(s)</td>
+<td>239.756208ms</td>
+<td>112.61 tokens/s</td>
+<td>189 token(s)</td>
+<td>4.324769917s</td>
+<td>43.70 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>672</td>
+<td>4055</td>
+<td>16.465076958s</td>
+<td>20.759667ms</td>
+<td>21 token(s)</td>
+<td>100.237417ms</td>
+<td>209.50 tokens/s</td>
+<td>958 token(s)</td>
+<td>16.34347325s</td>
+<td>58.62 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>117</td>
+<td>765</td>
+<td>12.602169333s</td>
+<td>20.170833ms</td>
+<td>41 token(s)</td>
+<td>571.561417ms</td>
+<td>71.73 tokens/s</td>
+<td>216 token(s)</td>
+<td>12.009847625s</td>
+<td>17.99 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>175</td>
+<td>1108</td>
+<td>7.71324125s</td>
+<td>20.659542ms</td>
+<td>40 token(s)</td>
+<td>210.587792ms</td>
+<td>189.94 tokens/s</td>
+<td>355 token(s)</td>
+<td>7.481459s</td>
+<td>47.45 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>116</td>
+<td>910</td>
+<td>6.719768291s</td>
+<td>17.037916ms</td>
+<td>61 token(s)</td>
+<td>324.379041ms</td>
+<td>188.05 tokens/s</td>
+<td>266 token(s)</td>
+<td>6.3774075s</td>
+<td>41.71 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>107</td>
+<td>753</td>
+<td>12.611524s</td>
+<td>14.170333ms</td>
+<td>23 token(s)</td>
+<td>375.398417ms</td>
+<td>61.27 tokens/s</td>
+<td>250 token(s)</td>
+<td>12.221180041s</td>
+<td>20.46 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>606</td>
+<td>3636</td>
+<td>16.257907583s</td>
+<td>19.923375ms</td>
+<td>28 token(s)</td>
+<td>145.953084ms</td>
+<td>191.84 tokens/s</td>
+<td>868 token(s)</td>
+<td>16.091436708s</td>
+<td>53.94 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 1025M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>write_a_php_function_to_take_in_an_array_and_outpu</b>: 20250614-130858</p>
+<p>page created:   2025-06-14 13:11:28</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

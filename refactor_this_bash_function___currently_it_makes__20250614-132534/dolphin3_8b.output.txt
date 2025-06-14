@@ -1,0 +1,22 @@
+Refactored code:
+
+```bash
+function addModelToIndexFile {
+    responseWords=$(wc -w < "$modelFile" | awk '{print $1}')
+    responseBytes=$(wc -c < "$modelFile" | awk '{print $1}')
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td>$responseWords</td><td>$responseBytes</td>"
+        while read -r line; do
+            value=$(echo "$line" | cut -d ':' -f2)
+            if [[ -n "$value" ]]; then
+                echo "<td>$value</td>"
+            fi
+        done < "$statsFile"
+        echo "</tr>"
+    ) >> "$indexFile"
+}
+```
+
+This code removes the need for a temporary array, directly reading from `$statsFile` and outputting to the index file. It also eliminates the need for looping through an array.
+

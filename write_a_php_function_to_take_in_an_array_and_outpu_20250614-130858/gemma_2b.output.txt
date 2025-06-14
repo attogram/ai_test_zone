@@ -1,0 +1,42 @@
+```php
+<?php
+function array_to_html_list($array) {
+  $html = "<ul>";
+  foreach ($array as $key => $value) {
+    $html .= "<li>$key: $value</li>";
+  }
+  $html .= "</ul>";
+  return $html;
+}
+
+// Example usage
+$array = array("name" => "John", "age" => 30, "city" => "New York");
+echo array_to_html_list($array);
+?>
+```
+
+**Output:**
+
+```html
+<ul>
+  <li>name: John</li>
+  <li>age: 30</li>
+  <li>city: New York</li>
+</ul>
+```
+
+**Explanation:**
+
+1. The `array_to_html_list()` function takes in an array as input.
+2. It initializes an HTML string with an opening `<ul>` tag.
+3. The function then uses a `foreach` loop to iterate over the array's keys and values.
+4. For each key-value pair, it creates an `<li>` tag with the key and value inside.
+5. After the loop, it adds a closing `</ul>` tag to the HTML string.
+6. Finally, it returns the HTML string.
+
+**Notes:**
+
+* The `$key` variable contains the key of the current element in the array.
+* The `$value` variable contains the value of the current element in the array.
+* This function assumes that the array contains only strings, numbers, and Boolean values.
+

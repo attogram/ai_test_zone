@@ -1,0 +1,30 @@
+**Refactored code:**
+
+```bash
+function addModelToIndexFile {
+    # Read stats file directly into a string
+    statsContent=$(cat "$statsFile")
+
+    # Split the string into lines and extract values
+    lines=$(split -r ':' <<< "$statsContent")
+
+    # Join the values into the index file with proper formatting
+    output=""
+    for value in "${lines[@]}"; do
+        output="$output -d ':' -f2 \"$value\""
+    done
+    output="$output\n"
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$output</td>"
+    ) >> "$indexFile"
+}
+```
+
+**Changes made:**
+
+- Removed the `$statsInfo` array and directly read the content of the `$statsFile` into a string.
+- Used the `split` command to split the string into lines based on ':' delimiter.
+- Joined the extracted values back into the output string with proper formatting using the `-d ':' -f2` flags.
+- Concatenated the output string with appropriate formatting into the final output file.
+

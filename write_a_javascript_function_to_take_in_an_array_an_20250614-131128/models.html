@@ -1,0 +1,174 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: models</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_javascript_function_to_take_in_an_array_an</a>: <b>models</b>: 20250614-131128</header>
+<br />
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>architecture</th>
+    <th>parameters</th>
+    <th>context<br />length</th>
+    <th>embedding<br />length</th>
+    <th>quantization</th>
+    <th>temperature</th>
+    <th>capabilities</th>
+    <th class='left'>system prompt</th>
+    <th>(raw)</th>
+    <th>(index)</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>qwen2</td>
+<td>7.6B</td>
+<td>32768</td>
+<td>3584</td>
+<td>Q4_K_M</td>
+<td></td>
+<td class='left'>completion<br />tools<br />insert<br /></td>
+<td class='left'>You are Qwen, created by Alibaba Cloud. You are a helpful assistant.
+</td>
+<td><a href='./qwen2_5_coder_7b.info.txt'>raw</a></td>
+<td><a href='../models.html#qwen2_5_coder_7b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>llama</td>
+<td>6.7B</td>
+<td>16384</td>
+<td>4096</td>
+<td>Q4_0</td>
+<td></td>
+<td class='left'>completion<br /></td>
+<td class='left'></td>
+<td><a href='./codellama_7b.info.txt'>raw</a></td>
+<td><a href='../models.html#codellama_7b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>starcoder</td>
+<td>7.5B</td>
+<td>8192</td>
+<td>4096</td>
+<td>Q4_0</td>
+<td></td>
+<td class='left'>completion<br /></td>
+<td class='left'></td>
+<td><a href='./starcoder_7b.info.txt'>raw</a></td>
+<td><a href='../models.html#starcoder_7b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>stablelm</td>
+<td>2.8B</td>
+<td>16384</td>
+<td>2560</td>
+<td>Q4_0</td>
+<td></td>
+<td class='left'>completion<br /></td>
+<td class='left'></td>
+<td><a href='./stable_code_3b.info.txt'>raw</a></td>
+<td><a href='../models.html#stable_code_3b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>qwen2</td>
+<td>1.8B</td>
+<td>131072</td>
+<td>1536</td>
+<td>Q4_K_M</td>
+<td>0.6</td>
+<td class='left'>completion<br /></td>
+<td class='left'></td>
+<td><a href='./deepcoder_1_5b.info.txt'>raw</a></td>
+<td><a href='../models.html#deepcoder_1_5b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>llama</td>
+<td>8.0B</td>
+<td>131072</td>
+<td>4096</td>
+<td>Q4_K_M</td>
+<td></td>
+<td class='left'>completion<br /></td>
+<td class='left'>You are Dolphin, a helpful AI assistant.
+</td>
+<td><a href='./dolphin3_8b.info.txt'>raw</a></td>
+<td><a href='../models.html#dolphin3_8b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>gemma</td>
+<td>2.5B</td>
+<td>8192</td>
+<td>2048</td>
+<td>Q4_0</td>
+<td></td>
+<td class='left'>completion<br /></td>
+<td class='left'></td>
+<td><a href='./gemma_2b.info.txt'>raw</a></td>
+<td><a href='../models.html#gemma_2b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>granite</td>
+<td>2.5B</td>
+<td>131072</td>
+<td>2048</td>
+<td>Q4_K_M</td>
+<td></td>
+<td class='left'>completion<br />tools<br /></td>
+<td class='left'></td>
+<td><a href='./granite3_3_2b.info.txt'>raw</a></td>
+<td><a href='../models.html#granite3_3_2b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>llama</td>
+<td>7.2B</td>
+<td>32768</td>
+<td>4096</td>
+<td>Q4_0</td>
+<td></td>
+<td class='left'>completion<br />tools<br /></td>
+<td class='left'></td>
+<td><a href='./mistral_7b.info.txt'>raw</a></td>
+<td><a href='../models.html#mistral_7b'>index</a></td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>qwen3</td>
+<td>2.0B</td>
+<td>40960</td>
+<td>2048</td>
+<td>Q4_K_M</td>
+<td>0.6</td>
+<td class='left'>completion<br />tools<br />thinking<br /></td>
+<td class='left'></td>
+<td><a href='./qwen3_1_7b.info.txt'>raw</a></td>
+<td><a href='../models.html#qwen3_1_7b'>index</a></td>
+</tr>
+</table>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_javascript_function_to_take_in_an_array_an</a>: <b>models</b>: 20250614-131128</p>
+<p>page created:   2025-06-14 13:11:31</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.0</p>
+</footer></body></html>

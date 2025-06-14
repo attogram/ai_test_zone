@@ -1,0 +1,50 @@
+Here's a bash function that can parse data from the given model.info.txt file:
+```bash
+parse_model_file() {
+  local filename="$1"
+  declare -A model_vars
+  declare -A capabilities
+  declare -A projector_vars
+  declare -A parameters
+
+  while IFS= read -r line || [[ -n "$line" ]]); do
+    case "$line" in
+      "Model") declare & model_vars[@] & capabilities=() & projector_vars=() & parameters=() ;;
+      *) if [[ $line == *[![:alnum:]]] ]; then capabilities+=(${line##*}); fi; done;;
+    esac
+  done < "$filename"
+
+  for var in model_vars; do
+    value=${model_vars[$var]]}
+    eval "${var}=\"${value}\""
+  done
+
+  echo "Parsed Model Variables:"
+  for var in model_vars; do
+    echo -e "${var}=${model_vars[$var]}"
+  done
+
+  echo -e "\nParsed Capabilities:"
+  for capability in capabilities; do
+    echo -e "${capability}"
+  done
+
+  echo "Parsed Projector Variables:"
+  for var in projector_vars; do
+    echo -e "${var}=${projector_vars[$var]}"
+  done
+
+  echo "Parsed Parameters (only 'temperature' value saved):"
+  for param in parameters; do
+    if [[ $param == temperature* ]]; then
+      echo -e "${param}=${parameters[${param##*:}]}]"
+    fi
+  done
+}
+```
+You can use this function by passing the model.info.txt file path as an argument to the `parse_model_file()` function, like this:
+```bash
+parse_model_file("path/to/model.info.txt")
+```
+This will parse all the variables and values from the given file and print them out in a formatted way.
+
