@@ -1,0 +1,46 @@
+
+Here's an example implementation of the bash script using bash variables:
+```bash
+#!/bin/bash
+
+# Read in and parse the stats file
+while read -r line; do
+  # Get the name and value for each line in the stats file
+  name=$(echo "$line" | cut -d ':' -f1)
+  value=$(echo "$line" | cut -d ':' -f2)
+  
+  # Set the bash variable with the same name as the key in the stats file
+  eval $name=$value
+done < stats.txt
+
+# Read in and parse the show.txt file
+while read -r line; do
+  case "$line" in
+    Model*)
+      # Get the name and value for each line in the model section of the show.txt file
+      name=$(echo "$line" | cut -d ':' -f1)
+      value=$(echo "$line" | cut -d ':' -f2)
+      
+      # Set the bash variable with the same name as the key in the model section of the show.txt file
+      eval $name=$value
+    ;;
+    Capabilities*)
+      # Get the list of capabilities for each line in the capabilities section of the show.txt file
+      capabilities=$(echo "$line" | cut -d ':' -f2)
+      
+      # Set the bash variable with the same name as the key in the capabilities section of the show.txt file
+      eval capabilities=$capabilities
+    ;;
+    Parameters*)
+      # Get the name and value for each line in the parameters section of the show.txt file
+      name=$(echo "$line" | cut -d ':' -f1)
+      value=$(echo "$line" | cut -d ':' -f2)
+      
+      # Set the bash variable with the same name as the key in the parameters section of the show.txt file
+      eval $name=$value
+    ;;
+  esac
+done < show.txt
+```
+This script uses the `cut` command to extract the name and value for each line in the stats and show files, and then sets a bash variable with the same name as the key in the stats or show file. It also uses the `case` statement to handle the different sections of the show file (model, capabilities, and parameters) and sets the appropriate bash variables accordingly.
+

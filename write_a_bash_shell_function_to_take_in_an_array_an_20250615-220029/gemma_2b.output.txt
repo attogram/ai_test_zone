@@ -1,0 +1,22 @@
+```bash
+#!/bin/bash
+
+function array_to_html_list() {
+  # Create an HTML list of the array contents
+  html_list=""
+  for item in "${array[@]}"; do
+    html_list="$html_list - <li>$item</li>"
+  done
+
+  # Return the HTML list
+  echo "$html_list"
+}
+
+# Call the function with an array as input
+array=(1 2 3 4 5)
+html_list=$(array_to_html_list "${array[@]}")
+
+# Print the HTML list
+echo "$html_list"
+```
+

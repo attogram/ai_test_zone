@@ -1,0 +1,14 @@
+{
+"image": "Llama on a computer screen",
+"lumas": [
+{
+"color": "#f8f2ca",
+"size": "1000x2000px"
+},
+{
+"color": "#f8f2ca",
+"size": "1000x2000px"
+}
+]
+}
+

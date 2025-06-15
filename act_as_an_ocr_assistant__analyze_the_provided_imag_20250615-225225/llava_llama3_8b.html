@@ -1,0 +1,88 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: llava-llama3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_ocr_assistant__analyze_the_provided_imag</a>: <b>llava-llama3:8b</b>: 20250615-225225<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<b>llava-llama3:8b</b> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./act_as_an_ocr_assistant__analyze_the_provided_imag.prompt.yaml'>yaml</a>)
+  words:59  bytes:400<br />
+<textarea readonly rows='9'>Act as an OCR assistant. Analyze the provided image and:
+
+1. Recognize all visible text and numbers in the image as accurately as possible.
+2. Maintain the original structure and formatting of the text.
+3. If any words or phrases are unclear, indicate this with [unclear] in your transcription.
+
+Provide only the transcription without any additional comments.
+
+Image: ./docs/screenshots/run.page.png</textarea>
+</p>
+<div class='box'><a target='image' href='run.page.png'><img src='run.page.png' alt='./docs/screenshots/run.page.png' width='250' /></a></div><br /><p>Output: llava-llama3:8b (<a href='./llava_llama3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='4'>diate – 13.04 (5), 14 (6) and 16/18/19 (7). The date range is 1 9 Jan to 31 Mar with a peak on 21 Jan and an increase of 3% in the number of people staying ove rnight at hotels from one year ago.The percentage of hotel rooms occupied has fallen by 29.2% in March 2020 compared t o February and 19.6% compared to Febr uary 2019 . The occupation rate h as also fallen b y 3.8% on the same day a year earlier.In May, occupancy fell 37.5% in June, 22.4% i n July, 26.1% in August and 10.0% i n September. In Oct ober, occupancy increased by 17.1%. The hotel s had an occupation rate of 21.9% in Novem ber. By March 2020 the occu pation rate has fallen by 23.4%, compared to Feb ruary and by 15.5% compared t o June.The UKs first COVID-19 case was confirmed on 1</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./llava_llama3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>152</td></tr>
+<tr><td class='left'>bytes</td><td>761</td></tr>
+<tr><td class='left'>total duration</td><td>19.725413416s</td></tr>
+<tr><td class='left'>load duration</td><td>24.278416ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>670 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>4.937712209s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>135.69 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>246 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>14.758898208s</td></tr>
+<tr><td class='left'>eval rate</td><td>16.67 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./llava_llama3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/llava-llama3:8b'>llava-llama3:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.6 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>8192</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />vision<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1054M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_ocr_assistant__analyze_the_provided_imag</a>: <b>llava-llama3:8b</b>: 20250615-225225</p>
+<p>page created:   2025-06-15 23:06:19</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

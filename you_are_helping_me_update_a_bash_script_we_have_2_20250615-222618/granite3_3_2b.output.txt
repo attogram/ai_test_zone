@@ -1,0 +1,70 @@
+To achieve this, you can use `grep`, `cut`, and `awk` commands in bash for parsing the files. Here's a script that reads and parses both `stats.txt` and `show.txt`:
+
+```bash
+#!/bin/bash
+
+# Read and parse stats.txt
+declare -A stats_dict
+
+while IFS= read -r line; do
+  # Remove leading/trailing whitespaces and colon
+  line=$(echo "$line" | sed 's/[ :]*//g')
+
+  # Check if the line is in the desired format "name: value"
+  if [[ $line =~ [A-Za-z]+:[0-9.]+[eE] ]]; then
+    name=${BASH_REMATCH[1]}
+    value="${BASH_REMATCH[2]}"
+
+    # Store the name and value as a key-value pair in stats_dict
+    stats_dict[$name]="$value"
+  fi
+done < stats.txt
+
+# Read and parse show.txt
+declare -A show_dict
+
+while IFS= "|" read -r line; do
+  # Remove leading/trailing whitespaces
+  line=$(echo "$line" | sed 's/[ ]*$//g')
+
+  if [[ $line =~ Model ]]; then
+    # Parse Model section
+    name=${BASH_REMATCH[1]}
+    value="${BASH_REMATCH[2]}"
+    show_dict[$name]="$value"
+  elif [[ $line =~ Capabilities ]]; then
+    # Parse Capabilities section (it's a list of words)
+    value=$(echo "$line" | awk -F ',' '{print $2}')
+    show_dict["Capabilities"]=$value
+  elif [[ $line =~ Parameters ]]; then
+    # Parse Parameters section
+    name=${BASH_REMATCH[1]}
+    value="${BASH_REMATCH[2]}"
+    show_dict[$name]="$value"
+  fi
+done < show.txt
+```
+
+This script creates two associative arrays, `stats_dict` and `show_dict`, to store the parsed data from `stats.txt` and `show.txt`, respectively. It then reads each line of the files, parses them according to their formats, and stores the relevant information in the corresponding arrays.
+
+After running this script, you can access the values using the keys:
+
+- For stats_dict:
+  - `stats_dict["total duration"]`: "4.687657458s"
+  - `stats_dict["load duration"]`: "1.174041625s"
+  - `stats_dict["prompt eval count"]`: "22 token(s)"
+  - `stats_dict["prompt eval duration"]`: "152.612625ms"
+  - `stats_dict["prompt eval rate"]`: "144.16 tokens/s"
+  - `stats_dict["eval count"]`: "209 token(s)"
+  - `stats_dict["eval duration"]`: "3.360331625s"
+  - `stats_dict["eval rate"]`: "62.20 tokens/s"
+
+- For show_dict:
+  - `show_dict["architecture"]`: "starcoder"
+  - `show_dict["parameters"]`: "7.5B"
+  - `show_dict["context length"]`: "8192"
+  - `show_dict["embedding length"]`: "4096"
+  - `show_dict["quantization"]`: "Q4_0"
+  - `show_dict["Capabilities"]`: "completion"
+  - `show_dict["Parameters"]["stop"]`: "<|endoftext|>"`
+

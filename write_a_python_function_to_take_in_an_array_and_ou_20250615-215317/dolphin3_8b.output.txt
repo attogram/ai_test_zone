@@ -1,0 +1,36 @@
+Sure! Here's a Python function that takes an array as input and outputs an HTML unordered list:
+
+```python
+def array_to_html_list(array):
+    # Create an empty string for the HTML list
+    html_list = "<ul>"
+    
+    # Iterate over each element in the array
+    for item in array:
+        # Add an <li> tag with the current item as its content, and append it to the HTML list
+        html_list += f"<li>{item}</li>"
+    
+    # Close the </ul> tag
+    html_list += "</ul>"
+    
+    # Return the final HTML list string
+    return html_list
+```
+
+You can call this function by passing an array as a parameter, and it will return the corresponding HTML unordered list. For example:
+
+```python
+array = ["Item 1", "Item 2", "Item 3"]
+html_list = array_to_html_list(array)
+print(html_list)
+```
+
+Output:
+```html
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+</ul>
+```
+

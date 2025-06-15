@@ -1,0 +1,201 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: generate_keywords_for_this_image____docs_logo_logo</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>generate_keywords_for_this_image____docs_logo_logo</b>: 20250615-224624<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./generate_keywords_for_this_image____docs_logo_logo.prompt.yaml'>yaml</a>)
+  words:10  bytes:82<br />
+<textarea readonly rows='2'>Generate keywords for this image: ./docs/logo/logo-250.jpg
+Respond in JSON format</textarea>
+</p>
+<!-- IMAGES -->
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a></td>
+<td>20</td>
+<td>190</td>
+<td>21.601333041s</td>
+<td>11.839875ms</td>
+<td>2248 token(s)</td>
+<td>19.2700175s</td>
+<td>116.66 tokens/s</td>
+<td>55 token(s)</td>
+<td>2.31770375s</td>
+<td>23.73 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./minicpm_v_8b.html'>minicpm-v:8b</a></td>
+<td>12</td>
+<td>126</td>
+<td>8.73000625s</td>
+<td>20.914667ms</td>
+<td>84 token(s)</td>
+<td>6.659660458s</td>
+<td>12.61 tokens/s</td>
+<td>40 token(s)</td>
+<td>2.048059042s</td>
+<td>19.53 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a></td>
+<td>17</td>
+<td>180</td>
+<td>4.492441834s</td>
+<td>24.525792ms</td>
+<td>121 token(s)</td>
+<td>2.761995875s</td>
+<td>43.81 tokens/s</td>
+<td>61 token(s)</td>
+<td>1.704673917s</td>
+<td>35.78 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a></td>
+<td>20</td>
+<td>223</td>
+<td>6.427365666s</td>
+<td>22.365625ms</td>
+<td>121 token(s)</td>
+<td>2.583508959s</td>
+<td>46.84 tokens/s</td>
+<td>68 token(s)</td>
+<td>3.820108458s</td>
+<td>17.80 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3_4b.html'>gemma3:4b</a></td>
+<td>32</td>
+<td>366</td>
+<td>46.481894s</td>
+<td>28.831083ms</td>
+<td>282 token(s)</td>
+<td>41.752099083s</td>
+<td>6.75 tokens/s</td>
+<td>130 token(s)</td>
+<td>4.69999075s</td>
+<td>27.66 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_7b.html'>llava:7b</a></td>
+<td>22</td>
+<td>233</td>
+<td>9.139105959s</td>
+<td>14.159084ms</td>
+<td>601 token(s)</td>
+<td>3.973277791s</td>
+<td>151.26 tokens/s</td>
+<td>90 token(s)</td>
+<td>5.149410459s</td>
+<td>17.48 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_llama3_8b.html'>llava-llama3:8b</a></td>
+<td>23</td>
+<td>150</td>
+<td>8.800446375s</td>
+<td>22.200666ms</td>
+<td>599 token(s)</td>
+<td>4.673092458s</td>
+<td>128.18 tokens/s</td>
+<td>66 token(s)</td>
+<td>4.104194834s</td>
+<td>16.08 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a></td>
+<td>9</td>
+<td>70</td>
+<td>3.980653458s</td>
+<td>12.491542ms</td>
+<td>603 token(s)</td>
+<td>2.8982085s</td>
+<td>208.06 tokens/s</td>
+<td>30 token(s)</td>
+<td>1.066013417s</td>
+<td>28.14 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./bakllava_7b.html'>bakllava:7b</a></td>
+<td>4</td>
+<td>27</td>
+<td>5.5252615s</td>
+<td>10.356208ms</td>
+<td>605 token(s)</td>
+<td>4.138180375s</td>
+<td>146.20 tokens/s</td>
+<td>26 token(s)</td>
+<td>1.375402584s</td>
+<td>18.90 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./moondream_1_8b.html'>moondream:1.8b</a></td>
+<td>12</td>
+<td>73</td>
+<td>6.067173334s</td>
+<td>15.175459ms</td>
+<td>752 token(s)</td>
+<td>5.28531525s</td>
+<td>142.28 tokens/s</td>
+<td>46 token(s)</td>
+<td>764.740417ms</td>
+<td>60.15 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1331M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>generate_keywords_for_this_image____docs_logo_logo</b>: 20250615-224624</p>
+<p>page created:   2025-06-15 22:49:05</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

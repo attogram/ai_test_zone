@@ -1,0 +1,183 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>dolphin3:8b</b>: 20250615-222618<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Here&#39;s how you can read in and parse these two text files using a bash script:
+
+```bash
+#!/bin/bash
+
+# Read in and parse the stats file
+while IFS=&quot;:&quot; read -r name value; do
+  # Save data into bash variables
+  declare &quot;$name=$value&quot;
+done &lt; stats.txt
+
+echo &quot;STATS:&quot;
+echo &quot;total duration: $total_duration&quot;
+echo &quot;load duration: $load_duration&quot;
+echo &quot;prompt eval count: $prompt_eval_count token(s)&quot;
+echo &quot;prompt eval duration: $prompt_eval_duration&quot;
+echo &quot;prompt eval rate: $prompt_eval_rate tokens/s&quot;
+echo &quot;eval count: $eval_count token(s)&quot;
+echo &quot;eval duration: $eval_duration&quot;
+echo &quot;eval rate: $eval_rate tokens/s&quot;
+
+# Read in and parse the show.txt file
+while IFS= read -r line; do
+  # Model Section
+  if [[ &quot;$line&quot; == &quot;Model&quot;* ]]; then
+    section=&quot;Model&quot;
+    while IFS=&quot; &quot; read -r name value; do
+      declare &quot;$name=$value&quot;
+    done &lt;&lt;&lt; &quot;$line&quot;
+
+    echo &quot;MODEL:&quot;
+    echo &quot;${architecture}&quot;
+    echo &quot;parameters: ${parameters}B&quot;
+    echo &quot;context length: $context_length&quot;
+    echo &quot;embedding length: $embedding_length&quot;
+    echo &quot;quantization: ${quantization}&quot;
+
+  # Capabilities Section
+  elif [[ &quot;$line&quot; == &quot;Capabilities&quot;* ]]; then
+    section=&quot;Capabilities&quot;
+
+  # Parameters Section
+  elif [[ &quot;$line&quot; == &quot;Parameters&quot;* ]]; then
+    section=&quot;Parameters&quot;
+    while IFS=&quot;:&quot; read -r name value; do
+      declare &quot;$name=$value&quot;
+    done &lt;&lt;&lt; &quot;${line#   }&quot;
+
+    echo &quot;PARAMETERS:&quot;
+    echo &quot;stop: $stop&quot;
+  fi
+
+done &lt; show.txt
+```
+
+This script first reads in the stats file line by line, splitting each line at the colon (:) character. It assigns the name and value parts to bash variables.
+
+Then it reads in the show.txt file and checks for certain patterns indicating the start of a section (Model, Capabilities, Parameters). Once it detects one of these sections, it reads lines until it detects the end of this section. Then it parses each line accordingly:
+
+- For Model Section: The first line contains the section&#39;s data, so it splits this line at spaces and assigns the name-value pairs to bash variables.
+- For Capabilities Section: This section consists of a list of words, which are printed directly.
+- For Parameters Section: Similar to the Model Section, it reads lines until detecting the end of this section, then splits these lines at the colon (:) character.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./dolphin3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>330</td></tr>
+<tr><td class='left'>bytes</td><td>2267</td></tr>
+<tr><td class='left'>total duration</td><td>34.632121375s</td></tr>
+<tr><td class='left'>load duration</td><td>20.059458ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>368 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.540239375s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>144.87 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>552 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>32.071192875s</td></tr>
+<tr><td class='left'>eval rate</td><td>17.21 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./dolphin3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1003M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>dolphin3:8b</b>: 20250615-222618</p>
+<p>page created:   2025-06-15 22:29:50</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

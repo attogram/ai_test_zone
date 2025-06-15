@@ -1,0 +1,89 @@
+
+function parse_model_info() {
+  local file="$1"
+  local modelName=
+  local architecture=
+  local parameters=
+  local contextLength=
+  local embeddingLength=
+  local quantization=
+  local capabilities=()
+  local systemPrompt=
+  local numCtx=
+  local temperature=
+
+  while IFS='' read -r line || [[ -n "$line" ]]; do
+    # Parse the model section
+    if [[ "$line" == "Model"* ]]; then
+      while IFS= read -r line; do
+        case "$line" in
+          architecture\ *)
+            architecture="${line#* }"
+            ;;
+          parameters\ *)
+            parameters="${line#* }"
+            ;;
+          context\ length\ *)
+            contextLength="${line#* }"
+            ;;
+          embedding\ length\ *)
+            embeddingLength="${line#* }"
+            ;;
+          quantization\ *)
+            quantization="${line#* }"
+            ;;
+        esac
+      done < "$file"
+    fi
+
+    # Parse the capabilities section
+    if [[ "$line" == "Capabilities"* ]]; then
+      while IFS= read -r line; do
+        capabilities+=("$line")
+      done < "$file"
+    fi
+
+    # Parse the system section
+    if [[ "$line" == "System"* ]]; then
+      systemPrompt="${line#* }"
+    fi
+
+    # Parse the parameters section
+    if [[ "$line" == "Parameters"* ]]; then
+      while IFS= read -r line; do
+        case "$line" in
+          num_ctx\ *)
+            numCtx="${line#* }"
+            ;;
+          temperature\ *)
+            temperature="${line#* }"
+            ;;
+        esac
+      done < "$file"
+    fi
+  done < "$file"
+
+  # Set the bash variables
+  architecture="$architecture"
+  parameters="$parameters"
+  contextLength="$contextLength"
+  embeddingLength="$embeddingLength"
+  quantization="$quantization"
+  capabilities=("${capabilities[@]}")
+  systemPrompt="$systemPrompt"
+  numCtx="$numCtx"
+  temperature="$temperature"
+}
+
+# Call the function and set the bash variables
+parse_model_info "model.info.txt"
+echo $architecture
+echo $parameters
+echo $contextLength
+echo $embeddingLength
+echo $quantization
+printf '%s\n' "${capabilities[@]}"
+echo $systemPrompt
+echo $numCtx
+echo $temperature
+

@@ -1,0 +1,13 @@
+I am Qwen, a large language model created by Alibaba Cloud. I am designed to understand and generate human-like text based on the input I receive. My function is to assist with a wide range of tasks, from answering questions and providing information to generating text for various purposes such as writing articles, emails, or even creative writing.
+
+Here are some of the things I can do:
+
+1. **Answer Questions**: I can provide information on a vast array of topics, from general knowledge to specific facts and details.
+2. **Generate Text**: I can help with writing, including articles, stories, emails, and more. I can also assist with tasks like summarizing content, translating text, and even generating code.
+3. **Dialogue**: I can engage in conversations, helping to maintain a dialogue on various subjects.
+4. **Educational Assistance**: I can help with learning and education by providing explanations, examples, and resources.
+5. **Creative Writing**: I can assist with creative writing tasks, helping to generate ideas, outlines, and even complete pieces of writing.
+6. **Technical Support**: I can provide help with technical questions and tasks, such as coding, software usage, and troubleshooting.
+
+To interact with me, you can simply type your question or the task you need help with, and I will do my best to assist you.
+

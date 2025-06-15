@@ -1,0 +1,228 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: stable-code:3b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>stable-code:3b</b>: 20250615-221507<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<b>stable-code:3b</b> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_bash_function_to_parse_data_from_thi.prompt.yaml'>yaml</a>)
+  words:174  bytes:1514<br />
+<textarea readonly rows='10'>Help me write bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          </textarea>
+</p>
+<p>Output: stable-code:3b (<a href='./stable_code_3b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Here&#39;s a bash function that parses data from the given `model.info.txt` file:
+
+```bash
+parse_model_info() {
+  local file=&quot;$1&quot;
+  local -A modelSection
+  local -A capabilitiesSection
+  local -A projectorSection
+  local -A parametersSection
+  local -A systemSection
+
+  while IFS= read -r line; do
+    if [[ $line == &quot;Model&quot;* ]]; then
+      modelSection=$(printf &#39;%s\n&#39; &quot;$@&quot; | grep -E &#39;^[[:space:]]*Model[[:space:]]*.*$&#39;)
+      continue
+    fi
+
+    if [[ $line == &quot;Capabilities&quot;* ]]; then
+      capabilitiesSection=$(printf &#39;%s\n&#39; &quot;$@&quot; | grep -E &#39;^[[:space:]]*Capabilities[[:space:]]*.*$&#39;)
+      continue
+    fi
+
+    # Process Projector section
+    if [[ $line == &quot;Projector&quot;* ]]; then
+      projectorSection=$(printf &#39;%s\n&#39; &quot;$@&quot; | grep -E &#39;^[[:space:]]*Projector[[:space:]]*.*$&#39;)
+      continue
+    fi
+
+    # Process Parameters section
+    if [[ $line == &quot;Parameters&quot;* ]]; then
+      parametersSection=$(printf &#39;%s\n&#39; &quot;$@&quot; | grep -E &#39;^[[:space:]]*Parameters[[:space:]]*.*$&#39;)
+      continue
+    fi
+
+    # Process System section
+    if [[ $line == &quot;System&quot;* ]]; then
+      systemSection=$(printf &#39;%s\n&#39; &quot;$@&quot; | grep -E &#39;^[[:space:]]*System[[:space:]]*.*$&#39;)
+      continue
+    fi
+
+    # Process other sections
+    local sectionName=$(echo &quot;$line&quot; | sed &#39;s/[[:space:]]*//&#39;))
+    case $sectionName in
+      Model)   modelSection[&quot;$line&quot;]=1 ;;
+      Capabilities) capabilitiesSection[&quot;$line&quot;]=1 ;;
+      Projector) projectorSection[&quot;$line&quot;]=1 ;;
+      Parameters) parametersSection[&quot;$line&quot;]=1 ;;
+      System) systemSection[&quot;$line&quot;]=1 ;;
+      *) echo &quot;Unknown section: $sectionName&quot;; return 1 ;;
+    esac
+  done
+
+  # Extract and print model information
+  IFS=$&#39;\n&#39; read -d &#39;&#39; -a modelInfo &lt;&lt;&lt; &quot;$modelSection&quot;
+  for line in &quot;${modelInfo[@]}&quot;; do
+    echo &quot;$line&quot;
+  done
+
+  # Extract and print capabilities information
+  capabilitiesInfo=()
+  if [[ ${capabilitiesSection[&quot;Capabilities&quot;]} != *&quot;$&quot;* ]]; then
+    capabilitiesInfo=( &quot;${capabilitiesSection[&quot;Capabilities&quot;]}&quot; ))
+  fi
+  for line in &quot;${capabilitiesInfo[@]}&quot;; do
+    echo &quot;$line&quot;
+  done
+
+  # Extract and print projector information
+  projectorInfo=()
+  if [[ ${projectorSection[&quot;Projector&quot; ]} != *&quot;$&quot;* ]]; then
+    projectorInfo=( &quot;${projectorSection[&quot;Projector&quot;]}&quot; ))
+  fi
+  for line in &quot;${projectorInfo[@]}&quot;; do
+    echo &quot;$line&quot;
+  done
+
+  # Extract and print parameters information
+  parametersInfo=()
+  if [[ ${parametersSection[&quot;Parameters&quot;]} != *&quot;$&quot;* ]]; then
+      parametersInfo=( &quot;${parametersSection[&quot;Parameters&quot;]}&quot; ))
+    fi
+  for line in &quot;${parametersInfo[@]}&quot;; do
+    echo &quot;$line&quot;
+  done
+
+  # Extract and print system information
+  systemPrompt=&quot;&quot;
+  if [[ ${systemSection[&quot;System&quot;]} != *&quot;$&quot;* ]]; then
+      systemPrompt=$(printf &#39;%s\n&#39; &quot;$@&quot; | grep -E &#39;^[[:space:]]*System[[:space:]]*.*$&#39;)
+    fi
+  echo &quot;$systemPrompt&quot;
+}
+```
+
+You can run the function by providing the `model.info.txt` file as an argument to the bash function, like this:
+
+```bash
+parse_model_info model.info.txt
+```
+
+The function will parse the data from the provided file and print the extracted information for each section (Model, Capabilities, Projector, Parameters, System).</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./stable_code_3b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>341</td></tr>
+<tr><td class='left'>bytes</td><td>3107</td></tr>
+<tr><td class='left'>total duration</td><td>27.834262791s</td></tr>
+<tr><td class='left'>load duration</td><td>10.438166ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>370 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>1.480551417s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>249.91 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>947 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>26.342611291s</td></tr>
+<tr><td class='left'>eval rate</td><td>35.95 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./stable_code_3b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/stable-code:3b'>stable-code:3b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>stablelm</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.8 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>2.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>16384</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2560</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1865M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>stable-code:3b</b>: 20250615-221507</p>
+<p>page created:   2025-06-15 22:17:24</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

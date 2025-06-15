@@ -1,0 +1,18 @@
+
+// It should also have a way of specifying what attributes are shown on each item
+// You could use this as a base for making a template system
+
+// Write a PHP script to import a csv file into a MYSQL table, with the following fields
+/*
+id - primary key 0 - 100 (no nulls)
+name - string
+gender - string F or M
+age - int 0-120 (no nulls)
+married_status - string (no nulls) Y/N
+hometown - string (no nulls)
+bio - text (no nulls)
+*/
+?>
+
+
+

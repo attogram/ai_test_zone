@@ -1,0 +1,22 @@
+.
+//     The function should use Array#forEach() or Array#map().
+//
+//         Example:
+//             var myList = [1, 2, 3];
+//             htmlList(myList); // => "<li>1</li><li>2</li><li>3</li>"
+
+
+/* Your code here */
+function htmlList(array) {
+  return array.reduce((string, item)=> `${string}<li>${item}</li>`,"<ul>") + "</ul>";
+};
+
+
+
+
+
+
+
+
+
+

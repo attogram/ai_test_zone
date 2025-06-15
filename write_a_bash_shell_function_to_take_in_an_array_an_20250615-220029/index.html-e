@@ -1,0 +1,200 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: write_a_bash_shell_function_to_take_in_an_array_an</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>write_a_bash_shell_function_to_take_in_an_array_an</b>: 20250615-220029<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_bash_shell_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:19  bytes:93<br />
+<textarea readonly rows='1'>Write a Bash shell function to take in an array and output a html list of the array contents</textarea>
+</p>
+<!-- IMAGES -->
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>171</td>
+<td>1101</td>
+<td>18.745407208s</td>
+<td>18.601167ms</td>
+<td>48 token(s)</td>
+<td>563.181917ms</td>
+<td>85.23 tokens/s</td>
+<td>321 token(s)</td>
+<td>18.162993042s</td>
+<td>17.67 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>176</td>
+<td>1089</td>
+<td>17.110058542s</td>
+<td>12.244083ms</td>
+<td>39 token(s)</td>
+<td>844.11ms</td>
+<td>46.20 tokens/s</td>
+<td>324 token(s)</td>
+<td>16.252523s</td>
+<td>19.94 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>98</td>
+<td>875</td>
+<td>18.456004916s</td>
+<td>17.230791ms</td>
+<td>19 token(s)</td>
+<td>345.969625ms</td>
+<td>54.92 tokens/s</td>
+<td>327 token(s)</td>
+<td>18.092081625s</td>
+<td>18.07 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>73</td>
+<td>502</td>
+<td>4.935733625s</td>
+<td>14.636667ms</td>
+<td>28 token(s)</td>
+<td>308.020667ms</td>
+<td>90.90 tokens/s</td>
+<td>189 token(s)</td>
+<td>4.6123415s</td>
+<td>40.98 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>442</td>
+<td>2685</td>
+<td>11.754752166s</td>
+<td>18.554208ms</td>
+<td>22 token(s)</td>
+<td>101.294542ms</td>
+<td>217.19 tokens/s</td>
+<td>665 token(s)</td>
+<td>11.634362333s</td>
+<td>57.16 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>144</td>
+<td>918</td>
+<td>14.356061208s</td>
+<td>17.88325ms</td>
+<td>42 token(s)</td>
+<td>582.884875ms</td>
+<td>72.06 tokens/s</td>
+<td>231 token(s)</td>
+<td>13.754667583s</td>
+<td>16.79 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>56</td>
+<td>399</td>
+<td>3.318064958s</td>
+<td>21.328583ms</td>
+<td>41 token(s)</td>
+<td>199.164541ms</td>
+<td>205.86 tokens/s</td>
+<td>139 token(s)</td>
+<td>3.096622167s</td>
+<td>44.89 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>91</td>
+<td>644</td>
+<td>5.509633042s</td>
+<td>15.478834ms</td>
+<td>62 token(s)</td>
+<td>305.043583ms</td>
+<td>203.25 tokens/s</td>
+<td>197 token(s)</td>
+<td>5.188339209s</td>
+<td>37.97 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>69</td>
+<td>589</td>
+<td>13.12827175s</td>
+<td>14.344875ms</td>
+<td>25 token(s)</td>
+<td>445.794458ms</td>
+<td>56.08 tokens/s</td>
+<td>242 token(s)</td>
+<td>12.667272042s</td>
+<td>19.10 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>4104</td>
+<td>23854</td>
+<td>2m30.55965175s</td>
+<td>19.5555ms</td>
+<td>29 token(s)</td>
+<td>174.339291ms</td>
+<td>166.34 tokens/s</td>
+<td>5589 token(s)</td>
+<td>2m30.364865917s</td>
+<td>37.17 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 933M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>write_a_bash_shell_function_to_take_in_an_array_an</b>: 20250615-220029</p>
+<p>page created:   2025-06-15 22:05:22</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

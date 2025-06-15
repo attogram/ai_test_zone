@@ -1,0 +1,26 @@
+Sure, here's a refactored version of your bash function that reads the `$statsFile` directly and outputs the values directly into the index file without using the `$statsInfo` array.
+
+```bash
+function addModelToIndexFile {
+    responseWords=$(wc -w < "$modelFile" | awk '{print $1}')
+    responseBytes=$(wc -c < "$modelFile" | awk '{print $1}')
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td >$responseWords</td><td>${responseBytes}</td>"
+        while IFS=: read -r key value; do
+            if [[ -n "$value" ]]; then
+              echo "<td>${value}</td>";
+            fi
+        done < "$statsFile"
+        echo "</tr>"
+    ) >> "$indexFile"
+}
+```
+
+### Explanation:
+- The `while IFS=: read -r key value` loop reads each line of the `$statsFile`, splitting it on the `:` character and assigning the first part to `key` and the second part to `value`.
+- This loop directly processes the contents of the `$statsFile`, so there's no need for an intermediate array.
+- The rest of the logic remains the same, outputting the model details and stats into the index file.
+
+This refactoring ensures that you're reading and processing the file in a more efficient manner without the use of an extra array.
+

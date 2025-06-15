@@ -1,0 +1,126 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>refactor_this_bash_function___currently_it_makes_</a>: <b>mistral:7b</b>: 20250615-220523<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<b>mistral:7b</b> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./refactor_this_bash_function___currently_it_makes_.prompt.yaml'>yaml</a>)
+  words:143  bytes:1093<br />
+<textarea readonly rows='10'>Refactor this bash function:
+- currently it makes $statsInfo array via reading $statsFile, then loops through it to add the values to the index file.
+- refactor to not use the $statsInfo array, just read $statsFile directly and output the values directly into the index file.
+- The function should still take the same parameters and produce the same output.
+
+Code:
+
+function addModelToIndexFile {
+    responseWords=$(wc -w &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+    responseBytes=$(wc -c &lt; &quot;$modelFile&quot; | awk &#39;{print $1}&#39;)
+
+    # parse the stats file into an array, splitting on : character, getting the second part of each line
+    statsInfo=()
+    while read -r line; do
+      value=$(echo &quot;$line&quot; | cut -d &#39;:&#39; -f2)
+      statsInfo+=(&quot;$value&quot;)
+    done &lt; &quot;$statsFile&quot;
+
+    (
+        echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$model.html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;td &gt;$responseWords&lt;/td&gt;&lt;td&gt;${responseBytes}&lt;/td&gt;&quot;
+        for value in &quot;${statsInfo[@]}&quot;; do
+            if [[ -n &quot;$value&quot; ]]; then
+              echo &quot;&lt;td&gt;${value}&lt;/td&gt;&quot;;
+            fi
+        done
+        echo &quot;&lt;/tr&gt;&quot;
+    ) &gt;&gt; &quot;$indexFile&quot;
+}</textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='23'> Here&#39;s a refactored version of the function that reads the `$statsFile` directly and outputs the values to the `$indexFile`. I&#39;ve also made some cosmetic changes for better readability.
+
+```bash
+function addModelToIndexFile {
+    # Get the word count, byte count and model name from the given files
+    local responseWords=$(wc -w &lt; &quot;$modelFile&quot;)
+    local responseBytes=$(wc -c &lt; &quot;$modelFile&quot;)
+    local model=&quot;${model%.html}&quot;
+
+    # Read each line from $statsFile, split it by : character, get the second part of each line, and output directly to the index file
+    while IFS=: read -r key value; do
+        if [[ -n &quot;$value&quot; ]]; then
+            printf &#39;&lt;tr&gt;&lt;td class=&quot;left&quot;&gt;&lt;a href=&quot;./%s.html&quot;&gt;%s&lt;/a&gt;&lt;/td&gt;&lt;td&gt;%s&lt;/td&gt;&lt;td&gt;%s&lt;/td&gt;&lt;td&gt;%s&lt;/td&gt;\n&#39; \
+                &quot;$model&quot; &quot;$responseWords&quot; &quot;$responseBytes&quot; &quot;$key&quot; &quot;$value&quot; &gt;&gt; &quot;$indexFile&quot;
+        fi
+    done &lt; &quot;$statsFile&quot;
+}
+```
+
+This refactored version removes the `statsInfo` array, reads from the `$statsFile` directly, and outputs the values to the `$indexFile` in a single line using printf. It maintains the same input and output behavior as the original function.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>151</td></tr>
+<tr><td class='left'>bytes</td><td>1124</td></tr>
+<tr><td class='left'>total duration</td><td>18.3125785s</td></tr>
+<tr><td class='left'>load duration</td><td>14.693791ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>321 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.087537875s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>153.77 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>322 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>16.209488791s</td></tr>
+<tr><td class='left'>eval rate</td><td>19.86 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1798M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>refactor_this_bash_function___currently_it_makes_</a>: <b>mistral:7b</b>: 20250615-220523</p>
+<p>page created:   2025-06-15 22:10:05</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

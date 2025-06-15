@@ -1,0 +1,91 @@
+<think>
+Okay, so I'm trying to figure out how to implement the code that generates all these HTML files for displaying model runs and statistics. The user provided a lot of code snippets, including functions for creating various index pages and output files.
+
+First, I need to understand what each part does. There's a main function called createMainModelIndexHtml which seems to generate an HTML file listing all the model run results. It uses predefined variables like resultsIndexFile and mainModelIndexHtml. The loop inside this function iterates over each model found in the results directory, extracts their names, and creates links for each run.
+
+I notice that there's a set of modelsFound array which is populated by checking each file in the results directory. For each HTML file, it removes the .html extension to get the model name. Then, it adds these names to modelsFound so they can be used in the index page.
+
+The main task is to generate all these HTML pages and ensure that when an image is shown, the corresponding index page links correctly. The user's code seems to handle this by calling functions like addModelToOutputIndexHtml which appends HTML content for each run.
+
+I need to make sure that every time a new model is processed, it updates the main index page with its details and links. Also, I should check if the directory structure is correct, ensuring that the necessary files are created and named properly.
+
+Potential issues might include handling multiple models at once or ensuring that all images are correctly displayed without any overlaps or missing links. Maybe also verifying that the functions for generating each HTML file return the expected content without errors.
+
+I think breaking down the main function into smaller parts would help. Perhaps creating a helper function to generate individual model run HTML and another to create the index page. This way, I can test each part separately before integrating them all together.
+
+Another point is ensuring that when an image shows up, it correctly links to the right index page by using the same process as for generating the main index. That means the addModelToOutputIndexHtml function should be called whenever a new model's run data is added or updated.
+
+I also need to make sure that all necessary variables and arrays are properly initialized before they're used, like creating modelsFound and mainModelIndexHtml at the beginning of the script.
+
+In summary, my approach would involve:
+
+1. Initializing all necessary variables and functions.
+2. Looping through each model in the results directory to extract their names.
+3. Using these names to generate individual HTML files for each run.
+4. Updating the main index page with each new model's information as it's processed.
+5. Ensuring that any images displayed are linked correctly in the main index page.
+
+I should also check if there are any edge cases, such as multiple runs for the same model or handling different types of outputs like HTML vs image files properly.
+
+Finally, testing each part step by step would help catch any issues early on, ensuring that all functions work together seamlessly to generate the desired output.
+</think>
+
+To implement the code that generates the HTML pages, we'll use the provided snippets and structure them into a clear, organized manner. The key steps include initializing variables, looping through models, creating individual HTML files for each run, updating index pages, and handling image displays.
+
+Here's the step-by-step explanation:
+
+1. **Initialize Variables**: Create arrays and functions needed for processing each model.
+2. **Generate Individual Model Files**: Use a loop to create HTML files per model with their respective images.
+3. **Update Index Page**: After generating runs, update the main index page with links to each run's details.
+4. **Handle Images**: Display any generated images in the correct sections of the index pages.
+
+**Code Implementation:**
+
+```python
+# Initialize variables and functions
+resultsIndexFile = "${resultsDirectory}/index.html"
+modelsFound = []
+modelsIndex = []
+
+def createModelRunHTML(modelName, dirPath):
+    # ... existing code to generate HTML for each model's run ...
+    
+def addModelToOutputIndexHtml(modelName, linkText):
+    # ... existing code to update main index pages ...
+
+# Generate individual model HTML files
+for file in ${resultsDirectory}/*; do 
+  if [ -d "$file" ]; then
+    fileName = "${file##*/}"
+    modelName = ${fileName % .html}
+    if [[ ! "${modelsFound[@]} =~ "$modelName" ]]; then
+      modelsFound+=("$modelName")
+    fi
+    mainModelIndexHtml="$resultsDirectory/models.html"
+    ... // existing code to create HTML for each model ...
+  fi
+done
+
+# Update index page and display images
+for foundModel in ${modelsFound[@]}; do
+  echo "Running model: $foundModel"
+  
+  # ... loop through modelsIndex...
+end
+
+# Handle image display (example)
+if [ ! ${file} ]; then
+  continue
+fi
+```
+
+**Explanation:**
+
+- **Initialization**: `resultsIndexFile` and `modelsFound` are set up to collect model names. `mainModelIndexHtml` initializes the main index page.
+  
+- **Loop through Models**: Each model's HTML file is processed, creating an individual HTML output for each run.
+
+- **Update Index Page**: After processing runs, the main index page is updated with links and details from all models found in the results directory.
+
+This structure ensures that each model's run is displayed correctly within its respective HTML file and linked properly to the main index page.
+

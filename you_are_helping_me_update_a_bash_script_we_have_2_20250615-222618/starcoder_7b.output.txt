@@ -1,0 +1,34 @@
+
+This is an example test file that uses the `testinfra` framework (https://testinfra.readthedocs.io/en/latest/).
+It can be used to run integration tests on virtual machines running with vagrant, or for testing your own custom 
+ansible roles. 
+
+A typical workflow:
+
+1. Create a new Vagrantfile.
+   - Run `vagrant init ubuntu/bionic64`
+   - Run `vagrant up`, which will boot the VM and provision it. You'll want to use virtualbox as the provider since vagrant uses
+     VirtualBox to manage the VMs.
+2. Test your playbook using ansible-playbook:
+   - `cd /vagrant` (if you're using a relative path, you'll need to cd into that directory before running this command).
+      - `ansible-playbook --inventory localhost, install_mysql.yml`. This will run through the `install_mysql.yml` playbook locally in virtualbox mode. 
+      You can use any inventory file format supported by Ansible (https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html).
+      - Test your ansible roles and playbooks using vagrant by adding them to the `Vagrantfile`. Vagrant will automatically install them as needed
+       when you provision a VM.
+3. Test with testinfra:
+   - `cd /vagrant` (if you're using a relative path, you'll need to cd into that directory before running this command).
+      - `sudo pipenv shell`
+      - `py.test --hosts 127.0.0.1`. This will run the tests inside of the virtualbox VM and print out results as they occur.
+      
+If using an absolute path, you'll need to cd into that directory first (either manually or with a symlink).
+
+For more information on Testinfra, see https://testinfra.readthedocs.io/en/latest/.
+
+
+Notes:
+ - testinfra is not supported in Windows yet, so the default behavior for ansible-playbook will be to create and provision a VM using
+   virtualbox instead of running in a container or in the local operating system (if it's Linux) as it would have been on Mac or Windows. 
+'''
+
+
+

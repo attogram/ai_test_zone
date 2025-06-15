@@ -1,0 +1,59 @@
+ To help you with updating your bash script, I've provided functions to read and parse both `stats.txt` and `show.txt` files. Below is the code that reads the files and parses them as per your requirements:
+
+```bash
+# Function to read stats.txt file and store data in an associative array
+declare -A stats_data=()
+while IFS=':' read -r name value; do
+    stats_data[$name]=$value
+done < stats.txt
+
+# Function to read show.txt file and store data in variables
+read_show_file() {
+    local section=""
+    local data=()
+
+    while IFS='\n' read -r line; do
+        if [[ $line == *"Model"* ]]; then
+            section="model"
+        elif [[ $line == *"Capabilities"* ]]; then
+            section="capabilities"
+        elif [[ $line == *"Parameters"* ]]; then
+            section="parameters"
+        elif [[ $line == *"    " ]]; then
+            continue # skip empty lines starting with "    "
+        else
+            if [[ $section == "model" ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                data+=([$name]=$value)
+            elif [[ $section == "capabilities" ]]; then
+                data+=("$line")
+            elif [[ $section == "parameters" ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                data+=([$name]=$value)
+            fi
+        fi
+    done < show.txt
+
+    declare -A show_data=()
+    for i in "${data[@]}"; do
+        if [[ $i == *"   " ]]; then # model section
+            IFS=' ' read -r name value <<< "$i"
+            show_data["model_$name"]=$value
+        elif [[ $i == *"  " ]]; then # capabilities section
+            show_data["capabilities"]+=("$i")
+        elif [[ $i == *"   " ]]; then # parameters section
+            IFS=' ' read -r name value <<< "$i"
+            show_data["parameters_$name"]=$value
+        fi
+    done
+}
+
+# Call the function to read and store data from show.txt file
+read_show_file
+```
+
+Now you can access the parsed data in your script:
+
+- To get stats values: `${stats_data["total duration"]}` or `${stats_data["load duration"]}`, etc.
+- To get show values: `${show_data["model_architecture"]}`, `${show_data["capabilities"][@]}`, `${show_data["parameters_stop"]}`, etc.
+

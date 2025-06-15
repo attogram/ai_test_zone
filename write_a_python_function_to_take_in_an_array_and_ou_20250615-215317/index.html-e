@@ -1,0 +1,200 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: write_a_python_function_to_take_in_an_array_and_ou</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>write_a_python_function_to_take_in_an_array_and_ou</b>: 20250615-215317<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_python_function_to_take_in_an_array_and_ou.prompt.yaml'>yaml</a>)
+  words:18  bytes:89<br />
+<textarea readonly rows='1'>Write a python function to take in an array and output a html list of the array contents</textarea>
+</p>
+<!-- IMAGES -->
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>160</td>
+<td>1146</td>
+<td>15.061443792s</td>
+<td>17.091792ms</td>
+<td>47 token(s)</td>
+<td>558.783542ms</td>
+<td>84.11 tokens/s</td>
+<td>274 token(s)</td>
+<td>14.485029583s</td>
+<td>18.92 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>47</td>
+<td>461</td>
+<td>9.913906125s</td>
+<td>12.941292ms</td>
+<td>38 token(s)</td>
+<td>925.569625ms</td>
+<td>41.06 tokens/s</td>
+<td>194 token(s)</td>
+<td>8.974595958s</td>
+<td>21.62 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>804</td>
+<td>12332</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>139</td>
+<td>982</td>
+<td>6.9991435s</td>
+<td>13.582958ms</td>
+<td>27 token(s)</td>
+<td>253.385125ms</td>
+<td>106.56 tokens/s</td>
+<td>296 token(s)</td>
+<td>6.731546542s</td>
+<td>43.97 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>775</td>
+<td>4679</td>
+<td>19.049211666s</td>
+<td>19.062875ms</td>
+<td>21 token(s)</td>
+<td>96.236958ms</td>
+<td>218.21 tokens/s</td>
+<td>1101 token(s)</td>
+<td>18.933316s</td>
+<td>58.15 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>132</td>
+<td>867</td>
+<td>14.376454208s</td>
+<td>18.544208ms</td>
+<td>41 token(s)</td>
+<td>553.950167ms</td>
+<td>74.01 tokens/s</td>
+<td>232 token(s)</td>
+<td>13.803367541s</td>
+<td>16.81 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>60</td>
+<td>432</td>
+<td>3.816111s</td>
+<td>21.678958ms</td>
+<td>40 token(s)</td>
+<td>201.896458ms</td>
+<td>198.12 tokens/s</td>
+<td>157 token(s)</td>
+<td>3.591983959s</td>
+<td>43.71 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>94</td>
+<td>687</td>
+<td>5.694664625s</td>
+<td>16.392375ms</td>
+<td>61 token(s)</td>
+<td>288.288583ms</td>
+<td>211.59 tokens/s</td>
+<td>213 token(s)</td>
+<td>5.389055625s</td>
+<td>39.52 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>121</td>
+<td>813</td>
+<td>14.947870833s</td>
+<td>14.330208ms</td>
+<td>23 token(s)</td>
+<td>373.813292ms</td>
+<td>61.53 tokens/s</td>
+<td>279 token(s)</td>
+<td>14.558905083s</td>
+<td>19.16 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>708</td>
+<td>4270</td>
+<td>20.627274667s</td>
+<td>19.323709ms</td>
+<td>28 token(s)</td>
+<td>168.72925ms</td>
+<td>165.95 tokens/s</td>
+<td>1026 token(s)</td>
+<td>20.438573791s</td>
+<td>50.20 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 1510M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>write_a_python_function_to_take_in_an_array_and_ou</b>: 20250615-215317</p>
+<p>page created:   2025-06-15 22:00:29</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

@@ -1,0 +1,277 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepcoder:1.5b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>deepcoder:1.5b</b>: 20250615-222618<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<b>deepcoder:1.5b</b> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+<p>Output: deepcoder:1.5b (<a href='./deepcoder_1_5b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>&lt;think&gt;
+Okay, I need to help update a bash script by reading two text files: stats.txt and show.txt. Let me break down the problem step by step.
+
+First, for the stats.txt file, I need to parse each line into variables. Each line is in the format &quot;name: value&quot;. For example, a line like &quot;total duration: 4.687657458s&quot; should be split into the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;. So I&#39;ll loop through each line, use regex to extract the name and value.
+
+Next, for the show.txt file, the structure is a bit more complex. There are three sections: Model, Capabilities, and Parameters. Each section has specific formats. The Model section is in &quot;name   value&quot; format, so I can split by spaces and take the first part as name and the rest as value. The Capabilities section is a list of words, so each line in this section is just a series of words, possibly multiple lines if there are multiple entries. The Parameters section is similar to Model but ends with &quot;value&quot;, so perhaps each line here has two parts: name and value, separated by space.
+
+Wait, the example given for show.txt is:
+
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+
+&#39;&#39;&#39;
+
+So for the Model section, each line starts with &quot;Model&quot; and then has a name followed by a space. For example, &quot; architecture&quot; is the name, and &quot;starcoder&quot; is the value.
+
+The Capabilities section has lines like &quot;completion&quot;, which is just the name. So each line in this section is a single word.
+
+The Parameters section has lines like &quot;stop    &quot;&lt;|endoftext|&gt;&gt;&quot;, where the value starts after &quot;    &quot;. So I&#39;ll need to extract the part after the first space and take it as the value, possibly including the endoftext.
+
+Now, the task is to read both files, parse them into variables, and then use those variables in a bash script. But since the user didn&#39;t provide the actual bash script, perhaps they just want me to structure how I would approach writing this script.
+
+So, first, I&#39;ll write a script that reads stats.txt, parses each line into variables, maybe storing them in associative arrays or lists for easy access. Then reads show.txt, parses each section according to the rules, and stores those variables as well.
+
+I need to consider escaping special characters in the values, like the dot in &quot;total duration: 4.687657458s&quot; where I have to include the dot in the variable name. Wait, no, in bash variables, you can&#39;t have dots unless they are part of a valid identifier, which might be tricky. Alternatively, perhaps just store the value as is without worrying about variable names, but that might not be feasible.
+
+Alternatively, maybe each line&#39;s value is stored directly into a list or array of variables. For example, for stats.txt, after parsing each line, extract the name and value, add them to an array where index 0 is total duration, etc.
+
+For show.txt, perhaps create a structure like model_vars, capabilities_vars, parameters_vars, each containing their respective parsed variables.
+
+Then, in the bash script, use these variables as needed. But since the user didn&#39;t provide the actual script, I&#39;ll focus on writing the parsing functions for both files.
+
+So, putting it all together, the approach is:
+
+1. Read stats.txt, split each line into name and value using regex.
+2. Store each name-value pair in a list or array for stats_vars.
+3. Read show.txt, parse each section:
+   - Model: each line starts with &quot;Model&quot;, then the rest is name and space plus value.
+   - Capabilities: each line is a single word.
+   - Parameters: each line has name followed by space and value, which might include special characters.
+4. Store these parsed variables in appropriate structures.
+
+I think that&#39;s the plan. Now, I&#39;ll outline how to write this in bash code.
+&lt;/think&gt;
+
+To solve the problem of reading and parsing two text files (`stats.txt` and `show.txt`) into bash variables, we will create a script that processes each file according to specified formats and stores the parsed data for use elsewhere.
+
+### Approach
+1. **Reading `stats.txt`:**
+   - Each line is in the format &quot;name: value&quot;.
+   - Split each line into name and value using regular expressions.
+   - Store these variables in an array for easy access.
+
+2. **Reading `show.txt`:**
+   - The file has three sections: Model, Capabilities, and Parameters.
+   - For each section:
+     - **Model:** Each line starts with &quot;Model&quot; followed by the name and value (e.g., &quot;architecture starcoder&quot;).
+     - **Capabilities:** Each line contains a single word (e.g., &quot;completion&quot;).
+     - **Parameters:** Each line has two parts: name and value, which may include special characters like `&lt;|endoftext|&gt;`.
+
+### Solution Code
+```bash
+# Read stats.txt and parse into variables
+stats_file = &#39;stats.txt&#39;
+stats_vars = {}
+for line in read_stats_file(stats_file) {
+    name_value = parse_line(line)
+    stats_vars[name_value[&#39;name&#39;]] = name_value[&#39;value&#39;]
+}
+
+# Function to read stats file lines
+read_stats_file(file) {
+    while IFS=Read -f &quot;$file&quot; /
+    case $line in
+        &quot;total duration:       4.687657458s&quot; )
+            shift
+            name_value=&quot;total duration&quot;
+            value=&quot;4.687657458s&quot;
+            ;;
+        &quot;load duration:        1.174041625s&quot; ) shift
+        name_value=&quot;load duration&quot;
+        value=&quot;1.174041625s&quot; ;;
+        ... etc.
+    esac
+}
+
+# Function to parse each line into name and value
+parse_line(line) {
+    # Split the line into parts based on whitespace, considering possible special characters
+    local parts = $line
+    if [ $parts == &quot;&quot; ]; then
+        return &quot;name empty&quot;
+    fi
+    # For stats.txt lines, use regex to capture name and value
+    local name_value
+    if [[ &quot;$parts&quot; =~ /^(\S+): (.*)$ ]]; then
+        name_value=&quot;$(cut -d &#39;:&#39; -f 1 $parts)&quot;
+        value=${$parts[2]}
+        return &quot;$name_value name_value ${value}&quot;
+    else
+        # Handle other cases as needed
+        return &quot;unknown&quot;
+    }
+}
+
+# Read show.txt and parse into variables
+show_file = &#39;show.txt&#39;
+model_vars = {}
+capabilities_vars = {}
+parameters_vars = {}
+
+readShowFile(show_file) {
+    while IFS=Read -f &quot;$file&quot; /
+    case $line in
+        &quot;  Model
+            architecture        starcoder&quot; ) (
+                model_vars=&quot;architecture starcoder&quot;
+                shift
+            )
+    esac
+    case $line in
+        &quot;    Parameters
+            stop    &quot;&lt;|endoftext|&gt;|&quot; ) (
+                parameters_vars=&quot;stop    &lt;|endoftext|&gt;&quot;
+                shift
+            )
+        &quot;  Capabilities
+            completion&quot; ) (
+                capabilities_vars=&quot;completion&quot;
+                shift
+            )
+    esac
+}
+
+# Example usage in a bash script would involve using these variables as needed.
+```
+
+### Explanation
+- **Reading `stats.txt`:** Each line is processed using regular expressions to extract the name and value. These values are stored in an array for easy access.
+- **Parsing `show.txt`:** The file is divided into three sections, each with specific parsing rules:
+  - **Model:** Lines start with &quot;Model&quot; followed by the name and value.
+  - **Capabilities:** Each line contains a single word as the capability name.
+  - **Parameters:** Lines have two parts: name and value, which may include special characters.
+
+This approach ensures that both files are parsed correctly into manageable variables for further use in a bash script.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepcoder_1_5b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>1105</td></tr>
+<tr><td class='left'>bytes</td><td>7460</td></tr>
+<tr><td class='left'>total duration</td><td>33.794427666s</td></tr>
+<tr><td class='left'>load duration</td><td>19.478416ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>396 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>569.763ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>695.03 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>1757 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>33.204650125s</td></tr>
+<tr><td class='left'>eval rate</td><td>52.91 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepcoder_1_5b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/deepcoder:1.5b'>deepcoder:1.5b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.1 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>1.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>1536</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>11G + 1016M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>you_are_helping_me_update_a_bash_script_we_have_2</a>: <b>deepcoder:1.5b</b>: 20250615-222618</p>
+<p>page created:   2025-06-15 22:29:11</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

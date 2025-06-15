@@ -1,0 +1,36 @@
+Sure, here's the updated script with comments for each section:
+
+```bash
+#!/bin/bash
+
+# Read in the stats data
+stats_data=$(cat stats.txt)
+
+# Parse the stats data into variables
+stats_data=$(awk -F ':' 'split($1, "=") { print $2 }' <<< "$stats_data")
+
+# Extract the relevant values from the stats data
+total_duration=$(echo "$stats_data" | grep total duration: | awk '{ print $2 }')
+load_duration=$(echo "$stats_data" | grep load duration: | awk '{ print $2 }')
+prompt_count=$(echo "$stats_data" | grep prompt eval count: | awk '{ print $2 }')
+# ... and so on for other values
+
+# Read in the show data
+show_data=$(cat show.txt)
+
+# Parse the show data into variables
+show_data=$(awk -F ':' 'split($1, "=") { print $2 }' <<< "$show_data")
+
+# Extract the relevant values from the show data
+model=$(echo "$show_data" | grep Model: | awk '{ print $2 }')
+capabilities=$(echo "$show_data" | grep Capabilities: | awk '{ print $2 }')
+parameters=$(echo "$show_data" | grep Parameters: | awk '{ print $2 }')
+
+# Print the extracted values
+echo "Model: $model"
+echo "Capabilities: $capabilities"
+echo "Parameters: $parameters"
+```
+
+This updated script performs the same tasks as the original script, but it reads the data from two different files and parses it into variables using specific commands for each section.
+

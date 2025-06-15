@@ -1,0 +1,30 @@
+To read and parse the "stats.txt" file, you can use a simple bash scripting approach:
+
+1. Read the stats.txt file line by line using a loop construct.
+2. Within each iteration of the loop, split the line into an array of fields using internal tools like `cut` or `awk`.
+3. Once the line is parsed into separate fields, you can access and save specific data values into bash variables.
+4. Repeat the above steps for parsing the "show.txt" file as well.
+
+Here's a simple example of how this could be implemented in a bash script:
+
+```bash
+#!/bin/bash
+
+# Read in stats.txt file line by line
+while IFS= read -r line; do
+
+  # Split the line into an array of fields
+  read_array=( $line )
+
+  # Save specific data values into bash variables
+  name="${read_array[0]}"
+  value="${read_array[1]}"
+
+done < stats.txt
+
+echo "Name: $name"
+echo "Value: $value"
+```
+
+This script reads in the stats.txt file line by line, splits each line into an array of fields, saves specific data values into bash variables, and then prints out the name and value for the "total duration" field found in the example stats.txt file provided earlier.
+

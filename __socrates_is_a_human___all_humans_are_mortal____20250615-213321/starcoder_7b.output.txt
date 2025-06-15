@@ -1,0 +1,40 @@
+
+  - Yes, he's mortal. (He's a real person)
+- What happens if you ask "Is Socrates mortal?" to an object?
+  - It won't work because objects don't have the capability of being asked what they are.
+
+### Proxies in JavaScript
+
+> A proxy is an object that stands between another object and its actual target, allowing for manipulation and controlling access to it.
+
+- Proxies provide a way to intercept operations on objects, such as getting or setting properties, calling methods, etc.
+  - This is useful because we have no idea how the object will be used; we might need to alter its behavior in some ways.
+
+```js
+const handler = {
+  get: function (target, key) {
+    if(key === 'age'){
+      return target[key] + 100;
+    } else{
+      return Reflect.get(target, key);
+    }
+  },
+
+  set: function (obj, prop, value){
+    obj[prop] = value * 2;
+
+    // let result = Reflect.set(obj, prop, value * 2)
+    // or
+    // const result = true
+
+    return true
+  }
+}
+
+
+const person = new Proxy({}, handler);
+person.age = 10;
+console.log(person.age);
+// -> 101
+```
+

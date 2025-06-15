@@ -1,0 +1,110 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: codellama:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>codellama:7b</b>: 20250615-220029<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<b>codellama:7b</b> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_bash_shell_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:19  bytes:93<br />
+<textarea readonly rows='1'>Write a Bash shell function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: codellama:7b (<a href='./codellama_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+You can create a Bash shell function that takes in an array as input and outputs an HTML list of its contents using the following code:
+```bash
+function array_to_html() {
+  local -n arr=$1
+  local result=&quot;&quot;
+
+  for i in &quot;${arr[@]}&quot;; do
+    result+=&quot;&lt;li&gt;$i&lt;/li&gt;&quot;
+  done
+
+  echo &quot;&lt;ul&gt;${result}&lt;/ul&gt;&quot;
+}
+```
+This function takes an array as the first argument, and then uses a `for` loop to iterate over its elements. For each element, it creates an HTML `&lt;li&gt;` tag with the current element&#39;s value inside, and appends it to the `result` variable. Finally, it outputs the entire list as an HTML `&lt;ul&gt;` tag.
+
+You can use this function in your Bash script by calling it like this:
+```bash
+array=(&quot;apple&quot; &quot;banana&quot; &quot;cherry&quot;)
+html=$(array_to_html array)
+echo &quot;$html&quot;
+```
+This will output the following HTML:
+```
+&lt;ul&gt;
+  &lt;li&gt;apple&lt;/li&gt;
+  &lt;li&gt;banana&lt;/li&gt;
+  &lt;li&gt;cherry&lt;/li&gt;
+&lt;/ul&gt;
+```
+Note that the `-n` option in the `local` statement is used to create a named reference to the array, so that we can use it inside the function. The `${arr[@]}` syntax is used to iterate over all elements of the array.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./codellama_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>176</td></tr>
+<tr><td class='left'>bytes</td><td>1089</td></tr>
+<tr><td class='left'>total duration</td><td>17.110058542s</td></tr>
+<tr><td class='left'>load duration</td><td>12.244083ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>39 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>844.11ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>46.20 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>324 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>16.252523s</td></tr>
+<tr><td class='left'>eval rate</td><td>19.94 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./codellama_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/codellama:7b'>codellama:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>9.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>6.7B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>16384</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1832M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>codellama:7b</b>: 20250615-220029</p>
+<p>page created:   2025-06-15 22:01:17</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

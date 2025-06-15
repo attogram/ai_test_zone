@@ -1,0 +1,13 @@
+The number of occurrences of the character r with a single quote (r') in the word "Strawberry" is 3.Get this information using Python programming:
+
+```python
+word = 'Strawberry'
+
+# Count the occurrences of character r with a single quote 
+count_r = word.lower().count("r'"))
+
+print(f"The number of occurrences of r' in the word 'Strawberry' is {count_r}.")
+```
+
+This code counts the occurrences of "r'" (single quote on both sides) in a case-insensitive manner. It uses the built-in `lower()` function to convert all characters in the string to lowercase before counting the occurrences.
+

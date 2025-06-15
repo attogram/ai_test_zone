@@ -1,0 +1,34 @@
+This is a script that appears to be used for running multiple instances of an AI model called "ollama" with different prompts and configurations, then generating HTML reports documenting the results. Here's a breakdown of its functionality:
+
+1. It sets up environment variables and parses command-line arguments.
+2. It defines several functions:
+   - `setModels`: Not implemented in the provided script.
+   - `setPrompt`: Sets a prompt for the model to run.
+   - `createOutputDirectory`: Creates directories to store output files.
+   - `savePrompt`: Saves the prompt to a file.
+   - `createModelInfoTxt`: Generates information text files for each model run.
+   - `createModelsOverviewHtml`: Generates an HTML overview for all models run.
+   - `setSystemStats`: Gets statistics about the system resources used by the models.
+   - `createOutputIndexHtml`: Creates an index page for output results.
+   - `addModelToOutputIndexHtml`: Adds individual model result links to the output index.
+   - `finishOutputIndexHtml`: Finalizes the output index HTML file, including adding system statistics and images.
+   - `createMainIndexHtml`: Creates a main index HTML for all runs.
+   - `createMainModelIndexHtml`: Generates an index of all models used in run results.
+   - `runModelWithTimeout`: Runs a model with a timeout to prevent infinite hanging.
+
+3. It parses command-line arguments and sets up the necessary variables and directories before running each model with its respective prompt. The script logs that it is done and provides the path to the output directory.
+
+The provided code is incomplete because several functions are defined but not implemented (e.g., `setModels`, `clearModel`). Also, some parts of the script may be specific to the environment in which it runs or to other scripts or tools it interacts with (for example, `ollama` and related utilities). 
+
+Here's what you can do with this code:
+
+- Customize the model names (`models`) and prompts.
+- Set up paths for output directories (`outputDirectory`, `resultsDirectory`).
+- Run the script which will execute models with given prompts and generate HTML reports.
+
+To use this script, make sure that:
+- The `ollama` command-line tool or similar is available and correctly configured.
+- Any dependencies referenced in the functions (e.g., `clearModel`) are present or implemented as needed.
+
+Please note that running scripts on a system can have significant consequences if not properly understood. Ensure that you comprehend what each part of the script does before executing it, especially when dealing with environment variables, file operations, and system commands.
+

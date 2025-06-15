@@ -1,0 +1,200 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: describe_this_image____docs_logo_logo_250_jpg</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>describe_this_image____docs_logo_logo_250_jpg</b>: 20250615-224247<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./describe_this_image____docs_logo_logo_250_jpg.prompt.yaml'>yaml</a>)
+  words:4  bytes:46<br />
+<textarea readonly rows='1'>Describe this image: ./docs/logo/logo-250.jpg</textarea>
+</p>
+<!-- IMAGES -->
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a></td>
+<td>395</td>
+<td>2440</td>
+<td>45.944637166s</td>
+<td>14.87575ms</td>
+<td>2240 token(s)</td>
+<td>19.933317958s</td>
+<td>112.37 tokens/s</td>
+<td>576 token(s)</td>
+<td>25.995092958s</td>
+<td>22.16 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./minicpm_v_8b.html'>minicpm-v:8b</a></td>
+<td>111</td>
+<td>687</td>
+<td>13.910486042s</td>
+<td>19.556542ms</td>
+<td>77 token(s)</td>
+<td>7.112288417s</td>
+<td>10.83 tokens/s</td>
+<td>130 token(s)</td>
+<td>6.777111416s</td>
+<td>19.18 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a></td>
+<td>59</td>
+<td>372</td>
+<td>4.235346166s</td>
+<td>21.385666ms</td>
+<td>114 token(s)</td>
+<td>2.169789125s</td>
+<td>52.54 tokens/s</td>
+<td>73 token(s)</td>
+<td>2.042057459s</td>
+<td>35.75 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a></td>
+<td>82</td>
+<td>501</td>
+<td>8.075072292s</td>
+<td>22.163417ms</td>
+<td>114 token(s)</td>
+<td>2.559128875s</td>
+<td>44.55 tokens/s</td>
+<td>97 token(s)</td>
+<td>5.492862s</td>
+<td>17.66 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3_4b.html'>gemma3:4b</a></td>
+<td>211</td>
+<td>1360</td>
+<td>52.343669416s</td>
+<td>29.471166ms</td>
+<td>274 token(s)</td>
+<td>42.075410167s</td>
+<td>6.51 tokens/s</td>
+<td>280 token(s)</td>
+<td>10.237751958s</td>
+<td>27.35 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_7b.html'>llava:7b</a></td>
+<td>101</td>
+<td>571</td>
+<td>11.440831208s</td>
+<td>14.90275ms</td>
+<td>592 token(s)</td>
+<td>3.971998958s</td>
+<td>149.04 tokens/s</td>
+<td>131 token(s)</td>
+<td>7.451343s</td>
+<td>17.58 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_llama3_8b.html'>llava-llama3:8b</a></td>
+<td>131</td>
+<td>738</td>
+<td>14.459823125s</td>
+<td>21.420916ms</td>
+<td>591 token(s)</td>
+<td>4.670223s</td>
+<td>126.55 tokens/s</td>
+<td>155 token(s)</td>
+<td>9.767223125s</td>
+<td>15.87 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a></td>
+<td>169</td>
+<td>1021</td>
+<td>11.586295584s</td>
+<td>12.777459ms</td>
+<td>594 token(s)</td>
+<td>2.895120542s</td>
+<td>205.17 tokens/s</td>
+<td>232 token(s)</td>
+<td>8.676939833s</td>
+<td>26.74 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./bakllava_7b.html'>bakllava:7b</a></td>
+<td>75</td>
+<td>484</td>
+<td>9.304359083s</td>
+<td>11.708083ms</td>
+<td>596 token(s)</td>
+<td>4.090424125s</td>
+<td>145.71 tokens/s</td>
+<td>95 token(s)</td>
+<td>5.200640708s</td>
+<td>18.27 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./moondream_1_8b.html'>moondream:1.8b</a></td>
+<td>52</td>
+<td>329</td>
+<td>6.344019375s</td>
+<td>14.349958ms</td>
+<td>743 token(s)</td>
+<td>5.272647333s</td>
+<td>140.92 tokens/s</td>
+<td>63 token(s)</td>
+<td>1.055431792s</td>
+<td>59.69 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1289M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>describe_this_image____docs_logo_logo_250_jpg</b>: 20250615-224247</p>
+<p>page created:   2025-06-15 22:46:24</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

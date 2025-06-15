@@ -1,0 +1,93 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: llava-phi3:3.8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_function__an</a>: <b>llava-phi3:3.8b</b>: 20250615-214236<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<b>llava-phi3:3.8b</b> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./who_are_you__what_are_you__how_do_you_function__an.prompt.yaml'>yaml</a>)
+  words:15  bytes:69<br />
+<textarea readonly rows='1'>Who are you, What are you, How do you function, and What can you do?</textarea>
+</p>
+<p>Output: llava-phi3:3.8b (<a href='./llava_phi3_3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='4'>I am a language model trained to assist users in generating human-like text based on the input provided. I use machine learning algorithms to analyze patterns in large amounts of text data to generate responses that resemble natural language. My functionality is limited by the data and training provided during my development process, but my goal is to help answer questions, provide information or carry out tasks as accurately and efficiently as possible.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./llava_phi3_3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>73</td></tr>
+<tr><td class='left'>bytes</td><td>460</td></tr>
+<tr><td class='left'>total duration</td><td>3.011499458s</td></tr>
+<tr><td class='left'>load duration</td><td>14.333166ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>29 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>409.133292ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>70.88 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>83 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>2.587313416s</td></tr>
+<tr><td class='left'>eval rate</td><td>32.08 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./llava_phi3_3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/llava-phi3:3.8b'>llava-phi3:3.8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>3.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>4096</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>3072</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />vision<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1869M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_function__an</a>: <b>llava-phi3:3.8b</b>: 20250615-214236</p>
+<p>page created:   2025-06-15 21:46:04</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

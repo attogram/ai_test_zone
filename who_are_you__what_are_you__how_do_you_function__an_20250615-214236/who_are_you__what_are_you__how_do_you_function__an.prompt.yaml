@@ -1,0 +1,7 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: |
+      Who are you, What are you, How do you function, and What can you do?
+model: ''

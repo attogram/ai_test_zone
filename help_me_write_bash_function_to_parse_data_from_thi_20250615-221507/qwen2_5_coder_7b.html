@@ -1,0 +1,217 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen2.5-coder:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>qwen2.5-coder:7b</b>: 20250615-221507<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<b>qwen2.5-coder:7b</b> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_bash_function_to_parse_data_from_thi.prompt.yaml'>yaml</a>)
+  words:174  bytes:1514<br />
+<textarea readonly rows='10'>Help me write bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          </textarea>
+</p>
+<p>Output: qwen2.5-coder:7b (<a href='./qwen2_5_coder_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Certainly! Below is a bash function that parses the `model.info.txt` file according to your specifications:
+
+```bash
+parse_model_info() {
+    # Initialize variables and arrays
+    declare -A modelParams
+    capabilities=()
+    systemPrompt=&quot;&quot;
+
+    # Read the file line by line
+    while IFS= read -r line; do
+        # Trim leading/trailing whitespace
+        line=$(echo &quot;$line&quot; | xargs)
+
+        # Check for Model section
+        if [[ &quot;$line&quot; == &quot;Model&quot; ]]; then
+            continue
+        elif [[ &quot;$line&quot; =~ ^[[:space:]]*([a-zA-Z0-9_]+)[[:space:]]+([^[:space:]]+) ]]; then
+            modelParams[${BASH_REMATCH[1]}]=&quot;${BASH_REMATCH[2]}&quot;
+        fi
+
+        # Check for Capabilities section
+        if [[ &quot;$line&quot; == &quot;Capabilities&quot; ]]; then
+            continue
+        elif [[ &quot;$line&quot; =~ ^[[:space:]]*([a-zA-Z0-9_]+)$ ]]; then
+            capabilities+=(&quot;${BASH_REMATCH[1]}&quot;)
+        fi
+
+        # Check for System section
+        if [[ &quot;$line&quot; == &quot;System&quot; ]]; then
+            continue
+        elif [[ -n &quot;$systemPrompt&quot; ]]; then
+            systemPrompt+=&quot; $line&quot;
+        else
+            systemPrompt=&quot;$line&quot;
+        fi
+
+        # Check for Parameters section
+        if [[ &quot;$line&quot; == &quot;Parameters&quot; ]]; then
+            continue
+        elif [[ &quot;$line&quot; =~ ^[[:space:]]*([a-zA-Z0-9_]+)[[:space:]]+([^[:space:]]+) ]]; then
+            if [[ &quot;${BASH_REMATCH[1]}&quot; == &quot;temperature&quot; ]]; then
+                modelParams[${BASH_REMATCH[1]}]=&quot;${BASH_REMATCH[2]}&quot;
+            fi
+        fi
+    done &lt; &quot;model.info.txt&quot;
+
+    # Output the results
+    echo &quot;Model Parameters:&quot;
+    for key in &quot;${!modelParams[@]}&quot;; do
+        echo &quot;$key=\&quot;${modelParams[$key]}\&quot;&quot;
+    done
+
+    echo &quot;Capabilities:&quot;
+    printf &quot;%s\n&quot; &quot;${capabilities[@]}&quot;
+
+    echo &quot;System Prompt:&quot;
+    echo &quot;$systemPrompt&quot;
+
+    echo &quot;Temperature: ${modelParams[temperature]}&quot;
+}
+
+# Call the function to parse the model.info.txt file
+parse_model_info
+```
+
+### Explanation:
+1. **Initialization**: We initialize an associative array `modelParams` to store the key-value pairs from the Model and Parameters sections, a bash array `capabilities` to store the keywords from the Capabilities section, and a variable `systemPrompt` to store the lines from the System section.
+
+2. **Reading File Line by Line**: The script reads the file line by line using a while loop. It trims any leading or trailing whitespace from each line.
+
+3. **Section Identification**: The script checks if the current line starts with &quot;Model&quot;, &quot;Capabilities&quot;, &quot;System&quot;, or &quot;Parameters&quot;. If it does, it skips to the next line.
+
+4. **Parsing Model and Parameters Sections**:
+   - For lines in the Model and Parameters sections that match the pattern `name value`, it extracts the name and value using a regular expression and stores them in the associative array.
+   
+5. **Parsing Capabilities Section**:
+   - Each keyword in the Capabilities section is added to the bash array.
+
+6. **Parsing System Section**:
+   - The lines from the System section are concatenated into a single variable, preserving any multi-line content.
+
+7. **Output**: The script prints out the parsed values for each section and the specific &#39;temperature&#39; value.
+
+### Usage:
+1. Save the function in a bash script or source it in your current shell session.
+2. Ensure `model.info.txt` is in the same directory as the script or provide the correct path to the file.
+3. Call the `parse_model_info` function to execute the parsing logic.
+
+This function should correctly parse the provided example `model.info.txt` and output the results accordingly.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen2_5_coder_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>443</td></tr>
+<tr><td class='left'>bytes</td><td>3547</td></tr>
+<tr><td class='left'>total duration</td><td>50.7095065s</td></tr>
+<tr><td class='left'>load duration</td><td>19.561292ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>364 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.727406s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>133.46 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>843 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>47.961819167s</td></tr>
+<tr><td class='left'>eval rate</td><td>17.58 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen2_5_coder_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/qwen2.5-coder:7b'>qwen2.5-coder:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.6B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>3584</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br />insert<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 880M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>qwen2.5-coder:7b</b>: 20250615-221507</p>
+<p>page created:   2025-06-15 22:16:05</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

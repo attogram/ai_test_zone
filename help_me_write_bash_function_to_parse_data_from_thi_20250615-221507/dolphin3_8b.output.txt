@@ -1,0 +1,51 @@
+Here is a bash function that will parse data from your file:
+
+```bash
+parse_model_info() {
+    declare -A model_data
+    declare -a capabilities
+    
+    while IFS= read -r line && [[ $line != "Projector" ]] ; do
+        if [[ "$line" == "Model"* ]]; then 
+            name=$(echo "$line" | sed 's/.*\t//' | tr -d '[:space:]')
+            model_data["$name"]=$(echo "$line" | sed 's/^.*\t//' | tr -d '[:space:]')
+        elif [[ "$line" == "Capabilities"* ]]; then 
+            while IFS= read -r capability && [[ $capability != "Projector" ]] ; do
+                capabilities+=("$capability")
+            done
+        elif [[ "$line" == "System"* ]]; then 
+            systemPrompt="$line"
+        elif [[ "$line" == "Parameters"* ]]; then 
+            parameters=$(echo "$line" | sed 's/.*\t//' | tr -d '[:space:]')
+            model_data["temperature"]="$(echo "$parameters" | grep -oE "[0-9.]+")"
+        fi
+    done < model.info.txt
+
+    echo "Model data:"
+    for key in "${!model_data[@]}"; do
+        echo "$key=${model_data[$key]}"
+    done
+    
+    echo "Capabilities:"
+    for cap in "${capabilities[@]}"; do
+        echo $cap
+    done
+    
+    echo "System prompt: $systemPrompt"
+    
+    echo "Temperature parameter (if available): ${model_data["temperature"]}"
+}
+```
+
+This script reads the file line by line and uses `declare -A` to create an associative array for storing model data, and a simple array for capabilities. 
+
+It first checks if the line belongs to Model section, Capabilities section or System section. If it's in Model section, it extracts name and value using sed and tr commands and stores them into associative array with name as key and value as value.
+
+For Capabilities section, it appends each capability to the capabilities array.
+
+For System section, it directly assigns line to systemPrompt variable.
+
+In Parameters section, it looks for a number (temperature) and saves that in model_data associative array under "temperature" key.
+
+Finally, it outputs all the data. Note that if Parameters section is missing or doesn't contain temperature value, the output will be blank for temperature.
+

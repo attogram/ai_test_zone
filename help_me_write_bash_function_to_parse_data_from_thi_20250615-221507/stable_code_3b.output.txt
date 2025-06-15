@@ -1,0 +1,102 @@
+Here's a bash function that parses data from the given `model.info.txt` file:
+
+```bash
+parse_model_info() {
+  local file="$1"
+  local -A modelSection
+  local -A capabilitiesSection
+  local -A projectorSection
+  local -A parametersSection
+  local -A systemSection
+
+  while IFS= read -r line; do
+    if [[ $line == "Model"* ]]; then
+      modelSection=$(printf '%s\n' "$@" | grep -E '^[[:space:]]*Model[[:space:]]*.*$')
+      continue
+    fi
+
+    if [[ $line == "Capabilities"* ]]; then
+      capabilitiesSection=$(printf '%s\n' "$@" | grep -E '^[[:space:]]*Capabilities[[:space:]]*.*$')
+      continue
+    fi
+
+    # Process Projector section
+    if [[ $line == "Projector"* ]]; then
+      projectorSection=$(printf '%s\n' "$@" | grep -E '^[[:space:]]*Projector[[:space:]]*.*$')
+      continue
+    fi
+
+    # Process Parameters section
+    if [[ $line == "Parameters"* ]]; then
+      parametersSection=$(printf '%s\n' "$@" | grep -E '^[[:space:]]*Parameters[[:space:]]*.*$')
+      continue
+    fi
+
+    # Process System section
+    if [[ $line == "System"* ]]; then
+      systemSection=$(printf '%s\n' "$@" | grep -E '^[[:space:]]*System[[:space:]]*.*$')
+      continue
+    fi
+
+    # Process other sections
+    local sectionName=$(echo "$line" | sed 's/[[:space:]]*//'))
+    case $sectionName in
+      Model)   modelSection["$line"]=1 ;;
+      Capabilities) capabilitiesSection["$line"]=1 ;;
+      Projector) projectorSection["$line"]=1 ;;
+      Parameters) parametersSection["$line"]=1 ;;
+      System) systemSection["$line"]=1 ;;
+      *) echo "Unknown section: $sectionName"; return 1 ;;
+    esac
+  done
+
+  # Extract and print model information
+  IFS=$'\n' read -d '' -a modelInfo <<< "$modelSection"
+  for line in "${modelInfo[@]}"; do
+    echo "$line"
+  done
+
+  # Extract and print capabilities information
+  capabilitiesInfo=()
+  if [[ ${capabilitiesSection["Capabilities"]} != *"$"* ]]; then
+    capabilitiesInfo=( "${capabilitiesSection["Capabilities"]}" ))
+  fi
+  for line in "${capabilitiesInfo[@]}"; do
+    echo "$line"
+  done
+
+  # Extract and print projector information
+  projectorInfo=()
+  if [[ ${projectorSection["Projector" ]} != *"$"* ]]; then
+    projectorInfo=( "${projectorSection["Projector"]}" ))
+  fi
+  for line in "${projectorInfo[@]}"; do
+    echo "$line"
+  done
+
+  # Extract and print parameters information
+  parametersInfo=()
+  if [[ ${parametersSection["Parameters"]} != *"$"* ]]; then
+      parametersInfo=( "${parametersSection["Parameters"]}" ))
+    fi
+  for line in "${parametersInfo[@]}"; do
+    echo "$line"
+  done
+
+  # Extract and print system information
+  systemPrompt=""
+  if [[ ${systemSection["System"]} != *"$"* ]]; then
+      systemPrompt=$(printf '%s\n' "$@" | grep -E '^[[:space:]]*System[[:space:]]*.*$')
+    fi
+  echo "$systemPrompt"
+}
+```
+
+You can run the function by providing the `model.info.txt` file as an argument to the bash function, like this:
+
+```bash
+parse_model_info model.info.txt
+```
+
+The function will parse the data from the provided file and print the extracted information for each section (Model, Capabilities, Projector, Parameters, System).
+

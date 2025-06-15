@@ -1,0 +1,116 @@
+<think>
+Okay, I need to write a PHP function that takes an array and outputs a HTML list of its contents. Let me think about how to approach this.
+
+First, I should consider what the function needs to do. The goal is to convert an array into a HTML list structure. Each element in the array should appear on a new line in the HTML.
+
+So, the steps I need to take are:
+
+1. Check if the input array is empty. If it is, maybe return an empty string or handle that case appropriately.
+2. Loop through each element of the array.
+3. For each element, create a span tag in HTML.
+4. The content of each span should be the corresponding array element.
+5. Combine all these span elements into a single string with newlines between them.
+
+Wait, how does HTML display multiple spans? Each span will appear on its own line. So if I have an array like [1,2,3], the HTML should look like:
+
+<span>1</span>
+<span>2</span>
+<span>3</span>
+
+But when outputting as a string, each span is separated by a newline.
+
+So in PHP, I can construct a string where each element is wrapped in <span> and </span>, and then join them with newlines.
+
+Let me think about the structure. The function will take an array as input. Let's name it $array.
+
+I'll start by initializing an empty string or an array to hold each span element. Then loop through each index of the array, create a span for each value, and append it to the result.
+
+But wait, how do I handle cases where the array has different data types? For example, if some elements are strings and others are numbers. But since HTML spans can contain any content, perhaps that's not an issue here.
+
+Now, writing the function:
+
+Function name: array_to_html
+
+Parameters: $array
+
+Return value: A string representing the HTML list.
+
+So, in code:
+
+function array_to_html($array) {
+    if (empty($array)) {
+        return '';
+    }
+    $html = '';
+    foreach ($array as $key => $value) {
+        $html .= '<span>' . $value . '</span> ';
+    }
+    // Remove the trailing space
+    $html = substr($html, 0, -1);
+    return $html;
+}
+
+Wait, but what if the array is empty? The function returns an empty string. Otherwise, it loops through each element and appends <span>value</span>.
+
+Testing this with an example: array [1,2,3] should produce:
+
+<span>1</span>
+<span>2</span>
+<span>3</span>
+
+When joined, it becomes "<span>1</span><span>2</span><span>3</span>" but wait, no. Because the initial code appends each span followed by a space. So for [1,2,3], the $html would be '<span>1</span ><span>2</span ><span>3</span>' and then substr removes the trailing space.
+
+Wait, let's see:
+
+For each element, it's appending '<span>' . $value . '</span> ' with a space after the span. Then when we do substr, it removes the last space.
+
+So for [1,2,3], the loop would be:
+
+- First iteration: $html becomes '<span>1</span >'
+- Second: '<span>2</span> <'
+- Third: '<span>3</span> '
+
+Then substr(0,-1) removes the last space, resulting in '<span>1</span><span>2</span><span>3</span>'.
+
+Yes, that's correct.
+
+What about an empty array? The function returns an empty string, which is acceptable.
+
+Another test case: array with one element, like [ 'a' ], should output '<span>a</span>'.
+
+What if the array has null or other types? Since in PHP, it can handle any data type in a span, that's fine.
+
+So I think this function should work as intended.
+</think>
+
+To solve this problem, we need to write a PHP function that takes an array and outputs a HTML list of its contents. Each element from the array will be displayed on a new line within the HTML structure.
+
+### Approach
+1. **Check for Empty Array**: If the input array is empty, return an empty string.
+2. **Initialize Result String**: Create an empty string to accumulate the HTML elements.
+3. **Loop Through Array**: For each element in the array, construct a span tag in HTML where the element's value is the content of the span.
+4. **Combine Elements**: Append each span element to the result string, ensuring each spans ends with a newline character.
+5. **Remove Trailing Space**: After constructing the HTML string, remove any trailing space to ensure proper formatting.
+
+### Solution Code
+```php
+function array_to_html($array) {
+    if (empty($array)) {
+        return '';
+    }
+    $html = '';
+    foreach ($array as $key => $value) {
+        $html .= '<span>' . $value . '</span> ';
+    }
+    $html = substr($html, 0, -1);
+    return $html;
+}
+```
+
+### Explanation
+- **Checking for Empty Array**: The function first checks if the input array is empty. If it is, an empty string is returned immediately.
+- **Building HTML Elements**: Each element from the array is converted into a span tag in HTML. This ensures that each value appears on a new line within the output string.
+- **Combining Elements**: As we loop through the array, each span element is appended to the result string with a trailing space. After the loop, this string is processed to remove any extra trailing space, ensuring clean formatting.
+
+This approach efficiently converts an array into a well-formatted HTML list, making it easy to display array data using HTML standards.
+

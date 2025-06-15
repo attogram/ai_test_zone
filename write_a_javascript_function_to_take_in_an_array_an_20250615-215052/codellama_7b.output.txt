@@ -1,0 +1,26 @@
+
+Here is a sample code to create a HTML list from an array:
+
+```
+function createList(arr) {
+  let list = document.createElement("ul");
+  for (let i = 0; i < arr.length; i++) {
+    let item = document.createElement("li");
+    item.innerHTML = arr[i];
+    list.appendChild(item);
+  }
+  return list;
+}
+```
+This function takes an array as input and creates a new HTML element with the tag "ul" (unordered list). Then it loops through the elements of the array, creating a new HTML element for each element in the array and setting its innerHTML property to the current value of the array at that index. Finally, the function returns the created HTML list.
+
+You can use this function by passing an array as an argument:
+```
+let myArray = ["apple", "banana", "cherry"];
+let list = createList(myArray);
+document.body.appendChild(list);
+```
+This code creates a new HTML element with the tag "ul" and appends it to the body of the document, then passes an array as an argument to the function `createList`, which creates a new HTML list from the elements of the array and returns it. Finally, the created list is appended to the body of the document using the `appendChild` method.
+
+This way you can create a HTML list easily with just a few lines of code.
+

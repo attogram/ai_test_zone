@@ -1,0 +1,26 @@
+```
+function arrayToHtmlList($array) {
+    $html = '<ul>';
+    foreach ($array as $item) {
+        $html .= '<li>' . $item . '</li>';
+    }
+    $html .= '</ul>';
+    return $html;
+}
+```
+This function takes in an array as input and outputs a HTML list of the array contents. The function first initializes an empty string variable `$html` to store the resulting HTML. It then iterates over the input array using `foreach`, and for each element in the array, it appends an `<li>` tag with the current item's value inside the `<ul>` tag. Finally, it returns the complete HTML list.
+
+Here is an example of how to use this function:
+```
+$array = ['apple', 'banana', 'cherry'];
+echo arrayToHtmlList($array);
+```
+This will output a HTML unordered list with the elements of the input array inside `<li>` tags, like this:
+```
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

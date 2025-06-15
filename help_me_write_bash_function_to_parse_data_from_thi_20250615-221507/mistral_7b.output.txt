@@ -1,0 +1,61 @@
+ Here is a Bash function that should parse your `model.info.txt` file according to your specifications:
+
+```bash
+parse_model_info() {
+    # Initialize variables
+    declare -A sections=(["Model"] ["Capabilities"] ["System"] ["Parameters"] ["Projector"])
+    architecture=""
+    systemPrompt=""
+    temperature=0
+    capabilities=()
+    embedding_length=0
+    context_length=0
+    quantization=""
+    num_ctx=0
+    parameters=()
+    dimensions=0
+
+    # Read file line by line
+    while IFS='	' read -r name value; do
+        case $name in
+            architecture) architecture="$value";;
+            context length|embedding length) embedding_length="$value";;
+            parameters) parameters+=" "$value";;
+            quantization) quantization="$value";;
+            temperature) temperature="$value";;
+            num_ctx) num_ctx="$value";;
+            dimensions) dimensions="$value";;
+            esac
+
+        # Initialize section variables if the line belongs to a new section
+        section=$(echo $name | awk '{print $1}')
+        [[ ${sections[$section]} == "" ]] && sections[$section]=()
+    done < "$1"
+
+    # Save Capabilities keywords
+    for line in "${sections[Capabilities]}"; do
+        capabilities+=("$line")
+    done
+
+    # Save System prompt
+    systemPrompt="${sections[System]}"
+
+    # Save the 'temperature' value from Parameters section
+    temperature=${parameters[@]/ parameters=/}
+
+    # Print variables for debugging purposes (uncomment if needed)
+    # echo "architecture: $architecture"
+    # echo "embedding_length: $embedding_length"
+    # echo "context_length: $context_length"
+    # echo "quantization: $quantization"
+    # echo "temperature: $temperature"
+    # echo "num_ctx: $num_ctx"
+    # echo "parameters: ${parameters[@]}"
+    # echo "capabilities: ${capabilities[@]}"
+    # echo "dimensions: $dimensions"
+    # echo "systemPrompt: $systemPrompt"
+}
+```
+
+This function reads the file line by line and stores the relevant information in variables according to your specifications. It also initializes variables for each section when it first appears, which allows any section to be missing. The example model.info.txt contents you provided are used for demonstration purposes. If you want to use this script, simply call `parse_model_info <file_path>`.
+

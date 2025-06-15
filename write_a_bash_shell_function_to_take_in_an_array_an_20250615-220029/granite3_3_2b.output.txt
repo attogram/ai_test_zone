@@ -1,0 +1,21 @@
+Here's a Bash function named `array_to_html_list` that takes an array as input and outputs an HTML unordered list (`<ul>`). Make sure to replace `'your_array'` with your actual array.
+
+```bash
+array_to_html_list() {
+  local array=(${@1})
+
+  echo "<ul>"
+  for item in "${array[@]}"; do
+    echo "  <li>$item</li>"
+  done
+  echo "</ul>"
+}
+
+# Usage
+your_array=("Item 1" "Item 2" "Item 3")
+html_list=$(array_to_html_list "$your_array")
+echo $html_list
+```
+
+This function iterates through the array and generates an HTML unordered list (`<ul>`) with each element enclosed in a list item (`<li>`). The result is then printed to the standard output.
+

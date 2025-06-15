@@ -1,0 +1,23 @@
+Here's a JavaScript function that takes an array as input and outputs an HTML unordered list (`<ul>`) containing each element from the array:
+
+```javascript
+function arrayToListHTML(arr) {
+    let htmlList = '<ul>';
+
+    arr.forEach((item, index) => {
+        htmlList += `<li>${item}</li>`;
+    });
+
+    htmlList += '</ul>';
+
+    return htmlList;
+}
+
+// Example usage:
+const fruits = ['Apple', 'Banana', 'Cherry'];
+const htmlList = arrayToListHTML(fruits);
+console.log(htmlList); // Outputs: <ul><li>Apple</li><li>Banana</li><li>Cherry</li></ul>
+```
+
+This function iterates through the input array using `forEach()`, and for each element, it appends a new list item (`<li>`) to the `htmlList` string. The result is a complete HTML unordered list containing all elements from the input array.
+

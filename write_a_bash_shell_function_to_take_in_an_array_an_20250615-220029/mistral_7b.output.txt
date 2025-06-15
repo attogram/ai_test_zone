@@ -1,0 +1,34 @@
+ Here's a simple Bash shell function that takes an array as input and outputs an HTML unordered list (ul) of its contents:
+
+```bash
+print_array_as_html_list() {
+    local arr=("$@")
+    local html="<ul>\n"
+
+    for element in "${arr[@]}"; do
+        html+="  <li>${element}</li>\n"
+    done
+
+    html+="</ul>"
+    echo -e "$html"
+}
+```
+
+Usage:
+
+```bash
+declare -a fruits=("Apple" "Banana" "Cherry" "Orange")
+print_array_as_html_list "${fruits[@]}"
+```
+
+This will output the following HTML string:
+
+```
+<ul>
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Cherry</li>
+  <li>Orange</li>
+</ul>
+```
+

@@ -1,0 +1,104 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gemma:2b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>gemma:2b</b>: 20250615-215317<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<b>gemma:2b</b> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_python_function_to_take_in_an_array_and_ou.prompt.yaml'>yaml</a>)
+  words:18  bytes:89<br />
+<textarea readonly rows='1'>Write a python function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: gemma:2b (<a href='./gemma_2b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>```python
+def array_to_html_list(array):
+  &quot;&quot;&quot;
+  Converts an array into an HTML list.
+
+  Args:
+    array: The array to convert.
+
+  Returns:
+    An HTML list of the array contents.
+  &quot;&quot;&quot;
+
+  html_list = []
+  for item in array:
+    html_list.append(&#39;&lt;li&gt;&#39; + str(item) + &#39;&lt;/li&gt;&#39;)
+  return &#39;\n&#39;.join(html_list)
+
+
+# Example usage:
+array = [1, 2, 3, 4, 5]
+html_list = array_to_html_list(array)
+
+# Print the HTML list
+print(html_list)
+```</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gemma_2b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>60</td></tr>
+<tr><td class='left'>bytes</td><td>432</td></tr>
+<tr><td class='left'>total duration</td><td>3.816111s</td></tr>
+<tr><td class='left'>load duration</td><td>21.678958ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>40 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>201.896458ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>198.12 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>157 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>3.591983959s</td></tr>
+<tr><td class='left'>eval rate</td><td>43.71 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gemma_2b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/gemma:2b'>gemma:2b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>gemma</td></tr>
+<tr><td class='left'>size</td><td class='left'>3.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>2.5B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>8192</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2048</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 1508M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>gemma:2b</b>: 20250615-215317</p>
+<p>page created:   2025-06-15 21:59:39</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

@@ -1,0 +1,26 @@
+ Here's a simple JavaScript function that takes an array and returns an HTML unordered list (<ul>) containing list items (<li>) for each element in the array:
+
+```javascript
+function arrayToHtmlList(arr) {
+  let html = '<ul>';
+
+  // Iterate through the array using Array.prototype.forEach()
+  arr.forEach((item, index) => {
+    html += `<li>${item}</li>`;
+  });
+
+  // Close the unordered list tag
+  html += '</ul>';
+
+  return html;
+}
+```
+
+To use this function:
+
+```javascript
+let myArray = ['Apples', 'Oranges', 'Bananas'];
+console.log(arrayToHtmlList(myArray));
+// Outputs: '<ul><li>Apples</li><li>Oranges</li><li>Bananas</li></ul>'
+```
+

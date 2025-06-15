@@ -1,0 +1,28 @@
+Here is a JavaScript function that takes in an array and outputs an HTML unordered list:
+
+```javascript
+function convertArrayToHtmlList(arr) {
+  var ul = document.createElement("ul");
+  
+  for (var i = 0; i < arr.length; i++) {
+    var li = document.createElement("li");
+    li.textContent = arr[i];
+    ul.appendChild(li);
+  }
+  
+  return ul;
+}
+```
+
+This function creates a new unordered list element (`<ul>`) and then iterates over the array. For each item in the array, it creates a new list item element (`<li>`), sets its text content to the current item, and appends it to the unordered list.
+
+To use this function, you can call it with an array of items:
+
+```javascript
+var myArray = ["Item 1", "Item 2", "Item 3"];
+var myList = convertArrayToHtmlList(myArray);
+document.body.appendChild(myList);
+```
+
+This will create an unordered list containing the three items from `myArray`, and then add it to the body of the HTML document.
+

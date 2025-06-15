@@ -1,0 +1,21 @@
+ Here's a refactored version of the function that reads the `$statsFile` directly and outputs the values to the `$indexFile`. I've also made some cosmetic changes for better readability.
+
+```bash
+function addModelToIndexFile {
+    # Get the word count, byte count and model name from the given files
+    local responseWords=$(wc -w < "$modelFile")
+    local responseBytes=$(wc -c < "$modelFile")
+    local model="${model%.html}"
+
+    # Read each line from $statsFile, split it by : character, get the second part of each line, and output directly to the index file
+    while IFS=: read -r key value; do
+        if [[ -n "$value" ]]; then
+            printf '<tr><td class="left"><a href="./%s.html">%s</a></td><td>%s</td><td>%s</td><td>%s</td>\n' \
+                "$model" "$responseWords" "$responseBytes" "$key" "$value" >> "$indexFile"
+        fi
+    done < "$statsFile"
+}
+```
+
+This refactored version removes the `statsInfo` array, reads from the `$statsFile` directly, and outputs the values to the `$indexFile` in a single line using printf. It maintains the same input and output behavior as the original function.
+

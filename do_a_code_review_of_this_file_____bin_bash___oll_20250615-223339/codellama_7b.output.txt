@@ -1,0 +1,139 @@
+[PYTHON]
+def get_unique_elements(my_list):
+    return list(set(my_list))
+
+def intersect_lists(list1, list2):
+    return list(set(list1) & set(list2))
+
+def difference_lists(list1, list2):
+    return list(set(list1) - set(list2))
+
+def union_lists(list1, list2):
+    return list(set(list1) | set(list2))
+
+def find_max_value(my_list):
+    if len(my_list) == 0:
+        return None
+    return max(my_list)
+
+def find_min_value(my_list):
+    if len(my_list) == 0:
+        return None
+    return min(my_list)
+
+def sum_lists(list1, list2):
+    return list(set(list1 + list2))
+
+def average_lists(list1, list2):
+    return sum(list1 + list2) / len(list1 + list2)
+
+def median_lists(list1, list2):
+    combined_list = list1 + list2
+    combined_list.sort()
+    if len(combined_list) % 2 == 0:
+        return (combined_list[len(combined_list) // 2] + combined_list[len(combined_list) // 2 - 1]) / 2
+    else:
+        return combined_list[len(combined_list) // 2]
+
+def mode_lists(list1, list2):
+    modes = {}
+    for item in list1 + list2:
+        if item not in modes:
+            modes[item] = 1
+        else:
+            modes[item] += 1
+    maxCount = max(modes.values())
+    return [item for item in modes if modes[item] == maxCount]
+
+def multiply_lists(list1, list2):
+    result = []
+    for i in range(len(list1)):
+        for j in range(len(list2)):
+            result.append(list1[i] * list2[j])
+    return result
+
+def power_set(my_list):
+    pow_set = [[]]
+    for item in my_list:
+        pow_set += [subset + [item] for subset in pow_set]
+    return pow_set
+
+def get_frequency_dict(my_list):
+    frequency_dict = {}
+    for item in my_list:
+        if item not in frequency_dict:
+            frequency_dict[item] = 1
+        else:
+            frequency_dict[item] += 1
+    return frequency_dict
+
+def get_unique_elements(my_list):
+    return list(set(my_list))
+
+def intersect_lists(list1, list2):
+    return list(set(list1) & set(list2))
+
+def difference_lists(list1, list2):
+    return list(set(list1) - set(list2))
+
+def union_lists(list1, list2):
+    return list(set(list1) | set(list2))
+
+def find_max_value(my_list):
+    if len(my_list) == 0:
+        return None
+    return max(my_list)
+
+def find_min_value(my_list):
+    if len(my_list) == 0:
+        return None
+    return min(my_list)
+
+def sum_lists(list1, list2):
+    return list(set(list1 + list2))
+
+def average_lists(list1, list2):
+    return sum(list1 + list2) / len(list1 + list2)
+
+def median_lists(list1, list2):
+    combined_list = list1 + list2
+    combined_list.sort()
+    if len(combined_list) % 2 == 0:
+        return (combined_list[len(combined_list) // 2] + combined_list[len(combined_list) // 2 - 1]) / 2
+    else:
+        return combined_list[len(combined_list) // 2]
+
+def mode_lists(list1, list2):
+    modes = {}
+    for item in list1 + list2:
+        if item not in modes:
+            modes[item] = 1
+        else:
+            modes[item] += 1
+    maxCount = max(modes.values())
+    return [item for item in modes if modes[item] == maxCount]
+
+def multiply_lists(list1, list2):
+    result = []
+    for i in range(len(list1)):
+        for j in range(len(list2)):
+            result.append(list1[i] * list2[j])
+    return result
+
+def power_set(my_list):
+    pow_set = [[]]
+    for item in my_list:
+        pow_set += [subset + [item] for subset in pow_set]
+    return pow_set
+
+def get_frequency_dict(my_list):
+    frequency_dict = {}
+    for item in my_list:
+        if item not in frequency_dict:
+            frequency_dict[item] = 1
+        else:
+            frequency_dict[item] += 1
+    return frequency_dict
+[/PYTHON]
+
+

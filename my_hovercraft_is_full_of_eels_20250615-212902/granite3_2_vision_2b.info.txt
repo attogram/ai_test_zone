@@ -1,0 +1,31 @@
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user's questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+

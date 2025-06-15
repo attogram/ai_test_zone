@@ -1,0 +1,4 @@
+* Premise 1: Socrates is a human. (Given fact)
+* Premise 2: All humans are mortal. (Given fact)
+* Conclusion: Therefore, Socrates is mortal. (Logical deduction based on the two premises)
+

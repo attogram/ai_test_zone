@@ -1,0 +1,49 @@
+Certainly! Below is a JavaScript function that takes an array as input and returns an HTML unordered list (`<ul>`) containing the elements of the array.
+
+```javascript
+function arrayToHtmlList(array) {
+    // Start by creating an unordered list element
+    let html = '<ul>';
+
+    // Iterate over each item in the array
+    for (let i = 0; i < array.length; i++) {
+        // For each item, create a list item and append it to the HTML string
+        html += `<li>${array[i]}</li>`;
+    }
+
+    // Close the unordered list tag
+    html += '</ul>';
+
+    return html;
+}
+
+// Example usage:
+const myArray = ['Apple', 'Banana', 'Cherry'];
+const htmlList = arrayToHtmlList(myArray);
+console.log(htmlList);
+```
+
+### Explanation:
+
+1. **HTML Structure**: The function starts by creating an unordered list (`<ul>`) and ends it after appending all the list items.
+
+2. **Iteration**: It iterates over each element in the input array using a `for` loop.
+
+3. **List Items**: For each element, it creates a `<li>` (list item) tag and appends it to the HTML string.
+
+4. **Return Statement**: Finally, it returns the complete HTML string representing the unordered list.
+
+### Example Output:
+
+If you call `arrayToHtmlList(['Apple', 'Banana', 'Cherry']);`, the output will be:
+
+```html
+<ul>
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Cherry</li>
+</ul>
+```
+
+You can use this HTML string to dynamically generate list content in your web application.
+

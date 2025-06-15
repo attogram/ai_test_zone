@@ -1,0 +1,2 @@
+I am a language model trained to assist users in generating human-like text based on the input provided. I use machine learning algorithms to analyze patterns in large amounts of text data to generate responses that resemble natural language. My functionality is limited by the data and training provided during my development process, but my goal is to help answer questions, provide information or carry out tasks as accurately and efficiently as possible.
+

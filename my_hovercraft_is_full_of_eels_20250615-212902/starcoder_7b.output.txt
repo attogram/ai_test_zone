@@ -1,0 +1,8 @@
+.</p>
+          <h3 class="section-heading">What does your hovercraft do?</h3>
+          <p>I enjoy the challenging aspects of my job. I'm a great team player and can adapt to any situation or challenge. My work ethic is extremely high, which allows me to achieve a variety of projects on time.</p>
+
+          <!-- End About Section -->
+
+@endsection
+

@@ -1,0 +1,23 @@
+Sure! Here's an example of a Bash shell function that takes an array as input and outputs it as an HTML unordered list:
+
+```bash
+function print_html_list() {
+  local -a arr=("$@") # Convert the input arguments into an array
+  printf '<ul>\n' # Start the unordered list with `<ul>`
+
+  for element in "${arr[@]}"; do
+    printf "  <li>$element</li>\n" # Add each element as a list item with `<li>`
+  done
+
+  printf '</ul>\n' # Close the unordered list with `</ul>`
+}
+
+# Example usage:
+array=("Apple" "Banana" "Orange")
+print_html_list "${array[@]}"
+```
+
+This function first converts the input arguments into an array using the `local -a` syntax. Then, it iterates over each element in the array and prints them as list items (`<li>`) within an unordered list (`<ul>`). Finally, it outputs the closing `</ul>` tag.
+
+You can modify this function according to your specific needs or add additional formatting as required.
+

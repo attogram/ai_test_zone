@@ -1,0 +1,101 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>dolphin3:8b</b>: 20250615-220029<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_bash_shell_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:19  bytes:93<br />
+<textarea readonly rows='1'>Write a Bash shell function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Sure! Here&#39;s an example of a Bash shell function that takes an array as input and outputs it as an HTML unordered list:
+
+```bash
+function print_html_list() {
+  local -a arr=(&quot;$@&quot;) # Convert the input arguments into an array
+  printf &#39;&lt;ul&gt;\n&#39; # Start the unordered list with `&lt;ul&gt;`
+
+  for element in &quot;${arr[@]}&quot;; do
+    printf &quot;  &lt;li&gt;$element&lt;/li&gt;\n&quot; # Add each element as a list item with `&lt;li&gt;`
+  done
+
+  printf &#39;&lt;/ul&gt;\n&#39; # Close the unordered list with `&lt;/ul&gt;`
+}
+
+# Example usage:
+array=(&quot;Apple&quot; &quot;Banana&quot; &quot;Orange&quot;)
+print_html_list &quot;${array[@]}&quot;
+```
+
+This function first converts the input arguments into an array using the `local -a` syntax. Then, it iterates over each element in the array and prints them as list items (`&lt;li&gt;`) within an unordered list (`&lt;ul&gt;`). Finally, it outputs the closing `&lt;/ul&gt;` tag.
+
+You can modify this function according to your specific needs or add additional formatting as required.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./dolphin3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>144</td></tr>
+<tr><td class='left'>bytes</td><td>918</td></tr>
+<tr><td class='left'>total duration</td><td>14.356061208s</td></tr>
+<tr><td class='left'>load duration</td><td>17.88325ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>42 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>582.884875ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>72.06 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>231 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>13.754667583s</td></tr>
+<tr><td class='left'>eval rate</td><td>16.79 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./dolphin3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1582M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>dolphin3:8b</b>: 20250615-220029</p>
+<p>page created:   2025-06-15 22:02:19</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

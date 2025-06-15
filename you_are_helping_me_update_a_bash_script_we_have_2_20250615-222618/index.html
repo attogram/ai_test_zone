@@ -1,0 +1,242 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: you_are_helping_me_update_a_bash_script_we_have_2</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>you_are_helping_me_update_a_bash_script_we_have_2</b>: 20250615-222618<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./you_are_helping_me_update_a_bash_script_we_have_2.prompt.yaml'>yaml</a>)
+  words:174  bytes:1238<br />
+<textarea readonly rows='10'>You are helping me update a bash script.
+We have 2 text files: stats.txt and show.txt.
+
+Read in and parse the stats file:
+  - save the data into bash variables
+  - each line is in format &quot;name: value&quot;
+  - for example line:
+    total duration:       4.687657458s
+ - is parsed so we can get the name &quot;total duration&quot; and the value &quot;4.687657458s&quot;
+ - Example stats.txt file:
+&#39;&#39;&#39;
+total duration:       4.687657458s
+load duration:        1.174041625s
+prompt eval count:    22 token(s)
+prompt eval duration: 152.612625ms
+prompt eval rate:     144.16 tokens/s
+eval count:           209 token(s)
+eval duration:        3.360331625s
+eval rate:            62.20 tokens/s
+
+&#39;&#39;&#39;
+
+Read in a parse the show.txt file:
+  - save the data into bash variables
+  - There are 3 sections: Model, Capabilities, and Parameters
+  - For Model Section, it&#39;s in format &quot;name   value&quot;
+  - For Capabilities section, it&#39;s a list of 1 or more words
+  - For Parameters section, it&#39;s in format &quot;name   value&quot;
+  - Example show.txt file:
+&#39;&#39;&#39;
+  Model
+    architecture        starcoder
+    parameters          7.5B
+    context length      8192
+    embedding length    4096
+    quantization        Q4_0
+
+  Capabilities
+    completion
+
+  Parameters
+    stop    &quot;&lt;|endoftext|&gt;&quot;
+&#39;&#39;&#39;</textarea>
+</p>
+
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>400</td>
+<td>3819</td>
+<td>53.614246958s</td>
+<td>19.913833ms</td>
+<td>418 token(s)</td>
+<td>3.506388791s</td>
+<td>119.21 tokens/s</td>
+<td>879 token(s)</td>
+<td>50.087343625s</td>
+<td>17.55 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>319</td>
+<td>1889</td>
+<td>29.191109042s</td>
+<td>13.339542ms</td>
+<td>443 token(s)</td>
+<td>2.791029459s</td>
+<td>158.72 tokens/s</td>
+<td>519 token(s)</td>
+<td>26.385974958s</td>
+<td>19.67 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>280</td>
+<td>1925</td>
+<td>28.111405125s</td>
+<td>15.81775ms</td>
+<td>405 token(s)</td>
+<td>2.556679875s</td>
+<td>158.41 tokens/s</td>
+<td>465 token(s)</td>
+<td>25.538204542s</td>
+<td>18.21 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>189</td>
+<td>1120</td>
+<td>8.960862917s</td>
+<td>11.803625ms</td>
+<td>379 token(s)</td>
+<td>1.411108458s</td>
+<td>268.58 tokens/s</td>
+<td>300 token(s)</td>
+<td>7.537264042s</td>
+<td>39.80 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>1105</td>
+<td>7460</td>
+<td>33.794427666s</td>
+<td>19.478416ms</td>
+<td>396 token(s)</td>
+<td>569.763ms</td>
+<td>695.03 tokens/s</td>
+<td>1757 token(s)</td>
+<td>33.204650125s</td>
+<td>52.91 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>330</td>
+<td>2267</td>
+<td>34.632121375s</td>
+<td>20.059458ms</td>
+<td>368 token(s)</td>
+<td>2.540239375s</td>
+<td>144.87 tokens/s</td>
+<td>552 token(s)</td>
+<td>32.071192875s</td>
+<td>17.21 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>206</td>
+<td>1306</td>
+<td>8.470394334s</td>
+<td>20.554584ms</td>
+<td>430 token(s)</td>
+<td>757.235625ms</td>
+<td>567.85 tokens/s</td>
+<td>361 token(s)</td>
+<td>7.691839209s</td>
+<td>46.93 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>299</td>
+<td>2447</td>
+<td>24.4047095s</td>
+<td>16.402958ms</td>
+<td>433 token(s)</td>
+<td>1.202828333s</td>
+<td>359.98 tokens/s</td>
+<td>805 token(s)</td>
+<td>23.184600625s</td>
+<td>34.72 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>280</td>
+<td>2188</td>
+<td>35.622855209s</td>
+<td>14.41725ms</td>
+<td>428 token(s)</td>
+<td>2.622502417s</td>
+<td>163.20 tokens/s</td>
+<td>635 token(s)</td>
+<td>32.985103417s</td>
+<td>19.25 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>3820</td>
+<td>23066</td>
+<td>2m29.683512209s</td>
+<td>19.063709ms</td>
+<td>399 token(s)</td>
+<td>658.389917ms</td>
+<td>606.02 tokens/s</td>
+<td>5644 token(s)</td>
+<td>2m29.005427541s</td>
+<td>37.88 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 872M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>you_are_helping_me_update_a_bash_script_we_have_2</b>: 20250615-222618</p>
+<p>page created:   2025-06-15 22:33:39</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

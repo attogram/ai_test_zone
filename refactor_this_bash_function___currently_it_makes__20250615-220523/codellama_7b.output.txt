@@ -1,0 +1,25 @@
+
+The provided function `addModelToIndexFile` takes three parameters: `$model`, `$statsFile`, and `$indexFile`. It reads the contents of the file `$statsFile`, parses it into an array using the `while read -r line; do ... done < "$statsFile"` loop, and then uses this array to construct an HTML table row that is appended to the file `$indexFile`.
+
+To refactor this function to not use the `$statsInfo` array, we can modify the code as follows:
+```bash
+function addModelToIndexFile {
+    responseWords=$(wc -w < "$modelFile" | awk '{print $1}')
+    responseBytes=$(wc -c < "$modelFile" | awk '{print $1}')
+
+    (
+        echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td>$responseWords</td><td>${responseBytes}</td>"
+        while read -r line; do
+            value=$(echo "$line" | cut -d ':' -f2)
+            if [[ -n "$value" ]]; then
+                echo "<td>${value}</td>";
+            fi
+        done < "$statsFile"
+        echo "</tr>"
+    ) >> "$indexFile"
+}
+```
+In this modified version of the function, we use a `while read -r line; do ... done` loop to parse the contents of the `$statsFile`, just as before. However, instead of storing the parsed values in an array and then using that array to construct the HTML table row, we now directly append the parsed values to the file `$indexFile`.
+
+The main advantage of this refactored version is that it eliminates the need for a temporary array, which can help reduce memory usage and improve performance. However, the output produced by the function will be slightly different than before, as the `statsInfo` array was used to construct the `<td>` elements for the second and third columns of the table row. You may want to adjust the code in these areas to ensure that the output is still correct.
+

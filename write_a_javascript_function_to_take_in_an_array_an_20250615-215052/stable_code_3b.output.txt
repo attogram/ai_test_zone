@@ -1,0 +1,19 @@
+Here is a JavaScript function that takes an array as input and returns an HTML list of the array contents:
+```javascript
+function arrayToHtmlList(arr) {
+  let html = '<ul>';
+  for (let i = 0; i < arr.length; i++) {
+    html += `<li>${arr[i]}</li>`;
+  }
+  html += '</ul>';
+  return html;
+}
+```
+You can use this function to convert an array into an HTML list. Here's an example:
+```javascript
+const arr = ['apple', 'banana', 'cherry'];
+const htmlList = arrayToHtmlList(arr);
+document.body.innerHTML = htmlList;
+```
+This will create an HTML list with the contents of the `arr` array. The resulting HTML list will be inserted into the body of the current document.
+

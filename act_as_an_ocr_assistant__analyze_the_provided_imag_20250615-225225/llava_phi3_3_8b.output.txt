@@ -1,0 +1,4 @@
+"Coverage - Eligible Members - Unique ID (Member Number) Date of birth - Gender - ZIP Code - Name, Address, City, State, Zip - Phone Number - Mailing Address - Coverage Start/End Dates - Plan Type - Premium Paid / Not Charged - Amount Owed to the Program - Contributions - Payments"
+
+Member number: 617329104358
+

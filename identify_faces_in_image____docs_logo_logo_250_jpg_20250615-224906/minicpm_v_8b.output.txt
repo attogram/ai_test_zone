@@ -1,0 +1,16 @@
+The faces present in this digital illustration are those of llamas, anthropomorphized to appear human-like. Here's a detailed breakdown:
+
+1. The face on the far-left llama is located within these coordinates:
+   - Top Left: approximately at (0.25, 0.3)
+   - Bottom Right: roughly at (0.48, 0.6)
+
+2. For the middle llama's face:
+   - Top Left: around (0.47, 0.3)
+   - Bottom Right: about (0.69, 0.65)
+
+3. Lastly, for the face on the far-right llama:
+   - Top Left: approximately at (0.71, 0.28)
+   - Bottom Right: roughly at (0.94, 0.62)
+
+These dimensions indicate where each llama's facial features are positioned relative to their overall bodies within this digital setting.
+

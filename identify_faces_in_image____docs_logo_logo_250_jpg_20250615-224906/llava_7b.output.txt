@@ -1,0 +1,32 @@
+ ```json
+{
+  "faces": [
+    {
+      "x": 0.564,
+      "y": 0.239,
+      "width": 0.781,
+      "height": 0.662
+    },
+    {
+      "x": 0.672,
+      "y": 0.524,
+      "width": 0.731,
+      "height": 0.930
+    },
+    {
+      "x": 0.808,
+      "y": 0.670,
+      "width": 0.764,
+      "height": 0.943
+    }
+  ]
+}
+```
+The faces detected in the image are of three alpacas standing in front of a server room. The bounding boxes for each alpaca are as follows:
+
+- The top left alpaca has the coordinates (0.564,0.239,0.781,0.662).
+- The middle alpaca is at (0.672,0.524,0.731,0.930).
+- The bottom right alpaca is at (0.808,0.670,0.764,0.943).
+
+Please note that the dimensions given are relative to the image's resolution and may vary when using them in a programmatic context. 
+

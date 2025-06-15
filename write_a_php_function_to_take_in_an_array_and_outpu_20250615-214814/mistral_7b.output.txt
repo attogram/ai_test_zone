@@ -1,0 +1,37 @@
+ Here's a simple PHP function that accepts an associative array as input and outputs HTML unordered list (<ul>) with each key-value pair as a list item (<li>).
+
+```php
+function arrayToHtmlList($array) {
+    $html = '<ul>';
+
+    foreach ($array as $key => $value) {
+        $html .= '<li>' . $key . ': ' . $value . '</li>';
+    }
+
+    $html .= '</ul>';
+
+    return $html;
+}
+```
+
+To use this function, pass an associative array as the argument. Here's an example usage:
+
+```php
+$myArray = [
+    'Apple' => 'Fruit',
+    'Banana' => 'Fruit',
+    'Carrot' => 'Vegetable'
+];
+echo arrayToHtmlList($myArray);
+```
+
+This will output the following HTML:
+
+```html
+<ul>
+  <li>Apple: Fruit</li>
+  <li>Banana: Fruit</li>
+  <li>Carrot: Vegetable</li>
+</ul>
+```
+

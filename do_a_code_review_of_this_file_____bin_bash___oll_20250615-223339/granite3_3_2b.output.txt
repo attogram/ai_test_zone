@@ -1,0 +1,21 @@
+This script is a comprehensive command-line tool for running language models using OLLAMA, managing the output, statistics, and indexing of results. Here's a breakdown of its functions:
+
+1. **Setup**: Parses command-line arguments (`parseCommandLine`), sets up models and prompt, creates necessary directories (`createOutputDirectory`).
+
+2. **Main Execution Loop**:
+   - Iterates over each specified model.
+   - Clears the model's output and statistics files.
+   - Runs the OLLAMA model with the given prompt using `runModelWithTimeout`, which handles session timeout (configurable by `TIMEOUT` variable).
+   - Updates system memory stats, OLLAMA and model statistics.
+   - Generates HTML files for model output, statistics, models overview (`createModelsOverviewHtml`), and individual model index in results directory (`createOutputIndexHtml`).
+   - Adds the model to the main run index (`createMainIndexHtml`).
+
+3. **Finishing Touches**:
+   - Ensures all processes are properly terminated (`finishOutputIndexHtml`).
+   - Generates a full list of models used in all runs and their corresponding links, saved as `models.html` in the results directory.
+
+4. **Statistics Collection**:
+   - Collects and saves various statistics related to model run time (`setStats`), system memory usage (`setSystemStats`), OLLAMA details (`setOllamaStats`), and model properties (size, name, architecture, capabilities).
+
+This script utilizes `ollama` as the underlying language processing engine, making it a powerful tool for running models and managing their output. The generated HTML files serve as an organized index and summary of results for further analysis or sharing.
+

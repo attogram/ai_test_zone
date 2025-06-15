@@ -1,0 +1,814 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>do_a_code_review_of_this_file_____bin_bash___oll</a>: <b>dolphin3:8b</b>: 20250615-223339<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./do_a_code_review_of_this_file_____bin_bash___oll.prompt.yaml'>yaml</a>)
+  words:2478  bytes:23370<br />
+<textarea readonly rows='10'>Do a code review of this file: #!/bin/bash
+#
+# ollama-multirun
+#
+# Bash shell script to run a prompt against all models in ollama, and save the output as web pages
+#
+# Usage:
+#  - Enter prompt manually:    ./multirun.sh
+#  - Enter prompt as argument: ./multirun.sh &quot;your prompt&quot;
+#  - Enter prompt from file:   ./multirun.sh &lt; prompt.txt
+#  - Enter prompt from pipe:   echo &quot;your prompt&quot; | ./multirun.sh
+#                              echo &quot;summarize this file: $(cat filename)&quot; | ./multirun.sh
+#
+#  - By default, will use all available models
+#    To set a list of models to use, set as a comma-seperated list with -m
+#      example:  ./multirun.sh -m deepseek-r1:1.5b,deepseek-r1:8b
+#
+#  - By default, will use &quot;./results&quot; as the results output directory
+#    To set a results output directory:
+#      ./multirun.sh -r ./path/to/directory
+#
+#  - By default, will wait 5 minutes for models to respond.
+#    To set new timeout (in seconds):
+#      ./multirun.sh -t 30
+#
+# Requires: ollama, bash, expect, awk, basename, date, grep, mkdir, sed, sort, top, tr, uname, wc
+
+NAME=&quot;ollama-multirun&quot;
+VERSION=&quot;5.1&quot;
+URL=&quot;https://github.com/attogram/ollama-multirun&quot;
+TIMEOUT=&quot;300&quot; # number of seconds to allow model to respond
+
+echo; echo &quot;$NAME v$VERSION&quot;; echo
+
+function parseCommandLine {
+  modelsList=&quot;&quot;
+  resultsDirectory=&quot;results&quot;
+  prompt=&quot;&quot;
+  while (( &quot;$#&quot; )); do
+    case &quot;$1&quot; in
+      -m) # specify models to run
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ ${2:0:1} != &quot;-&quot; ]; then
+          modelsList=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -r) # specify results outputDirectory
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ ${2:0:1} != &quot;-&quot; ]; then
+          resultsDirectory=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -t) # specify timeout in seconds
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ ${2:0:1} != &quot;-&quot; ]; then
+          TIMEOUT=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -*|--*=) # unsupported flags
+        echo &quot;Error: unsupported argument: $1&quot; &gt;&amp;2
+        exit 1
+        #shift 1
+        ;;
+      *) # preserve positional arguments
+        prompt+=&quot;$1&quot;
+        shift
+        ;;
+    esac
+  done
+  # set positional arguments in their proper place
+  eval set -- &quot;$prompt&quot;
+}
+
+function setModels {
+  models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort)) # Get list of models, sorted alphabetically
+  if [ -z &quot;$models&quot; ]; then
+    echo &quot;No models found. Please install models with &#39;ollama pull &lt;model-name&gt;&#39;&quot; &gt;&amp;2
+    exit 1
+  fi
+
+  parsedModels=()
+  if [ -n &quot;$modelsList&quot; ]; then
+    IFS=&#39;,&#39; read -ra modelsListArray &lt;&lt;&lt; &quot;$modelsList&quot; # parse csv into modelsListArray
+    for m in &quot;${modelsListArray[@]}&quot;; do
+      if [[ &quot;${models[*]}&quot; =~ &quot;$m&quot; ]]; then # if model exists
+        parsedModels+=(&quot;$m&quot;)
+      else
+        echo &quot;Error: model not found: $m&quot; &gt;&amp;2
+        exit 1
+      fi
+    done
+  fi
+  if [ -n &quot;$parsedModels&quot; ]; then
+    models=(&quot;${parsedModels[@]}&quot;)
+  fi
+
+  echo &quot;models:&quot;;
+  echo &quot;${models[@]}&quot;
+  echo
+}
+
+function safeString() {
+  local input=&quot;$1&quot; # Get the input
+  input=${input:0:50} # Truncate to first 50 characters
+  input=$(echo &quot;$input&quot; | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;) # Convert to lowercase
+  input=$(echo &quot;$input&quot; | sed &quot;s/ /_/g&quot;) # Replace spaces with underscores
+  input=$(echo &quot;$input&quot; | sed &#39;s/[^a-zA-Z0-9_]/_/g&#39; | tr -cd &#39;a-zA-Z0-9_&#39;)
+  echo &quot;$input&quot; # Output the sanitized string
+}
+
+function createOutputDirectory {
+  tag=$(safeString &quot;$prompt&quot;)
+  tagDatetime=$(date &#39;+%Y%m%d-%H%M%S&#39;)
+  outputDirectory=&quot;$resultsDirectory/${tag}_${tagDatetime}&quot;
+  echo &quot;Output Directory: $outputDirectory/&quot;
+  if [ ! -d &quot;$outputDirectory&quot; ]; then
+    if ! mkdir -p &quot;$outputDirectory&quot;; then
+      echo &quot;Error: Failed to create Output Directory $outputDirectory&quot; &gt;&amp;2
+      exit 1
+    fi
+  fi
+}
+
+function setPrompt {
+  if [ -n &quot;$prompt&quot; ]; then # if prompt is already set from command line
+    return
+  fi
+
+  if [ -t 0 ]; then # Check if input is from a terminal (interactive)
+    echo &quot;Enter prompt:&quot;;
+    read -r prompt # Read prompt from user input
+    return
+  fi
+
+  prompt=$(cat) # Read from standard input (pipe or file)
+}
+
+function savePrompt {
+  echo; echo &quot;Prompt:&quot;; echo &quot;$prompt&quot;; echo
+
+  promptFile=&quot;$outputDirectory/prompt.txt&quot;
+  echo &quot;Creating: $promptFile&quot;
+  echo &quot;$prompt&quot; &gt; &quot;$promptFile&quot;
+
+  promptWords=$(wc -w &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+  promptBytes=$(wc -c &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+
+  promptYamlFile=&quot;$outputDirectory/$tag.prompt.yaml&quot;
+  echo &quot;Creating: $promptYamlFile&quot;
+  generatePromptYaml &gt; &quot;$promptYamlFile&quot;
+}
+
+function generatePromptYaml {
+  # Github Prompt YAML: https://docs.github.com/en/github-models/use-github-models/storing-prompts-in-github-repositories
+  cat &lt;&lt; EOF
+messages:
+  - role: system
+    content: &#39;&#39;
+  - role: user
+    content: |
+$(while IFS= read -r line; do echo &quot;      $line&quot;; done &lt;&lt;&lt; &quot;$prompt&quot;)
+model: &#39;&#39;
+EOF
+}
+
+function showPrompt {
+  echo &quot;&lt;p&gt;Prompt: (&lt;a href=&#39;./prompt.txt&#39;&gt;raw&lt;/a&gt;) (&lt;a href=&#39;./${tag}.prompt.yaml&#39;&gt;yaml&lt;/a&gt;)&quot;
+  echo &quot;  words:$promptWords  bytes:$promptBytes&lt;br /&gt;&quot;
+  textarea &quot;$prompt&quot; 0 10 # 0 padding, max 10 lines
+  echo &quot;&lt;/p&gt;&quot;
+}
+
+function showImages {
+  if [ -n &quot;$addedImages&quot; ]; then
+    for image in ${addedImages}; do
+      echo -n &quot;&lt;div class=&#39;box&#39;&gt;&quot;
+      echo -n &quot;&lt;a target=&#39;image&#39; href=&#39;$(basename $image)&#39;&gt;&lt;img src=&#39;$(basename $image)&#39; alt=&#39;$image&#39; width=&#39;250&#39; /&gt;&lt;/a&gt;&quot;
+      echo -n &quot;&lt;/div&gt;&quot;
+    done
+    echo -n &quot;&lt;br /&gt;&quot;
+  fi
+}
+
+function textarea() {
+  local content=&quot;$1&quot; # Get the input
+  if [ -z &quot;$content&quot; ]; then
+    content=&quot;&quot;
+  fi
+  local padding=&quot;$2&quot;
+  if [ -z &quot;$padding&quot; ]; then
+    padding=0
+  fi
+  local max=&quot;$3&quot;
+  if [ -z &quot;$max&quot; ]; then
+    max=25
+  fi
+  local lines=$(echo &quot;$content
+&quot; | wc -l) # Get number of lines in content
+  lines=$((lines + padding))
+  if [ &quot;$lines&quot; -gt &quot;$max&quot; ]; then
+    lines=$max
+  fi
+  content=$(echo &quot;$content&quot; | sed &#39;s/&amp;/\&amp;amp;/g; s/&lt;/\&amp;lt;/g; s/&gt;/\&amp;gt;/g; s/&quot;/\&amp;quot;/g; s/&#39;&quot;&#39;&quot;&#39;/\&amp;#39;/g&#39;) # Escape HTML special characters
+  echo &quot;&lt;textarea readonly rows=&#39;$lines&#39;&gt;${content}&lt;/textarea&gt;&quot;
+}
+
+function clearModel {
+  expect \
+    -c &quot;spawn ollama run $1&quot; \
+    -c &quot;expect \&quot;&gt;&gt;&gt; \&quot;&quot; \
+    -c &#39;send -- &quot;/clear
+&quot;&#39; \
+    -c &quot;expect \&quot;Cleared session context\&quot;&quot; \
+  ;
+}
+
+function showHeader {
+  title=&quot;$1&quot;
+  cat &lt;&lt; &quot;EOF&quot;
+  &lt;!DOCTYPE html&gt;
+  &lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;style&gt;
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  &lt;/style&gt;
+EOF
+  echo &quot;&lt;title&gt;$title&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&quot;
+}
+
+function showFooter {
+  title=&quot;$1&quot;
+  echo &quot;&lt;br /&gt;&lt;br /&gt;&quot;
+  echo &quot;&lt;footer&gt;&quot;
+  echo &quot;&lt;p&gt;$title&lt;/p&gt;&quot;
+  echo &quot;&lt;p&gt;page created:   $(date &#39;+%Y-%m-%d %H:%M:%S&#39;)&lt;/p&gt;&quot;
+  echo &quot;&lt;p&gt;Generated with: &lt;a target=&#39;$NAME&#39; href=&#39;$URL&#39;&gt;$NAME&lt;/a&gt; v$VERSION&lt;/p&gt;&quot;
+  echo &quot;&lt;/footer&gt;&lt;/body&gt;&lt;/html&gt;&quot;
+}
+
+function createMenu {
+  local currentModel=&quot;$1&quot;
+  echo &quot;&lt;span class=&#39;menu&#39;&gt;&quot;
+  echo &quot;&lt;a href=&#39;models.html&#39;&gt;models&lt;/a&gt;: &quot;
+  for modelName in ${models[@]}; do
+    if [ &quot;$modelName&quot; == &quot;$currentModel&quot; ]; then
+      echo &quot;&lt;b&gt;$modelName&lt;/b&gt; &quot;
+    else
+      echo &quot;&lt;a href=&#39;./$(safeString &quot;$modelName&quot;).html&#39;&gt;$modelName&lt;/a&gt; &quot;
+    fi
+  done
+  echo &#39;&lt;/span&gt;&#39;;
+}
+
+function setStats {
+  statsTotalDuration=$(grep -oE &quot;total duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsLoadDuration=$(grep -oE &quot;load duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsPromptEvalCount=$(grep -oE &quot;prompt eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)
+  statsPromptEvalDuration=$(grep -oE &quot;prompt eval duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsPromptEvalRate=$(grep -oE &quot;prompt eval rate:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)
+  statsEvalCount=$(grep -oE &quot;^eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $3, $4 }&#39;)
+  statsEvalDuration=$(grep -oE &quot;^eval duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsEvalRate=$(grep -oE &quot;^eval rate:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $3, $4 }&#39;)
+
+  addedImages=$(grep -oE &quot;Added image &#39;(.*)&#39;&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39; | sed &quot;s/&#39;//g&quot;)
+  if [ -n &quot;$addedImages&quot; ]; then
+    for image in ${addedImages}; do
+      if ! [ -f &quot;$outputDirectory&quot;/&quot;$(basename $image)&quot; ]; then
+        echo &quot;Copying image: $image&quot;
+        cp $image $outputDirectory
+      fi
+    done
+  fi
+
+  responseWords=$(wc -w &lt; &quot;$modelOutputTxt&quot; | awk &#39;{print $1}&#39;)
+  responseBytes=$(wc -c &lt; &quot;$modelOutputTxt&quot; | awk &#39;{print $1}&#39;)
+}
+
+function setOllamaStats {
+  ollamaVersion=$(ollama -v | awk &#39;{print $4}&#39;)
+  ollamaPs=$(ollama ps | awk &#39;{print $1, $2, $3, $4, $5, $6}&#39; | sed &#39;1d&#39;) # Get the first 6 columns of ollama ps output, skipping the header
+  ollamaModel=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $1}&#39;) # Get the model name
+  ollamaProcessor=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $5, $6}&#39;) # Get the processor
+  ollamaSize=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $3, $4}&#39;) # Get the model size
+}
+
+function setSystemStats {
+  systemArch=$(uname -m) # Get hardware platform
+  systemProcessor=$(uname -p) # Get system processor
+  systemOSName=$(uname -s) # Get system OS name
+  systemOSVersion=$(uname -r) # Get system OS version
+  setSystemMemoryStats
+}
+
+function setSystemMemoryStats {
+  top=$(top -l 1)
+  systemMemoryUsed=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $2}&#39;) # Get system memory used
+  systemMemoryAvail=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $6}&#39;) # Get system memory available
+}
+
+function showSystemStats {
+  echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;System&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;ollama proc&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaProcessor&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;ollama version&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaVersion&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;sys arch&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemArch&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;sys processor&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemProcessor&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;sys memory&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemMemoryUsed + $systemMemoryAvail&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;sys OS&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemOSName $systemOSVersion&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+}
+
+function createModelInfoTxt { # Create model info files - for each model, do &#39;ollama show&#39; and save the results to text file
+  for model in &quot;${models[@]}&quot;; do
+    modelInfoTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot;).info.txt&quot;
+    echo &quot;Creating: $modelInfoTxt&quot;
+    ollama show &quot;$model&quot; &gt; &quot;$modelInfoTxt&quot;
+  done
+}
+
+function setModelInfo {
+  modelInfoTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot;).info.txt&quot;
+  modelCapabilities=()
+  modelSystemPrompt=&quot;&quot;
+  modelTemperature=&quot;&quot;
+  section=&quot;&quot;
+
+  while IFS= read -r line; do # Read the content of the file line by line
+    line=&quot;$(echo -e &quot;${line}&quot; | sed -e &#39;s/^[[:space:]]*//&#39; -e &#39;s/[[:space:]]*$//&#39;)&quot; # Trim leading/trailing whitespace
+    if [[ -z &quot;$line&quot; ]]; then
+      section=&quot;&quot;
+      continue; # Skip empty lines
+    fi
+    if [[ $line == &quot;Model&quot;* ]]; then
+      section=&quot;Model&quot;
+      continue
+    elif [[ $line == &quot;Capabilities&quot;* ]]; then
+      section=&quot;Capabilities&quot;
+      continue
+    elif [[ $line == &quot;System&quot;* ]]; then
+      section=&quot;System&quot;
+      continue
+    elif [[ $line == &quot;Parameters&quot;* ]]; then
+      section=&quot;Parameters&quot;
+      continue
+    elif [[ $line == &quot;License&quot;* ]]; then
+      section=&quot;License&quot;
+      continue
+    elif [[ $line == &quot;Projector&quot;* ]]; then
+      section=&quot;Projector&quot;
+      continue
+    fi
+
+    case $section in
+      &quot;Model&quot;)
+        if [[ &quot;$line&quot; == &quot;architecture&quot;* ]]; then
+          modelArchitecture=$(echo &quot;$line&quot; | awk &#39;/architecture/ {print $2}&#39;) # Get model architecture
+        fi
+        if [[ &quot;$line&quot; == &quot;parameters&quot;* ]]; then
+          modelParameters=$(echo &quot;$line&quot; | awk &#39;/parameters/ {print $2}&#39;) # Get model parameters
+        fi
+        if [[ &quot;$line&quot; == &quot;context length&quot;* ]]; then
+          modelContextLength=$(echo &quot;$line&quot; | awk &#39;/context length/ {print $3}&#39;) # Get model context length
+        fi
+        if [[ &quot;$line&quot; == &quot;embedding length&quot;* ]]; then
+          modelEmbeddingLength=$(echo &quot;$line&quot; | awk &#39;/embedding length/ {print $3}&#39;) # Get model embedding length
+        fi
+        if [[ &quot;$line&quot; == &quot;quantization&quot;* ]]; then
+          modelQuantization=$(echo &quot;$line&quot; | awk &#39;/quantization/ {print $2}&#39;) # Get model quantization
+        fi
+        ;;
+      &quot;Capabilities&quot;)
+        modelCapabilities+=(&quot;$line&quot;)
+        ;;
+      &quot;System&quot;)
+        modelSystemPrompt+=&quot;$line&quot;$&#39;
+&#39;
+        ;;
+      &quot;Parameters&quot;)
+        if [[ &quot;$line&quot; == &quot;temperature&quot;* ]]; then
+          modelTemperature=$(echo &quot;$line&quot; | awk &#39;/temperature/ {print $2}&#39;) # Get model temperature
+        fi
+        ;;
+    esac
+  done &lt; &quot;$modelInfoTxt&quot;
+}
+
+function createModelsOverviewHtml {
+  # list of models used in current run
+  modelsIndexHtml=&quot;$outputDirectory/models.html&quot;
+  echo &quot;Creating: $modelsIndexHtml&quot;
+  {
+    showHeader &quot;$NAME: models&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;models&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+    cat &lt;&lt;- EOF
+&lt;br /&gt;
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th class=&#39;left&#39;&gt;model&lt;/th&gt;
+    &lt;th&gt;architecture&lt;/th&gt;
+    &lt;th&gt;parameters&lt;/th&gt;
+    &lt;th&gt;context&lt;br /&gt;length&lt;/th&gt;
+    &lt;th&gt;embedding&lt;br /&gt;length&lt;/th&gt;
+    &lt;th&gt;quantization&lt;/th&gt;
+    &lt;th&gt;temperature&lt;/th&gt;
+    &lt;th&gt;capabilities&lt;/th&gt;
+    &lt;th class=&#39;left&#39;&gt;system prompt&lt;/th&gt;
+    &lt;th&gt;(raw)&lt;/th&gt;
+    &lt;th&gt;(index)&lt;/th&gt;
+  &lt;/tr&gt;
+EOF
+  } &gt; &quot;$modelsIndexHtml&quot;
+
+  for model in &quot;${models[@]}&quot;; do
+    setModelInfo
+    {
+      echo &quot;&lt;tr&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot;).html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelArchitecture&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelParameters&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelContextLength&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelEmbeddingLength&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelQuantization&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelTemperature&lt;/td&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;$(printf &quot;%s&lt;br /&gt;&quot; &quot;${modelCapabilities[@]}&quot;)&lt;/td&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;$modelSystemPrompt&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot;).info.txt&#39;&gt;raw&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;&lt;a href=&#39;../models.html#$(safeString &quot;$model&quot;)&#39;&gt;index&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;/tr&gt;&quot;
+    } &gt;&gt; &quot;$modelsIndexHtml&quot;
+  done
+
+  {
+    echo &quot;&lt;/table&gt;&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt;&gt; &quot;$modelsIndexHtml&quot;
+}
+
+function createModelOutputHtml {
+  modelHtmlFile=&quot;$outputDirectory/$(safeString &quot;$model&quot;).html&quot;
+  echo &quot;Creating: $modelHtmlFile&quot;
+  {
+    showHeader &quot;$NAME: $model&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;$model&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;br /&gt;&lt;br /&gt;&quot;
+    createMenu &quot;$model&quot;
+    echo &quot;&lt;/header&gt;&quot;
+    showPrompt
+    showImages
+    echo &quot;&lt;p&gt;Output: $model (&lt;a href=&#39;./$(safeString &quot;$model&quot;).output.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;
+    textarea &quot;$(cat &quot;$modelOutputTxt&quot;)&quot; 3 25 # 5 padding, max 30 lines
+    echo &quot;&lt;/p&gt;&quot;
+
+    echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;Stats (&lt;a href=&#39;./$(safeString &quot;$model&quot;).stats.txt&#39;&gt;raw&lt;/a&gt;)&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;words&lt;/td&gt;&lt;td&gt;$responseWords&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;bytes&lt;/td&gt;&lt;td&gt;$responseBytes&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;total duration&lt;/td&gt;&lt;td&gt;$statsTotalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;load duration&lt;/td&gt;&lt;td&gt;$statsLoadDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;prompt eval count&lt;/td&gt;&lt;td&gt;$statsPromptEvalCount&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;prompt eval duration&lt;/td&gt;&lt;td&gt;$statsPromptEvalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;prompt eval rate&lt;/td&gt;&lt;td&gt;$statsPromptEvalRate&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;eval count&lt;/td&gt;&lt;td&gt;$statsEvalCount&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;eval duration&lt;/td&gt;&lt;td&gt;$statsEvalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;eval rate&lt;/td&gt;&lt;td&gt;$statsEvalRate&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+
+    echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;Model (&lt;a href=&#39;./$(safeString &quot;$model&quot;).info.txt&#39;&gt;raw&lt;/a&gt;)&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;name&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;&lt;a target=&#39;ollama&#39; href=&#39;https://ollama.com/library/${model}&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;architecture&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelArchitecture&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;size&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaSize&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;parameters&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelParameters&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;context length&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelContextLength&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;embedding length&lt;/td&gt;&lt;td  class=&#39;left&#39;&gt;$modelEmbeddingLength&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;quantization&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelQuantization&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;capabilities&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$(printf &quot;%s&lt;br /&gt;&quot; &quot;${modelCapabilities[@]}&quot;)&lt;/td&gt;&quot;
+    echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+
+    showSystemStats
+
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$modelHtmlFile&quot;
+}
+
+function createOutputIndexHtml {
+  outputIndexHtml=&quot;$outputDirectory/index.html&quot;
+  echo &quot;Creating: $outputIndexHtml&quot;
+  {
+    showHeader &quot;$NAME: $tag&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$NAME&lt;/a&gt;: &lt;b&gt;$tag&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;br /&gt;&lt;br /&gt;&quot;
+    createMenu &quot;index&quot;
+    echo  &quot;&lt;/header&gt;&quot;
+    showPrompt
+    echo &quot;&lt;!-- IMAGES --&gt;&quot;
+    cat &lt;&lt;- &quot;EOF&quot;
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th class=&#39;left&#39;&gt;model&lt;/th&gt;
+    &lt;th&gt;words&lt;/th&gt;
+    &lt;th&gt;bytes&lt;/th&gt;
+    &lt;th&gt;total&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;load&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;prompt eval&lt;br /&gt;count&lt;/th&gt;
+    &lt;th&gt;prompt eval&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;prompt eval&lt;br /&gt;rate&lt;/th&gt;
+    &lt;th&gt;eval&lt;br /&gt;count&lt;/th&gt;
+    &lt;th&gt;eval&lt;br /&gt;duration&lt;/th&gt;
+    &lt;th&gt;eval&lt;br /&gt;rate&lt;/th&gt;
+  &lt;/tr&gt;
+EOF
+  } &gt; &quot;$outputIndexHtml&quot;
+}
+
+function addModelToOutputIndexHtml {
+  (
+    echo &quot;&lt;tr&gt;&quot;
+    echo &quot;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot;).html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$responseWords&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$responseBytes&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsTotalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsLoadDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalCount&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalRate&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalCount&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalRate&lt;/td&gt;&quot;
+    echo &quot;&lt;/tr&gt;&quot;
+  ) &gt;&gt; &quot;$outputIndexHtml&quot;
+}
+
+function finishOutputIndexHtml {
+  {
+    echo &quot;&lt;/table&gt;&quot;
+    echo &quot;&lt;br /&gt;&lt;br /&gt;&quot;
+    showSystemStats
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$NAME&lt;/a&gt;: &lt;b&gt;$tag&lt;/b&gt;: $tagDatetime&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt;&gt; &quot;$outputIndexHtml&quot;
+
+  imagesHtml=$(showImages)
+  sed -i -e &quot;s#&lt;!-- IMAGES --&gt;#${imagesHtml}#&quot; &quot;$outputIndexHtml&quot;
+}
+
+function createMainIndexHtml {
+  resultsIndexFile=&quot;${resultsDirectory}/index.html&quot;
+  echo &quot;Creating: $resultsIndexFile&quot;
+  {
+    showHeader &quot;$NAME: results&quot;
+    titleLink=&quot;&lt;b&gt;$NAME&lt;/b&gt;&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+    echo &quot;&lt;p&gt;&lt;a href=&#39;models.html&#39;&gt;Models Index&lt;/a&gt;&lt;/p&gt;&quot;
+    echo &quot;&lt;p&gt;Runs:&lt;ul&gt;&quot;
+    for dir in &quot;$resultsDirectory&quot;/*; do
+      if [ -d &quot;$dir&quot; ]; then
+        echo &quot;&lt;li&gt;&lt;a href=&#39;${dir##*/}/index.html&#39;&gt;${dir##*/}&lt;/a&gt;&lt;/li&gt;&quot;
+      fi
+    done
+    echo &quot;&lt;/ul&gt;&lt;/p&gt;&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt; $resultsIndexFile
+}
+
+function createMainModelIndexHtml {
+  # create table of contents: list all models used in all run results, and links to every individual model run
+  modelsFound=()
+  modelsIndex=()
+
+  for dir in &quot;$resultsDirectory&quot;/*; do # for each item in main results directory
+    if [ -d &quot;$dir&quot; ]; then # if is a directory
+      for file in &quot;$dir&quot;/*.html; do # for each *.html file in the directory
+        if [[ $file != *&quot;/index.html&quot; &amp;&amp; $file != *&quot;/models.html&quot; ]]; then # skip index.html and models.html
+          fileName=&quot;${file##*/}&quot;
+          modelName=&quot;${fileName%.html}&quot; # remove .html to get model name
+          if [[ ! &quot;${modelsFound[@]}&quot; =~ &quot;$modelName&quot; ]]; then
+            modelsFound+=(&quot;$modelName&quot;)
+          fi
+          modelsIndex+=(&quot;$modelName:$dir/$fileName&quot;)
+        fi
+      done
+    fi  
+  done
+
+  mainModelIndexHtml=&quot;$resultsDirectory/models.html&quot;
+  echo &quot;Creating: $mainModelIndexHtml&quot;
+  {
+    showHeader &quot;$NAME: Model Run Index&quot;
+    titleLink=&quot;&lt;b&gt;&lt;a href=&#39;index.html&#39;&gt;$NAME&lt;/a&gt;&lt;/b&gt;: Model Run Index&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+
+    echo &#39;&lt;p&gt;Models: &#39;
+    for foundModel in &quot;${modelsFound[@]}&quot;; do
+      echo &quot;&lt;a href=&#39;#$foundModel&#39;&gt;$foundModel&lt;/a&gt; &quot;
+    done
+    echo &#39;&lt;/p&gt;&#39;
+
+    echo &quot;&lt;ul&gt;&quot;
+    for foundModel in &quot;${modelsFound[@]}&quot;; do
+      echo &quot; &lt;li id=&#39;$foundModel&#39;&gt;$foundModel&lt;/li&gt;&quot;
+      echo &quot;  &lt;ul&gt;&quot;
+      for modelIndex in &quot;${modelsIndex[@]}&quot;; do
+        modelName=${modelIndex%%:*} # get everything before the :
+        if [ &quot;$modelName&quot; == &quot;$foundModel&quot; ]; then
+          run=${modelIndex#*:} # get everything after the :
+          runLink=&quot;${run#$resultsDirectory/}&quot; # remove the results directory from beginning
+          runName=&quot;${runLink%/*}&quot; # remove everything after last slash including the slash
+          echo &quot;   &lt;li&gt;&lt;a href=&#39;$runLink&#39;&gt;$runName&lt;/a&gt;&lt;/li&gt;&quot;
+        fi
+      done
+      echo &#39;  &lt;/ul&gt;&#39;
+    done
+    echo &quot;&lt;/ul&gt;&quot;
+    echo &quot;&lt;p&gt;&lt;a href=&#39;./models.html&#39;&gt;top&lt;/a&gt;&lt;/p&gt;&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$mainModelIndexHtml&quot;
+}
+
+function runModelWithTimeout {
+  ollama run --verbose &quot;${model}&quot; -- &quot;${prompt}&quot; &gt; &quot;${modelOutputTxt}&quot; 2&gt; &quot;${modelStatsTxt}&quot; &amp;
+  pid=$!
+  (
+    sleep $TIMEOUT
+    if kill -0 $pid 2&gt;/dev/null; then
+      echo
+      echo &quot;[ERROR: Session Timeout after ${TIMEOUT} seconds]&quot; &gt; &quot;${modelOutputTxt}&quot;
+      kill $pid 2&gt;/dev/null
+    fi
+
+  ) &amp;
+  timeout_pid=$!
+
+  # Wait for the main process to complete
+  if wait $pid 2&gt;/dev/null; then
+    # Main process completed successfully, kill the timeout process
+    if kill -0 $timeout_pid 2&gt;/dev/null; then
+      kill $timeout_pid 2&gt;/dev/null
+      wait $timeout_pid 2&gt;/dev/null  # Clean up the timeout process
+    fi
+  else
+    # Main process was killed (likely by timeout), wait for timeout process
+    wait $timeout_pid 2&gt;/dev/null
+  fi
+
+}
+
+export OLLAMA_MAX_LOADED_MODELS=1
+
+parseCommandLine &quot;$@&quot;
+setModels
+setPrompt
+createOutputDirectory
+createMainIndexHtml
+savePrompt
+createModelInfoTxt
+createModelsOverviewHtml
+setSystemStats
+createOutputIndexHtml
+
+echo &quot;Response Timeout: $TIMEOUT&quot;
+
+for model in &quot;${models[@]}&quot;; do # Loop through each model and run it with the given prompt
+  echo; echo &quot;Running model: $model&quot;; echo
+  clearModel &quot;$model&quot;
+  modelOutputTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot;).output.txt&quot;
+  modelStatsTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot;).stats.txt&quot;
+  echo &quot;Creating: $modelOutputTxt&quot;
+  echo &quot;Creating: $modelStatsTxt&quot;
+  runModelWithTimeout
+  setSystemMemoryStats
+  setOllamaStats
+  setModelInfo
+  setStats
+  createModelOutputHtml
+  addModelToOutputIndexHtml
+done
+
+finishOutputIndexHtml
+createMainModelIndexHtml
+
+echo; echo &quot;Done: $outputDirectory/&quot;</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>This is a script that appears to be used for running multiple instances of an AI model called &quot;ollama&quot; with different prompts and configurations, then generating HTML reports documenting the results. Here&#39;s a breakdown of its functionality:
+
+1. It sets up environment variables and parses command-line arguments.
+2. It defines several functions:
+   - `setModels`: Not implemented in the provided script.
+   - `setPrompt`: Sets a prompt for the model to run.
+   - `createOutputDirectory`: Creates directories to store output files.
+   - `savePrompt`: Saves the prompt to a file.
+   - `createModelInfoTxt`: Generates information text files for each model run.
+   - `createModelsOverviewHtml`: Generates an HTML overview for all models run.
+   - `setSystemStats`: Gets statistics about the system resources used by the models.
+   - `createOutputIndexHtml`: Creates an index page for output results.
+   - `addModelToOutputIndexHtml`: Adds individual model result links to the output index.
+   - `finishOutputIndexHtml`: Finalizes the output index HTML file, including adding system statistics and images.
+   - `createMainIndexHtml`: Creates a main index HTML for all runs.
+   - `createMainModelIndexHtml`: Generates an index of all models used in run results.
+   - `runModelWithTimeout`: Runs a model with a timeout to prevent infinite hanging.
+
+3. It parses command-line arguments and sets up the necessary variables and directories before running each model with its respective prompt. The script logs that it is done and provides the path to the output directory.
+
+The provided code is incomplete because several functions are defined but not implemented (e.g., `setModels`, `clearModel`). Also, some parts of the script may be specific to the environment in which it runs or to other scripts or tools it interacts with (for example, `ollama` and related utilities). 
+
+Here&#39;s what you can do with this code:
+
+- Customize the model names (`models`) and prompts.
+- Set up paths for output directories (`outputDirectory`, `resultsDirectory`).
+- Run the script which will execute models with given prompts and generate HTML reports.
+
+To use this script, make sure that:
+- The `ollama` command-line tool or similar is available and correctly configured.
+- Any dependencies referenced in the functions (e.g., `clearModel`) are present or implemented as needed.
+
+Please note that running scripts on a system can have significant consequences if not properly understood. Ensure that you comprehend what each part of the script does before executing it, especially when dealing with environment variables, file operations, and system commands.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./dolphin3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>384</td></tr>
+<tr><td class='left'>bytes</td><td>2635</td></tr>
+<tr><td class='left'>total duration</td><td>1m17.142309708s</td></tr>
+<tr><td class='left'>load duration</td><td>18.960583ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>4096 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>29.816241666s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>137.37 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>537 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>47.306329167s</td></tr>
+<tr><td class='left'>eval rate</td><td>11.35 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./dolphin3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/dolphin3:8b'>dolphin3:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 845M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>do_a_code_review_of_this_file_____bin_bash___oll</a>: <b>dolphin3:8b</b>: 20250615-223339</p>
+<p>page created:   2025-06-15 22:40:21</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

@@ -1,0 +1,32 @@
+The image contains a screenshot from an application called "ollama-multirun" displaying various parameters related to machine learning model optimization and running times. The layout is structured as follows:
+
+**Header Section:**
+- Title of the page: `description_this_image___docs_logo_Logo250.jpg`
+- File path or URL reference at the bottom left corner:
+  ```
+    .:/docs/Loggo-250.jpg
+  ```
+
+**Main Content Area (Table):**
+- **Column Headers:** 
+  - model
+  - [unclear]
+  - bytes
+  - duration
+  - load
+  - prompt evaluate time
+  - prompt total duration
+
+- **Row Data:**
+  ```
+    minicpmv-3:2b, 1751, '4', '80s'
+    qwen2.5l:36, [unclear], '2m'...
+```
+
+**Side Section (System Information):**
+- `ollama proc`, CPU usage
+- `ollama version`
+- System architecture and processor details
+
+The text contains some unclear entries due to the resolution of the image or possible formatting issues.
+

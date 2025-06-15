@@ -1,0 +1,187 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>mistral:7b</b>: 20250615-221507<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<b>mistral:7b</b> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_bash_function_to_parse_data_from_thi.prompt.yaml'>yaml</a>)
+  words:174  bytes:1514<br />
+<textarea readonly rows='10'>Help me write bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          </textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'> Here is a Bash function that should parse your `model.info.txt` file according to your specifications:
+
+```bash
+parse_model_info() {
+    # Initialize variables
+    declare -A sections=([&quot;Model&quot;] [&quot;Capabilities&quot;] [&quot;System&quot;] [&quot;Parameters&quot;] [&quot;Projector&quot;])
+    architecture=&quot;&quot;
+    systemPrompt=&quot;&quot;
+    temperature=0
+    capabilities=()
+    embedding_length=0
+    context_length=0
+    quantization=&quot;&quot;
+    num_ctx=0
+    parameters=()
+    dimensions=0
+
+    # Read file line by line
+    while IFS=&#39;	&#39; read -r name value; do
+        case $name in
+            architecture) architecture=&quot;$value&quot;;;
+            context length|embedding length) embedding_length=&quot;$value&quot;;;
+            parameters) parameters+=&quot; &quot;$value&quot;;;
+            quantization) quantization=&quot;$value&quot;;;
+            temperature) temperature=&quot;$value&quot;;;
+            num_ctx) num_ctx=&quot;$value&quot;;;
+            dimensions) dimensions=&quot;$value&quot;;;
+            esac
+
+        # Initialize section variables if the line belongs to a new section
+        section=$(echo $name | awk &#39;{print $1}&#39;)
+        [[ ${sections[$section]} == &quot;&quot; ]] &amp;&amp; sections[$section]=()
+    done &lt; &quot;$1&quot;
+
+    # Save Capabilities keywords
+    for line in &quot;${sections[Capabilities]}&quot;; do
+        capabilities+=(&quot;$line&quot;)
+    done
+
+    # Save System prompt
+    systemPrompt=&quot;${sections[System]}&quot;
+
+    # Save the &#39;temperature&#39; value from Parameters section
+    temperature=${parameters[@]/ parameters=/}
+
+    # Print variables for debugging purposes (uncomment if needed)
+    # echo &quot;architecture: $architecture&quot;
+    # echo &quot;embedding_length: $embedding_length&quot;
+    # echo &quot;context_length: $context_length&quot;
+    # echo &quot;quantization: $quantization&quot;
+    # echo &quot;temperature: $temperature&quot;
+    # echo &quot;num_ctx: $num_ctx&quot;
+    # echo &quot;parameters: ${parameters[@]}&quot;
+    # echo &quot;capabilities: ${capabilities[@]}&quot;
+    # echo &quot;dimensions: $dimensions&quot;
+    # echo &quot;systemPrompt: $systemPrompt&quot;
+}
+```
+
+This function reads the file line by line and stores the relevant information in variables according to your specifications. It also initializes variables for each section when it first appears, which allows any section to be missing. The example model.info.txt contents you provided are used for demonstration purposes. If you want to use this script, simply call `parse_model_info &lt;file_path&gt;`.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>237</td></tr>
+<tr><td class='left'>bytes</td><td>2300</td></tr>
+<tr><td class='left'>total duration</td><td>33.907617s</td></tr>
+<tr><td class='left'>load duration</td><td>14.210458ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>390 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.436913375s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>160.04 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>604 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>31.455697916s</td></tr>
+<tr><td class='left'>eval rate</td><td>19.20 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1224M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_bash_function_to_parse_data_from_thi</a>: <b>mistral:7b</b>: 20250615-221507</p>
+<p>page created:   2025-06-15 22:21:15</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

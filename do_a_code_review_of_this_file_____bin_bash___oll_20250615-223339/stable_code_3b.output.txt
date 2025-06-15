@@ -1,0 +1,12 @@
+# Function to create the main index.html file
+def create_main_index_html():
+    with open("index.html", "w")) as f:
+        f.write("<html>\n<head>\n  <title>Ollama Runs Index</title>\n</head>\n<body>\n  <h1>Ollama Runs</h1>\n  <ul>\n")
+        for model in models:
+            model_link = f"<li><a href='{model}.html'>{model}</a></li>"
+            f.write(f"    {model_link}\n")
+        f.write("  </ul>\n</body>\n</html>")
+
+# Call the function to create the main index.html file
+create_main_index_html()
+

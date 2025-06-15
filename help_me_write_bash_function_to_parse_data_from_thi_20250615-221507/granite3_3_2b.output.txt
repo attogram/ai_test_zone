@@ -1,0 +1,62 @@
+Here are bash functions that should meet your requirements:
+
+```bash
+function parse_model_info() {
+  local model_info_file="model.info.txt"
+  local current_section=""
+
+  while IFS= read -r line; do
+    case "$line" in
+      "^Model$"*)
+        current_section="Model"
+        continue
+        ;;
+      "^Capabilities$"*)
+        current_section="Capabilities"
+        declare -A capabilities_array
+        while IFS=":" read -r key value <<<$line; do
+          capabilities_array[$key]=$value
+        done <<< "$line"
+        ;;
+      "^System$"*)
+        current_section="System"
+        system_prompt=$(cat <<<'EOF'
+$line
+EOF
+        ;;
+      "^Parameters$"*)
+        current_section="Parameters"
+        while IFS=':' read -r key value; do
+          if [[ "$key" == "temperature" ]]; then
+            temperature=$value
+          fi
+        done <<< "$line"
+        ;;
+      *)
+        case "$current_section" in
+          Model|Capabilities|System|Parameters)
+            echo "Skipping line: $line" >> /dev/stderr
+          ;;
+        esac
+        ;;
+    esac
+  done < "$model_info_file"
+}
+
+function main() {
+  parse_model_info
+}
+
+main
+```
+
+This script reads the `model.info.txt` file line by line and processes each line based on its section header:
+
+1. If the line matches "Model", it stores the value in a variable named after the key (e.g., `architecture="granite"` becomes `name="granite"`, but currently, there's no assignment due to missing `$value`).
+2. If the line matches "Capabilities", it declares an array named `capabilities_array` and parses each keyword-value pair, storing them in the array.
+3. If the line matches "System", it captures the lines following until the next section header as the system prompt.
+4. If the line matches "Parameters", it extracts only the 'temperature' value.
+5. For any other line or missing sections/lines, it skips them and outputs an error message.
+
+You can call `main()` to execute the function. After parsing, you'll have the respective variables and arrays containing the data from your file.
+

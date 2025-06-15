@@ -1,0 +1,63 @@
+Here's how you can read in and parse these two text files using a bash script:
+
+```bash
+#!/bin/bash
+
+# Read in and parse the stats file
+while IFS=":" read -r name value; do
+  # Save data into bash variables
+  declare "$name=$value"
+done < stats.txt
+
+echo "STATS:"
+echo "total duration: $total_duration"
+echo "load duration: $load_duration"
+echo "prompt eval count: $prompt_eval_count token(s)"
+echo "prompt eval duration: $prompt_eval_duration"
+echo "prompt eval rate: $prompt_eval_rate tokens/s"
+echo "eval count: $eval_count token(s)"
+echo "eval duration: $eval_duration"
+echo "eval rate: $eval_rate tokens/s"
+
+# Read in and parse the show.txt file
+while IFS= read -r line; do
+  # Model Section
+  if [[ "$line" == "Model"* ]]; then
+    section="Model"
+    while IFS=" " read -r name value; do
+      declare "$name=$value"
+    done <<< "$line"
+
+    echo "MODEL:"
+    echo "${architecture}"
+    echo "parameters: ${parameters}B"
+    echo "context length: $context_length"
+    echo "embedding length: $embedding_length"
+    echo "quantization: ${quantization}"
+
+  # Capabilities Section
+  elif [[ "$line" == "Capabilities"* ]]; then
+    section="Capabilities"
+
+  # Parameters Section
+  elif [[ "$line" == "Parameters"* ]]; then
+    section="Parameters"
+    while IFS=":" read -r name value; do
+      declare "$name=$value"
+    done <<< "${line#   }"
+
+    echo "PARAMETERS:"
+    echo "stop: $stop"
+  fi
+
+done < show.txt
+```
+
+This script first reads in the stats file line by line, splitting each line at the colon (:) character. It assigns the name and value parts to bash variables.
+
+Then it reads in the show.txt file and checks for certain patterns indicating the start of a section (Model, Capabilities, Parameters). Once it detects one of these sections, it reads lines until it detects the end of this section. Then it parses each line accordingly:
+
+- For Model Section: The first line contains the section's data, so it splits this line at spaces and assigns the name-value pairs to bash variables.
+- For Capabilities Section: This section consists of a list of words, which are printed directly.
+- For Parameters Section: Similar to the Model Section, it reads lines until detecting the end of this section, then splits these lines at the colon (:) character.
+

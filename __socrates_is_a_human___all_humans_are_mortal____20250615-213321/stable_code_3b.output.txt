@@ -1,0 +1,6 @@
+Socrates is not mortal.
+
+The statement "All humans are mortal" is an analogy that makes an implicit generalization about all humans, even though this statement is false for Socrates specifically.
+
+So, whether or not Socrates is mortal depends on the specific interpretation of the statement "All humans are mortal".
+

@@ -1,0 +1,18 @@
+ It seems like you have a shell script that generates HTML pages for an OLLAMA project, which I assume is a text generation tool. The script does the following:
+
+1. Parses command line arguments
+2. Sets up variables such as models to use, prompt for text generation, and directories for storing output
+3. Creates main index HTML file
+4. Saves the prompt and generates model information
+5. Generates an overview HTML page with a table summarizing all the models used in the project
+6. For each model:
+    - Clears the model's state (for reuse)
+    - Runs the model using a specified prompt and saves the output and stats in separate files
+    - Sets system memory stats and OLLAMA-specific stats
+    - Generates HTML pages for that specific model, including details about the model and the generated text
+    - Adds the data from this specific model run to the overall output index HTML page
+7. Finalizes the output index HTML page
+8. Generates a model index HTML page, which contains links to individual model run pages within each project result directory
+
+The script also includes timeout functionality for running models and some error handling if the main process is killed. This script should be useful for generating text with OLLAMA and documenting the results in an organized manner.
+

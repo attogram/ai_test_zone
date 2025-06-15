@@ -1,0 +1,34 @@
+Here is a simple PHP function that will convert an array into an HTML unordered list (`<ul>`). This function assumes that the input array contains strings, which will be used as list items. If your array contains more complex data types, you may need to adjust the function accordingly.
+
+```php
+function array_to_html_list($arr) {
+    $htmlList = "<ul>";
+
+    // Iterate through the array and create list items
+    foreach ($arr as $value) {
+        $htmlList .= "<li>" . htmlspecialchars($value) . "</li>";
+    }
+
+    $htmlList .= "</ul>";
+
+    return $htmlList;
+}
+```
+
+You can use this function like so:
+
+```php
+$array = ["Item 1", "Item 2", "Item 3"];
+echo array_to_html_list($array);
+```
+
+This will output the following HTML:
+
+```html
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+```
+

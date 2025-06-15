@@ -1,0 +1,94 @@
+Thinking...
+Okay, let's see what this script does. It's a bash script that runs some models using Ollama, processes the outputs, and generates HTML files. The user probably wants to know how to run this script, what it does, and maybe some tips.
+
+First, the script starts by setting up some variables like OLLAMA_MAX_LOADED_MODELS and parsing command-line arguments. Then it calls functions to set models, prompts, create directories, and generate various HTML files. The main loop runs each model with a timeout, collects outputs, and builds the index HTML.
+
+The user might be asking for the steps to run this script, maybe the purpose of each function, or how to handle errors. Also, they might want to know the output structure or how to customize the script.
+
+I need to explain the script's purpose, the key functions, the process of running models with timeouts, and the output structure. Also, mention any important notes, like the timeout handling and the HTML files generated. Maybe suggest that the user should check the output directory for the generated files.
+...done thinking.
+
+This script is a Bash script that runs Ollama models with timeout constraints, collects output data, and generates HTML reports. Here's a breakdown of its key components and functionality:
+
+---
+
+### **1. Core Functions**
+- **`parseCommandLine`**: Parses command-line arguments (e.g., `--timeout 10`).
+- **`setModels`**: Sets the list of models to run.
+- **`setPrompt`**: Sets the prompt for model execution.
+- **`createOutputDirectory`**: Creates a directory to store outputs.
+- **`createMainIndexHtml`**: Generates a main index HTML file for results.
+- **`runModelWithTimeout`**: Runs a model with a timeout, capturing output and statistics.
+- **`setSystemStats`**: Collects system statistics (memory, Ollama version).
+- **`createModelOutputHtml`**: Generates HTML for a single model's output.
+- **`finishOutputIndexHtml`**: Finalizes the index HTML with system stats and images.
+
+---
+
+### **2. Key Features**
+- **Timeout Handling**: Models are run with a specified timeout (`--timeout` argument). If the model exceeds the time, it's terminated, and an error is logged.
+- **Output Structure**:
+  - **`outputDirectory`**: Stores all outputs (logs, stats, HTML files).
+  - **`models.html`**: Lists all models and their runs.
+  - **`index.html`**: Main index for results, including model outputs and system stats.
+- **HTML Generation**:
+  - **`createModelOutputHtml`**: Generates detailed HTML for each model's output (words, bytes, stats).
+  - **`finishOutputIndexHtml`**: Adds system stats and images to the index.
+
+---
+
+### **3. Execution Flow**
+1. **Setup**:
+   - Creates output directory.
+   - Sets models and prompt.
+   - Initializes HTML files for results.
+
+2. **Model Execution**:
+   - Runs each model with a timeout.
+   - Captures output (logs) and statistics (stats).
+   - Collects system stats (memory, Ollama version).
+
+3. **Output Generation**:
+   - Generates HTML for each model's output.
+   - Adds model data (name, architecture, size) to the index.
+   - Finalizes the index with system stats and images.
+
+---
+
+### **4. Important Notes**
+- **Timeout Handling**: If a model exceeds the timeout, it's terminated, and an error is logged. The script ensures cleanup of the timeout process.
+- **HTML Files**:
+  - `models.html`: Lists all models and their runs.
+  - `index.html`: Main index with model outputs, system stats, and images.
+- **Customization**:
+  - Adjust `TIMEOUT` in the script to control the maximum run time.
+  - Modify `models` array to include desired models.
+
+---
+
+### **5. Example Output**
+- **`models.html`**:
+  - Lists all models and their run directories.
+- **`index.html`**:
+  - Displays model outputs (words, bytes, stats).
+  - Includes system stats (memory, Ollama version).
+  - Shows images from model outputs.
+
+---
+
+### **6. How to Run**
+1. Save the script to a file (e.g., `run_ollama.sh`).
+2. Make it executable: `chmod +x run_ollama.sh`.
+3. Run: `./run_ollama.sh --timeout 10` (adjust `10` as needed).
+
+---
+
+### **7. Tips**
+- **Debugging**: Use `--verbose` to get detailed logs.
+- **Custom Models**: Replace `model` in `runModelWithTimeout` with your custom model name.
+- **Images**: The script captures images from model outputs and includes them in the index.
+
+---
+
+This script is ideal for quickly testing Ollama models with controlled execution and structured output for further analysis. Let me know if you need help customizing it!
+

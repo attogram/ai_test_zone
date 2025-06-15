@@ -1,0 +1,497 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepseek-r1:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>how_many_r_s_in_the_word__strawberry__</a>: <b>deepseek-r1:8b</b>: 20250615-213646<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<b>deepseek-r1:8b</b> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./moondream_1_8b.html'>moondream:1.8b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./how_many_r_s_in_the_word__strawberry__.prompt.yaml'>yaml</a>)
+  words:7  bytes:39<br />
+<textarea readonly rows='1'>How many r&#39;s in the word &quot;Strawberry&quot;?</textarea>
+</p>
+<p>Output: deepseek-r1:8b (<a href='./deepseek_r1_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Thinking...
+First, the question is: &quot;How many r&#39;s in the word &#39;Strawberry&#39;?&quot;
+
+I need to count the number of times the letter &#39;r&#39; appears in the word &quot;Strawberry&quot;.
+
+Let me write down the word: S-t-r-a-w-b-e-r-r-y.
+
+Now, I&#39;ll go through each letter and check for &#39;r&#39;.
+
+Starting with the first letter: S - not an r.
+
+Second letter: t - not an r.
+
+Third letter: r - yes, this is one r.
+
+Fourth letter: a - not an r.
+
+Fifth letter: w - not an r.
+
+Sixth letter: b - not an r.
+
+Seventh letter: e - not an r.
+
+Eighth letter: r - yes, second r.
+
+Ninth letter: r - yes, third r.
+
+Tenth letter: y - not an r.
+
+I think I miscounted. Let me list the positions:
+
+1. S
+
+2. t
+
+3. r (first)
+
+4. a
+
+5. w
+
+6. b
+
+7. e
+
+8. r (second)
+
+9. r? Wait, is that right?
+
+The word &quot;Strawberry&quot; has 10 letters: S-t-r-a-w-b-e-r-r-y.
+
+After &#39;e&#39;, it&#39;s &#39;r&#39; and then another &#39;r&#39;? No:
+
+Standard spelling: Strawberry.
+
+Let me confirm the spelling. Yes, &quot;strawberry&quot; is spelled with two r&#39;s at the end part.
+
+Break it down:
+
+- Straw: that has one r (the third letter).
+
+Straw: S-t-r-a-w, so positions 1 to 5 are S,t,r,a,w.
+
+Then berry: b-e-r-r-y, but &quot;strawberry&quot; is combined as s-t-r-a-w-b-e-r-r-y.
+
+So from position 6 onwards: b (position 6), e (7), r (8), r (9), y (10).
+
+In the word &quot;Strawberry&quot;, it&#39;s one word, so:
+
+Full word: S-T-R-A-W-B-E-R-R-Y
+
+Letters:
+
+1. S
+
+2. T
+
+3. R
+
+4. A
+
+5. W
+
+6. B
+
+7. E
+
+8. R
+
+9. R
+
+10. Y
+
+So, the &#39;r&#39;s are at positions 3, 8, and 9.
+
+Position 3 is one r, position 8 is another r, and position 9 is yet another r? No:
+
+&quot;Strawberry&quot;: let&#39;s count carefully.
+
+S-T-R-A-W-B-E-R-R-Y
+
+- Index 1: S
+
+- Index 2: T
+
+- Index 3: R (first &#39;r&#39;)
+
+- Index 4: A
+
+- Index 5: W
+
+- Index 6: B
+
+- Index 7: E
+
+- Index 8: R (second &#39;r&#39;)
+
+- Index 9: R? Wait, is the ninth letter an R?
+
+B-E-R-R-Y – so after E it&#39;s one R for &quot;berry&quot;, but in &quot;strawberry&quot; it&#39;s s-t-r-a-w-b-e-r-r-y.
+
+Perhaps I should think of it as two parts. The word has 10 letters:
+
+S, T, R, A, W, B, E, R, R, Y
+
+Yes: letter 8 is R and letter 9 is R? No.
+
+Standard spelling: Strawberry.
+
+The third character is &#39;r&#39; in &quot;straw&quot;, but let&#39;s list all characters sequentially.
+
+Write the word out: S t r a w b e r r y
+
+Positions:
+
+1. S
+
+2. t
+
+3. r (first)
+
+4. a
+
+5. w
+
+6. b
+
+7. e
+
+8. r (second) – this is from &quot;berry&quot;, but in compound, it&#39;s separate.
+
+9. r? Wait, no: after &#39;e&#39; it should be one letter for the first part of berry or something?
+
+&quot;Strawberry&quot; is derived from &quot;straw&quot; + &quot;berry&quot;. &quot;Berry&quot; has two R&#39;s at positions 3 and 4 if we start from B.
+
+But in the word itself:
+
+- S
+
+- t
+
+- r (from straw)
+
+- a
+
+- w
+
+- b
+
+- e
+
+- r (first of berry, but it&#39;s part of the same word)
+
+- then another r? No, &quot;berry&quot; is spelled with two consecutive R&#39;s if we consider it as one syllable.
+
+I think I&#39;m confusing myself. Let me spell &quot;strawberry&quot; properly.
+
+S-T-R-A-W-B-E-R-R-Y
+
+That&#39;s 10 letters: S, T, R, A, W, B, E, R, R, Y
+
+So the &#39;r&#39;s are:
+
+- Position 3: R (from straw)
+
+- Position 8: R (first of berry)
+
+- Position 9: R (second of berry? No.)
+
+In &quot;berry&quot;, it&#39;s B-E-R-R-Y, so two R&#39;s.
+
+But in &quot;strawberry&quot;, the last part is combined with &quot;berry&quot;.
+
+Let me count the occurrences:
+
+Starting from left:
+
+S - not r
+
+T - not r
+
+R - yes, 1st r (index 3)
+
+A - not r
+
+W - not r
+
+B - not r
+
+E - not r
+
+R - yes, 2nd r (index 8 or position of berry&#39;s first R)
+
+Then the next letter is another R? In &quot;berry&quot;, B-E-R-R-Y means after E there are two R&#39;s.
+
+So for &quot;strawberry&quot;: S-T-R-A-W-B-E-R-R-Y
+
+After W and before Y, it&#39;s B-E-R-R-Y, so positions:
+
+- 6: B
+
+- 7: E
+
+- 8: R (first berry r)
+
+- 9: R (second berry r)
+
+- 10: Y
+
+But position 3 is also an &#39;r&#39;, from &quot;straw&quot;.
+
+So total &#39;r&#39;s: one at position 3, and two at positions 8 and 9.
+
+Positions are relative to the whole word:
+
+Index: 1-S, 2-T, 3-R, 4-A, 5-W, 6-B, 7-E, 8-R, 9-R, 10-Y
+
+Yes, so letters &#39;r&#39; at indices 3, 8, and 9.
+
+That&#39;s three &#39;r&#39;s in total.
+
+But let me double-check with the actual word. I know that &quot;strawberry&quot; has multiple r&#39;s.
+
+I can think of it phonetically or just count directly.
+
+S-t-r-a-w-b-e-r-r-y: when I read it, there are two syllables with an &#39;r&#39; sound in berry, but let&#39;s confirm spelling.
+
+Perhaps the question is about lowercase and uppercase. The word is given as &quot;Strawberry&quot; with capital S, but typically we count letters regardless of case. So &#39;R&#39; or &#39;r&#39; should be counted if it&#39;s the same letter.
+
+In this context, it&#39;s probably case-insensitive, so all r&#39;s are considered.
+
+Now, in some accents, pronunciation might vary, but here it&#39;s about spelling: how many times does the letter &quot;r&quot; appear.
+
+So from above, three occurrences.
+
+But I recall that sometimes people misspell or think of it differently. Let me search my memory.
+
+Strawberry: S-t-r-a-w-b-e-r-r-y – yes, 10 letters with two r&#39;s at the end part after b and e.
+
+Another way: &quot;straw&quot; has one &#39;r&#39;, &quot;berry&quot; has two &#39;r&#39;s, but when combined, it&#39;s not that they are separate; in &quot;strawberry&quot;, the transition is smooth, so no additional r or anything. It should be three distinct letters of &#39;r&#39;.
+
+I can write a small code or just list them.
+
+S: consonant
+
+T: consonant
+
+R: vowel? No, R is often considered a consonant but not always; it&#39;s about counting occurrences.
+
+Just count the character &#39;r&#39; ignoring case.
+
+In &quot;Strawberry&quot;, assuming standard capitalization, S is uppercase, others lowercase or mixed?
+
+The question says &quot;the word &#39;Strawberry&#39;&quot;, which has capital S and lowercase for the rest probably. But in letter counting, we usually don&#39;t distinguish case unless specified.
+
+So letters: S (capital), t (lowercase), r (lowercase), a (lowercase), w (lowercase), b (lowercase), e (lowercase), r (lowercase), y (lowercase). And the ninth letter is also lowercase &#39;r&#39;? No, in &quot;Strawberry&quot;, if it&#39;s written with capital S and lowercase for all else, then positions 3 to 10 are lowercase except position 1.
+
+But that doesn&#39;t affect counting; we count the letter regardless of case. So there is one uppercase R (but it&#39;s an r) at position 1? No, in English, when we say &quot;how many r&#39;s&quot;, we mean the letter itself, not considering case unless specified.
+
+In this word, S is capital and t,r,a,w,b,e,r,y are lowercase except for the first character being capital. But &#39;r&#39; appears three times: one at position 3 (lowercase), and two at positions 8 and 9? Let&#39;s list all letters with their cases if needed, but I think it&#39;s irrelevant.
+
+To be precise, let&#39;s consider the word as given: &quot;Strawberry&quot;.
+
+In standard English writing, when a word starts with capital letter, we can still count the lowercase instances separately or not?
+
+No, in counting letters, &#39;R&#39; and &#39;r&#39; are considered different only if case-sensitive is specified; otherwise, they are both counted.
+
+But here, since it&#39;s &quot;the word&quot;, I think it&#39;s safe to assume that all r/r&#39;s should be counted as one letter.
+
+Moreover, the question says &quot;how many r&#39;s&quot; – using lowercase r, but in context, it probably means the same letter regardless of case.
+
+Perhaps it&#39;s a trick with capitalization, but I doubt it.
+
+Another thing: is there any hyphen or special character? No, just &quot;Strawberry&quot;.
+
+So spelling is straightforward.
+
+I can count without cases:
+
+The word contains three &#39;r&#39; letters.
+
+But let me make sure about the spelling. Is &quot;strawberry&quot; always spelled with two r&#39;s in the berry part?
+
+Yes: strawberry has 10 characters including spaces? No, just the word.
+
+S-t-r-a-w-b-e-r-r-y – that&#39;s three r&#39;s.
+
+Sometimes people might think of it as having one or two, but standard spelling has three.
+
+For example:
+
+- Strawberry vs. Strawbery (misspelled)
+
+But correctly spelled: strawberry has multiple r&#39;s.
+
+I can look up the word definition if needed, but I think for this purpose, we don&#39;t need to.
+
+Perhaps in some dialects, it might be pronounced differently, but again, the question is about the word spelling.
+
+The user said &quot;the word &#39;Strawberry&#39;&quot;, so it&#39;s written form.
+
+In writing: let&#39;s count the frequency of &#39;r&#39;.
+
+S: not r
+
+t: not r
+
+r: yes (1)
+
+a: not r
+
+w: not r
+
+b: not r
+
+e: not r
+
+r: yes (2) – position 8
+
+Then another letter? Position 9 is also r?
+
+In &quot;berry&quot;, it&#39;s b-e-r-r-y, so after e there are two consecutive &#39;r&#39; characters.
+
+So in &quot;strawberry&quot;, the eighth and ninth positions are both &#39;r&#39;.
+
+Position 7: e
+
+Position 8: r (first of berry)
+
+Position 9: r (second of berry)
+
+Then position 10: y
+
+And earlier, position 3 is another &#39;r&#39;, which is part of &quot;straw&quot;.
+
+So three separate instances.
+
+Therefore, there are three r&#39;s in the word.
+
+But let me confirm with a different approach. I can think about how it is pronounced or just accept standard spelling.
+
+Perhaps the question has a typo or something, but no, it seems straightforward.
+
+Another thing: case sensitivity. The word &quot;Strawberry&quot; starts with capital S, so letter 1 is &#39;S&#39;, which might be confused with lowercase s, but in counting r&#39;s, we&#39;re looking for that specific character.
+
+But since the question uses lowercase &quot;r&#39;s&quot;, it implies we should count all instances of the letter regardless of case.
+
+In position 3: lowercase &#39;r&#39;
+
+Position 8 and 9: lowercase &#39;r&#39;
+
+And no uppercase R except possibly if S was considered, but S is not an r.
+
+So definitely three lowercase or one uppercase (but counted as same) &#39;r&#39; letters.
+
+But to be precise in counting, I think it&#39;s three.
+
+Perhaps the user meant &quot;how many times does the letter &#39;R&#39; appear&quot; or something similar.
+
+I think I&#39;m overcomplicating. Let me just answer based on common knowledge.
+
+How many r&#39;s are there in strawberry? It has two syllables: straw-ber-ry, but spelled with multiple r&#39;s.
+
+Spelling-wise, it is S-T-R-A-W-B-E-R-R-Y.
+
+So letters: 10 total, three &#39;r&#39;.
+
+I can even think of the word as having &quot;rr&quot; in it at positions 8 and 9.
+
+But position 3 is separate.
+
+Yes.
+
+Therefore, there are three r&#39;s.
+
+The question says &quot;Strawberry&quot; with capital S, but I don&#39;t think that changes anything for counting letters like &#39;r&#39;.
+
+Final answer should be 3.
+...done thinking.
+
+There are three instances of the letter &quot;r&quot; in the word &quot;Strawberry,&quot; regardless of case sensitivity. The spelling is: S-t-r-a-w-b-e-r-r-y.
+
+- Positions:
+  - Index 3 (lowercase): from the first part, &quot;straw&quot;
+  - Index 8 and 9 (both lowercase): from the second part, &quot;berry&quot;</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepseek_r1_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>1824</td></tr>
+<tr><td class='left'>bytes</td><td>10116</td></tr>
+<tr><td class='left'>total duration</td><td>3m24.372772833s</td></tr>
+<tr><td class='left'>load duration</td><td>19.581333ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>14 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>388.170875ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>36.07 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>2942 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>3m23.964416125s</td></tr>
+<tr><td class='left'>eval rate</td><td>14.42 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepseek_r1_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/deepseek-r1:8b'>deepseek-r1:8b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen3</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.6 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />thinking<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.0</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1678M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>how_many_r_s_in_the_word__strawberry__</a>: <b>deepseek-r1:8b</b>: 20250615-213646</p>
+<p>page created:   2025-06-15 21:40:56</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.1</p>
+</footer></body></html>

@@ -1,0 +1,15 @@
+
+#     - Use this bash function to write a python script that loops through the 10,000 numbers from 0-9,999 and prints out a list of only the even numbers.
+
+# + id="l73Q1c8t2r_p" colab={"base_uri": "https://localhost:8080/"} outputId="06f5e3d4-dcdf-45a3-b9ed-934a7960ca82"
+# !wget https://raw.githubusercontent.com/mchirico/code_snippets/master/bash_array.sh  #wget bash function
+# !wget https://raw.githubusercontent.com/mchirico/code_snippets/master/python_lister.py # wget python script to loop through the array and print out even numbers.
+
+
+# + colab={"base_uri": "https://localhost:8080/"} id="nC172o5k-sQ_" outputId="e34966b7-f5bc-4a1c-c60a-d0274c20b0ae"
+# !chmod u+x bash_array.sh  #fix permissions
+# !./bash_array.sh  # run the script in a subshell and test it works
+# !python python_lister.py  #run python script to loop through array and print out even numbers
+
+
+

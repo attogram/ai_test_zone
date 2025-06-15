@@ -1,0 +1,100 @@
+To update your bash script to read and parse both `stats.txt` and `show.txt`, you can follow the steps below. This script will extract the required data from both files and store it in bash variables.
+
+Here's a sample bash script:
+
+```bash
+#!/bin/bash
+
+# Function to parse stats.txt
+parse_stats() {
+    local file=$1
+    declare -A stats_vars
+
+    while IFS=: read -r key value; do
+        key=$(echo "$key" | awk '{print $1}' | tr -d '[:space:]')
+        value=$(echo "$value" | awk '{$1=""; print $0}' | xargs)
+        stats_vars["$key"]="$value"
+    done < "$file"
+
+    # Extract variables from associative array
+    total_duration=${stats_vars["total duration"]}
+    load_duration=${stats_vars["load duration"]}
+    prompt_eval_count=${stats_vars["prompt eval count"]}
+    prompt_eval_duration=${stats_vars["prompt eval duration"]}
+    prompt_eval_rate=${stats_vars["prompt eval rate"]}
+    eval_count=${stats_vars["eval count"]}
+    eval_duration=${stats_vars["eval duration"]}
+    eval_rate=${stats_vars["eval rate"]}
+}
+
+# Function to parse show.txt
+parse_show() {
+    local file=$1
+    declare -A model_vars=()
+    declare -a capabilities=()
+    declare -A parameters_vars=()
+
+    while IFS= read -r line; do
+        if [[ $line =~ ^[[:space:]]*Model ]]; then
+            continue
+        elif [[ $line =~ ^[[:space:]]*Capabilities ]]; then
+            section="capabilities"
+        elif [[ $line =~ ^[[:space:]]*Parameters ]]; then
+            section="parameters"
+        else
+            key=$(echo "$line" | awk '{print $1}' | tr -d '[:space:]')
+            value=$(echo "$line" | awk '{$1=""; print $0}' | xargs)
+            if [[ $section == "model" ]]; then
+                model_vars["$key"]="$value"
+            elif [[ $section == "capabilities" ]]; then
+                capabilities+=("$value")
+            elif [[ $section == "parameters" ]]; then
+                parameters_vars["$key"]="$value"
+            fi
+        fi
+    done < "$file"
+
+    # Extract variables from associative arrays and arrays
+    architecture=${model_vars["architecture"]}
+    parameters=${model_vars["parameters"]}
+    context_length=${model_vars["context length"]}
+    embedding_length=${model_vars["embedding length"]}
+    quantization=${model_vars["quantization"]}
+    
+    completion_capability=${capabilities[0]}
+
+    stop_value=${parameters_vars["stop"]}
+}
+
+# Read and parse files
+parse_stats "stats.txt"
+parse_show "show.txt"
+
+# Output the parsed values for verification
+echo "Stats:"
+echo "total_duration: $total_duration"
+echo "load_duration: $load_duration"
+echo "prompt_eval_count: $prompt_eval_count"
+echo "prompt_eval_duration: $prompt_eval_duration"
+echo "prompt_eval_rate: $prompt_eval_rate"
+echo "eval_count: $eval_count"
+echo "eval_duration: $eval_duration"
+echo "eval_rate: $eval_rate"
+
+echo "Show:"
+echo "architecture: $architecture"
+echo "parameters: $parameters"
+echo "context_length: $context_length"
+echo "embedding_length: $embedding_length"
+echo "quantization: $quantization"
+echo "completion_capability: $completion_capability"
+echo "stop_value: $stop_value"
+```
+
+### Explanation:
+1. **parse_stats function**: This function reads `stats.txt`, splits each line into a key and value, and stores them in an associative array `stats_vars`. It then extracts individual variables from this array.
+2. **parse_show function**: This function reads `show.txt`, processes the sections (Model, Capabilities, Parameters), and stores the data in associative arrays or arrays depending on the section.
+3. **Main script**: Calls these functions to read and parse both files and then prints out the extracted values for verification.
+
+Make sure to give execute permissions to your script using `chmod +x scriptname.sh` before running it. Adjust the paths if necessary to match where your text files are located.
+

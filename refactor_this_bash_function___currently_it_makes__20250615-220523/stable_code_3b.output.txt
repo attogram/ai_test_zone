@@ -1,0 +1,27 @@
+Here is the refactored bash function:
+```bash
+function addModelToIndexFile {
+
+  # Read $modelFile and count lines.
+  numLines=$(wc -l < "$modelFile")
+
+  # Initialize responseWords, responseBytes to 0.
+  responseWords=0
+  responseBytes=0
+
+  # Parse the stats file directly, splitting on : character, getting the second part of each line
+  while IFS= read -r line; do
+    value=$(echo "$line" | cut -d ':' -f2)
+    responseWords=$((responseWords + 1)))
+    responseBytes=$((responseBytes + ${#value})))
+  done < "$statsFile"
+
+  # Calculate $percentageComplete, rounded to 2 decimal places.
+  percentageComplete=$(echo "scale=2;($responseBytes / $totalBytes) * 100" | bc -l))
+
+  # Output the values directly into the index file.
+  echo "<tr><td class='left'><a href='./$model.html'>$model</a></td><td>${numLines}</td><td>${responseWords}</td><td>${responseBytes}</td><td>${percentageComplete}</td></tr>" >> "$indexFile"
+}
+```
+In this refactored function, the `$statsInfo` array is no longer used. Instead, the stats file is read directly and its values are output directly into the index file. This approach simplifies the code and improves performance by reducing memory usage.
+

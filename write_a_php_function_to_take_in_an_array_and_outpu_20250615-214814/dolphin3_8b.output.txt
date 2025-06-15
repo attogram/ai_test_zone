@@ -1,0 +1,32 @@
+Here is a simple PHP function that takes an array as input and outputs an HTML unordered list:
+
+```php
+function generateHtmlList($array) {
+  $output = '<ul>';
+  
+  foreach ($array as $item) {
+    $output .= "<li>$item</li>";
+  }
+  
+  $output .= '</ul>';
+  
+  return $output;
+}
+```
+
+You can use this function like so:
+
+```php
+$array = ['Apple', 'Banana', 'Cherry'];
+echo generateHtmlList($array);
+```
+This will output the following HTML code:
+
+```html
+<ul>
+    <li>Apple</li>
+    <li>Banana</li>
+    <li>Cherry</li>
+</ul>
+```
+

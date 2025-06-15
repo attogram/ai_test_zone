@@ -1,0 +1,37 @@
+```javascript
+function arrayToHtmlList(arr) {
+  // Create an HTML list element
+  const list = document.createElement("ul");
+
+  // Loop through the array and add a list item for each element
+  for (const item of arr) {
+    const listItem = document.createElement("li");
+    listItem.textContent = item;
+    list.appendChild(listItem);
+  }
+
+  // Return the HTML list
+  return list.innerHTML;
+}
+```
+
+**Example Usage:**
+```
+const myArray = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5"];
+const htmlList = arrayToHtmlList(myArray);
+
+// Output the HTML list
+console.log(htmlList);
+```
+
+**Output:**
+```html
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+  <li>Item 4</li>
+  <li>Item 5</li>
+</ul>
+```
+

@@ -1,0 +1,23 @@
+Here is a Python function that converts a list into an HTML unordered list (`<ul>`) using a list comprehension:
+
+```python
+def list_to_html(input_list):
+    return "<ul>" + "".join([f"<li>{item}</li>" for item in input_list] ) + "</ul>"
+```
+
+This function takes an array (or list) as input and returns a string containing HTML code for an unordered list (`<ul>`) with each element of the input list enclosed within `<li>` tags.
+
+You can use this function like so:
+
+```python
+input_list = ["Apple", "Banana", "Cherry"]
+html_list = list_to_html(input_list)
+print(html_list)
+```
+
+This will output the following HTML code:
+
+```html
+<ul><li>Apple</li><li>Banana</li><li>Cherry</li></ul>
+```
+

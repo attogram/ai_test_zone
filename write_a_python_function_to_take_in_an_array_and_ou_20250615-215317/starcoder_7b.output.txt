@@ -1,0 +1,86 @@
+ with links in the form of <a href="http://www.python.org">Python</a></p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># import library for reading text file and manipulating strings
+</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span> 	<span class="c"># read text file and regex
+</span><span class="kn">import</span> <span class="nn">urllib2</span> <span class="kn">as</span> <span class="nn">ur</span>   <span class="c"># http requests
+</span></code></pre></div>
+
+	<p>Read file with the text data:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">myfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;text.txt&#39;</span><span class="p">)</span>	<span class="c"># open file
+</span></code></pre></div>
+
+	<p>Read in the data:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">data</span> <span class="o">=</span> <span class="n">myfile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&#39;data&#39;</span> 	<span class="c"># print the data to screen
+</span></code></pre></div>
+
+	<p>Split the string into lines (strings):</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">lines_list</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>	<span class="c"># split into lines
+</span></code></pre></div>
+
+	<p>Write a function that takes in the list of lines, and adds the html tags to each line: <a href="http://www.python.org">Python</a>,  <a href="http://www.r-project.org/">R</a>, <a href="http://www.rstudio.com">RStudio</a></p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">addTags</span><span class="p">(</span><span class="n">array_of_strings</span><span class="p">,</span> <span class="n">tagString</span><span class="p">):</span>
+    <span class="s">&#39;&#39;&#39;addTags takes in a list of strings and adds the link to them: &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">a_string</span> <span class="ow">in</span> <span class="n">array_of_strings</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39; &#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">a_string</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;{0}&#39;</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">tagString</span> <span class="o">+</span> <span class="n">a_string</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;{0} </span><span class="se">\&#39;</span><span class="s">{1}</span><span class="se">\&#39;</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span> <span class="n">tagString</span><span class="p">,</span> <span class="n">a_string</span>  )
+    <span class="k">return</span> <span class="bp">None</span>
+
+<span class="k">def</span> <span class="nf">makeTag</span><span class="p">(</span><span class="n">tagString</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="s">&#39;&#39;&#39;makeTag takes in a string tag and arguments that need to be replaced with the tagString.
+	Returns a new tagged string. &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">item_to_add</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+        <span class="n">tagString</span> <span class="o">=</span>  <span class="s">&#39;</span><span class="se">\&#39;</span><span class="si">{0}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{1}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{2}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{3}</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span> <span class="n">tagString</span><span class="p">,</span> <span class="n">item_to_add</span><span class="p">,</span> <span class="n">tagString</span><span class="p">,</span> <span class="s">&#39; </span><span class="se">\&#39;</span><span class="s">&#39;&#39;</span>  )
+    <span class="k">return</span> <span class="n">tagString</span></code></pre></div>
+
+	<p>Use the functions to add tags to each line:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># create array of strings with the tags and values we want to replace. The order is important:  tagString, item1, item2, ...
+</span><span class="n">tagArray</span> <span class="o">=</span> [<span class="s">&#39;&lt;a href=&quot;&#39;</span><span class="p">,</span> <span class="s">&#39;http://www.python.org&quot;&gt;Python&lt;/a&gt;, &#39;</span><span class="p">,</span> 	<span class="c"># tag string (link), item1, item2
+</span>             <span class="s">&#39;&lt;a href=&quot;&#39;</span><span class="p">,</span> <span class="s">&#39;http://www.r-project.org/&quot;&gt;R&lt;/a&gt;, &#39;</span><span class="p">,</span> 	<span class="c"># tag string (link), item1, item2
+</span>             <span class="s">&#39;&lt;a href=&quot;&#39;</span><span class="p">,</span> <span class="s">&#39;http://www.rstudio.com&quot;&gt;RStudio&lt;/a&gt;, &#39;</span><span class="p">]</span>
+<span class="n">array_of_strings</span>  <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Python&#39;</span><span class="p">,</span> <span class="s">&#39;R&#39;</span><span class="p">,</span> <span class="s">&#39;RStudio&#39;</span><span class="p">]</span>	<span class="c"># strings that need to be replaced
+</span><span class="n">tagString_to_add</span>  <span class="o">=</span> <span class="s">&#39; , &#39;</span>			<span class="c"># string that will be inserted between each item
+</span></code></pre></div>
+
+	<p>For a simple print statement (printed to screen):</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">printTags</span><span class="o">=</span> <span class="n">addTags</span><span class="p">(</span> <span class="n">array_of_strings</span><span class="p">,</span> <span class="s">&#39; </span><span class="se">\&#39;</span><span class="s">&#39;&#39;</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>	<span class="c"># create link for the first 
+</span></code></pre></div>
+
+	<p>Print all lines:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">len</span><span class="p">(</span><span class="n">lines_list</span><span class="p">)):</span>
+	<span class="k">print</span> <span class="s">&#39;{0} </span><span class="se">\&#39;</span><span class="s">{1}</span><span class="se">\&#39;</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span> <span class="n">tagArray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lines_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  )	<span class="c"># print each line
+</span></code></pre></div>
+
+	<p>Put all lines into a single string:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="bp">len</span><span class="p">(</span><span class="n">lines_list</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">):</span>
+	<span class="n">tagString_to_add</span> <span class="o">=</span>  <span class="s">&#39;</span><span class="se">\&#39;</span><span class="si">{0}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{1}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{2}</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span> <span class="n">tagString_to_add</span><span class="p">,</span> 
+												<span class="n">lines_list</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>	<span class="c"># line of data to replace </span>
+											<span class="n">tagArray</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>   <span class="c"># item2 in tag array (R)
+</span></code></pre></div>
+
+	<p>Put all items into a single string:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">tagString_to_add</span> <span class="o">=</span>  <span class="s">&#39;</span><span class="se">\&#39;</span><span class="si">{0}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{1}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{2}</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span> <span class="n">tagString_to_add</span><span class="p">,</span> 
+										<span class="n">lines_list</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="c"># line of data to replace </span>
+									<span class="n">tagArray</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>  <span class="c"># item3 in tag array (RStudio)
+</span></code></pre></div>
+
+	<p>Add the last line to the array:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python">	<span class="n">tagString_to_add</span> <span class="o">=</span>  <span class="s">&#39;</span><span class="se">\&#39;</span><span class="si">{0}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{1}</span><span class="s"> </span><span class="se">\&#39;</span><span class="si">{2}</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span> <span class="n">tagString_to_add</span><span class="p">,</span> 
+										<span class="n">lines_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="c"># last line of data to replace </span>
+									<span class="n">tagArray</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c"># item4 in tag array (closing bracket)
+</span></code></pre></div>
+
+	<p>Print the whole string:</p>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">print</span> <span class="n">tagString_to_add</span>
+<span class="n">myfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></code></pre></div>
+
+	<h2 id="conclusion">Conclusion</h2>
+
+		<p>I've created a python function to take in an array of text, and output the array in html tags. The link to the webpage is <a href="http://www.python-course.eu/">Python Course</a>.</p>
+
+	<footer class="entry-meta">
+		<span class="entry-tags"><a href="/tag/Python" title="Pages tagged Python" class="tag"><span class="term">Python</span></a><a href="/tag/HTML5" title="Pages tagged HTML5" class="tag>b></</3</</a_</10</1">1</</i</</a</<"></</</</</</</</</</</</p</</</</</</</</</</</</</</</</</</</</</</</</</</</</</</</
+

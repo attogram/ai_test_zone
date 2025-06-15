@@ -1,0 +1,25 @@
+```bash
+#!/bin/bash
+
+# Open the model.info.txt file
+model_info=$(cat model.info.txt)
+
+# Parse the model section
+model_data=$(awk -F ":\s+" '/Model\s*:\s*\S*\n/ {print $2;}' <<< "$model_info")
+
+# Parse the capabilities section
+capabilities_data=$(awk '/Capabilities:\s*\S*\n/ {print $1;}' <<< "$model_info")
+
+# Parse the system section
+system_data=$(awk '/System:\s*\S*\n/ {print $2;}' <<< "$model_info")
+
+# Parse the parameters section
+params_data=$(awk '/Parameters:\s*\S*\n/ {print $2;}' <<< "$model_info")
+
+# Print the data
+echo "Model: $model_data"
+echo "Capabilities: $capabilities_data"
+echo "System: $system_data"
+echo "Parameters: $params_data"
+```
+

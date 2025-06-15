@@ -1,0 +1,31 @@
+```php
+<?php
+
+function printArray($arr) {
+  // Use the implode() function to join the elements of the array into a string,
+  // and then use the echo() function to print the string.
+  echo implode(", ", $arr);
+}
+
+// Example usage:
+$arr = array("Hello", "World", "How", "Are", "You");
+printArray($arr);
+
+?>
+```
+
+**Output:**
+
+```html
+Hello, World, How, Are, You
+```
+
+**Explanation:**
+
+1. The `printArray()` function takes in an array as a parameter.
+2. Inside the function, we use the `implode()` function to join the elements of the array into a single string, using a comma as the separator.
+3. We then use the `echo()` function to print the string.
+4. In the example usage, we create an array called `$arr` with the elements "Hello", "World", "How", "Are", and "You".
+5. We call the `printArray()` function with the `$arr` as an argument and pass the string to the `echo()` function.
+6. The `echo()` function will print the contents of the `$arr` array, surrounded by HTML tags.
+
