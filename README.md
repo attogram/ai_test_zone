@@ -4,7 +4,7 @@
 
 * Created with: https://github.com/attogram/ollama-multirun
 
-## Artificial Intelligence Attogram Projects
+## Attogram Artificial Intelligence Projects
 
 * [ollama-multirun](https://github.com/attogram/ollama-multirun) — A bash shell script to run a single prompt against any or all of your locally installed ollama models, saving the output and performance statistics as easily navigable web pages.
 * [llm-council](https://github.com/attogram/llm-council) — A bash script to start a chat between 2 or more LLMs running on ollama
