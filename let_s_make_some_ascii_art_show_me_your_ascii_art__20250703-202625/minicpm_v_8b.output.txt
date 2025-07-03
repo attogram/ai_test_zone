@@ -1,0 +1,10 @@
+Here's a ASCII art of a tree:
+```
+        ____
+         | |
+            |\
+             V v
+              o_-
+                |
+```
+

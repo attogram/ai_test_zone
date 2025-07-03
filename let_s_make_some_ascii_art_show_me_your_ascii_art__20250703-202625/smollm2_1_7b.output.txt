@@ -1,0 +1,12 @@
+You're asking for some ASCII art! Here's a quick creation to get you started:
+
+```
+ _____ _______  __
+/     /     \ |/\
+  \-+/-\ |-\/
+   '-'   '-'
+|  o.o  | - ~_
+|    |  |
+         '----|
+```
+

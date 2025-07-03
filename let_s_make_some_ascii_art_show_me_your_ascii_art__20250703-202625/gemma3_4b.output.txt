@@ -1,0 +1,10 @@
+Okay, let's do this!  I'll create an ASCII art of a simple cat.  Here we go:
+
+```
+   /\_/\
+  ( o.o )
+  > ^ <
+```
+
+How about that?  I can try something more complex if you'd like, or something different.  Do you have a specific animal or object in mind?  Or would you like to challenge me with a more difficult shape?
+

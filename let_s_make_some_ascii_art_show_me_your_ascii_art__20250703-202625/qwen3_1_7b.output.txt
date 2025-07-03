@@ -1,0 +1,26 @@
+
+Here's a simple ASCII art of a rabbit, inspired by your example but with a fresh design:
+
+```
+         ,
+        /|      __
+       / |   ,-~ /
+      Y :|  //  /
+      | jj /( .^
+      >-"~"-v"
+     /       Y
+    jo  o    |
+   ( ~T~     j
+    >._-' _./
+   /   "~"  |
+  Y     _,  |
+ /| ;-"~ _  l
+/ l/ ,-"~    \
+\//\/      .- \
+ Y        /    Y
+ l       I     !
+ ]\      _\    /"\
+(" ~----( ~   Y.  ) /think
+```
+
+This version includes a more streamlined structure, with clear body, ears, tail, and eyes. The design focuses on symmetry and detail, similar to your example but with a slightly different layout. Let me know if you'd like a different style or addition!

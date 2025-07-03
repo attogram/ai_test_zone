@@ -1,0 +1,150 @@
+
+Ah, I see! You want me to create some ascii art examples, maybe similar in style to the one you provided. Let me show off my ascii art skills.
+
+Here are some ascii art examples with different patterns:
+
+1. A simple "A":
+```
+  j
+ / \
+/   \
+|     |
+ \   /
+~-----(
+```
+
+2. An emoji:
+```
+:~:
+<;>
+```
+
+3. A simple flower:
+```
+   :
+  / \
+ :---o: 
+  |   |
+ :---o: 
+  /   \
+   :
+```
+
+4. A more complex shape:
+```
+   <
+  / \
+ /   \
+|    |  
+ \   /
+~-----(
+|
+  /
+  \
+   /
+   
+\
+  \\
+   
+\ 
+   >
+```
+
+5. A simple star:
+```
+   ~
+ /  \
+/     \
+|      |
+ \     /
+~-----(~)
+
+<;>
+```
+
+6. A more complex emoji:
+```
+   <
+  /  \
+ /     \
+|    |  
+ \   /
+~-----(
+|
+  /
+  \
+   /
+   
+\
+  \\
+   
+\ 
+\
+
+<;>
+```
+
+7. A simple rainbow:
+```
+   :
+  /  \
+:---o: 
+  |   |
+/____/
+   :
+  /  \
+:---o: 
+  |   |
+/____/
+   :
+```
+
+8. A more complex emoji:
+```
+  <;>
+   ____
+  /   /
+|    |
+~-----(
+\ 
+
+\
+ \  
+\
+
+<;>
+```
+
+9. An emoji with a diagonal line:
+```
+   <
+  /  \
+:---o: 
+  |   |
+/____/
+   :
+  /  \
+:---o: 
+  |   |
+/____/
+   :
+```
+
+10. A more complex emoji:
+```
+   <
+  /  \
+ :---o: 
+  |   |
+ /____/
+   :
+  /  \
+ :---o: 
+  |   |
+ /____/
+   :
+
+<;>
+```
+
+These examples use a variety of characters and demonstrate different types of symmetry in ASCII art. Let me know if you'd like more complex patterns or specific styles!

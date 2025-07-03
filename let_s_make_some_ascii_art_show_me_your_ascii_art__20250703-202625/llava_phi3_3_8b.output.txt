@@ -1,0 +1,10 @@
+Sure, here is an ASCII art of a cat:
+```css
+ /\_/\  
+| o o | 
+>| ><|
+| o o |
+ \_^_/
+```
+I hope you like it! Let me know if there's anything else I can do for you.
+

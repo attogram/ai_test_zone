@@ -1,0 +1,15 @@
+Alright, the user wants me to show off my ASCII art skills. They provided a sample output of an ascii rabbit and asked for more examples.
+
+First, I need to understand what makes each line unique. It seems like they're creating symmetrical patterns using symbols that repeat in both left and right directions. Each line is part of a larger image made by mirroring the existing characters on either side.
+
+I'll start by thinking about symmetry. Maybe each line pairs with another mirrored around the center. For example, the top line might have a character that's mirrored below it. I should ensure that as we go down, the pattern doesn't break but continues in reverse.
+
+Next, I need to consider which symbols to use. The example uses various punctuation and letters like Y, j, ~, ., ^, etc. It looks like using characters from the ASCII printable set would be best because they're widely available on most systems.
+
+I should think about how each line builds upon the previous ones. Maybe the first line is a single character, then the next pairs it with another mirrored, and so on. Each line seems to introduce more unique symbols as we go up, ensuring that the image becomes wider and more detailed without losing clarity.
+
+Also, I notice that some lines are longer than others. That might mean that each subsequent line adds symmetry by mirroring characters from both ends. It's like building a mirror image in ASCII art, where each segment is a pair of mirrored segments from prior lines.
+
+I wonder if the user wants more variety or if they have specific patterns in mind. Maybe I can suggest some common symmetrical ascii art to get started with different types of images, like numbers, shapes, or letters.
+
+Overall, my approach will focus on creating visually appealing and symmetric ASCII art that expands as each line is added. Using a variety of symbols and ensuring each mirrored segment works together to form a cohesive image.

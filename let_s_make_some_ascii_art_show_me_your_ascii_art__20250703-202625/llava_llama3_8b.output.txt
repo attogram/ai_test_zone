@@ -1,0 +1,10 @@
+Here's a simple ASCII art representation of a cat:
+```lua
+           / 
+          / 
+        _/  
+        \_
+        / 
+```
+It features a pair of ears on top and a tail at the bottom, along with a body that forms an arc with two points. The dots and slashes represent the fur on the cat. I hope this helps! Let me know if you have any other questions or if there's anything else I can help you with.
+

@@ -1,0 +1,6 @@
+I love that rabbit! Here's my attempt at an ASCII cat:
+
+ /_/\
+( o.o )
+>^<
+
