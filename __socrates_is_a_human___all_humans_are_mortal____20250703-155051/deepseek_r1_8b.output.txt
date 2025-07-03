@@ -1,0 +1,4 @@
+
+Yes, Socrates is mortal. This follows logically from the given premises: "Socrates is a human" and "All humans are mortal." Since all humans share this property of mortality, it applies to Socrates as well.
+
+This is an example of a syllogism in logic, where two universal statements lead to a specific conclusion.

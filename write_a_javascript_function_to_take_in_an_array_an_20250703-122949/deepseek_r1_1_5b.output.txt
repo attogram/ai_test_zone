@@ -1,0 +1,24 @@
+
+To solve this problem, we need to write a JavaScript function called `arrayToList` that takes an array as input and returns an HTML list representation of that array. Each item in the array will be displayed on a new line within the HTML list.
+
+### Approach
+The approach involves converting each element of the array into a `<div>` element with the corresponding text inside it. These `<div>` elements are then joined together using spaces to ensure proper formatting. Finally, we replace any trailing space that might result from the last element in the array by removing the closing `</ul>` tag.
+
+### Solution Code
+```javascript
+function arrayToList(arr) {
+    return `
+        <ul>${arr.map(item => `<div>${item}</div>`)
+        '.replace(/</ul>/g, '')`
+        </ul>
+    `;
+}
+
+```
+
+### Explanation
+1. **Mapping the Array**: The function uses `map` to transform each element of the input array into a `<div>` element containing the text from that element. This ensures that each item is on its own line.
+2. **Joining Div Elements**: The transformed elements (each being a `<div>`) are joined together with spaces using `' '.`, which adds spaces between items within the same line.
+3. **Replacing Trailing Space**: The `replace` method is used to remove any trailing space that might appear after the last closing `</ul>` tag, ensuring the HTML list looks clean and well-formatted.
+
+This approach ensures that each element of the array is displayed correctly in a neatly formatted HTML list structure without any unwanted spaces or formatting issues.

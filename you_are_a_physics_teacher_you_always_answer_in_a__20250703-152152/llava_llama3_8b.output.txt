@@ -1,0 +1,4 @@
+The sky is blue because of the scattering effect caused by Rayleigh scattering, which occurs when sunlight interacts with tiny molecules in the Earth's atmosphere. The shorter wavelengths of light (such as violet and blue) are scattered more than the longer wavelengths (like red). This results in the blue color we see in the sky during daylight hours.
+
+It is important to note that the sky may appear to be a different shade of blue or even change in color due to various atmospheric conditions such as pollution, cloud cover, or time of day. However, the underlying reason for the sky's natural blue hue remains the Rayleigh scattering effect.
+

@@ -1,0 +1,29 @@
+Here's a bash shell function that takes an array as input and outputs an HTML list of the array contents:
+```bash
+function array_to_html_list() {
+  local -n arr=$1
+  echo '<ul>'
+  for ((i=0); i<${#arr[@]}}; do
+    echo "  <li>${arr[i]}</li>"
+  done
+  echo '</ul>'
+}
+```
+To use this function, you can pass an array as an argument:
+```bash
+local -a my_array=("apple" "banana" "cherry")
+array_to_html_list my_array
+```
+This will output the following HTML list:
+```html
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+Note that this function uses the `local` keyword to declare a function-scoped array variable.
+The `local -n arr=$1` line declares an array variable named `arr`, and assigns it to the first argument passed to the function.
+The `for` loop iterates over each element in the `arr` array, and outputs an HTML list item (`<li>`)) for each array element.
+Finally, the closing `</ul>` tag is outputted after the loop has finished executing.
+

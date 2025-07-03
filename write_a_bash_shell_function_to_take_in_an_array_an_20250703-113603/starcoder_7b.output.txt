@@ -1,0 +1,41 @@
+
+
+```bash
+#!/bin/bash
+
+function print_array {
+  echo "<ul>"
+  for i in "${!1}"; do
+    echo "  <li> $i </li>"
+  done
+  echo "</ul>"
+}
+
+
+# Test with:
+#   test_array=("apple" "banana" "orange")
+print_array ${test_array[@]}
+```
+
+### Write a Bash shell function to take in an array and print the contents of that array to a file named `array.txt` (including a new line for each element)
+
+
+```bash
+#!/bin/bash
+function output_to_file {
+  echo "${1[@]}" > array.txt
+
+  # Check if file exists - If it does, then append, else create the file
+  if [ -e "array.txt" ] ; then
+    cat >> array.txt << EOF
+EOF
+  fi
+}
+
+
+# Test with:
+#   test_array=("apple" "banana" "orange")
+output_to_file ${test_array[@]}
+```
+
+

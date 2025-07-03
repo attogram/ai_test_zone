@@ -1,0 +1,90 @@
+Certainly! Below is a Bash function that parses the `model.info.txt` file according to the specifications you provided:
+
+```bash
+#!/bin/bash
+
+parse_model_info() {
+    # Initialize variables
+    declare -A model_vars
+    declare -a capabilities
+    system_prompt=""
+    temperature=""
+
+    # Read the file line by line
+    while IFS= read -r line; do
+        if [[ $line == "Model" ]]; then
+            # Model section
+            while IFS= read -r line; do
+                if [[ $line == "parameters" ]]; then
+                    # Parameters section
+                    temperature="${line#*=}"
+                    break
+                else
+                    # Model section
+                    name="${line%%=*}"
+                    value="${line#*=}"
+                    model_vars["$name"]="$value"
+                fi
+            done
+        elif [[ $line == "Capabilities" ]]; then
+            # Capabilities section
+            while IFS= read -r line; do
+                capabilities+=("$line")
+            done
+        elif [[ $line == "System" ]]; then
+            # System section
+            system_prompt="$line"
+        fi
+    done < model.info.txt
+
+    # Output the parsed variables
+    echo "Model Variables:"
+    for name in "${!model_vars[@]}"; do
+        echo "$name=${model_vars[$name]}"
+    done
+
+    echo "Capabilities:"
+    echo "${capabilities[@]}"
+
+    echo "System Prompt:"
+    echo "$system_prompt"
+
+    echo "Temperature:"
+    echo "$temperature"
+}
+
+# Call the function
+parse_model_info
+```
+
+### Explanation:
+1. **Initialization**: 
+   - `model_vars` is an associative array to store the model variables.
+   - `capabilities` is an array to store the capabilities.
+   - `system_prompt` is a string to store the system prompt.
+   - `temperature` is a string to store the temperature value.
+
+2. **Reading the File**:
+   - The script reads the file line by line.
+   - When it encounters the "Model" section, it processes the lines to extract the model variables.
+   - When it encounters the "Capabilities" section, it processes the lines to extract the capabilities.
+   - When it encounters the "System" section, it extracts the system prompt.
+
+3. **Output**:
+   - The parsed variables are printed out in the specified format.
+
+### Usage:
+Save the script to a file, for example, `parse_model_info.sh`, and make it executable:
+
+```bash
+chmod +x parse_model_info.sh
+```
+
+Then run it:
+
+```bash
+./parse_model_info.sh
+```
+
+This will output the parsed data according to the specifications you provided.
+

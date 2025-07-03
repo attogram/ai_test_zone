@@ -1,0 +1,96 @@
+Here is a PHP function that parses the model.info.txt file according to your specifications:
+
+```php
+function parseModelInfo($filePath) {
+    $parsedData = array();
+
+    // Read the file and find each section
+    $file = fopen($filePath, 'r');
+    if ($file === false) {
+        throw new Exception("Failed to open file: " . $filePath);
+    }
+
+    while (($line = fgets($file)) !== false) {
+        // Remove leading/trailing whitespace
+        $line = trim($line);
+
+        // Check for Model section and parse it
+        if (strpos($line, 'Model') === 0) {
+            $sectionName = trim(substr($line, 6));
+            $lines = explode("\n", $line);
+            foreach ($lines as $l) {
+                list($key, $value) = explode(' ', $l);
+                $parsedData[$sectionName . '_' . $key] = $value;
+            }
+        }
+
+        // Check for Capabilities section and parse it
+        elseif (strpos($line, 'Capabilities') === 0) {
+            $sectionName = trim(substr($line, 9));
+            foreach ($lines as $l) {
+                list($keyword, $value) = explode(' ', $l);
+                if (!empty($parsedData[$sectionName . '_' . $keyword])) {
+                    $parsedData[$sectionName . '_' . $keyword] = $value;
+                }
+            }
+        }
+
+        // Check for System section and parse it
+        elseif (strpos($line, 'System') === 0) {
+            $lines = explode("\n", $line);
+            foreach ($lines as $l) {
+                list($key, $value) = explode(' ', $l);
+                if (!empty($parsedData[$key])) {
+                    $parsedData[$key] = trim($value);
+                }
+            }
+        }
+
+        // Check for Parameters section and parse it
+        elseif (strpos($line, 'Parameters') === 0 && empty($parsedData['parameters'])) {
+            $sectionName = trim(substr($line, 8));
+            foreach ($lines as $l) {
+                list($key, $value) = explode(' ', $l);
+                if (!empty($parsedData[$sectionName . '_' . $key])) {
+                    $parsedData[$sectionName . '_' . $key] = $value;
+                }
+            }
+        }
+
+        // Check for System section and parse it
+        elseif (strpos($line, 'System') === 0 && empty($parsedData['system_prompt'])) {
+            $lines = explode("\n", $line);
+            foreach ($lines as $l) {
+                list($key, $value) = explode(' ', $l);
+                if (!empty($parsedData[$key])) {
+                    $parsedData[$key] = trim($value);
+                }
+            }
+        }
+
+        // Check for Parameters section and parse it
+        elseif (strpos($line, 'Parameters') === 0 && empty($parsedData['temperature'])) {
+            $sectionName = trim(substr($line, 8));
+            foreach ($lines as $l) {
+                list($key, $value) = explode(' ', $l);
+                if (!empty($parsedData[$sectionName . '_' . $key])) {
+                    $parsedData[$sectionName . '_' . $key] = $value;
+                }
+            }
+        }
+
+    }
+
+    fclose($file);
+
+    return $parsedData;
+}
+```
+
+Example usage:
+
+```php
+$parsedData = parseModelInfo('model.info.txt');
+print_r($parsedData);
+```
+

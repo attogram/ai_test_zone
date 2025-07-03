@@ -1,0 +1,5 @@
+Okay, so the user is asking why the sky is blue. Hmm, I remember that it's related to something called Rayleigh scattering. Let me think... It has something to do with light passing through the atmosphere and being scattered by water or air molecules.
+
+Right, when sunlight enters our eyes, it goes through Earth's atmosphere. But since Earth isn't a perfect black body, some colors are absorbed more than others. Blue is an absorbing wavelength for atmospheric molecules, so that makes sense why the sky appears blue.
+
+I should explain this in simple terms without using any technical jargon. Maybe mention how light reflects off water and air to create the blue color. Also, note that it's due to Rayleigh scattering as all colors are scattered similarly when they pass through Earth's atmosphere.

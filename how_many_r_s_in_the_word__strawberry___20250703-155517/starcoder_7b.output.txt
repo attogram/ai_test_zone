@@ -1,0 +1,244 @@
+
+#
+#     * "12"
+#     
+# - How many s's are there?
+#
+#     * "3046859375"
+#     
+# ### Part III: Fibonacci Numbers
+#
+# In this part, we'll be working with Fibonacci numbers. You can find more information about it [here](https://en.wikipedia.org/wiki/Fibonacci_number).
+#
+# We'll need to keep track of a couple variables in order for the algorithm to work correctly:
+# - `previous`: The number before our current one (e.g. if we're on 3, then this would be 2)
+# - `current`: Our current number from our list (e.g. if we're on 3, then this would be 3)
+#     
+# We'll also need a couple helper functions to help us implement the algorithm:
+# - `get_next(x)` will return two values: The next value in the sequence and whether or not it's in our list already. For example if we're on 1, this would be 2 (because 3 = 5 + 7) and False because we haven't added that number to out sequence yet
+# - `is_fibonacci(x)` will check a given number against the Fibonacci equation and return True if it is or False if not. For example, calling `is_fibonacci(20)` should return True since 47 = 3^2 + 5^2 (which is 8)
+#     
+# In order to make our lives easier later on, we'll define the following variables:
+# - `list`: A list of numbers that will be iterated through and added to as we compute Fibonacci numbers. We set it up with 1 since we already know what the first number is!
+# - `n`: The current value in our for loop (so if this is 0, then we're on step one)
+#     
+# ### Example: How Many Fibonacci Numbers Are There?
+#
+# First, let's try calculating out first Fibonacci number. We'll need to know how many numbers before it we have in order for our algorithm to work correctly (in this case, 1! = the value of 0, which is just 1), so that means that `previous` will be equal to "None" and `current` will be set to 1.
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call "list")
+#         > `list[0] = previous + current`
+#         
+# The next step will be calculating out next Fibonacci number, so let's check if it exists in our list. For this case, since 1 hasn't been added yet to the list, our algorithm won't know what that next value is and we'll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we've reached the end of our sequence. Return True now (as it's the first Fibonacci number)
+#         > `if current in list:`  
+#             >> return True
+#         
+# Now that we know that this isn't our final Fibonacci number, let's figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(current)`
+#         > `previous = current`  
+#         >> `(new previous value) = (old current value)`   
+#         > `current, is_new = get_next(current)`  
+#             >> `(new current value), (whether the new number exists in our list or not) = (`  
+#             >> `get_next((old current value)))`   
+#     
+# Since we now have what our next and previous values are, let's add them to out sequence:
+# - `(previous + current)` -> `(2) + (1)` = `3`
+#     * Step Four: Add the new number to list
+#         > `list[1] = previous + current`  
+#         
+# Our list now looks like `[1, 3]`. We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn't we'll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn't found, then we're on a step with no "next" value (so add that too!)
+#         > `if current in list:`  
+#             >> return True
+#         
+# We're now on the last step of the algorithm. Since this is it, let's return False to indicate that this wasn't our final Fibonacci number:
+#     
+#     * Step Six: If we haven't found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         >> `return False`  
+#         
+# Let's see if we got it right! We should have 2 values and we should have [1, 3] as our list:
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call "list")
+#         > `list[0] = previous + current`  
+#         
+# Our list now looks like `[1, 3]`! Now let's check if it exists in our list. For this case, since 3 hasn't been added yet to the list, our algorithm won't know what that next value is and we'll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we've reached the end of our sequence. Return True now (as it's the second Fibonacci number)
+#         > `if 3 in list:`  
+#             >> return True   
+#         
+# Now that we know that this isn't our final Fibonacci number, let's figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(3)`
+#         > `previous = 3`  
+#         >> `(new previous value) = (old current value)`   
+#         > `current, is_new = get_next(3)`  
+#             >> `(new current value), (whether the new number exists in our list or not) = (`  
+#             >> `get_next((old current value)))`  
+#     
+# Since we now have what our next and previous values are, let's add them to out sequence:
+# - `3 + 1` -> `4`
+#     * Step Four: Add the new number to list
+#         > `list[2] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4]`! We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn't we'll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn't found, then we're on a step with no "next" value (so add that too!)
+#         > `if current in list:`  
+#             >> return True   
+#         
+# We're now on the last step of the algorithm. Since this is it, let's return False to indicate that this wasn't our final Fibonacci number:
+#     
+#     * Step Six: If we haven't found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         >> `return False`  
+#         
+# Let's see if we got it right! We should have 3 values and we should have [1, 3, 4] as our list:
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call "list")
+#         > `list[0] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4]`! Now let's check if it exists in our list. For this case, since 4 hasn't been added yet to the list, our algorithm won't know what that next value is and we'll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we've reached the end of our sequence. Return True now (as it's the third Fibonacci number)
+#         > `if 4 in list:`  
+#             >> return True   
+#         
+# Now that we know that this isn't our final Fibonacci number, let's figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(4)`
+#         > `previous = 4`  
+#         >> `(new previous value) = (old current value)`   
+#         > `current, is_new = get_next(4)`  
+#             >> `(new current value), (whether the new number exists in our list or not) = (`  
+#             >> `get_next((old current value)))`   
+#     
+# Since we now have what our next and previous values are, let's add them to out sequence:
+# - `4 + 3` -> `7`
+#     * Step Four: Add the new number to list
+#         > `list[3] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4, 7]`! We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn't we'll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn't found, then we're on a step with no "next" value (so add that too!)
+#         > `if current in list:`  
+#             >> return True   
+#         
+# We're now on the last step of the algorithm. Since this is it, let's return False to indicate that this wasn't our final Fibonacci number:
+#     
+#     * Step Six: If we haven't found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         >> `return False`  
+#         
+# Let's see if we got it right! We should have 4 values and we should have [1, 3, 4, 7] as our list:
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call "list")
+#         > `list[0] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4, 7]`! Now let's check if it exists in our list. For this case, since 7 hasn't been added yet to the list, our algorithm won't know what that next value is and we'll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we've reached the end of our sequence. Return True now (as it's the fourth Fibonacci number)
+#         > `if 7 in list:`  
+#             >> return True   
+#         
+# Now that we know that this isn't our final Fibonacci number, let's figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(7)`
+#         > `previous = 7`  
+#         >> `(new previous value) = (old current value)`   
+#         > `current, is_new = get_next(7)`  
+#             >> `(new current value), (whether the new number exists in our list or not) = (`  
+#             >> `get_next((old current value)))`   
+#     
+# Since we now have what our next and previous values are, let's add them to out sequence:
+# - `7 + 4` -> `11`
+#     * Step Four: Add the new number to list
+#         > `list[4] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4, 7, 11]`! We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn't we'll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn't found, then we're on a step with no "next" value (so add that too!)
+#         > `if current in list:`  
+#             >> return True   
+#         
+# We're now on the last step of the algorithm. Since this is it, let's return False to indicate that this wasn't our final Fibonacci number:
+#     
+#     * Step Six: If we haven't found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         >> `return False`  
+#         
+# We've reached the end of the algorithm, so let's return True now!
+#     
+#     * Step Seven: If we got this far (which means we haven't found a new value yet), then return true because it was the final number in our sequence.
+#         >> `return True`  
+#         
+# It looks like that did work correctly, so let's return 5 to indicate that there are 5 Fibonacci numbers!
+#     
+#     * Step Eight: If we've made it this far (which means we've found our final number), then return the length of the list. We can do this by calling `len(list)` and that will give us how many values in there are.
+#         >> `return len(list)`  
+#         
+# Now let's put everything together! The first step is to get out starting value, which is 1:
+#     
+# ```python
+# start = 20 # the number we'll be starting with when we compute our sequence of Fibonacci numbers (so it will be called "previous" in the algorithm below)
+# ```
+# Now that we have a starting point, let's create an empty list to store all of our values:
+#     
+# ```python
+# fib = [] # we'll add all of our results here! This is called a list, which will help us keep track of the values as they are computed. It looks like [1] below.
+# ```
+# Now let's define out for loop and put it together in one line:
+#     
+# ```python
+# for i in range(start): # we'll be looping through all numbers from 20 to infinity (i goes from start - 1, so that means 19)
+#     fib.append((fib[len(fib)-1] + fib[len(fib)-2]) if len(fib) > 1 else 1 # since we'll be adding the previous and current values below, we need to check whether or not there are more than one value in our list beforehand
+# ```
+# So what is happening here? First off, we've defined a for loop that goes through all numbers from "start" - 1 until infinity (in this case, it's going up to 20 since start = 21). The first time the number gets called in our list of Fibonacci values, it will be 20.
+#     
+# Since we defined a list called `fib` with `[1]` as its first element, the next number in our for loop is 3. We'll add that to out list:
+# - `(previous + current) = (20 + 1)` -> `(40)`
+#     * Step Four: Add the new value to list
+#         > `fib[1] = previous + current`  
+#         
+# Our list now looks like `[1, 40]`! Now let's check if it exists in our list. For this case, since 40 hasn't been added yet to the list, our algorithm won't know what that next value is and we'll have to find it ourselves!
+#     
+#     * Step Five: If the current number already exists in our list, then we've reached the end of our sequence. Return True now (as it's the second Fibonacci number)
+#         > `if 40 in fib:`  
+#             >> return True   
+#         
+# Now that we know that this isn't our final Fibonacci number, let's figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Six: Get the value of `get_next(40)`
+#         > `previous = 40`  
+#         >> `(new previous value) = (old current value)`   
+#         > `current, is_new = get_next(40)`  
+#             >> `(new current value), (whether the new number exists in our list or not) = (`  
+#             >> `get_next((old current value)))` 
+#     
+# Since we now have what our next and previous values are, let's add them to out sequence:
+# - `40 + 1` -> `41`
+#     * Step Four: Add the new number to list
+#         > `fib[2] = previous + current`  
+#         
+# Our list now looks like `[1, 40, 41]`! We can check whether or not this next value is in our sequence by checking if it already exists.17111101011111111111000001100001000000000000000000000
+
+
+
+
+##
+
+
+#
+
+
+
+

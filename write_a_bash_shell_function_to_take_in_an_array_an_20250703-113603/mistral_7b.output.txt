@@ -1,0 +1,39 @@
+ Here is a Bash shell function that takes an array as input and outputs an HTML unordered list (ul) of its contents. This example assumes that the array has been previously defined using the `declare -a my_array` command.
+
+```bash
+print_html_list() {
+    local IFS="\n"
+    local ul='<ul>'
+    local li='<li>'
+
+    # Iterate over the array and build HTML list items
+    for item in "${!my_array[@]}"; do
+        ul+="${li}${my_array[$item]}</li>"
+    done
+
+    # Close the unordered list tag
+    ul+='</ul>'
+
+    # Print the result
+    echo "$ul"
+}
+
+# Example usage:
+declare -a my_array=(
+    "Apple"
+    "Banana"
+    "Cherry"
+)
+print_html_list my_array
+```
+
+In this example, the `my_array` array contains "Apple", "Banana", and "Cherry". Running the script will output:
+
+```bash
+<ul>
+    <li>Apple</li>
+    <li>Banana</li>
+    <li>Cherry</li>
+</ul>
+```
+

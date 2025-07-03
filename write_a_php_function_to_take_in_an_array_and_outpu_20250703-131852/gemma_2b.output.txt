@@ -1,0 +1,34 @@
+```php
+function print_array_contents($array) {
+  // Use the PHP `implode()` function to join the array elements with commas.
+  $output = implode(", ", $array);
+
+  // Use the PHP `echo` function to print the HTML list.
+  echo "<ul>$output</ul>";
+}
+```
+
+**Example Usage:**
+
+```php
+// Example array of colors.
+$colors = array("red", "orange", "yellow", "green", "blue", "indigo", "violet");
+
+// Call the `print_array_contents()` function.
+print_array_contents($colors);
+```
+
+**Output:**
+
+```html
+<ul>red, orange, yellow, green, blue, indigo, violet</ul>
+```
+
+**Explanation:**
+
+* The `print_array_contents()` function takes an array as its input.
+* It uses the `implode()` function to join the array elements with commas.
+* It then uses the `echo` function to print the HTML list.
+* The `implode()` function takes the array elements as its first argument, and the commas are used to separate them.
+* The `echo` function takes the HTML string and prints it on the page.
+

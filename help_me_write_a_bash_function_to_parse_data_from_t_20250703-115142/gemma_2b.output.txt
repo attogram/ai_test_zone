@@ -1,0 +1,24 @@
+```bash
+#!/bin/bash
+
+# Load the model.info.txt file into a variable
+model_info=$(cat model.info.txt)
+
+# Parse the model.info.txt file
+model_data=$(echo "$model_info" | grep -E "Model\|Capabilities\|System\|Parameters")
+
+# Split the model data into sections
+sections=$(echo "$model_data" | grep -E "^\s*\w+" | sort | uniq)
+
+# Create an empty array to store the keywords
+keywords=()
+
+# Loop through the sections and extract the keywords
+for section in $sections; do
+  keywords[$section]=$(echo "$model_data" | grep -E "^\s*\w+$section" | sort | head -n 1)
+done
+
+# Print the keywords
+echo "${keywords[@]}"
+```
+

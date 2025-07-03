@@ -1,0 +1,32 @@
+Here's a simple JavaScript function that takes an array as input, creates HTML list items for each item in the array, and returns the resulting HTML string:
+
+```javascript
+function arrayToList(arr) {
+  let html = "";
+  arr.forEach((item) => {
+    html += `<li>${item}</li>`;
+  });
+  return html;
+}
+
+// Example usage:
+let array = ["Item 1", "Item 2", "Item 3"];
+console.log(arrayToList(array));
+```
+
+In this code:
+
+- We create an empty string `html` that will store the HTML list items.
+- Inside the function, we use the `forEach()` method to iterate over each item in the input array. For each item, we append a new `<li>` element containing the item's text as its content.
+- Finally, we return the constructed HTML string.
+
+When you run this code with an example array, it will output:
+
+```html
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+```
+
+This function works for arrays of any size and can be easily extended to support different types of data (e.g., objects) by modifying the `forEach()` callback.
+

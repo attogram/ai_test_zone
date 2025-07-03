@@ -1,0 +1,56 @@
+Certainly! Below is a PHP function that takes an array and outputs an HTML list of its contents. This function assumes that the array contains strings that can be safely used as HTML list items.
+
+```php
+<?php
+function arrayToHtmlList($array) {
+    // Check if the input is an array
+    if (!is_array($array)) {
+        return "Input must be an array.";
+    }
+
+    // Initialize the HTML list
+    $htmlList = '<ul>';
+
+    // Iterate through the array and add each item to the list
+    foreach ($array as $item) {
+        // Ensure the item is a string
+        if (!is_string($item)) {
+            return "All items in the array must be strings.";
+        }
+
+        // Add the item to the list
+        $htmlList .= '<li>' . htmlspecialchars($item) . '</li>';
+    }
+
+    // Close the list
+    $htmlList .= '</ul>';
+
+    return $htmlList;
+}
+
+// Example usage
+$exampleArray = ['apple', 'banana', 'cherry'];
+echo arrayToHtmlList($exampleArray);
+?>
+```
+
+### Explanation:
+1. **Input Validation**: The function first checks if the input is an array. If not, it returns an error message.
+2. **HTML List Initialization**: It initializes an HTML unordered list (`<ul>`).
+3. **Iterate and Append**: It iterates through each item in the array, ensuring each item is a string. It then appends each item to the list using `htmlspecialchars` to ensure safe HTML output.
+4. **Close the List**: After the loop, it closes the list with `</ul>`.
+5. **Return the List**: Finally, it returns the constructed HTML list.
+
+### Example Output:
+If you run the example usage with the array `['apple', 'banana', 'cherry']`, the output will be:
+
+```html
+<ul>
+    <li>apple</li>
+    <li>banana</li>
+    <li>cherry</li>
+</ul>
+```
+
+This function ensures that the output is safe and properly formatted as an HTML list.
+

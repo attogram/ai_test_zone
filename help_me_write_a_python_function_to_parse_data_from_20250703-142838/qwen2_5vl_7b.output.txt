@@ -1,0 +1,71 @@
+Sure, I'll help you write a Python function to parse the `model.info.txt` file as described. Below is a Python function that reads the file and extracts the required information:
+
+```python
+def parse_model_info(file_path):
+    model = {}
+    capabilities = []
+    system_prompt = ""
+    parameters = {}
+
+    with open(file_path, 'r') as file:
+        section = None
+        for line in file:
+            line = line.strip()
+            if line == "":
+                continue
+
+            if line.startswith("Model"):
+                section = "Model"
+            elif line.startswith("Capabilities"):
+                section = "Capabilities"
+            elif line.startswith("Projector"):
+                section = "Projector"
+            elif line.startswith("Parameters"):
+                section = "Parameters"
+            elif line.startswith("System"):
+                section = "System"
+            elif line.startswith("License"):
+                section = "License"
+            elif section == "Model":
+                name, value = line.split()
+                model[name] = value
+            elif section == "Capabilities":
+                capabilities.append(line)
+            elif section == "System":
+                system_prompt += line + " "
+            elif section == "Parameters":
+                name, value = line.split()
+                parameters[name] = value
+
+    # Clean up the system prompt
+    system_prompt = system_prompt.strip()
+
+    return model, capabilities, system_prompt, parameters
+
+# Example usage
+file_path = 'model.info.txt'
+model_info = parse_model_info(file_path)
+print("Model:", model_info[0])
+print("Capabilities:", model_info[1])
+print("System Prompt:", model_info[2])
+print("Parameters:", model_info[3])
+```
+
+### Explanation:
+1. **Model Section**: Each line is in the format "name    value". We split the line and store the name and value in a dictionary.
+2. **Capabilities Section**: Each line is a single keyword. We store these keywords in a list.
+3. **System Section**: The lines are concatenated into a single string.
+4. **Parameters Section**: Each line is in the format "name    value". We split the line and store the name and value in a dictionary.
+
+### Example Output:
+If you run the function with the example `model.info.txt` file, it will output:
+
+```python
+Model: {'architecture': 'granite', 'parameters': '2.5B', 'context length': '16384', 'embedding length': '2048', 'quantization': 'Q4_K_M'}
+Capabilities: ['completion', 'tools', 'vision']
+System Prompt: 'A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user\'s questions. '
+Parameters: {'num_ctx': '16384', 'temperature': '0'}
+```
+
+This function will handle missing sections or lines gracefully by not including them in the output.
+

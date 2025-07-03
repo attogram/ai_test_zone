@@ -1,0 +1,87 @@
+ Here is a PHP function that parses your `model.info.txt` file as per your requirements:
+
+```php
+function parseModelInfo($file) {
+    $data = []; // To store parsed data
+
+    $sections = ['Model', 'Capabilities', 'System', 'Parameters', 'Projector']; // Expected sections
+    $section = ''; // Current section
+    $line = ''; // Current line
+    $key = ''; // Key for Model and Parameters sections
+    $value = ''; // Value for Model, Capabilities, System, and Parameters sections
+    $capabilities = []; // Array to store capabilities keywords
+    $systemPrompt = ''; // Variable to store system prompt
+    $temperatureValue = 0; // Variable to store temperature value
+
+    if (file_exists($file)) {
+        $handle = fopen($file, 'r');
+
+        while (!feof($handle)) {
+            $line = trim(fgets($handle));
+
+            // Find section name
+            if (preg_match('/^(\w+)/', $line, $matches) && in_array($matches[0], $sections)) {
+                $section = $matches[0];
+                continue;
+            }
+
+            // Save Model or Parameters data
+            if ($section === 'Model' || $section === 'Parameters') {
+                list($key, $value) = explode(' ', $line);
+                fundef($key, $value);
+                continue;
+            }
+
+            // Save Capabilities data
+            if ($section === 'Capabilities') {
+                $capabilities[] = trim($line);
+                continue;
+            }
+
+            // Save System data
+            if (strpos($line, 'System') !== false) {
+                $systemPrompt .= trim($line) . " "; // Adding multiple lines for System section
+                continue;
+            }
+
+            // Save Parameters data
+            if ($section === 'Parameters' && strpos($line, 'temperature') !== false) {
+                list($key, $value) = explode(' ', $line);
+                $temperatureValue = floatval(str_replace('temperature', '', $value));
+            }
+        }
+
+        fclose($handle);
+    }
+
+    // Add parsed data to the main data array
+    if (!empty($capabilities)) {
+        $data['Capabilities'] = $capabilities;
+    }
+
+    if (!empty($systemPrompt)) {
+        $data['System'] = $systemPrompt;
+    }
+
+    // Only add temperature value if it exists and is a number
+    if (is_numeric($temperatureValue)) {
+        $data['Parameters']['temperature'] = $temperatureValue;
+    }
+
+    return $data;
+}
+
+// Function to create variables from key-value pairs in the Model section
+function fundef($key, $value) {
+    global ${$key}; // Create a global variable using the provided key
+    $$key = $value; // Assign the value to the created global variable
+}
+```
+
+You can use the `parseModelInfo()` function like this:
+
+```php
+$parsedData = parseModelInfo('model.info.txt');
+print_r($parsedData);
+```
+

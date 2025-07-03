@@ -1,0 +1,53 @@
+```javascript
+function parseModelInfo(filename) {
+  const fs = require('fs');
+  
+  // Read the contents of the file
+  const content = fs.readFileSync(filename, 'utf8');
+  
+  // Split the contents by sections
+  const sections = content.trim().split('\n\n');
+  
+  let modelSection = '';
+  let capabilitiesSection = '';
+  let systemSection = '';
+  let parametersSection = '';
+  let temperature = null;
+  
+  sections.forEach((section) => {
+    // Split the section by lines
+    const lines = section.trim().split('\n');
+    
+    if (lines[0] === 'Model') {
+      modelSection += lines.join('\n');
+    } else if (lines[0].startsWith('Capabilities')) {
+      capabilitiesSection += lines.join('\n');
+    } else if (lines[0] === 'System' || lines[0] === '') {
+      systemSection += lines.join('\n');
+    } else if (lines[0] === 'Parameters') {
+      parametersSection = lines.join('\n');
+    } else {
+      // Handle the case where a line has two values separated by a space
+      const [name, value] = lines.map(line => line.trim());
+      
+      if (name === 'architecture' && !modelSection) {
+        modelSection += `architecture="${value}"\n`;
+      } else if (name === 'temperature') {
+        temperature = parseFloat(value);
+      } else {
+        // Ignore lines that don't match the expected pattern
+        modelSection += line + '\n';
+      }
+    }
+  });
+  
+  return {
+    architecture: `architecture="${modelSection.trim().substring(8, modelSection.indexOf('"'))}"`,
+    capabilities: Array.from(new Set(capabilitiesSection.trim().split('\n')), line => line.trim()),
+    systemPrompt: systemSection ? `${systemSection}` : undefined,
+    temperature: temperature !== null ? temperature : undefined,
+  };
+}
+```
+This function reads the contents of the file using `fs.readFileSync` and then splits it by sections based on empty lines between them. It then loops through each section and performs the necessary parsing based on the section type (Model, Capabilities, System, Parameters). The parsed values are returned as an object with properties for architecture, capabilities, system prompt, and temperature.
+

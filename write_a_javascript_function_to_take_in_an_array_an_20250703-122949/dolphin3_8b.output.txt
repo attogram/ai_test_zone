@@ -1,0 +1,31 @@
+Here is a JavaScript function that takes an array as input and outputs an HTML unordered list:
+
+```javascript
+function arrayToHtmlList(array) {
+  // Start with the opening <ul> tag
+  let html = "<ul>";
+
+  // Iterate over each element in the array
+  for (let i = 0; i < array.length; i++) {
+    // Add the opening <li> and closing </li> tags around each element
+    html += `<li>${array[i]}</li>`;
+  }
+
+  // Close the unordered list with the ending </ul> tag
+  html += "</ul>";
+
+  return html;
+}
+```
+
+You can use this function by passing in an array of elements you want to convert into an HTML list. For example:
+
+```javascript
+let fruits = ["apple", "banana", "orange"];
+let htmlList = arrayToHtmlList(fruits);
+console.log(htmlList);
+// Output: <ul><li>apple</li><li>banana</li><li>orange</li></ul>
+```
+
+You can then insert the `htmlList` variable into your HTML code wherever you want to display the list.
+

@@ -1,0 +1,255 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen2.5vl:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_a_bash_function_to_parse_data_from_t</a>: <b>qwen2.5vl:7b</b>: 20250703-115142<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<b>qwen2.5vl:7b</b> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_a_bash_function_to_parse_data_from_t.prompt.yaml'>yaml</a>)
+  words:175  bytes:1490<br />
+<textarea readonly rows='10'>Help me write a Bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...</textarea>
+</p>
+<p>Output: qwen2.5vl:7b (<a href='./qwen2_5vl_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Certainly! Below is a Bash function that parses the `model.info.txt` file as described. The function will handle the different sections and extract the required information into variables.
+
+```bash
+#!/bin/bash
+
+# Function to parse the model.info.txt file
+parse_model_info() {
+    local model_info_file=&quot;$1&quot;
+    local model_section=0
+    local capabilities=()
+    local system_prompt=&quot;&quot;
+    local parameters=()
+    local temperature=&quot;&quot;
+
+    while IFS= read -r line; do
+        if [[ $line =~ ^Model ]]; then
+            model_section=1
+        elif [[ $line =~ ^Capabilities ]]; then
+            model_section=2
+        elif [[ $line =~ ^System ]]; then
+            model_section=3
+        elif [[ $line =~ ^Parameters ]]; then
+            model_section=4
+        elif [[ $line =~ ^Projector ]]; then
+            model_section=5
+        elif [[ $line =~ ^License ]]; then
+            model_section=6
+        elif [[ $line =~ ^architecture ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            fi
+        elif [[ $line =~ ^parameters ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            elif [[ $model_section -eq 4 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            fi
+        elif [[ $line =~ ^context length ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            fi
+        elif [[ $line =~ ^embedding length ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            fi
+        elif [[ $line =~ ^quantization ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                eval &quot;$name=\&quot;\$value\&quot;&quot;
+            fi
+        elif [[ $line =~ ^completion ]]; then
+            capabilities+=(&quot;$line&quot;)
+        elif [[ $line =~ ^tools ]]; then
+            capabilities+=(&quot;$line&quot;)
+        elif [[ $line =~ ^vision ]]; then
+            capabilities+=(&quot;$line&quot;)
+        elif [[ $line =~ ^A chat between a curious user and an artificial intelligence assistant ]]; then
+            system_prompt=&quot;$line&quot;
+        elif [[ $line =~ ^temperature ]]; then
+            if [[ $model_section -eq 4 ]]; then
+                IFS=&#39; &#39; read -r name value &lt;&lt;&lt; &quot;$line&quot;
+                temperature=&quot;$value&quot;
+            fi
+        fi
+    done &lt; &quot;$model_info_file&quot;
+}
+
+# Example usage
+model_info_file=&quot;model.info.txt&quot;
+parse_model_info &quot;$model_info_file&quot;
+
+# Print the extracted information
+echo &quot;architecture: $architecture&quot;
+echo &quot;parameters: $parameters&quot;
+echo &quot;context length: $context_length&quot;
+echo &quot;embedding length: $embedding_length&quot;
+echo &quot;quantization: $quantization&quot;
+echo &quot;capabilities: ${capabilities[@]}&quot;
+echo &quot;system prompt: $system_prompt&quot;
+echo &quot;temperature: $temperature&quot;
+```
+
+### Explanation:
+1. **Model Section**: Extracts the `architecture`, `parameters`, `context length`, `embedding length`, and `quantization` values.
+2. **Capabilities Section**: Collects all the capabilities into an array.
+3. **System Section**: Collects the system prompt.
+4. **Parameters Section**: Extracts the `temperature` value.
+
+### Usage:
+- Save the script to a file, e.g., `parse_model_info.sh`.
+- Make the script executable: `chmod +x parse_model_info.sh`.
+- Run the script with the `model.info.txt` file as an argument: `./parse_model_info.sh model.info.txt`.
+
+This script will parse the `model.info.txt` file and print out the extracted information.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen2_5vl_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>511</td></tr>
+<tr><td class='left'>bytes</td><td>4370</td></tr>
+<tr><td class='left'>total duration</td><td>1m1.701692791s</td></tr>
+<tr><td class='left'>load duration</td><td>28.689875ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>358 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>4.261333084s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>84.01 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>1022 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>57.411024583s</td></tr>
+<tr><td class='left'>eval rate</td><td>17.80 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen2_5vl_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/qwen2.5vl:7b'>qwen2.5vl:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen25vl</td></tr>
+<tr><td class='left'>size</td><td class='left'>9.1 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>8.3B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>128000</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>3584</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />vision<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 2127M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_a_bash_function_to_parse_data_from_t</a>: <b>qwen2.5vl:7b</b>: 20250703-115142</p>
+<p>Page created: 2025-07-03 12:15:24</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

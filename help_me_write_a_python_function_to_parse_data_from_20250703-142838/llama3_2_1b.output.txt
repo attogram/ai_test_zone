@@ -1,0 +1,69 @@
+Here is a Python function that parses the data from the model.info.txt file:
+```python
+import re
+
+def parse_model_info(file_path):
+    """
+    Parse data from model.info.txt file.
+
+    Args:
+        file_path (str): Path to the model.info.txt file.
+
+    Returns:
+        dict: Dictionary containing parsed data.
+    """
+
+    # Initialize empty dictionaries for each section
+    model_data = {}
+    capabilities_data = []
+    system_prompt = set()
+    parameters_data = {}
+
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+        # Model section
+        line_index = 0
+        while True:
+            model_line = lines[line_index].strip().split(' ')
+            if len(model_line) < 2 or model_line[1] == '':
+                break
+
+            # Save name and value to dictionary
+            name, value = model_line[:2]
+            model_data[name.strip()] = value.strip()
+
+            line_index += 1
+
+        # Capabilities section
+        capabilities_list = [line.strip() for line in lines[line_index:line_index + len(lines) // 2]]
+        capabilities_data.extend(capabilities_list)
+
+        # System section
+        system_lines = [lines[line_index].strip().split(' ') if re.match(r'^\s*\w+ \w+', line.strip()) else [] for line in lines[line_index + len(lines) // 2:]]
+        for i, line in enumerate(system_lines):
+            if line:
+                system_prompt.add(line[0])
+
+        # Parameters section
+        parameters_list = [line.strip() for line in lines[line_index + len(lines) // 2 + 1:]]
+        for i, line in enumerate(parameters_list):
+            if line == 'temperature':
+                parameters_data['temperature'] = float(line.split(' ')[1])
+
+    return {
+        'model': model_data,
+        'capabilities': capabilities_data,
+        'system_prompt': system_prompt,
+        'parameters': parameters_data
+    }
+
+# Example usage:
+file_path = 'path_to_your_file.txt'
+data = parse_model_info(file_path)
+print(data)
+```
+This function reads the file line by line, parses each line according to the specifications, and stores the data in separate dictionaries. The `system_prompt` set is used to store unique system prompts.
+
+Note that this implementation assumes that the input file is well-formed and doesn't contain any invalid or malformed lines. You may want to add additional error handling or validation depending on your specific use case.
+

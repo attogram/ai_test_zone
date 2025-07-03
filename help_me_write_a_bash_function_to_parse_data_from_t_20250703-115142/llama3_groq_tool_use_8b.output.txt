@@ -1,0 +1,49 @@
+Here is a Bash function that should do what you asked for:
+
+```bash
+parse_model_info() {
+  declare -A model_data;
+  declare -a capabilities;
+  system_prompt="";
+  temperature="";
+
+  while read -r section line; do
+    case "$section" in
+      "Model") 
+        name=$(echo "$line" | awk '{print $1}')
+        value=$(echo "$line" | awk '{print $2}')
+        model_data[$name]=$value
+      ;;
+      "Capabilities")
+        capabilities+=("$line")
+      ;;
+      "System")
+        system_prompt+=$line"\n"
+      ;;
+      "Parameters")
+        name=$(echo "$line" | awk '{print $1}')
+        value=$(echo "$line" | awk '{print $2}')
+        if [ "$name" = "temperature" ]; then
+          temperature=$value
+        fi
+    esac
+  done < model.info.txt
+
+  echo "Model Data:"
+  for name in "${!model_data}"; do
+    echo "$name: ${model_data[$name]}"
+  done
+
+  echo "Capabilities:"
+  for capability in "${capabilities[@]}"; do
+    echo $capability
+  done
+
+  echo "System Prompt:\n$system_prompt"
+
+  echo "Temperature: $temperature"
+}
+```
+
+You can use this function to parse the `model.info.txt` file. It will extract and print the model data, capabilities, system prompt, and temperature value.
+

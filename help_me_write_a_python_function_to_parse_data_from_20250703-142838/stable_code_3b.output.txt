@@ -1,0 +1,50 @@
+Sure, I can help you with that. Here's a Python function that parses data from the provided model.info.txt file:
+```python
+def parse_model_info(file_path):
+    with open(file_path, 'r') as f:
+        data = f.read()
+
+    # Parse Model section
+    model_lines = [line.strip() for line in data.split('\n') if line.strip()]
+    model_vars = {}
+    for line in model_lines:
+        name, value = line.split('    ', 1)
+        if name not in model_vars:
+            model_vars[name] = []
+        model_vars[name].append(value.strip()))
+
+    # Parse Capabilities section
+    capabilities_lines = [line.strip() for line in data.split('\n') if line.strip()]
+    capabilities_vars = []
+    for line in capabilities_lines:
+        if line not in capabilities_vars:
+            capabilities_vars.append(line))
+
+    # Parse Projector section
+    projector_lines = [line.strip() for line in data.split('\n') if line.strip()]
+    projector_vars = {}
+    for line in projector_lines:
+        name, value = line.split('    ', 1)
+        if name not in projector_vars:
+            projector_vars[name] = []
+        projector_vars[name].append(value.strip()))
+
+    # Parse Parameters section
+    parameters_lines = [line.strip() for line in data.split('\n') if line.strip()]
+    parameters_vars = {}
+    for line in parameters_lines:
+        if 'temperature' in line:
+            name, value = line.split('    ', 1)
+            if name not in parameters_vars:
+                parameters_vars[name] = []
+            parameters_vars[name].append(value.strip()))
+
+    return {
+        'model': model_vars,
+        'capabilities': capabilities_vars,
+        'projector': projector_vars,
+        'parameters': parameters_vars
+    }
+```
+You can use this function to parse the data from your `model.info.txt` file and save it as variables in Python.
+

@@ -1,0 +1,49 @@
+```bash
+function array_to_html_list() {
+  echo "<ul>"
+  for item in "${1[@]}"; do
+    echo "<li>$item</li>"
+  done
+  echo "</ul>"
+}
+```
+
+**Usage:**
+
+```bash
+array_to_html_list my_array.txt
+```
+
+**Example Input File (my_array.txt):**
+
+```
+apple
+banana
+cherry
+durian
+grape
+lemon
+```
+
+**Output:**
+
+```html
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+  <li>durian</li>
+  <li>grape</li>
+  <li>lemon</li>
+</ul>
+```
+
+**Explanation:**
+
+* The `array_to_html_list` function takes in one argument, which is the array to convert to an HTML list.
+* It starts by opening an HTML `<ul>` tag.
+* It then iterates over the elements of the array, using a `for` loop.
+* Inside the loop, it adds an `<li>` tag to the `<ul>` with the current element's value as its content.
+* After the loop, it closes the `ul` tag with a closing `</ul>` tag.
+* Finally, it prints the HTML list to the console.
+

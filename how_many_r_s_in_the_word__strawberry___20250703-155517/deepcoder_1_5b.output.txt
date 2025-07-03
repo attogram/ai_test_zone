@@ -1,0 +1,4 @@
+
+The word "Strawberry" contains three instances of the letter 'r'. 
+
+**Answer:** There are \boxed{3} 'r's in the word "Strawberry".

@@ -1,0 +1,97 @@
+Here is a Bash function that parses the model.info.txt file according to your specifications:
+
+```bash
+#!/bin/bash
+
+parse_model_info() {
+  # Initialize variables to store data
+  declare -A model_data
+  declare -a capabilities_list
+  declare -A system_prompts
+  declare -A parameters_values
+  declare -a system_lines
+  shift $#
+
+  while IFS= read -r line; do
+    case "$line" in
+      "Model")
+        # Save each line as a bash variable
+        model_data[name]=$line
+        ;;
+      "Capabilities")
+        capabilities_list+=($line)
+        ;;
+      "System")
+        system_lines+=($line)
+        ;;
+      "Parameters")
+        parameters_values[$1]=${model_data[parameters_value]}
+        ;;
+      *)
+        # Handle unknown sections or lines
+        echo "Unknown section: $line"
+        return 1
+        ;;
+    esac
+  done <<< "$*"
+
+  # Process Model data
+  declare -A model_variables
+  for var in "${!model_data[@]}"; do
+    name=${model_data[$var]}
+    value=${name##*=}
+    model_variables[$var]=$value
+  done
+
+  # Process Capabilities list
+  for capability in "${capabilities_list[@]}"; do
+    declare -a vars=($capability)
+    for var in "${vars[@]}"; do
+      case $var in
+        "completion")
+          echo "Completion: ${model_variables[completion]}"
+          ;;
+        "tools")
+          echo "Tools: ${model_variables[tools]}"
+          ;;
+        "vision")
+          echo "Vision: ${model_variables[vision]}"
+          ;;
+      esac
+    done
+  done
+
+  # Process System prompts
+  for prompt in "${system_lines[@]}"; do
+    system_prompts[$prompt]=${model_data[system_prompt]}
+  done
+
+  # Print data
+  echo "Model Variables:"
+  for var in "${!model_variables[@]}"; do
+    echo "$var: ${model_variables[$var]}"
+  done
+
+  echo "Capabilities List:"
+  for capability in "${capabilities_list[@]}"; do
+    echo "$capability"
+  done
+
+  echo "System Prompts:"
+  for prompt in "${system_prompts[@]}"; do
+    echo "$prompt: ${system_prompts[$prompt]}"
+  done
+
+  echo "Parameters Values:"
+  for var in "${!parameters_values[@]}"; do
+    echo "$var: ${parameters_values[$var]}"
+  done
+}
+```
+
+You can call this function by replacing `model.info.txt` with the actual path to your file:
+
+```bash
+parse_model_info model.info.txt
+```
+

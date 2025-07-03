@@ -1,0 +1,75 @@
+Here is a JavaScript function that parses data from your `model.info.txt` file according to the described format:
+
+```javascript
+function parseModelInfo(data) {
+    let variables = {};
+    const modelKeywords = [];
+    let systemPrompt = '';
+    let temperature = null;
+
+    // Split the input data by section names.
+    const sections = data.split('\n\n');
+
+    for (let section of sections) {
+        if (section.trim() === 'Model') {
+            // Parsing Model section
+            const lines = section.split('\n');
+            for (let line of lines) {
+                let [name, value] = line.trim().split('    ');
+                variables[name.replace(/\s/g, '')] = value.replace(/\s/g, '');
+            }
+        } else if (section.trim() === 'Capabilities') {
+            // Parsing Capabilities section
+            modelKeywords.push(...section.split('\n').filter(line => line !== ''));
+        } else if (section.trim() === 'System') {
+            // Parsing System section
+            systemPrompt = section.trim();
+        } else if (section.trim() === 'Parameters') {
+            // Parsing Parameters section
+            const lines = section.split('\n');
+            for (let line of lines) {
+                let [name, value] = line.trim().split('    ');
+                if (name.replace(/\s/g, '') === 'temperature')
+                    temperature = value.replace(/\s/g, '');
+            }
+        }
+    }
+
+    // Return the results
+    return { variables, modelKeywords, systemPrompt, temperature };
+}
+
+// Example usage:
+const data = `
+Model
+  architecture        granite    
+  parameters          2.5B       
+  context length      16384      
+  embedding length    2048       
+  quantization        Q4_K_M     
+
+Capabilities
+  completion    
+  tools         
+  vision        
+
+System
+  A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+    detailed, and polite answers to the user's questions.                                                   
+
+License
+Apache License               
+Version 2.0, January 2004    
+...`;
+
+const { variables, modelKeywords, systemPrompt, temperature } = parseModelInfo(data);
+console.log(variables); // Example output: { architecture: 'granite', parameters: '2.5B', ... }
+console.log(modelKeywords); // Example output: ['completion', 'tools', 'vision']
+console.log(systemPrompt); // Example output: "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    detailed, and polite answers to the user's questions."
+console.log(temperature); // Example output: "0"
+```
+
+This function splits the input data by section names (Model, Capabilities, System, Parameters), then processes each line accordingly. The results are saved in corresponding variables and returned as an object.
+
+Please note that this is a basic solution; if there's any special consideration or more complex parsing required (e.g., handling nested sections), you may need to adjust the code accordingly.
+

@@ -1,0 +1,49 @@
+
+Here is a JavaScript function that should do what you're asking for:
+
+```javascript
+function parseModelInfo(filePath) {
+  let modelInfo = {};
+
+  // Read Model section
+  const lines = fs.readFileSync(filePath, 'utf8');
+  lines.forEach((line) => {
+    if (line.startsWith('Model')) {
+      const [name, value] = line.split(' ');
+      modelInfo[name] = value;
+    }
+  });
+
+  // Read Capabilities section
+  const lines = fs.readFileSync(filePath, 'utf8');
+  lines.forEach((line) => {
+    if (line.startsWith('Capabilities')) {
+      const keywords = line.split('\n').filter(word => word !== '');
+      modelInfo['capabilities'] = keywords;
+    }
+  });
+
+  // Read System section
+  const lines = fs.readFileSync(filePath, 'utf8');
+  lines.forEach((line) => {
+    if (line.startsWith('System')) {
+      const prompt = line.split('\n').filter(word => word !== '');
+      modelInfo['systemPrompt'] = prompt;
+    }
+  });
+
+  // Read Parameters section
+  const lines = fs.readFileSync(filePath, 'utf8');
+  lines.forEach((line) => {
+    if (line.startsWith('Parameters')) {
+      const [temperature] = line.split(' ');
+      modelInfo['temperature'] = temperature;
+    }
+  });
+
+  return modelInfo;
+}
+```
+
+This function reads the file line by line and checks each line to determine which section it belongs to. It then extracts the relevant information from each line and stores it in a JavaScript object. The function returns this object as the result.
+

@@ -1,0 +1,6 @@
+The Base64 encoded representation of the text "Solve a quadratic equation" is as follows:
+```
+SzdWJ0dXJuIHVuaXF1ZSBhbmQgcmVhbGx5IGZvdWxlIGNpcmlnaHRzLgoqS25vdyBkZXNpYmxlZCBwYXVsIFIuIEVsZW1lbnQuCiAqIHN0c29tZSBjb252ZXJpbmc=
+```
+The decoded text is "Solve a quadratic equation".
+

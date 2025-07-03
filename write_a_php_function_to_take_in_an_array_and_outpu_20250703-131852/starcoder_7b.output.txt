@@ -1,0 +1,13 @@
+.
+# Create an empty array (of strings) named my_array.
+# Input values into your array and see what happens.
+
+# + language="html"
+# <div class="alert alert-block alert-warning">
+#     <b>Warning!</b><br/>This exercise is quite challenging so take a break if you're bored or need a rest! 
+# </div>
+
+# + jupyter={"outputs_hidden": false}
+
+
+

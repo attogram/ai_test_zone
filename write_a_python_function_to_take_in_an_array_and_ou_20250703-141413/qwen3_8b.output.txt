@@ -1,0 +1,50 @@
+
+Here's a Python function that takes an array (list) as input and returns a string containing the contents of the array formatted as an HTML unordered list (`<ul>`).
+
+```python
+def array_to_html_list(arr):
+    """
+    Converts a list into an HTML unordered list string.
+
+    Parameters:
+    arr (list): The input list containing elements to be displayed in the list.
+
+    Returns:
+    str: A string containing the HTML representation of the list.
+    """
+    html = '<ul>\n'
+    for item in arr:
+        html += f'  <li>{item}</li>\n'
+    html += '</ul>'
+    return html
+```
+
+---
+
+### ✅ Example Usage:
+
+```python
+my_list = ["Apple", "Banana", "Cherry"]
+html_output = array_to_html_list(my_list)
+print(html_output)
+```
+
+### 📌 Output:
+
+```html
+<ul>
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Cherry</li>
+</ul>
+```
+
+---
+
+### 📝 Notes:
+
+- This function assumes the input is a list of strings. If the list contains non-string elements (e.g., integers), they will be automatically converted to strings when inserted into the HTML.
+- The function does **not** escape HTML characters, so if the array contains HTML tags or special characters, they will be rendered as-is in the HTML output.
+- If the input list is empty, the function will return `<ul></ul>`, which is valid HTML.
+
+This function is ideal for generating simple HTML lists dynamically from Python lists for use in web pages or templates.

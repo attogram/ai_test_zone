@@ -1,0 +1,40 @@
+Here is a simple Bash shell function that converts an input array into an HTML unordered list:
+
+```bash
+#!/bin/bash
+
+html_list() {
+  local -n arr=$1
+  local items=()
+  
+  for i in "${arr[@]}"; do
+    items+=("<li>$i</li>")
+  done
+  
+  printf "<ul>\n"
+  printf "%s\n" "${items[@]}"
+  printf "</ul>\n"
+}
+```
+
+This function uses a loop to iterate through the array, and for each item, it adds that item to an array of HTML list items. It then prints out the HTML code for an unordered list with all the list items.
+
+Here's an example use case:
+
+```bash
+arr=(apple orange banana)
+html_list arr
+```
+
+This will output the following:
+
+```html
+<ul>
+  <li>apple</li>
+  <li>orange</li>
+  <li>banana</li>
+</ul>
+```
+
+Note: This code requires Bash version 3.2+. In earlier versions, `local -n` is not supported.
+

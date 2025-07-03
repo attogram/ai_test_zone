@@ -1,0 +1,20 @@
+Okay, so I need to figure out how many 'r's are in the word "Strawberry". Let me start by writing down the word to visualize it better. S-T-R-A-W-B-E-R-R-Y.
+
+Hmm, let me check each letter one by one. The first letter is S, then T, then R. So that's the first 'r'. Then the next letters are A, W, B, E, R, R, Y. Wait, so after the first R, there's another R followed by another R? Let me count again.
+
+Breaking it down: S-T-R-A-W-B-E-R-R-Y. So the letters are S, T, R, A, W, B, E, R, R, Y. So the R's are in positions 3, 8, and 9. So that's three R's? Wait, but let me make sure I didn't miss any.
+
+Starting from the beginning: S (1), T (2), R (3), A (4), W (5), B (6), E (7), R (8), R (9), Y (10). So yes, the third letter is R, then the eighth and ninth letters are both R. So that's three R's total. But wait, let me check again. The word is "Strawberry". Let me spell it out again: S-T-R-A-W-B-E-R-R-Y. So between the first R and the second R, there's a space. So the letters are S-T-R-A-W-B-E-R-R-Y. So the first R is at the third position, then after that, there's an R at the eighth position, and another R at the ninth position. So that's three R's. But I want to make sure I didn't miscount. Let me count each occurrence:
+
+1. S
+2. T
+3. R
+4. A
+5. W
+6. B
+7. E
+8. R
+9. R
+10. Y
+
+So positions 3, 8, 9. That's three R's. So the answer should be 3. But wait, sometimes people might miscount, like if they miss a letter or count a letter twice. Let me check again. The word is "Strawberry". Let me type it out: S-T-R-A-W-B-E-R-R-Y. So yes, that's three R's. Alternatively, maybe I can think of it as S-T-R-A-W-B-E-R-R-Y. So between the first R and the second R, there's a space, but the letters are R, then another R, then another R. So three R's. Yeah, I think that's correct. So the answer is 3.

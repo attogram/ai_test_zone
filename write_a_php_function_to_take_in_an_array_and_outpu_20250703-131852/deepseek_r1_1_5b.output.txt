@@ -1,0 +1,44 @@
+
+To create an HTML list from an array, we can follow these steps:
+
+1. **Check if the Array is Empty**: If the input array is empty, return an empty string indicating no list was generated.
+
+2. **Loop Through Each Item**: Iterate over each value in the array using its index as both the key and the content.
+
+3. **Create List Items**: For each item, create a `<li>` element that contains:
+   - A `<ul>` containing an `h2` for the list heading.
+   - Each subsequent `<li>` will contain a span with the numeric index and the stringified value.
+
+4. **Styling**: Ensure proper spacing by using appropriate HTML attributes like `style="word-wrap: break-word;"`.
+
+Here is the PHP function that implements these steps:
+
+```php
+function arrayToHTMLList($array) {
+    if (empty($array)) {
+        return '';
+    }
+    
+    $html = '<ul>\n';
+    foreach ($array as $index => $value) {
+        $html .= "<li><div class=\"list-item\">\n  <span class=\"text-xs\">$index</span>: $value</span></div>\n</li>\n";
+    }
+    $html .= '</ul>';
+    
+    return $html;
+}
+```
+
+This function will take an array and convert it into a properly formatted HTML list. Each item is presented in its own `<li>` within the `<ul>`. The output will look like:
+
+```html
+<ul>
+  <li><div class="list-item">
+    <span class="text-xs">0</span>: "value1"
+  </div></div>
+  <li><div class="list-item">
+    <span class="text-xs">1</span>: "value2"
+  </div></div>
+  ...
+</ul>
+```

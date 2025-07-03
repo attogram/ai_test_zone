@@ -1,0 +1,9 @@
+
+
+
+## Notes on Parsing:
+- Some lines may be missing or blank (empty)
+  - For example, an empty line between parameters and capabilities
+  - An empty line between system and license
+
+

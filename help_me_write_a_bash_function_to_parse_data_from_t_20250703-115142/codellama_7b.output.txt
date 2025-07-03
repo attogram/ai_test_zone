@@ -1,0 +1,74 @@
+
+Here is a Bash function that can parse the contents of a `model.info.txt` file and store the parsed data in variables:
+```bash
+parse_model() {
+    local modelInfo="$1" # The path to the model.info.txt file
+    local section=""     # The current section being read (e.g. "Model", "Capabilities", etc.)
+    local variableName="" # The name of the variable being set (e.g. "architecture", "parameters", etc.)
+    local value=""        # The value being set for the variable
+
+    while IFS= read -r line; do
+        if [[ "$line" == *"Model"* ]]; then
+            section="Model"
+            continue
+        elif [[ "$line" == *"Capabilities"* ]]; then
+            section="Capabilities"
+            continue
+        elif [[ "$line" == *"Projector"* ]]; then
+            section="Projector"
+            continue
+        elif [[ "$line" == *"Parameters"* ]]; then
+            section="Parameters"
+            continue
+        elif [[ "$line" == *"System"* ]]; then
+            section="System"
+            continue
+        elif [[ "$line" == *"License"* ]]; then
+            section="License"
+            continue
+        fi
+
+        if [[ "$section" == "Model" ]]; then
+            # Parse the line as a key-value pair in the format of "name    value"
+            variableName=$(cut -d' ' -f1 <<< "$line")
+            value=$(cut -d' ' -f2- <<< "$line")
+            declare "${variableName}_${section}"=$value
+        elif [[ "$section" == "Capabilities" ]]; then
+            # Parse the line as a single keyword
+            variableName="capability_${section}"
+            value=$(cut -d' ' -f1 <<< "$line")
+            declare "${variableName}=$value"
+        elif [[ "$section" == "Projector" ]]; then
+            # Parse the line as a key-value pair in the format of "name    value"
+            variableName=$(cut -d' ' -f1 <<< "$line")
+            value=$(cut -d' ' -f2- <<< "$line")
+            declare "${variableName}_${section}"=$value
+        elif [[ "$section" == "Parameters" ]]; then
+            # Parse the line as a key-value pair in the format of "name    value"
+            variableName=$(cut -d' ' -f1 <<< "$line")
+            value=$(cut -d' ' -f2- <<< "$line")
+            declare "${variableName}_${section}"=$value
+        elif [[ "$section" == "System" ]]; then
+            # Parse the line as a single string
+            variableName="systemPrompt"
+            value="$line"
+            declare "${variableName}=$value"
+        elif [[ "$section" == "License" ]]; then
+            # Parse the line as a single keyword
+            variableName="license"
+            value=$(cut -d' ' -f1 <<< "$line")
+            declare "${variableName}=$value"
+        fi
+    done < "$modelInfo"
+}
+```
+This function reads each line of the `model.info.txt` file and determines which section it belongs to based on the text in the line. It then sets a variable name based on the section and key, and stores the value for that key-value pair in a variable with the same name. For example, if a line in the "Model" section has the format "architecture    granite", this function will set the `architecture_model` variable to "granite".
+
+The function allows for any section or any line to be missing by using `continue` statements to skip over the lines that do not contain the expected text. It also uses a `while read` loop to iterate over each line in the file, and a `cut` command to extract the key and value from each line.
+
+You can call this function by passing it the path to your `model.info.txt` file as an argument:
+```bash
+parse_model "/path/to/model.info.txt"
+```
+This will set the variables `architecture_model`, `parameters_model`, `context_length_model`, `embedding_length_model`, `quantization_model`, `capability_completion`, `capability_tools`, `capability_vision`, `projector_architecture`, `projector_parameters`, `projector_embedding_length`, `projector_dimensions`, `num_ctx`, `temperature_parameters`, `systemPrompt`, and `license` based on the contents of your `model.info.txt` file.
+

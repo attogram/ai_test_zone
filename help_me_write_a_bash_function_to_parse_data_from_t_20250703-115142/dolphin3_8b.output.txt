@@ -1,0 +1,52 @@
+Sure, here is a bash function that will read your file and perform the tasks you've requested:
+
+```bash
+#!/bin/bash
+
+function parse_model_info {
+  declare -A model_vars=( "architecture" "context length" "embedding length" "quantization" )
+  declare -a capabilities=()
+  declare systemPrompt=""
+  declare temperature=""
+
+  while IFS = read -r line; do
+    if [[ "$line" == *Model* ]]; then
+      section="Model"
+      continue
+    elif [[ "$section" == "Model" && "${model_vars[@]}" =~ $line ]]; then
+      name="${line#*        }"
+      declare "$name=\"$value\""
+    fi
+
+    if [[ "$line" == *Capabilities* ]]; then
+      section="Capabilities"
+      continue
+    elif [[ "$section" == "Capabilities" ]]; then
+      capabilities+=("$line")
+    fi
+
+    if [[ "$line" == *System* ]]; then
+      section="System"
+      systemPrompt="$line"
+    fi
+
+    if [[ "$section" == "Parameters" && "${model_vars[@]}" =~ temperature ]]; then
+      name="${line#*        }"
+      declare "$name=\"$value\""
+      temperature="$value"
+    fi
+  done < model.info.txt
+
+  echo "Model Variables: $architecture $contextLength $embeddingLength $quantization"
+  echo "Capabilities: ${capabilities[*]}"
+  echo "System Prompt: $systemPrompt"
+  echo "Temperature: $temperature"
+}
+
+parse_model_info
+```
+
+This script reads the given file line by line, and when it encounters a new section, it starts parsing according to that section. The variables are saved in bash variables or an associative array as per your requirements.
+
+Please replace `model.info.txt` with your actual filename at the last line of code. After running this script, you should see the model variables (`architecture`, `context length`, `embedding length`, and `quantization`) printed on the console along with the capabilities (as an array), system prompt, and temperature value from the file.
+

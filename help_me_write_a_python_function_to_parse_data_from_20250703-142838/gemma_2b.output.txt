@@ -1,0 +1,49 @@
+```python
+import re
+
+def parse_model_info(file_path):
+    """
+    Parses data from the model.info.txt file.
+
+    Args:
+        file_path (str): The path to the model.info.txt file.
+
+    Returns:
+        dict: A dictionary containing the parsed data.
+    """
+
+    # Load the file into a string.
+    with open(file_path, "r") as f:
+        model_info = f.read()
+
+    # Parse the model information.
+    model_info = re.split(r"\n", model_info)[1:]
+
+    # Create a dictionary to store the parsed data.
+    parsed_data = {}
+
+    # Iterate over the lines in the model.info.txt file.
+    for line in model_info:
+        # Split the line into a name and a value.
+        name, value = line.split("    ")
+
+        # Add the name and value to the dictionary.
+        parsed_data[name] = value
+
+    return parsed_data
+```
+```
+
+**Usage:**
+
+```python
+# Get the path to the model.info.txt file.
+file_path = "model.info.txt"
+
+# Parse the data.
+parsed_data = parse_model_info(file_path)
+
+# Print the parsed data.
+print(parsed_data)
+```
+

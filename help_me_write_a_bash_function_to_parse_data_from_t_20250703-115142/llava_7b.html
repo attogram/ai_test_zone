@@ -1,0 +1,216 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: llava:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_a_bash_function_to_parse_data_from_t</a>: <b>llava:7b</b>: 20250703-115142<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<b>llava:7b</b> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_a_bash_function_to_parse_data_from_t.prompt.yaml'>yaml</a>)
+  words:175  bytes:1490<br />
+<textarea readonly rows='10'>Help me write a Bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...</textarea>
+</p>
+<p>Output: llava:7b (<a href='./llava_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'> Here is a Bash function that parses the data from the `model.info.txt` file as described:
+```
+parse_model_info() {
+  # Initialize variables
+  architecture=
+  context_length=
+  embedding_length=
+  quantization=
+  completion=
+  tools=
+  vision=
+  projector_architecture=
+  projector_parameters=
+  projector_embedding_length=
+  projector_dimensions=
+  num_ctx=
+  temperature=
+  system_prompt=
+  license=
+  
+  # Loop through the lines of the file
+  while read line; do
+    # Check if the line is in the Model section
+    if [[ $line == *architecture* ]]; then
+      architecture=$(echo $line | awk &#39;{print $2}&#39;)
+      continue
+    elif [[ $line == *parameters* ]]; then
+      parameters=$(echo $line | awk &#39;{print $2}&#39;)
+      # Check if the line is for temperature
+      if [[ $line == *temperature* ]]; then
+        temperature=$(echo $line | awk &#39;{print $2}&#39;)
+        continue
+      fi
+      continue
+    elif [[ $line == *Capabilities* ]]; then
+      capabilities=($capabilities)
+      capabilities+=($(echo $line | awk &#39;{print $1}&#39; | tr &#39; &#39; &#39;\n&#39;))
+      continue
+    elif [[ $line == *System* ]]; then
+      system_prompt=$line
+      continue
+    elif [[ $line == *Projector* ]]; then
+      projector_architecture=$(echo $line | awk &#39;{print $2}&#39;)
+      projector_parameters=$(echo $line | awk &#39;{print $3}&#39;)
+      projector_embedding_length=$(echo $line | awk &#39;{print $4}&#39;)
+      projector_dimensions=$(echo $line | awk &#39;{print $5}&#39;)
+      continue
+    elif [[ $line == *License* ]]; then
+      license=$(echo $line | awk &#39;{print $2}&#39;)
+      continue
+    fi
+  done &lt; model.info.txt
+  
+  # Print the parsed variables
+  echo &quot;architecture=$architecture&quot;
+  echo &quot;context_length=$context_length&quot;
+  echo &quot;embedding_length=$embedding_length&quot;
+  echo &quot;quantization=$quantization&quot;
+  echo &quot;completion=${capabilities[@]}&quot;
+  echo &quot;tools=${tools[@]}&quot;
+  echo &quot;vision=${vision[@]}&quot;
+  echo &quot;projector_architecture=$projector_architecture&quot;
+  echo &quot;projector_parameters=$projector_parameters&quot;
+  echo &quot;projector_embedding_length=$projector_embedding_length&quot;
+  echo &quot;projector_dimensions=$projector_dimensions&quot;
+  echo &quot;num_ctx=$num_ctx&quot;
+  echo &quot;temperature=$temperature&quot;
+  echo &quot;system_prompt=$system_prompt&quot;
+  echo &quot;license=$license&quot;
+}
+```
+You can call this function by running `parse_model_info` in your Bash script. This will parse the data from the `model.info.txt` file and print the parsed variables to the console. </textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./llava_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>254</td></tr>
+<tr><td class='left'>bytes</td><td>2404</td></tr>
+<tr><td class='left'>total duration</td><td>41.711702125s</td></tr>
+<tr><td class='left'>load duration</td><td>16.204917ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>392 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.544252375s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>154.07 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>732 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>39.150486167s</td></tr>
+<tr><td class='left'>eval rate</td><td>18.70 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./llava_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/llava:7b'>llava:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />vision<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1793M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_a_bash_function_to_parse_data_from_t</a>: <b>llava:7b</b>: 20250703-115142</p>
+<p>Page created: 2025-07-03 12:12:07</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

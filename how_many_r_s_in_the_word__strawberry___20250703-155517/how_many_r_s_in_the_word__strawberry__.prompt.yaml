@@ -1,0 +1,7 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: |
+      How many r's in the word "Strawberry"?
+model: ''

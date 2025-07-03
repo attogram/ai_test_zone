@@ -1,0 +1,40 @@
+Here is a simple implementation for your requirement:
+
+```php
+
+<?php
+
+function listArrayToHtml($array) {
+
+    // Initialize empty string for holding HTML code.
+
+    $html = '';
+
+    
+
+    foreach ($array as $key => $value) {
+
+        $html .= '<li>' . $value . '</li>';
+
+    }
+
+    return '<ul>' . $html . '</ul>';
+
+}
+
+// Test the function
+
+$array_to_html = array("Item1", "Item2", "Item3");
+
+echo listArrayToHtml($array_to_html);
+
+?>
+
+```
+
+The `listArrayToHtml` function takes an array as input and then iterates over each key-value pair in that array. For every element, it generates a `<li>` tag (a simple HTML line item) containing the value of the current element.
+
+After iterating through all elements in the array, we use a `<ul>` tag to create an unordered list (`<ul>`) around our `list` items created by `foreach`. 
+
+Finally, this function returns its output as a string. In your example code snippet, you're using it with `$array_to_html`, which contains three values: "Item1", "Item2" and "Item3".
+

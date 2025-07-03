@@ -1,0 +1,5 @@
+1. The sky is blue because of the scattering effect of the Earth's atmosphere. The scattering is more pronounced for shorter wavelengths, such as violet light, which gets scattered more than the longer wavelengths, such as red light. This causes the sky to appear blue, as the blue light remains unscattered and dominant in the sky. 
+2. Additionally, the Sun emits different wavelengths of light, including visible and ultraviolet (UV) radiation. The UV radiation is scattered more than the visible light, further enhancing the scattering effect and contributing to a bluer sky. 
+3. Molecules, dust particles, and water droplets in the atmosphere also contribute to the scattering process. 
+4. Finally, the sky appears blue because of the Earth's rotation, which causes the atmosphere to act like a lens, focusing the scattered light, making the blue light more dominant in the sky.
+

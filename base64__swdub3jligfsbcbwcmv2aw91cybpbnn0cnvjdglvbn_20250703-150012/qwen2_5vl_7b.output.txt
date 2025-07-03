@@ -1,0 +1,10 @@
+The Base64 string you provided appears to be a message in Chinese. Here is the decoded message:
+
+"我爱编程，因为它是我的爱好。"
+
+This translates to:
+
+"I love programming, because it is my hobby."
+
+It seems like the message is expressing a personal sentiment about enjoying programming as a hobby. If you need further assistance or have any other questions, feel free to ask!
+

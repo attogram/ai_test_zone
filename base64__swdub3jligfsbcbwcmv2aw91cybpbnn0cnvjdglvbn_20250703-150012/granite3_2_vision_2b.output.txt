@@ -1,0 +1,5 @@
+
+The given Base64 string is a URL encoded version of the text "Hello, World!". Here's the decoded text:
+
+"Hello, World!"
+

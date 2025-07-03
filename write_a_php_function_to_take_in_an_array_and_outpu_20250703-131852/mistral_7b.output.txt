@@ -1,0 +1,35 @@
+ Here's a simple PHP function that takes an array as input and returns HTML `<ul><li>...</li></ul>` containing the array content.
+
+```php
+function arrayToHtmlList($array) {
+    $html = '<ul>';
+
+    foreach ($array as $value) {
+        $html .= '<li>' . htmlspecialchars($value) . '</li>';
+    }
+
+    $html .= '</ul>';
+
+    return $html;
+}
+```
+
+Example usage:
+
+```php
+$myArray = ['Apple', 'Banana', 'Orange'];
+echo arrayToHtmlList($myArray);
+```
+
+This will output:
+
+```html
+<ul>
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Orange</li>
+</ul>
+```
+
+Remember to include the `htmlspecialchars()` function when outputting user-supplied data to protect against cross-site scripting (XSS) attacks. If you are using a template engine like Twig, Symfony or Blade, there should be a built-in escape filter available for you.
+

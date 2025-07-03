@@ -1,0 +1,6 @@
+1. "Socrates is a human." This statement establishes that Socrates belongs to the category of beings known as humans.
+2. "All humans are mortal." This statement indicates that being mortal is a characteristic shared by all members of the human category.
+3. Therefore, since Socrates is established as a member of the human category, he must also possess the characteristic of being mortal.
+
+Based on these statements and logical reasoning, we can conclude that Socrates is indeed mortal.
+

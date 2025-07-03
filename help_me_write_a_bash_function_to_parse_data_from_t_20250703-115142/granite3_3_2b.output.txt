@@ -1,0 +1,65 @@
+Here are Bash functions to parse your `model.info.txt` file based on your requirements:
+
+```bash
+function parse_model_info() {
+  local model_file="model.info.txt"
+
+  # Parse Model section
+  while IFS= read -r line; do
+    if [[ $line =~ ^[Model] ]]; then
+      IFS=" " read -r name value <<< "$line"
+      eval name="$value"
+    fi
+  done < "$model_file"
+
+  # Parse Capabilities section
+  local capabilities=()
+  while IFS= read -r line; do
+    if [[ $line =~ ^Capabilities ]]; then
+      IFS=" " read -r capability <<< "$line"
+      capabilities+=("$capability")
+    fi
+  done < "$model_file"
+
+  # Parse System section
+  local systemPrompt=""
+  while IFS= read -r line; do
+    if [[ $line =~ ^System]]; then
+      IFS=$(printf '%[03n'] )
+      read -r prompt <<< "$line"
+      systemPrompt="$prompt"
+    fi
+  done < "$model_file"
+
+  # Parse Parameters section (only temperature)
+  while IFS= read -r line; do
+    if [[ $line =~ ^Parameters ]]; then
+      IFS=" " read -r key value <<< "$line"
+      if [[ $key == "temperature" ]]; then
+        temp="$value"
+        break
+      fi
+    done < "$model_file"
+
+  # Parse License section (optional)
+  local license=""
+  while IFS= read -r line; do
+    if [[ $line =~ ^License]]; then
+      IFS=$(printf '%[03n'] )
+      read -r licenseLine <<< "$line"
+      license="$licenseLine"
+    done < "$model_file"
+}
+
+# Call the function to parse the file content
+parse_model_info
+
+# Accessing parsed variables:
+echo "Architecture: $architecture"
+echo "Capabilities: ${capabilities[@]}"
+echo "System Prompt: $systemPrompt"
+echo "Temperature: $temp"
+```
+
+This function reads `model.info.txt`, parses each section based on your requirements, and stores the parsed values in appropriate variables for further use. You can call this function with the path to your `model.info.txt` file to parse its content.
+

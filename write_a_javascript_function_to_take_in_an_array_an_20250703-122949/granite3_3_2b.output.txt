@@ -1,0 +1,35 @@
+Here's a JavaScript function that converts an array into an HTML unordered list (`<ul>`) based on the array elements:
+
+```javascript
+function arrayToHTMLList(arr) {
+  // Check if the input is an array and not empty
+  if (!Array.isArray(arr) || arr.length === 0) {
+    throw new Error("Input should be a non-empty array");
+  }
+
+  // Start constructing the HTML list
+  let htmlList = "<ul>";
+
+  // Loop through the array elements and add them as list items (<li>)
+  for (let item of arr) {
+    htmlList += `<li>${item}</li>`;
+  }
+
+  // Close the unordered list
+  htmlList += "</ul>";
+
+  return htmlList;
+}
+```
+
+You can use this function like so:
+
+```javascript
+const arrayData = ["Apple", "Banana", "Cherry"];
+const htmlListElement = document.createElement("div");
+htmlListElement.innerHTML = arrayToHTMLList(arrayData);
+document.body.appendChild(htmlListElement);
+```
+
+This will create an HTML unordered list (`<ul>`) with the items from the `arrayData`. You can then manipulate or display this element as needed in your webpage.
+

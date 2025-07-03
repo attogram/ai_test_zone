@@ -1,0 +1,65 @@
+```php
+<?php
+
+function parseModelInfo($file_path) {
+  $modelData = array();
+  $data = file_get_contents($file_path);
+
+  // Parse model section
+  foreach (explode("\n", $data) as $line) {
+    if (strpos($line, "Model") === 0) {
+      $modelData["model"] = array();
+      $fields = explode("    ", trim(str_replace(" ", "", $line)));
+      foreach ($fields as $key => $value) {
+        $modelData["model"][$key] = trim($value);
+      }
+    }
+  }
+
+  // Parse capabilities section
+  $capabilities = [];
+  foreach (explode("\n", $data) as $line) {
+    if (strpos($line, "Capabilities") === 0) {
+      $capabilities = array();
+      $keywords = explode(",", trim(str_replace(" ", "", $line)));
+      foreach ($keywords as $key) {
+        $capabilities[] = trim($key);
+      }
+    }
+  }
+
+  // Parse system section
+  $systemPrompt = "";
+  foreach (explode("\n", $data) as $line) {
+    if (strpos($line, "System") === 0) {
+      $systemPrompt = trim($line);
+    }
+  }
+
+  // Parse parameters section
+  $params = [];
+  foreach (explode("\n", $data) as $line) {
+    if (strpos($line, "Parameters") === 0) {
+      $params = array();
+      $values = explode("=", trim(str_replace(" ", "", $line)));
+      foreach ($values as $key => $value) {
+        $params[$key] = trim($value);
+      }
+    }
+  }
+
+  return array(
+    "model" => $modelData,
+    "capabilities" => $capabilities,
+    "systemPrompt" => $systemPrompt,
+    "params" => $params
+  );
+}
+
+// Example usage
+$data = parseModelInfo("model.info.txt");
+print_r($data);
+
+?>
+```
+

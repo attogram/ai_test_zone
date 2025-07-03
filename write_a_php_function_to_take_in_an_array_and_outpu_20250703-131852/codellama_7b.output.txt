@@ -1,0 +1,31 @@
+
+Here is a sample PHP function that takes an array as input and outputs an HTML list of its contents:
+```php
+function array_to_html_list($array) {
+  $html = '<ul>';
+  
+  foreach ($array as $item) {
+    $html .= "<li>$item</li>";
+  }
+  
+  $html .= '</ul>';
+  
+  return $html;
+}
+```
+This function takes an array as input and uses a `foreach` loop to iterate over its elements. For each element, it appends a `<li>` tag with the value of the element inside. Finally, it returns the complete HTML list wrapped in an `<ul>` tag.
+
+Here's an example usage:
+```php
+$fruits = array("apple", "banana", "cherry");
+echo array_to_html_list($fruits);
+```
+This would output:
+```
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

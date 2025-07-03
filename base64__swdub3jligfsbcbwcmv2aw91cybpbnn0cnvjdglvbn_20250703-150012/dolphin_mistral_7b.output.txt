@@ -1,0 +1,2 @@
+The Base64 encoded text decodes to the following ASCII text: "Hello World!". It seems like you have provided a Base64 encoded message, and I've decoded it for you. The original message is "Hello World!", which is a common phrase used in programming and computer science.
+

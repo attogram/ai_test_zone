@@ -1,0 +1,73 @@
+Certainly! Below is a Python function that reads a `model.info.txt` file and parses its contents according to the specified format.
+
+```python
+def parse_model_info(file_path):
+    model_data = {
+        'Model': {},
+        'Capabilities': [],
+        'System': None,
+        'Parameters': {}
+    }
+    
+    with open(file_path, 'r') as file:
+        current_section = None
+        
+        for line in file:
+            line = line.strip()
+            
+            if not line or line.startswith('#'):
+                continue  # Skip empty lines and comments
+            
+            if line.startswith('Model'):
+                current_section = 'Model'
+                continue
+            elif line.startswith('Capabilities'):
+                current_section = 'Capabilities'
+                continue
+            elif line.startswith('System'):
+                current_section = 'System'
+                continue
+            elif line.startswith('Parameters'):
+                current_section = 'Parameters'
+                continue
+            elif line.startswith('License') or line.startswith('Projector'):
+                break  # Stop parsing if we encounter another section
+            
+            if current_section == 'Model':
+                name, value = line.split(maxsplit=1)
+                model_data['Model'][name.strip()] = value.strip()
+            elif current_section == 'Capabilities':
+                model_data['Capabilities'].append(line.strip())
+            elif current_section == 'System':
+                if model_data['System'] is None:
+                    model_data['System'] = ''
+                model_data['System'] += line + '\n'
+            elif current_section == 'Parameters':
+                name, value = line.split(maxsplit=1)
+                model_data['Parameters'][name.strip()] = value.strip()
+    
+    # Clean up the System prompt by removing leading/trailing whitespace and newlines
+    if model_data['System']:
+        model_data['System'] = model_data['System'].strip().replace('\n', ' ')
+    
+    return model_data
+
+# Example usage:
+file_path = 'model.info.txt'
+parsed_data = parse_model_info(file_path)
+
+print(parsed_data)
+```
+
+### Explanation:
+1. **Initialization**: We initialize a dictionary `model_data` to hold the parsed data, with sections for Model, Capabilities, System, and Parameters.
+2. **File Reading**: The function reads the file line by line.
+3. **Section Identification**: Lines starting with 'Model', 'Capabilities', 'System', or 'Parameters' identify the current section.
+4. **Parsing Each Section**:
+   - For the **Model** and **Parameters** sections, lines are split into name and value, which are stored in dictionaries.
+   - For the **Capabilities** section, each line is added to a list.
+   - For the **System** section, lines are concatenated until another section header is encountered.
+5. **Cleanup**: The System prompt is cleaned by removing leading/trailing whitespace and newlines.
+
+This function will parse the provided `model.info.txt` file and return a dictionary containing the parsed data.
+

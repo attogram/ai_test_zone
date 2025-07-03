@@ -1,0 +1,49 @@
+Here is a PHP function that should meet your requirements:
+
+```php
+function parseModelInfo($file) {
+    $modelData = [];
+
+    // Open the file and read its contents
+    $fileData = file($file);
+
+    // Process each line
+    foreach ($fileData as $line) {
+        // Check for Model section
+        if (strpos($line, 'Model') !== false) {
+            list($section, $key, $value) = explode(' ', $line);
+            $modelData[$section] = $value;
+        }
+        // Check for Capabilities section
+        elseif (strpos($line, 'Capabilities') !== false) {
+            list($section, $key) = explode(' ', $line);
+            if (!isset($modelData['capabilities'])) {
+                $modelData['capabilities'] = [];
+            }
+            $modelData['capabilities'][$key] = '';
+        }
+        // Check for System section
+        elseif (strpos($line, 'System') !== false) {
+            list($section, $value) = explode(':', $line);
+            if (!isset($modelData['system'])) {
+                $modelData['system'] = $value;
+            } else {
+                $modelData['system'] .= "\n$value";
+            }
+        }
+        // Check for Parameters section
+        elseif (strpos($line, 'Parameters') !== false) {
+            list($section, $key, $value) = explode(' ', $line);
+            if ($section === 'temperature') {
+                $modelData['parameters'][$key] = $value;
+            }
+        }
+    }
+
+    // Return the parsed data
+    return $modelData;
+}
+```
+
+This function reads the file line by line and processes each line based on its section. It stores the relevant information in a PHP array, which you can then access as needed. The function handles missing sections and lines gracefully by ignoring them and not throwing errors.
+

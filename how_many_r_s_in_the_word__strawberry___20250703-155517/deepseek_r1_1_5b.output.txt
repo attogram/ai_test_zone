@@ -1,0 +1,27 @@
+
+To determine how many **`r`s** are in the word "Strawberry," follow these steps:
+
+1. **Write Down the Word:**
+   
+   ```
+   S t r a w b e r r y
+   ```
+
+2. **Identify Each Letter:**
+   
+   - **S**  
+   - **t**  
+   - **r** (First occurrence)  
+   - **a**  
+   - **w**  
+   - **b**  
+   - **e**  
+   - **r** (Second occurrence)  
+   - **r** (Third occurrence)  
+   - **y**
+
+3. **Count the `r`s:**
+   
+   - From the list above, there are three instances of the letter **`r`**.
+
+\boxed{3}

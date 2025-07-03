@@ -1,0 +1,101 @@
+
+To solve this problem, we need to parse a file containing system information structured in sections. The goal is to extract specific lines that contain numeric or temperature values into an associative array. The file contains three main sections: one for model information, another for caputure messages, and yet another for system prompts followed by parameters.
+
+### Approach
+1. **Reading the First Line**: The first line of the file will contain the initial setup information.
+2. **Processing Model Information**: Extract relevant variables from this line into an associative array.
+3. **Extracting Capure Messages**: Skip until the next section header (e.g., "Cap") and process lines to extract capture messages.
+4. **Extracting System Prompt**: Look for a system prompt line after the model setup, extract its value into a temporary variable.
+5. **Processing Parameters**: Each parameter line is processed, considering valid temperature formats with optional negative signs.
+
+### Solution Code
+```javascript
+function parseModelInfo() {
+    const variables = [];
+    const parameters = [];
+
+    // Skip empty lines until we find 'name' or 'value'
+    while (true) {
+        let line = read();
+        if (line === '') break;
+        
+        if (line.startsWith('name ') && line.endsWith(' value')) {
+            const parts = line.split(/\s+/);
+            if (parts.length >= 2) {
+                variables[parts[0]] = parseInt(parts[1], 10);
+            }
+        }
+
+        // Skip until section header is found
+        while (true) {
+            let sectionHeader = read();
+            if (sectionHeader === 'Cap') break;
+            
+            let line = read();
+            if (line === '') break;
+            if (line.startsWith('system ') && line.endsWith('.')) {
+                break;
+            }
+        }
+
+        // Skip until system prompt is found
+        while (true) {
+            let sectionHeader = read();
+            if (sectionHeader === 'System') break;
+
+            let line = read();
+            if (line === '') break;
+            
+            if (line.startsWith('system ') && line.endsWith('.')) {
+                break;
+            }
+        }
+
+        // Process parameters
+        while (true) {
+            let line = read();
+            if (line === '') break;
+
+            if (line.startsWith('key value') && !line.includes('=')) {
+                const key = line.split(' ')[0];
+                const value = line.split(' ')[1].substring(0, line.split(' ')[1].find('-'));
+                
+                if (!value.includes('-')) continue;
+                if (key === '-') continue;
+
+                if (Object.keys(variables).includes(key)) variables[key] = -variables[key];
+                else variables[key] = 0;
+            }
+
+            // Skip until section header is found
+            while (true) {
+                let sectionHeader = read();
+                if (sectionHeader === 'Cap') break;
+                
+                let line = read();
+                if (line === '') break;
+
+                if (line.startsWith('system ') && line.endsWith('.')) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return { variables, parameters };
+}
+
+// Example usage
+let result = parseModelInfo();
+console.log(result.variables);
+console.log(result.parameters);
+```
+
+### Explanation
+- **Reading the First Line**: The function reads lines until it finds a line starting with "name" or "value".
+- **Processing Model Information**: It extracts numerical values from lines that start with "name ".
+- **Extracting Capure Messages**: Lines following the model setup are processed to extract capture messages.
+- **Extracting System Prompt**: The system prompt value is stored as a temporary variable.
+- **Processing Parameters**: Each parameter line is parsed, ensuring valid negative signs and extracting temperature values into the main variables.
+
+This approach efficiently processes each section of the file, ensuring that all relevant information is extracted accurately.

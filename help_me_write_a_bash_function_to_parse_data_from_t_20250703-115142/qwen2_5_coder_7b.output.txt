@@ -1,0 +1,65 @@
+Here is a Bash function that reads a `model.info.txt` file as described:
+
+```bash
+parse_model_info() {
+    local file_path="$1"
+    declare -A model_params
+    declare -a capabilities=()
+    local systemPrompt=""
+    local temperature=""
+
+    while IFS= read -r line; do
+        if [[ "$line" == "Model"* ]]; then
+            while IFS= read -r sub_line; do
+                if [[ "$sub_line" =~ ^[[:space:]]*([a-zA-Z_0-9]+)\s+([^\s#].*) ]]; then
+                    model_params[${BASH_REMATCH[1]}]="${BASH_REMATCH[2]}"
+                fi
+            done < <(grep -A 999 "Model" "$file_path")
+        elif [[ "$line" == "Capabilities"* ]]; then
+            while IFS= read -r cap_line; do
+                capabilities+=("$cap_line")
+            done < <(grep -A 999 "Capabilities" "$file_path" | sed '/^$/d')
+        elif [[ "$line" == "System"* ]]; then
+            systemPrompt=$(sed -n '/^System$/,/^L*/p' "$file_path" | grep -EoP '^[^#]*' | tr '\n' ' ')
+        elif [[ "$line" == "Parameters"* ]]; then
+            while IFS= read -r sub_line; do
+                if [[ "$sub_line" =~ ^[[:space:]]*temperature\s+([0-9.]+)\s*$ ]]; then
+                    temperature="${BASH_REMATCH[1]}"
+                fi
+            done < <(grep -A 999 "Parameters" "$file_path")
+        fi
+    done < "$file_path"
+
+    # Print the parsed data (for testing purposes)
+    echo "Model Parameters:"
+    for key in "${!model_params[@]}"; do
+        echo "$key=${model_params[$key]}"
+    done
+
+    echo "Capabilities:"
+    printf "%s\n" "${capabilities[@]}"
+
+    echo "System Prompt: '$systemPrompt'"
+
+    echo "Temperature: $temperature"
+}
+
+# Example usage:
+parse_model_info model.info.txt
+```
+
+### Explanation:
+1. **Model Parameters**: The function reads through the file and captures each line in the `Model` section into an associative array `model_params`.
+2. **Capabilities**: It collects all keywords from the `Capabilities` section into a bash array.
+3. **System Prompt**: The `System` section is read up until the next section header (starting with "License"), and it's stored as a single variable.
+4. **Temperature**: The function captures the value of `temperature` from the `Parameters` section.
+
+### Usage:
+To use this function, simply call it with the path to your `model.info.txt` file:
+
+```bash
+parse_model_info model.info.txt
+```
+
+This will print out the parsed values for testing purposes. You can then access these variables in your script as needed.
+

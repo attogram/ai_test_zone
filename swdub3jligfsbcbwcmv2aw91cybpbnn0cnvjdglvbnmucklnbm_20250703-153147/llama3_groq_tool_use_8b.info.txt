@@ -1,0 +1,21 @@
+  Model
+    architecture        llama    
+    parameters          8.0B     
+    context length      8192     
+    embedding length    4096     
+    quantization        Q4_0     
+
+  Capabilities
+    completion    
+    tools         
+
+  Parameters
+    stop    "<|start_header_id|>"    
+    stop    "<|end_header_id|>"      
+    stop    "<|eot_id|>"             
+
+  License
+    META LLAMA 3 COMMUNITY LICENSE AGREEMENT – Adapted For Groq 8B/70B Tool Use    
+    Meta Llama 3 Version Release Date: April 18, 2024                              
+    ...                                                                            
+

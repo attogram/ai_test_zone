@@ -1,0 +1,10 @@
+
+Here is a simple Python function that takes an array as input and returns an HTML list of its contents:
+
+```python
+def array_to_html(arr):
+    return "<ul>" + ", ".join([str(item) for item in arr]) + "</ul>"
+```
+
+This function uses a list comprehension to convert each element in the array to a string and then joins them together with commas. The resulting string is enclosed in an unordered list (`<ul>`) and closed with a closing unordered list (`</ul>`).
+

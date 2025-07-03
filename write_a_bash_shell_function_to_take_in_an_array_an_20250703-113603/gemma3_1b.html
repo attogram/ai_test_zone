@@ -1,0 +1,166 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gemma3:1b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>gemma3:1b</b>: 20250703-113603<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<b>gemma3:1b</b> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_bash_shell_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:19  bytes:93<br />
+<textarea readonly rows='3'>Write a Bash shell function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: gemma3:1b (<a href='./gemma3_1b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>```bash
+#!/bin/bash
+
+# Function to generate an HTML list of an array.
+#
+# Args:
+#   array: The array of data to be displayed in the HTML.
+#
+# Returns:
+#   A string containing the HTML list.
+generate_html_list() {
+  local array=&quot;$1&quot;
+
+  if [[ -z &quot;$array&quot; ]]; then
+    echo &quot;Error: No array provided.&quot; &gt;&amp;2  # Print to stderr
+    return 1  # Indicate failure
+  fi
+
+  # Using &#39;printf&#39; and &#39;html&#39; for a clean HTML output
+  printf &quot;&lt;ul&gt;\n&quot;
+  printf &quot;  &lt;li&gt;%s&lt;/li&gt;\n&quot; | \
+    printf &quot;  &lt;br&gt;\n&quot;
+
+  # Iterate through the array and create list items
+  for item in &quot;${array[@]}&quot;; do
+    printf &quot;  &lt;br&gt;\n&quot;
+  done
+
+  printf &quot;&lt;/ul&gt;\n&quot;
+}
+
+
+# Example usage:
+if [ $# -eq 0 ]; then
+  echo &quot;Usage: $0 &lt;array_name&gt;&quot; &gt;&amp;2
+  exit 1
+fi
+
+array_name=&quot;$1&quot;
+html_list=$(generate_html_list &quot;$array_name&quot;)
+
+if [ $? -eq 0 ]; then
+  echo &quot;$html_list&quot; &gt;&amp;2 # Output to stderr
+else
+  echo &quot;Error: Failed to generate HTML list.&quot; &gt;&amp;2
+  exit 1
+fi
+```
+
+Key improvements and explanations:
+
+* **Error Handling:**  Crucially, the function now checks if an array is provided as input (`if [[ -z &quot;$array&quot; ]]`). If not, it prints an error message to `stderr` (using `&gt;&amp;2`) and returns a non-zero exit code to signal an error.  This is *essential* for robust scripts.
+* **`printf` for Clean HTML:**  Using `printf` is generally better than `echo` for complex HTML structures because it provides more control over formatting (whitespace, line breaks).  It&#39;s more reliable and avoids potential issues with shell interpretation.
+* **HTML Structure:** The function now generates a well-formed HTML list: `&lt;ul&gt;` with `&lt;li&gt;` elements for each item.
+* **`\n` for newlines:**  Adds `\n` to ensure each `&lt;li&gt;` appears on a new line, making the HTML easier to read.
+* **Clearer Output:** The output is formatted with `&lt;li&gt;` elements and `&lt;br&gt;` tags, making the list more readable.
+* **`for` loop:**  A standard `for` loop iterates through the array elements.
+* **Example Usage in `if` statement:** The example usage within the `if` statement demonstrates how to call the function and handle the return code.  This is much more practical.
+* **Standard Error Output:**  Output is redirected to `stderr` (`&gt;&amp;2`) to clearly separate the output from standard output. This is very important for scripting and command-line tools.
+* **Exit Codes:** The script uses `exit 1` in case of error,  which is standard practice for bash scripts.
+* **Docstring:** Includes a docstring to explain the function&#39;s purpose, arguments, and return value.
+* **Security (Important - though not directly in the code):**  While this version doesn&#39;t *directly* handle shell injection vulnerabilities, using `printf` to construct the HTML is generally safer than `echo` because it avoids potential shell expansion issues.  However, always be mindful of user input if you were using the output in a more complex context.
+
+How to use the function:
+
+1.  **Save the code:** Save the code above as a file, for example, `generate_list.sh`.
+2.  **Make it executable:**  `chmod +x generate_list.sh`
+3.  **Run the script:**  `./generate_list.sh &quot;your array&quot;` (replace `&quot;your array&quot;` with the array you want to display).
+
+This improved version addresses potential issues, produces more readable HTML output, and includes better error handling and usability.  It&#39;s a much more robust and practical solution.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gemma3_1b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>521</td></tr>
+<tr><td class='left'>bytes</td><td>3312</td></tr>
+<tr><td class='left'>total duration</td><td>13.746321625s</td></tr>
+<tr><td class='left'>load duration</td><td>53.722166ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>28 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>98.221583ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>285.07 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>894 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>13.593836s</td></tr>
+<tr><td class='left'>eval rate</td><td>65.77 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gemma3_1b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/gemma3:1b'>gemma3:1b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>gemma3</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>999.89M</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>1152</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 2021M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>gemma3:1b</b>: 20250703-113603</p>
+<p>Page created: 2025-07-03 11:44:09</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

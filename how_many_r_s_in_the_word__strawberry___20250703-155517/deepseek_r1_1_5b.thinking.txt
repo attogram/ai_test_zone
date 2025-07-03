@@ -1,0 +1,5 @@
+First, I need to identify the letters in the word "Strawberry."
+
+Next, I'll count how many times the letter 'r' appears.
+
+Finally, I'll report the total number of 'r's found.

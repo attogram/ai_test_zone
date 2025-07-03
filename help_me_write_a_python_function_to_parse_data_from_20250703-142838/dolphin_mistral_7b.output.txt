@@ -1,0 +1,43 @@
+Here is a Python function that parses the data from the model.info.txt file according to your specifications:
+
+```python
+def parse_model_info(filepath):
+    sections = {"Model": [], "Capabilities": [], "System": [], "Parameters": []}
+    keywords = set()
+    lines = open(filepath, 'r').readlines()
+
+    current_section = None
+
+    for line in lines:
+        trimmed_line = line.strip().split(' ', 1)
+        if len(trimmed_line) == 2:
+            key, value = trimmed_line
+            current_section, variable = key.lower(), value.strip()
+
+            if current_section in sections:
+                if not isinstance(sections[current_section], list):
+                    sections[current_section] = [sections[current_section]]
+                sections[current_section].append(variable)
+
+        elif current_section is not None and line.strip() != '':
+            sections[current_section].append(line.strip())
+        
+        elif 'parameters' in key:
+            temperature = value.split()[1] if len(value.split()) > 1 else ''
+            sections['Parameters'].append(temperature)
+
+        if line.startswith('capabilities'):
+            words = line.strip().split()
+            for word in words[2:]:
+                keywords.add(word)
+    return sections, list(keywords)
+```
+
+You can call this function as follows:
+
+```python
+sections, capabilities = parse_model_info('model.info.txt')
+print(f'Model section data: {sections["Model"]}')
+print(f'Capabilities: {capabilities}')
+```
+

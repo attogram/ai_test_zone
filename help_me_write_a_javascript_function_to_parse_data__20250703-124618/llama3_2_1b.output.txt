@@ -1,0 +1,62 @@
+Here is a well-structured JavaScript function that parses the `model.info.txt` file according to your specifications:
+```javascript
+const fs = require('fs');
+
+function parseModelInfo(filename) {
+  const parsedData = {};
+
+  try {
+    const dataContent = fs.readFileSync(filename, 'utf8');
+    const lines = dataContent.split('\n');
+
+    // Model section
+    const modelLines = lines.filter(line => line.trim().startsWith('Model'));
+    for (const line of modelLines) {
+      const parts = line.split(/\s+/);
+      if (parts.length !== 2 || !parts[1].trim()) continue;
+      parsedData[`$${parts[0]}`] = parts[1].trim();
+    }
+
+    // Capabilities section
+    const capabilitiesLines = lines.filter(line => line.trim().startsWith('Capabilities'));
+    for (const line of capabilitiesLines) {
+      if (!line || !line.trim()) continue;
+      parsedData['$capabilities'] = line.trim();
+    }
+
+    // System section
+    const systemPromptLines = lines.filter(line => line.trim().startsWith('$systemPrompt'));
+    for (const line of systemPromptLines) {
+      if (!line || !line.trim()) continue;
+      parsedData[`$systemPrompt`] = line.trim();
+    }
+
+    // Parameters section
+    const parametersLines = lines.filter(line => line.trim().includes('parameters'));
+    for (const line of parametersLines) {
+      if (!line || !line.trim() || !line.includes('temperature')) continue;
+      parsedData['temperature'] = line.trim();
+    }
+
+  } catch (error) {
+    console.error(`Error parsing model info file: ${error}`);
+  }
+
+  return parsedData;
+}
+```
+You can use this function like this:
+```javascript
+const parsedData = parseModelInfo('model.info.txt');
+console.log(parsedData);
+```
+This will output the parsed data in a JavaScript object, with the following structure:
+```javascript
+{
+  "$Model": "granite",
+  "$Capabilities": "completion tools vision",
+  "$SystemPrompt": "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions."
+}
+```
+Note that this implementation assumes that the input file is in the correct format, with each line following the specified structure. If you need to handle edge cases or errors, you may want to add additional checks and error handling.
+

@@ -1,0 +1,24 @@
+```python
+def array_to_html_list(arr):
+    """Converts an array into an HTML unordered list."""
+    html_list = "<ul>"
+    for item in arr:
+        html_list += f"<li>{item}</li>"
+    html_list += "</ul>"
+    return html_list
+```
+You can use this function by passing the array as an argument and it will return an HTML unordered list with each element of the array on a separate line. Here's an example usage:
+```python
+arr = ["apple", "banana", "orange"]
+html_list = array_to_html_list(arr)
+print(html_list)
+```
+Output:
+```css
+<ul>
+    <li>apple</li>
+    <li>banana</li>
+    <li>orange</li>
+</ul>
+```
+

@@ -1,0 +1,2 @@
+
+The sky appears blue due to Rayleigh scattering. Sunlight, composed of various wavelengths, interacts with atmospheric molecules. Shorter wavelengths (blue/violet) scatter more than longer ones (red/orange). While violet scatters most, the sun emits more blue light, and our eyes are more sensitive to it. Additionally, some violet light is absorbed in the upper atmosphere. This scattered blue light dominates the sky's color during daylight.

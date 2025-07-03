@@ -1,0 +1,28 @@
+Here is a Bash function that can parse data from the `model.info.txt` file:
+```bash
+parse_model_info() {
+  # Read lines from model.info.txt file
+  local filename="$1"
+  while IFS= read -r line; do
+    # Parse each line in Model section
+    if [[ $line == "Model"* ]]; then
+      declare -A model
+      read -r line
+      while [[ $line != *"="* && $line != ""* ]]; do
+        model["${line%%*=*}"]="${line#*=}"
+        read -r line
+      done
+      echo "Model:"
+      for key in "${!model[@]}"; do
+        echo "${model[$key]]}"
+      done
+    fi
+  done < "$filename"
+}
+```
+To use this function, simply call it with the path to your `model.info.txt` file as an argument:
+```bash
+parse_model_info /path/to/model.info.txt
+```
+This will print out all of the information that was parsed from the `model.info.txt` file.
+

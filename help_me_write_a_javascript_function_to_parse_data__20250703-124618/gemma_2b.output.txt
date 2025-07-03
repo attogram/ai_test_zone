@@ -1,0 +1,52 @@
+```javascript
+const data = [];
+
+// Read the model.info.txt file
+const fs = require('fs');
+const fileContent = fs.readFileSync('model.info.txt', 'utf-8');
+
+// Parse the model.info.txt file
+const lines = fileContent.split('\n');
+
+// Create a function to parse a line
+function parseLine(line) {
+  const [name, value] = line.split('    ');
+  data.push({ [name]: value });
+}
+
+// Parse the model section
+for (const line of lines) {
+  if (line.startsWith('Model')) {
+    parseLine(line);
+  }
+}
+
+// Create an array of capabilities keywords
+const capabilities = [];
+for (const line of lines) {
+  if (line.startsWith('Capabilities')) {
+    capabilities.push(line.split(':')[1]);
+  }
+}
+
+// Parse the system section
+let systemPrompt = '';
+for (const line of lines) {
+  if (line.startsWith('System')) {
+    systemPrompt = line.split(':')[1];
+  }
+}
+
+// Parse the parameters section
+const parameters = [];
+for (const line of lines) {
+  if (line.startsWith('Parameters')) {
+    const [key, value] = line.split(':');
+    parameters.push({ [key]: value });
+  }
+}
+
+// Export the data
+module.exports = { data, capabilities, systemPrompt, parameters };
+```
+

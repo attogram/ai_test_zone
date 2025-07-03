@@ -1,0 +1,13 @@
+Base64: SGlnZXN0IHRoZW5lcmFzaWx5IGEgc2VydGlzdGxuIEkgaGFscyBhbiBjYWxsZSB6aXJvdXMgSSdpZGdpbmNvcnNvdy4=
+Translated: Modern development techniques and tools are essential for modernization. The most important factors of the transformation include re-engineering, process redesign, business case development, implementation, monitoring, maintenance, and continuous improvement.
+
+From this output it is clear that we are looking at different phases involved in software transformation using agile methodologies and DevSecOps. These include requirements gathering (re-engineering), design (process redesign), estimation and cost calculation, code implementation, quality assurance, deployment, monitoring, maintenance, feedback collection and changes based on the collected information, and finally continuous improvement.
+
+For example, if a system is to be replaced with cloud-based technologies, then it is necessary that we first re-engineer the existing system. We may need to document everything from architecture to technical details of the current implementation. Based on this documentation, we can create new business cases for the proposed solution and develop an approach for implementation.
+
+Once we identify how a legacy system will be replaced, the next step is its redesign. For instance, when replacing a monolithic system with a microservices-based one, it is necessary that we divide the entire functionality into smaller services and then implement them accordingly.
+
+The next phase of transformation includes business case development. In this stage, an architect or designer creates high-level design documentation to meet the requirements of the new system. This document serves as a basis for the implementation plan.
+
+Now let us assume that everything is in place and we are ready with our implementation plan. The next step is implementation. The best approach is to implement it in a phased manner, i.e., starting with the most critical functionality first. Once one phase of the implementation is completed, then we move on to another phase.
+

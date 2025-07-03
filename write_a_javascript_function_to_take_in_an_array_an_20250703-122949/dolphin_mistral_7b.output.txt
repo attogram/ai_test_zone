@@ -1,0 +1,32 @@
+Here is an example of a JavaScript function that accepts an array as input and returns an HTML string containing an unordered list (`<ul>`) with each element in the array listed as a list item (`<li>`):
+
+```javascript
+function arrayToHtmlList(array) {
+  let htmlList = '<ul>';
+  
+  // Loop over the array and create HTML elements for each item
+  for (let i = 0; i < array.length; i++) {
+    htmlList += '<li>' + array[i] + '</li>';
+  }
+  
+  return htmlList + '</ul>';
+}
+```
+
+You can use this function like this:
+
+```javascript
+let myArray = ['Apple', 'Banana', 'Orange'];
+console.log(arrayToHtmlList(myArray));
+```
+
+This would output:
+
+```html
+<ul>
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Orange</li>
+</ul>
+```
+

@@ -1,0 +1,103 @@
+Okay, so I need to figure out how many times the letter 'r' appears in the word "Strawberry." Hmm, let's start by writing down the word and then going through each letter one by one. 
+
+First, the word is "Strawberry." Let me write that out: S, T, R, A, W, B, E, R, R, Y. Wait, actually, I should make sure I have all the letters correctly. Maybe it's better to list them in order without missing any.
+
+Let me count each letter step by step:
+
+1. The first letter is 'S'.
+2. The second letter is 'T'.
+3. The third letter is 'R'—that's our first 'r'. So that's one.
+4. The fourth letter is 'A'.
+5. The fifth letter is 'W'.
+6. The sixth letter is 'B'.
+7. The seventh letter is 'E'.
+8. Now, the eighth letter is 'R'—that's the second 'r'.
+9. The ninth letter is another 'R'—third 'r'.
+10. Wait, hold on, let me count again because sometimes I might miscount.
+
+Wait, maybe it's better to write each letter with its position:
+
+- Position 1: S
+- Position 2: T
+- Position 3: R (first r)
+- Position 4: A
+- Position 5: W
+- Position 6: B
+- Position 7: E
+- Position 8: R (second r)
+- Position 9: R (third r)
+- Position 10: Y
+
+Wait, hold on. Let me check the word "Strawberry." It might be helpful to write it out properly.
+
+"Strawberry" is spelled as S-T-R-A-W-B-E-R-R-Y? Wait, no. Let's actually spell it correctly.
+
+S T R A W B E R R Y. Wait, that seems off because sometimes the spelling can vary. Alternatively, perhaps it's better to look up "Strawberry" and see how many letters there are and their positions.
+
+Wait, perhaps I'm overcomplicating this. Let's take each letter one by one:
+
+Starting from the beginning of "Strawberry":
+
+1. S
+2. T
+3. R (first r)
+4. A
+5. W
+6. B
+7. E
+8. R (second r)
+9. R (third r)
+10. Y
+
+Wait, that doesn't seem right because "Strawberry" might have more letters. Let me actually write out each letter:
+
+S T R A W B E R R Y.
+
+So let's count the positions step by step:
+
+- 1: S
+- 2: T
+- 3: R (count 1)
+- 4: A
+- 5: W
+- 6: B
+- 7: E
+- 8: R (count 2)
+- 9: R (count 3)
+- 10: Y
+
+So, according to this breakdown, the letters are:
+
+1. S
+
+2. T
+
+3. R → count 1
+
+4. A
+
+5. W
+
+6. B
+
+7. E
+
+8. R → count 2
+
+9. R → count 3
+
+10. Y
+
+Therefore, there are three 'r's in "Strawberry." 
+
+Let me verify this by writing out the word and marking each 'r':
+
+S T R A W B E R R Y.
+
+Looking at each letter:
+
+- The third character is 'R' (1st r)
+- The eighth character is 'R' (2nd r)
+- The ninth character is 'R' (3rd r)
+
+Yes, that's three times. So the answer should be 3.

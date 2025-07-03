@@ -1,0 +1,100 @@
+Here is a JavaScript function that parses the given file `model.info.txt` as described in your question:
+```javascript
+function parseInfoFile(fileContent) {
+  const modelData = {};
+  
+  // Parse Model section
+  if (/Model/.test(fileContent)) {
+    const lines = fileContent.split(/\n/);
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.includes('name') && line.includes('value')) {
+        const [name, value] = line.split(' ');
+        modelData[name.trim()] = value.trim();
+      }
+    }
+  }
+
+  // Parse Capabilities section
+  let capabilities = [];
+  if (/Capabilities/.test(fileContent)) {
+    fileContent.split(/\n/).forEach(line => {
+      if (line) {
+        capabilities.push(line);
+      }
+    });
+  }
+
+  // Parse System section
+  const systemPrompt = '';
+  if (/System/.test(fileContent)) {
+    fileContent.split(/\n/).forEach((line, i) => {
+      if (i === 0 && line.includes('system prompt')) {
+        systemPrompt = line.split(' ')[2].trim();
+      }
+    });
+  }
+
+  // Parse Parameters section
+  const parameters = {};
+  if (/Parameters/.test(fileContent)) {
+    fileContent.split(/\n/).forEach(line => {
+      if (line.includes('name') && line.includes('value')) {
+        const [name, value] = line.split(' ');
+        parameters[name.trim()] = parseInt(value.trim(), 10);
+      }
+    });
+    
+    // Only save the 'temperature' value
+    if (/temperature/.test(fileContent)) {
+      const lines = fileContent.split(/\n/).slice(1);
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.includes('name') && line.includes('value')) {
+          const [name, value] = line.split(' ');
+          parameters[name.trim()] = parseInt(value.trim(), 10);
+          break;
+        }
+      }
+    }
+  }
+
+  return { modelData: modelData, capabilities: capabilities, systemPrompt: systemPrompt, parameters: parameters };
+}
+```
+Replace `fileContent` with your file's contents as a string:
+```javascript
+const fileContent = `
+Model
+architecture        granite    
+parameters          2.5B       
+context length      16384      
+embedding length    2048       
+quantization        Q4_K_M     
+
+Capabilities
+completion    
+tools         
+vision        
+
+Projector
+architecture        clip       
+parameters          441.86M    
+embedding length    1152       
+dimensions          0          
+
+Parameters
+num_ctx        16384    
+temperature    0        
+
+System
+A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions. 
+
+License
+Apache License               
+Version 2.0, January 2004  
+...`;
+const parsedData = parseInfoFile(fileContent);
+console.log(parsedData);
+```
+

@@ -1,0 +1,22 @@
+Here is a Python function that does what you asked for:
+
+```python
+def array_to_html_list(arr):
+    if not isinstance(arr, list):
+        return "Error: Input must be a list."
+    else:
+        html_list = "<ul>"
+        for item in arr:
+            html_list += "<li>{}</li>".format(item)
+        html_list += "</ul>"
+        return html_list
+```
+
+Here's how you can use it:
+
+```python
+array = ["Apple", "Banana", "Cherry"]
+html = array_to_html_list(array)
+print(html)
+```
+

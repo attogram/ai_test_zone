@@ -1,0 +1,32 @@
+Certainly! Below is a JavaScript function that takes an array and outputs an HTML list of its contents:
+
+```javascript
+function arrayToHtmlList(arr) {
+    // Create an HTML list element
+    const listElement = document.createElement('ul');
+
+    // Loop through the array and create list items
+    arr.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item;
+        listElement.appendChild(listItem);
+    });
+
+    // Append the list element to the body or any other container
+    document.body.appendChild(listElement);
+}
+
+// Example usage:
+const myArray = ['Apple', 'Banana', 'Cherry'];
+arrayToHtmlList(myArray);
+```
+
+### Explanation:
+1. **Creating the List Element**: We create an `ul` (unordered list) element using `document.createElement('ul')`.
+2. **Looping Through the Array**: We use `forEach` to iterate over each item in the array.
+3. **Creating List Items**: For each item in the array, we create a `li` (list item) element and set its text content to the current item.
+4. **Appending List Items**: We append each `li` element to the `ul` list element.
+5. **Appending to the Body**: Finally, we append the `ul` list element to the `body` of the document using `document.body.appendChild(listElement)`.
+
+You can call this function with any array you want to convert to an HTML list.
+

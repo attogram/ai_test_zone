@@ -1,0 +1,22 @@
+ Here's a simple Python function that takes in an array as input and returns an HTML list of the array contents:
+```python
+def array_to_html_list(arr):
+    """
+    Takes in an array and returns an HTML list of the array contents.
+    """
+    html = "<ul>"
+    for item in arr:
+        html += f"<li>{item}</li>"
+    html += "</ul>"
+    return html
+```
+This function takes in a single argument `arr`, which is assumed to be a list of items. It then initializes an empty HTML list element with the `<ul>` tag, and then loops through each item in the array, appending an HTML list item (`<li>`) element for each item with the text content set to the item itself. Finally, it appends the closing `</ul>` tag and returns the completed HTML list.
+
+Here's an example usage of this function:
+```scss
+my_array = ["apple", "banana", "cherry"]
+html_list = array_to_html_list(my_array)
+print(html_list)
+```
+This code creates an array `my_array`, passes it to the `array_to_html_list` function, and assigns the returned HTML list to a variable `html_list`. Finally, it prints out the resulting HTML list. 
+

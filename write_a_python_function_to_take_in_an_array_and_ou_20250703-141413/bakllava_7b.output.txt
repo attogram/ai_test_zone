@@ -1,0 +1,8 @@
+
+function arrayToHTML(array) {
+    var output = "<ul>";
+    for (var i = 0; i < array.length; i++) {
+      output += "<li>" + array[i] + "</li>";
+    }
+    return output + "</ul>";
+

@@ -1,0 +1,8 @@
+.
+# <li>Write another function that takes two arrays, concatenates them into one big array and outputs it as well as the number of elements in each array, without using concatenate().
+# <li>The third function you will write will be called average_of_array which will take an array as input and return its mean.  This is a method - a function that belongs to an object (here: the array)
+# <li>Use the average_of_array() function on your big concatenated array from last task, you will have to loop through it.
+
+
+
+

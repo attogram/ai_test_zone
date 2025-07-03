@@ -1,0 +1,2 @@
+The sky appears blue because of a phenomenon called Rayleigh scattering, which occurs when sunlight encounters small particles in the atmosphere. These particles, known as aerosols or water droplets, scatter shorter (blue) wavelengths more than longer (red) wavelengths, giving the sky its characteristic blue color.
+

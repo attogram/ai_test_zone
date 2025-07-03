@@ -1,0 +1,24 @@
+
+To solve this problem, we need to write a Python function that takes an array and outputs an HTML list of the array contents. Each element in the array will be displayed inside a `<li>` tag within a `<ul>` container.
+
+### Approach
+The approach involves the following steps:
+1. **Iterate through the Array**: Use a loop to go through each element in the input array along with its index.
+2. **Create HTML Elements**: For each element, create a list containing the index and the element itself.
+3. **Construct HTML String**: Wrap these lists within `<li>` tags to form individual items of a `<ul>` container.
+
+This approach ensures that each element from the array is displayed in a clear and structured manner using HTML tags.
+
+### Solution Code
+
+```python
+def array_to_html(arr):
+    return f'<ul><li>{", ".join("[{i}, {item}]" for i, item in enumerate(arr))}</li></ul>'
+```
+
+### Explanation
+1. **Iteration**: The function uses `enumerate(arr)` to loop through each element of the array along with its index.
+2. **Element Creation**: For each element, it creates a list `[i, item]` where `i` is the index and `item` is the current element from the array.
+3. **HTML Construction**: These lists are then joined into a single string and enclosed within `<li>` tags to form individual elements inside the `<ul>` container.
+
+This method ensures that each element is displayed in a structured and readable way using HTML, making it easy for users to understand the content at a glance.

@@ -1,0 +1,16 @@
+```
+function list_to_html() {
+    local -n arr=$1 # "local -n" allows us to pass the array by reference
+    local html="<ul>"
+
+    for i in "${arr[@]}"; do
+        html+="<li>${i}</li>"
+    done
+
+    html+="</ul>"
+
+    echo "$html"
+}
+```
+This function takes an array as its first argument, and outputs a HTML list of the array contents. The `local -n` syntax allows us to pass the array by reference, so that we can modify the original array within the function without affecting the caller's copy of the array.
+

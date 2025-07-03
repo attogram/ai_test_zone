@@ -1,0 +1,32 @@
+
+Given the function \( F(t) = \prod_{i=1}^{n} \frac{t - k_i}{k_i} \), we need to show that \( F(0) = 1 \) and find \( F'(0) \).
+
+First, we analyze \( F(0) \):
+
+\[ F(0) = \prod_{i=1}^{n} \frac{0 - k_i}{k_i} = \prod_{i=1}^{n} \left( \frac{-k_i}{k_i} \right) = (-1)^n \]
+
+Given that \( F(0) = 1 \), we conclude that \( (-1)^n = 1 \). This implies that \( n \) must be even.
+
+Next, we compute the derivative \( F'(t) \). Using logarithmic differentiation:
+
+\[ \ln F(t) = \sum_{i=1}^{n} \left( \ln(t - k_i) - \ln(k_i) \right) \]
+
+Taking the derivative with respect to \( t \):
+
+\[ \frac{F'(t)}{F(t)} = \sum_{i=1}^{n} \frac{1}{t - k_i} \]
+
+At \( t = 0 \):
+
+\[ F'(0) = F(0) \cdot \left( \sum_{i=1}^{n} \frac{1}{-k_i} \right) = (-1)^n \cdot \left( -\sum_{i=1}^{n} \frac{1}{k_i} \right) \]
+
+Since \( n \) is even, \( (-1)^n = 1 \), thus:
+
+\[ F'(0) = -\sum_{i=1}^{n} \frac{1}{k_i} \]
+
+### Final Answer
+
+F(0) = \boxed{(-1)^n}
+
+and
+
+F’(0) = \boxed{(-1)^{n+1} \sum_{i=1}^{n} \frac{1}{k_i}}

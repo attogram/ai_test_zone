@@ -1,0 +1,9 @@
+Sure. The premise is valid.
+
+- Socrates is a human.
+- All humans are mortal.
+
+Therefore, the conclusion is also valid: Is Socrates mortal?
+
+The answer is: Yes. Socrates is mortal.
+

@@ -1,0 +1,21 @@
+Sure! Here's a simple bash shell function that takes in an array as input and outputs an HTML unordered list (`<ul>`) with each item in the array:
+
+```bash
+list_array() {
+    local ARRAY=$1
+    echo "<ul>"
+    for item in "${ARRAY[@]}"; do
+        echo "<li>$item</li>"
+    done
+    echo "</ul>"
+}
+```
+
+You can use this function by passing your array as an argument. For example, if you have an array called `my_array`, you would call the function like this:
+
+```bash
+list_array my_array
+```
+
+The output will be an HTML unordered list with each item in your array.
+

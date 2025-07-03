@@ -1,0 +1,25 @@
+Here is a simple PHP function that takes an array as input and outputs an HTML list of its contents:
+```php
+function createHtmlList($array) {
+    $html = "<ul>";
+    foreach ($array as $item) {
+        $html .= "<li>$item</li>";
+    }
+    $html .= "</ul>";
+    return $html;
+}
+```
+You can use this function like this:
+```php
+$fruits = ['apple', 'banana', 'orange'];
+echo createHtmlList($fruits);
+```
+This will output the following HTML list:
+```html
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>orange</li>
+</ul>
+```
+

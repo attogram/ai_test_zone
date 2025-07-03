@@ -1,0 +1,24 @@
+Here is a simple PHP function that takes an array as input and outputs it as an HTML unordered list:
+
+```php
+function arrayToHtmlList($array) {
+    $html = "<ul>\n";
+    foreach ($array as $value) {
+        $html .= "  <li>$value</li>\n";
+    }
+    $html .= "</ul>";
+    return $html;
+}
+
+$array = array("Apple", "Banana", "Cherry");
+print(arrayToHtmlList($array));
+```
+
+In this code:
+
+1. `arrayToHtmlList` is the function that takes an input array.
+2. The foreach loop iterates through each item in the input array.
+3. Each item of the array becomes a list item and is placed into `$html`.
+4. After all items are added, the closing unordered list tag is appended to `$html`, so it's now complete HTML code.
+5. We use `print` to output the final result.
+

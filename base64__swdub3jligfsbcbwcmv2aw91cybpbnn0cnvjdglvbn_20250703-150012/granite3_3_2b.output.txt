@@ -1,0 +1,6 @@
+The provided text is encoded in Base64. Let's decode it:
+
+"There are many different kinds of flowers, each with their own unique beauty and symbolism."
+
+Base64 decoding tool converts the string "UHJvZ3JhbSBMaXJzdCBhbGwgdGhlIG5ldHVyZSB0byB0aGUgYnV0ZSBwb2ludCBpbiB0ZXN0IGJlIG9mIHNwcmltYXRl" back to its original form.
+

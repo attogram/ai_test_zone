@@ -1,0 +1,21 @@
+Here is one way you could write such a function:
+```python
+def print_html_list(arr):
+    """Prints out an HTML unordered list of items from an input array."""
+    # Define a string that represents the opening tag for the HTML list.
+    open_tag = '<ul>'
+    # Create an empty string to hold the closing tag for the HTML list and any contents between tags (i.e. all except the first argument).
+    close_tag_and_contents = '</ul>\n'
+    # Use a loop to iterate through each item in the array, adding it as an unordered list item.
+    result = []
+    for i, item in enumerate(arr):
+        li_open = '<li>'
+        if len(result) > 0:
+            li_open += ', '
+        li_open += str(item)
+        li_close = '</li>\n'
+        # Add the opening and closing tags for each unordered list item to a result string.
+        result.append(li_open + close_tag_and_contents)
+    # Combine all of the individual HTML strings into one single output
+```
+

@@ -1,0 +1,43 @@
+
+1. First, let's create a Bash function that reads the model.info.txt file and parses the data as per your requirements.
+
+```bash
+parse_model_info() {
+  local model_info
+
+  # Read the Model section
+  while IFS= read -r line; do
+    name=$(echo $line | cut -d' ' -f1)
+    value=$(echo $line | cut -d' ' -f2)
+    echo "architecture=$name" >> model_info
+    shift 2
+  done < model.info.txt
+
+  # Read the Capabilities section
+  while IFS= read -r line; do
+    capabilities=$(echo $line | cut -d' ' -f1)
+    model_info+=("\"$capabilities\"")
+  done < model.info.txt
+
+  # Read the System section
+  local system_prompt=$(cat model.info.txt | grep "System" | awk '{print $2}')
+  echo "system_prompt=$system_prompt" >> model_info
+
+  # Read the Parameters section
+  while IFS= read -r line; do
+    temperature=$(echo $line | cut -d' ' -f1)
+    model_info+=("\"temperature=$temperature\"")
+  done < model.info.txt
+
+  echo "model_info=$model_info"
+}
+```
+
+2. Call the function with the path to your model.info.txt file:
+
+```bash
+parse_model_info model.info.txt
+```
+
+This function will read the model.info.txt file, parse the data according to your requirements, and save it as a bash variable named `model_info`.
+

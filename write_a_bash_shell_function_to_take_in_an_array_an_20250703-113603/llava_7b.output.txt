@@ -1,0 +1,28 @@
+ Here's an example function that takes in an array as input and outputs an HTML unordered list of the array contents:
+```bash
+function create_html_list() {
+  local ARRAY=($1)
+  local LIST=""
+  
+  for i in "${ARRAY[@]}"; do
+    LIST="$LIST<li>$i</li>"
+  done
+  
+  echo "<ul>$LIST</ul>"
+}
+```
+To use this function, you can call it like this:
+```bash
+CREATE_HTML_LIST=("item1" "item2" "item3")
+echo "$(create_html_list CREATE_HTML_LIST)"
+```
+This will output the following HTML code:
+```css
+<ul>
+  <li>item1</li>
+  <li>item2</li>
+  <li>item3</li>
+</ul>
+```
+Note that this function assumes that the input array contains only strings. If your array may contain other types of data, you may need to modify the function accordingly. Also, this function only creates an unordered list. If you need an ordered list, you can simply change the function name from `create_html_list` to `create_html_ordered_list`. 
+

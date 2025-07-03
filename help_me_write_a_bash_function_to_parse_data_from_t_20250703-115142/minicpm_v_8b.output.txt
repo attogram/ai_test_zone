@@ -1,0 +1,20 @@
+Here is a Bash function that will parse `model.info.txt` based on your requirements:
+
+```bash
+function parse_file() {
+    FILEPATH="model.info.txt"
+    MODELICES=$(grep 'Model' "$FILEPATH" | cut -d " " -f 2)
+    CAPABILITIESICES=$(grep 'Capabilities' "$FILEPATH" | cut -d " " -f 2)
+    SYSTEMICES=$(grep 'System' "$FILEPATH" | cut -d " " -f 2)
+    PARAMETERSICES=$(grep 'Parameters' "$FILEPATH" | cut -d " " -f 2)
+
+    MODELICESIFS=$MODELICES
+    CAPABILITIESIFSIFS=$CAPABILITIESICES
+    SYSTEMIFSIFSIFS=$SYSTEMICES
+    PARAMETERSIFSIFSIFSIFS=$PARAMETERSICES
+
+    # Remove line breaks and save to an array for each section.
+    MODELICESIFSIFSIFSIFS=("${MODELICESIFS//\n/}")
+    CAPABILITIESIFSIFSIFSIFSIFS=("${CAPABILITIESIFSIFSIFSIFSIFS//\n/}")
+    SYSTEMIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFSIFS
+

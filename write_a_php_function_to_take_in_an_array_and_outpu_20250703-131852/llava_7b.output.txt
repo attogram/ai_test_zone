@@ -1,0 +1,38 @@
+ Here is one way you can achieve this:
+```php
+function arrayToList($array) {
+    $html = '<ul>';
+    foreach ($array as $item) {
+        $html .= '<li>' . htmlspecialchars($item) . '</li>';
+    }
+    $html .= '</ul>';
+    return $html;
+}
+```
+This function takes in an array, loops through each item in the array, and appends a list item (`<li>`) to a string that represents the HTML list. The `htmlspecialchars()` function is used to escape any special characters in the items so that they can be displayed safely in the HTML.
+
+You can then call this function like this:
+```php
+$array = array('item 1', 'item 2', 'item 3');
+echo arrayToList($array);
+```
+This will output the following HTML:
+```css
+<ul>
+    <li>item 1</li>
+    <li>item 2</li>
+    <li>item 3</li>
+</ul>
+```
+Note that you may need to adjust the function to suit your specific needs. For example, if you want to add a link to each item in the list, you could modify the `foreach` loop like this:
+```php
+function arrayToList($array) {
+    $html = '<ul>';
+    foreach ($array as $item) {
+        $html .= '<li><a href="' . htmlspecialchars($item) . '">' . htmlspecialchars($item) . '</a></li>';
+    }
+    $html .= '</ul>';
+    return $html;
+}
+``` 
+

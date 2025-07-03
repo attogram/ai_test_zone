@@ -1,0 +1,15 @@
+```javascript
+function createList(arr) {
+  let ul = document.createElement('ul');
+  
+  for (let i=0; i<arr.length; i++) {
+    let li = document.createElement('li');
+    li.textContent = arr[i];
+    ul.appendChild(li);
+  }
+
+  return ul;
+}
+```
+This function takes in an array `arr` and creates a new unordered list element (`<ul>`). It then loops through the array, creating a new list item element for each value (`<li>`), sets its text content to the current array value, and appends it to the unordered list. Finally, it returns the newly created unordered list.
+

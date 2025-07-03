@@ -1,0 +1,29 @@
+You can use the `printf` command with the `-v` option to format the output as HTML. Here is a simple example:
+
+```bash
+array_contents=$(printf '%s\n' "${@}")
+html_content="<ul>\n$(printf '<li>%s</li>' "${array_contents[@]}")</ul>"
+echo "$html_content"
+```
+
+In this example, `array_contents` is the variable containing the array values. The `%s\n` format specifier in `printf` creates a new line for each element in the array.
+
+Here's how you can use it:
+
+```bash
+array=(a b c d)
+echo "HTML Content:"
+html_content="<ul>\n$(printf '<li>%s</li>' "${array[@]}")</ul>"
+echo "$html_content"
+```
+
+This will output: 
+```
+HTML Content:
+<ul>
+<li>a</li>
+<li>b</li>
+<li>c</li>
+<li>d</li>
+```
+

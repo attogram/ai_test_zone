@@ -1,0 +1,20 @@
+
+Here is a simple function that takes an array as input and returns an HTML string representing a list:
+
+```javascript
+function arrayToHtmlList(arr) {
+  return `<ul>`;
+  arr.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    li.style.position = 'inline-block';
+    li.style.display = 'block';
+    li.style.marginBottom = `${index * 10}px`;
+    arr.splice(index, 1); // Remove the current element from the array
+  });
+  return `</ul>`;
+}
+```
+
+This function creates a new unordered list (`<ul>`) and iterates over each item in the input array. For each item, it creates a new list item (`<li>`) with the item's text content as its value. The list item is then appended to the end of the list. Finally, the function returns the complete HTML string for the list.
+

@@ -1,0 +1,72 @@
+Here is a JavaScript function that parses the data from the `model.info.txt` file:
+
+```javascript
+function parseModelInfo(fileContent) {
+    const lines = fileContent.split('\n');
+    const data = {};
+
+    let sectionName;
+    for (const line of lines) {
+        if (!line.trim()) continue; // Skip empty lines
+
+        if (line.startsWith(' ')) {
+            // Store value in the previous named variable
+            const parts = line.trim().split(' ');
+            const name = parts[0].replace(/[^a-zA-Z]/g, '');
+            const value = parts[1];
+            data[name] = value;
+        } else {
+            sectionName = line.trim();
+            data[sectionName] = {};
+        }
+    }
+
+    // Extract capabilities
+    const capabilitiesLines = lines.filter((line) => line.startsWith('Capabilities'));
+    if (capabilitiesLines.length > 0) {
+        data.Capabilities = capabilitiesLines[0].trim().split('\t').slice(1);
+    } else {
+        data.Capabilities = [];
+    }
+
+    // Extract system prompt
+    const systemPromptLines = lines.filter((line) => line.startsWith('System'));
+    if (systemPromptLines.length > 0) {
+        data.systemPrompt = systemPromptLines.join('\n');
+    }
+
+    // Extract parameters
+    const parametersSectionIndex = lines.findIndex((line) => line.trim().startsWith('Parameters'));
+    if (parametersSectionIndex > -1) {
+        const paramsLines = lines.slice(parametersSectionIndex + 1);
+        const paramNameValuePairs = [];
+        for (const paramLine of paramsLines) {
+            if (!paramLine.trim()) continue; // Skip empty lines
+            const parts = paramLine.trim().split(' ');
+            const name = parts[0].replace(/[^a-zA-Z]/g, '');
+            const value = parts[1];
+            paramNameValuePairs.push(`${name}=${value}`);
+        }
+        data.Parameters = {};
+        for (const pair of paramNameValuePairs) {
+            const [name, value] = pair.split('=');
+            if (name === 'temperature') {
+                data.Parameters[name] = value;
+            }
+        }
+    }
+
+    return data;
+}
+```
+
+You can call this function by passing the content of `model.info.txt` as an argument:
+
+```javascript
+const fileContent = "your model info txt contents";
+const parsedData = parseModelInfo(fileContent);
+console.log(parsedData);
+```
+
+This will output a JavaScript object with all the extracted data. You can further process or log this data as needed.
+

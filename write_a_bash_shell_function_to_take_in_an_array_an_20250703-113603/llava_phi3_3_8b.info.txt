@@ -1,0 +1,26 @@
+  Model
+    architecture        llama     
+    parameters          3.8B      
+    context length      4096      
+    embedding length    3072      
+    quantization        Q4_K_M    
+
+  Capabilities
+    completion    
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          303.50M    
+    embedding length    1024       
+    dimensions          768        
+
+  Parameters
+    stop        "<|user|>"         
+    stop        "<|assistant|>"    
+    stop        "<|system|>"       
+    stop        "<|end|>"          
+    stop        "<|endoftext|>"    
+    num_ctx     4096               
+    num_keep    4                  
+

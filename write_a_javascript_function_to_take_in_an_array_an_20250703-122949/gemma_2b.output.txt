@@ -1,0 +1,23 @@
+```javascript
+function renderArray(array) {
+  return `<ul>` + array.map((item) => `<li>${item}</li>`).join('') + `</ul>`;
+}
+```
+
+**Example Usage:**
+```
+const arr = ['Item 1', 'Item 2', 'Item 3'];
+const output = renderArray(arr);
+
+console.log(output);
+```
+
+**Output:**
+```
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+```
+

@@ -1,0 +1,36 @@
+Here is a simple bash function that converts an array into an HTML list:
+
+```bash
+function array_to_html_list() {
+    if [ ${#} -ne 1 ]; then
+        echo "Error: Please provide only one argument."
+        return 1
+    fi
+
+    local arr=($1)
+    local html_list=""
+
+    for item in "${arr[@]}"; do
+        html_list+="(<li>$item</li>)"
+    done
+
+    echo "<ul>${html_list}</ul>"
+}
+```
+
+You can use this function like this:
+
+```bash
+array_to_html_list("apple,banana,orange")
+```
+
+This will output the following HTML list:
+
+```html
+<ul>
+  (<li>apple</li>)
+  (<li>banana</li>)
+  (<li>orange</li>)
+</ul>
+```
+

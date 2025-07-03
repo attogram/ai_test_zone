@@ -1,0 +1,12 @@
+
+function mylist(array) { 
+for ((i = 0; i < array.length; i++)) { 
+if [array[i] - 1] [!exist $array[i] ] { 
+return "not exist" 
+} else if [exist $array[i] ] { 
+return "exist" 
+} 
+} 
+return "array length: "array.length" 
+}
+

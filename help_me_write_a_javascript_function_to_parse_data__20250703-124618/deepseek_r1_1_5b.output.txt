@@ -1,0 +1,85 @@
+
+Here is the complete solution:
+
+```javascript
+function parseModelInfo() {
+    const lines = model.info.txt.split('\n').filter(line => line !== '');
+    
+    let result = [];
+    
+    // Process Model section
+    for (let i = 0; i < lines.length && !lines[i].startsWith('Model'); i++) {
+        const line = lines[i];
+        const parts = line.split(' ');
+        if (parts[1] === 'value') {
+            const name = parts.shift();
+            const value = parts.pop();
+            result.push({ name: name, value: value });
+        }
+    }
+
+    // Process Capabilities
+    for (let i = 0; i < lines.length && !lines[i].startsWith('Capabilities'); i++) {
+        const line = lines[i];
+        if (!line) continue;
+        const parts = line.split(/\s+/);
+        result.push(parts[0].toLowerCase()); // Assuming all are lowercase, but this could change
+    }
+
+    // Process System section (var $systemPrompt)
+    for (let i = 0; i < lines.length && !lines[i].startsWith('System'); i++) {
+        const line = lines[i];
+        if (!line) continue;
+        result.push(line);
+    }
+
+    // Process Parameters (only temperature is saved)
+    for (let i = 0; i < lines.length && !lines[i].startsWith('Parameters'); i++) {
+        const line = lines[i];
+        if (!line) continue;
+        let parts = line.split(/\s+/);
+        if (parts[1] === 'temperature') { // Assuming temperature is last in parameters
+            result.push(parts.pop());
+        }
+    }
+
+    return result;
+}
+
+// Example usage:
+const content = `Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+ 
+    Capabilities
+    completion    
+    tools         
+    vision        
+
+    Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+    Parameters
+    num_ctx        16384    
+    temperature    0        
+ 
+    System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user's questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+
+`;
+const contentLines = content.split('\n');
+console.log(parseModelInfo().join(' ', result));
+```
+
+This function processes each line of `model.info.txt`, categorizes it by section, and extracts the required information into variables or arrays as specified. It handles missing sections by skipping empty lines.

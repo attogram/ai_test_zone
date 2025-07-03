@@ -1,0 +1,48 @@
+```
+function parseModelInfo(modelInfo) {
+  // Create an object to store parsed data
+  const parsedData = {};
+
+  // Parse Model section
+  for (const line of modelInfo.Model.split('\n')) {
+    if (line.trim() != "") {
+      const [name, value] = line.split(" ");
+      parsedData[name] = value;
+    }
+  }
+
+  // Parse Capabilities section
+  const capabilities = [];
+  for (const line of modelInfo.Capabilities.split('\n')) {
+    if (line.trim() != "") {
+      capabilities.push(line.trim());
+    }
+  }
+  parsedData['capabilities'] = capabilities;
+
+  // Parse System section
+  const systemPrompt = [];
+  for (const line of modelInfo.System.split('\n')) {
+    if (line.trim() != "") {
+      systemPrompt.push(line.trim());
+    }
+  }
+  parsedData['systemPrompt'] = systemPrompt.join('');
+
+  // Parse Parameters section
+  const parameters = {};
+  for (const line of modelInfo.Parameters.split('\n')) {
+    if (line.trim() != "") {
+      const [name, value] = line.split(" ");
+      if (name == 'temperature') {
+        parsedData['parameters'] = { temperature: parseFloat(value) };
+        break;
+      }
+    }
+  }
+
+  // Return the parsed data
+  return parsedData;
+}
+```
+

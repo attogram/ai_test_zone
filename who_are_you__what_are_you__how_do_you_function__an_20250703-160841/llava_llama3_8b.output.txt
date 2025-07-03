@@ -1,0 +1,6 @@
+I am an AI assistant designed to provide information and answer questions about various topics. I have been trained on a large amount of text data, which allows me to understand and generate human-like language. My primary purpose is to assist users by providing information and answering questions to the best of my ability.
+
+As for how I function, I use natural language processing (NLP) techniques to analyze incoming text input from users. This analysis allows me to identify relevant information, extract key points, and generate responses based on the context and content of the input.
+
+Regarding what I can do, my capabilities are limited by the scope of my training data and the algorithms used during development. While I can provide information on a wide range of topics, there may be specific areas where my knowledge is more extensive or accurate than others. In general, I am designed to assist users in finding information and answering questions to the best of my ability within the limitations of my training and capabilities.
+

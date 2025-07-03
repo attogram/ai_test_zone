@@ -1,0 +1,29 @@
+```bash
+parse_info() {
+  local info_file=$1
+
+  # read Model section and save name=value lines as variables in bash
+  local model_vars=$(awk '/^Model/ {if ($2 ~ /[^ ]+/) printf "name=\"%s\"\n", $2; else print} END {print ""}' "$info_file")
+  
+  # read Capabilities section and save keywords into a bash array
+  local capabilities=($(sed '/^Capabilities/,$!d' <<< "$model\_vars"))
+  
+  # read System section and save as $systemPrompt variable
+  local system_prompt=$(awk '/^System/{print;next} END {print ""}' <<< "$info_file")
+  
+  # read Parameters section, only save 'temperature' value if present
+  local temperature_value=0
+  awk '/^Parameters/ && /^temperature/ {getline ; print $2 }' <<< "$model\_vars" | while read -r line; do
+      if [ "$(echo $line | tr -d ' ')">1"]  ]; then
+          echo "warning: multiple temperatures found, only saving first value." >&2
+          temperature_value="$line"
+      fi
+  done
+  
+  # return all variables as a string
+  local result="name=$model\_vars\ncapabilities=($capabilities)\ntemperature=$temperature_value\n$system\_prompt"
+  echo "$result"
+}
+```
+To use this function, you can call it like this: `parse_info /path/to/model.info.txt`
+

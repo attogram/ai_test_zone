@@ -1,0 +1,50 @@
+ Here is a Python function that parses the data from the `model.info.txt` file as per your specifications:
+
+```python
+def parse_model_info(file_path):
+    sections = {"Model": {}, "Capabilities": [], "System": "", "Parameters": {}, }
+    current_section = ""
+
+    with open(file_path, 'r') as file:
+        for line in file:
+            # Remove newline character and spaces at the end of the line
+            line = line.strip()
+            key, value = line.split(" ")
+
+            if not line or line.startswith("#"):
+                continue
+
+            if current_section == "Model":
+                sections["Model"][key] = value
+            elif current_section == "Parameters":
+                if key == "temperature":
+                    sections["Parameters"][key] = value
+            else:
+                sections[current_section].append(value)
+
+            # Update the current section based on the line's format
+            if line.startswith("Model"):
+                current_section = "Model"
+            elif line.startswith("Capabilities"):
+                current_section = "Capabilities"
+            elif line.startswith("System"):
+                current_section = "System"
+            elif line.startswith("Parameters"):
+                current_section = "Parameters"
+
+    # Convert the Model section into Python variables
+    for key, value in sections["Model"].items():
+        globals()[key] = value
+
+    return sections
+```
+
+You can use this function to parse your file like so:
+
+```python
+parsed_info = parse_model_info("model.info.txt")
+print(architecture)  # Outputs the architecture value (e.g., "granite")
+print(capabilities)  # Outputs a list of capabilities (e.g., ["completion", "tools", "vision"])
+print(systemPrompt)  # Outputs the system prompt as a single string
+print(parameters["temperature"])  # Outputs the temperature value (e.g., "0")
+

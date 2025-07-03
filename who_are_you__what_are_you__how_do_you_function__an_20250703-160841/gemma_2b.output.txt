@@ -1,0 +1,25 @@
+I am a large language model, trained by Google. I am a conversational AI that can assist with a wide range of tasks such as answering questions, generating text, summarizing, and more.
+
+**What I am:**
+
+* A computer program that can understand and respond to natural language.
+* A language model with a massive dataset of text and code.
+* A conversational AI that can interact with humans in a natural and engaging way.
+
+**How I function:**
+
+* I use natural language processing (NLP) techniques to understand the meaning of the text I am given.
+* I am trained on a massive dataset of text and code, which allows me to learn the relationships between words and concepts.
+* I use these relationships to generate new text, translate languages, and answer questions.
+
+**What I can do:**
+
+* Answer a wide range of questions on various topics.
+* Generate creative text formats, such as poems, stories, and scripts.
+* Summarize long pieces of text into shorter summaries.
+* Translate text between multiple languages.
+* Provide customer support and information.
+* Help with problem-solving and decision-making.
+
+I am still under development, but I am constantly learning and improving my abilities.
+

@@ -1,0 +1,25 @@
+Here is one way you could write a Bash function that takes in an array as input and outputs a HTML list:
+```bash
+html_list() {
+    local -n arr=$1 # use variable-reference syntax to access the passed argument
+    cat <<EOF
+<ul>
+$(printf "<li>%s</li>" $(for item in "${arr[@]}"; do echo "$item"; done))
+</ul>
+EOF
+}
+```
+To use this function, you would pass it an array as its first argument. For example:
+```bash
+my_array=( "apple" "banana" "cherry" ) # define an array
+html_list my_array # call the function with the array as an argument
+```
+This would output the following HTML list:
+```less
+<ul>
+  <li>apple</li>
+  <li>banana</li>
+  <li>cherry</li>
+</ul>
+```
+

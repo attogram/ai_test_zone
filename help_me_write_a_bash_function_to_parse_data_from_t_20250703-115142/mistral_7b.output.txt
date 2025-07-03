@@ -1,0 +1,65 @@
+ Here is a Bash function that parses your model.info.txt file as per your specifications:
+
+```bash
+parse_model_info() {
+    # Initialize variables and arrays
+    architecture=""
+    parameters=()
+    context_length=""
+    embedding_length=""
+    quantization=""
+    capabilities=()
+    system_prompt=""
+    temperature=0
+
+    section="Model"
+    IFS=' ' read -r name value <<< "$(grep "^$section[[:space:]]*[a-z]*[[:space:]]*[a-z]*" < $1)"
+    while [[ ! -z $name ]]; do
+        case $section in
+            Model) architecture=$value ;;
+            Parameters) temperature=$value ;;
+            *) ;; # Ignore other sections for now
+        esac
+        IFS=' ' read -r name value <<< "$(grep "^$section[[:space:]]*[a-z]*[[:space:]]*[a-z]*" < $1)"
+    done
+
+    section="Capabilities"
+    IFS=$'\n' read -ra capabilities <<< "$(grep "^$section[[:space:]]*" < $1)"
+
+    section="Parameters"
+    IFS=' ' read -r name value <<< "$(grep "^$section[[:space:]]*[a-z]*[[:space:]]*[a-z]*" < $1)"
+    while [[ ! -z $name ]] && [[ "$name" == temperature ]]; do
+        temperature=$value; break
+        IFS=' ' read -r name value <<< "$(grep "^$section[[:space:]]*[a-z]*[[:space:]]*[a-z]*" < $1)"
+    done
+
+    section="System"
+    IFS=$'\n' read -r system_prompt <<< "$(grep "^$section.*" < $1)"
+
+    # Handle multiple lines in System section
+    if [[ ! -z $system_prompt ]]; then
+        system_prompt=$(echo "$system_prompt" | tr -d '\r')
+        system_prompt=$(echo "$system_prompt" | sed '/^$/d')
+    fi
+
+    # Set variables if they are not empty
+    eval architecture="${architecture:-""}"
+    eval context_length="${context_length:-""}"
+    eval embedding_length="${embedding_length:-""}"
+    eval quantization="${quantization:-""}"
+    eval temperature="${temperature:-0}"
+}
+```
+
+You can call the function like this:
+
+```bash
+parse_model_info model.info.txt
+echo "architecture=$architecture"
+echo "capabilities=${capabilities[@]}"
+echo "system_prompt=$system_prompt"
+echo "temperature=$temperature"
+```
+
+This function uses `grep`, `read` and other basic Bash commands to parse the file, and it handles missing sections or lines by simply ignoring them.
+

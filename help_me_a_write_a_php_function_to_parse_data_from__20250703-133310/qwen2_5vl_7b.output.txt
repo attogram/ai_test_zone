@@ -1,0 +1,107 @@
+Sure, here's a PHP function that parses the `model.info.txt` file and extracts the required information as described:
+
+```php
+function parseModelInfo($filename) {
+    $data = file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $model = [];
+    $capabilities = [];
+    $systemPrompt = '';
+    $parameters = [];
+
+    $section = null;
+    $currentLine = '';
+
+    foreach ($data as $line) {
+        if (trim($line) === '') {
+            continue;
+        }
+
+        if (strpos($line, 'Model') === 0) {
+            $section = 'Model';
+            $currentLine = '';
+            continue;
+        } elseif (strpos($line, 'Capabilities') === 0) {
+            $section = 'Capabilities';
+            $currentLine = '';
+            continue;
+        } elseif (strpos($line, 'System') === 0) {
+            $section = 'System';
+            $currentLine = '';
+            continue;
+        } elseif (strpos($line, 'Parameters') === 0) {
+            $section = 'Parameters';
+            $currentLine = '';
+            continue;
+        }
+
+        if ($section === 'Model') {
+            $parts = explode(' ', $line);
+            if (count($parts) === 2) {
+                $model[$parts[0]] = $parts[1];
+            }
+        } elseif ($section === 'Capabilities') {
+            $capabilities[] = trim($line);
+        } elseif ($section === 'System') {
+            $systemPrompt .= $line . ' ';
+        } elseif ($section === 'Parameters') {
+            $parts = explode(' ', $line);
+            if (count($parts) === 2 && $parts[0] === 'temperature') {
+                $parameters['temperature'] = $parts[1];
+            }
+        } else {
+            $currentLine .= $line . ' ';
+        }
+    }
+
+    // Trim and clean the system prompt
+    $systemPrompt = trim($systemPrompt);
+
+    return [
+        'model' => $model,
+        'capabilities' => $capabilities,
+        'systemPrompt' => $systemPrompt,
+        'parameters' => $parameters,
+    ];
+}
+
+// Example usage
+$modelInfo = parseModelInfo('model.info.txt');
+print_r($modelInfo);
+```
+
+### Explanation:
+1. **Model Section**: Each line is in the format "name value". We split the line by space and store the name and value in the `$model` array.
+2. **Capabilities Section**: Each line is a single keyword. We store these keywords in an array.
+3. **System Section**: The system prompt is a single line or multiple lines. We concatenate these lines and store them in the `$systemPrompt` variable.
+4. **Parameters Section**: Similar to the Model section, each line is in the format "name value". We split the line by space and store the name and value in the `$parameters` array. We specifically look for the 'temperature' value.
+
+### Example Output:
+```php
+Array
+(
+    [model] => Array
+        (
+            [architecture] => granite
+            [parameters] => 2.5B
+            [context length] => 16384
+            [embedding length] => 2048
+            [quantization] => Q4_K_M
+        )
+
+    [capabilities] => Array
+        (
+            [0] => completion
+            [1] => tools
+            [2] => vision
+        )
+
+    [systemPrompt] => A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.
+    [parameters] => Array
+        (
+            [temperature] => 0
+        )
+)
+```
+
+This function will parse the `model.info.txt` file and return the parsed data in the format described.
+

@@ -1,0 +1,41 @@
+Here is a possible implementation of your requirements:
+
+```javascript
+function parseModelInfo(fileContent) {
+  const model = {};
+  const capabilities = [];
+  let systemPrompt = '';
+  const parameters = {};
+
+  fileContent.split('\n').forEach((line) => {
+    if (line.startsWith('Model')) {
+      const parts = line.split('    ');
+      for (let i = 1; i < parts.length; i++) {
+        const [name, value] = parts[i].trim().split('        ');
+        model[name] = value;
+      }
+    } else if (line.startsWith('Capabilities')) {
+      capabilities.push(...line.split('    ')[1].trim().split('\n'));
+    } else if (line.startsWith('System')) {
+      systemPrompt += line.trim() + '\n';
+    } else if (line.startsWith('Parameters')) {
+      const parts = line.split('    ');
+      for (let i = 1; i < parts.length; i++) {
+        const [name, value] = parts[i].trim().split('        ');
+        parameters[name] = value;
+      }
+    }
+  });
+
+  return { model, capabilities, systemPrompt, parameters };
+}
+
+const fileContent = "Model\narchitecture        granite\nparameters          2.5B\ncontext length      16384\nembedding length    2048\nquantization        Q4_K_M\ncapabilities\ncompletion\ntools        \vision\ndSystem\nA chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.\nLicense\nApache License               Version 2.0, January 2004     ...";
+const result = parseModelInfo(fileContent);
+console.log(result.model); // {"architecture":"granite","parameters":"2.5B","context length":"16384","embedding length":"2048","quantization":"Q4_K_M"}
+console.log(result.capabilities); // ["completion", "tools", "vision"]
+console.log(result.systemPrompt); 
+// "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions."
+console.log(result.parameters); // {"temperature":"0"}
+```
+

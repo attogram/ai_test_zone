@@ -1,0 +1,9 @@
+
+function generate_list(array) {
+    var out = '<ul>';
+    for (var i = 0; i < array.length; i++) {
+        out += '<li>' + array[i] + '</li>';
+    }
+    return out + '</ul>';
+}
+

@@ -1,0 +1,60 @@
+Here is a PHP function that parses data from your model.info.txt file:
+
+```php
+function parseModelInfo($filename) {
+    $variables = array();
+    $capabilities = array();
+    $systemPrompt = '';
+    $temperature = '';
+
+    // Open the file and read its contents line by line
+    $file = fopen($filename, "r");
+    while (($line = fgets($file)) !== false) {
+        $line = trim($line);
+
+        if (empty($line)) {
+            continue;
+        }
+
+        if (strpos($line, 'Model') === 0) {
+            // Parsing the Model section
+            preg_match("/\s*(\w+)\s*=\s*(\w+)/i", $line, $matches);
+            if (isset($matches[1]) && isset($matches[2])) {
+                $variables[$matches[1]] = $matches[2];
+            }
+        } elseif (strpos($line, 'Capabilities') === 0) {
+            // Parsing the Capabilities section
+            $capabilities[] = trim($line);
+        } elseif (strpos($line, 'System') === 0) {
+            // Parsing the System section
+            $systemPrompt = trim($line);
+        } elseif (strpos($line, 'Parameters') === 0) {
+            // Parsing the Parameters section
+            preg_match("/\s*(\w+)\s*=\s*(\w+)/i", $line, $matches);
+            if (isset($matches[1]) && isset($matches[2])) {
+                if ($matches[1] == 'temperature') {
+                    $temperature = $matches[2];
+                }
+                $variables[$matches[1]] = $matches[2];
+            }
+        }
+    }
+    fclose($file);
+
+    return array(
+        'variables' => $variables,
+        'capabilities' => $capabilities,
+        'systemPrompt' => $systemPrompt,
+        'temperature' => $temperature
+    );
+}
+
+// Usage example:
+$result = parseModelInfo('model.info.txt');
+print_r($result);
+```
+
+This function reads the file line by line, checks for specific keywords or sections (such as "Model", "Capabilities", etc.), and parses data accordingly. The parsed results are stored in an associative array.
+
+Note: This is just a basic example and may not cover all edge cases or variations in your model.info.txt format. You might need to modify the function depending on your actual file structure and requirements.
+

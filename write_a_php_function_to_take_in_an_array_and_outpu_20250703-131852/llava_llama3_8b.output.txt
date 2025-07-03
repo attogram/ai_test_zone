@@ -1,0 +1,30 @@
+Here is one way you can do it:
+```
+function array_to_html_list($arr) {
+  // Start the HTML list
+  echo "<ul>";
+  
+  // Loop through each element in the array
+  foreach ($arr as $item) {
+    // Output the current item as an HTML list item
+    echo "<li>" . $item . "</li>";
+  }
+  
+  // Close the HTML list
+  echo "</ul>";
+}
+```
+You can then call this function with your array of data like so:
+```
+$data = array("item1", "item2", "item3");
+array_to_html_list($data);
+```
+This will output something like:
+```
+<ul>
+  <li>item1</li>
+  <li>item2</li>
+  <li>item3</li>
+</ul>
+```
+

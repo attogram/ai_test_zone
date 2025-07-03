@@ -1,0 +1,29 @@
+
+To solve this problem, we need to write a PHP function that takes an array and outputs a HTML list of its contents. Each element in the array will be displayed as a separate `<li>` tag within a `<ul>` tag.
+
+### Approach
+1. **Initialize an Empty List**: Start by creating an empty `<ul>` tag.
+2. **Iterate Through the Array**: For each element in the input array, create a `<li>` tag containing that element.
+3. **Combine Elements**: Collect all the created `<li>` tags and combine them into a single string enclosed within `<ul>`.
+4. **Return the Result**: Return the combined HTML string.
+
+This approach ensures that each element from the array is properly encapsulated within a `<ul>` with individual `<li>` elements, creating a proper HTML list structure.
+
+### Solution Code
+```php
+function arrayToHTML($array) {
+    $html = "<ul>";
+    foreach ($array as $item) {
+        $html .= "<li>" . $item . "</li>";
+    }
+    $html .= "</ul>";
+    return $html;
+}
+```
+
+### Explanation
+- **Initialization**: The function starts by creating a `<ul>` tag.
+- **Loop Through Array**: Each element from the input array is processed in a loop. For each element, a `<li>` tag is created and concatenated with the corresponding value.
+- **Combine Elements**: After processing all elements, the final string is enclosed within `<ul>`, resulting in a complete HTML list structure.
+
+This method ensures that the output is a well-formatted HTML list where each array element appears as a separate item within a proper HTML structure.

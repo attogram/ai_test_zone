@@ -1,0 +1,65 @@
+Here is the Bash function to parse the `model.info.txt` file:
+```bash
+parse_model_info() {
+  local model_info_file=$1
+  declare -A model_params
+  declare -a capabilities
+  local systemPrompt=""
+  local temperature=""
+
+  while IFS= read -r line; do
+    if [[ $line =~ ^Model ]]; then
+      # Skip the section header
+      ((i++))
+      continue
+    elif [[ ${model_params[$name]} ]]; then
+      model_params[$name]=$value
+    else
+      name=${line%%*}
+      value=${line##* }
+      name=${name//  / }
+      value=${value//  / }
+      model_params[$name]=$value
+    fi
+
+    if [[ $line =~ ^Capabilities ]]; then
+      ((i++))
+      continue
+    elif [[ ${capabilities[@]} ]]; then
+      capabilities+=($line)
+    else
+      line=${line%% }
+      line=${line## }
+      capabilities+=($line)
+    fi
+
+    if [[ $line =~ ^System ]]; then
+      ((i++))
+      systemPrompt=$line
+      continue
+    fi
+
+    if [[ $line =~ ^Parameters ]]; then
+      ((i++))
+      temperature=$(echo "$line" | cut -d' ' -f2-)
+      continue
+    fi
+  done < $model_info_file
+
+  for key in "${!model_params[@]}"; do
+    echo "Model_$key=${model_params[$key]}"
+  done
+
+  capabilities=("${capabilities[@]}")
+
+  echo "Capabilities=(${capabilities[@]})"
+  echo "SystemPrompt=$systemPrompt"
+  echo "temperature=$temperature"
+}
+```
+You can call the function by passing the `model.info.txt` file as an argument:
+```bash
+parse_model_info model.info.txt
+```
+This will output the parsed data in the format you requested. Note that this implementation assumes that the sections (Model, Capabilities, Projector, Parameters, System, License) are ordered sequentially and that any line can be missing. The `continue` statement is used to skip empty lines or header lines.
+

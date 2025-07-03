@@ -1,0 +1,176 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gemma3:4b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_php_function_to_take_in_an_array_and_outpu</a>: <b>gemma3:4b</b>: 20250703-131852<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<b>gemma3:4b</b> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_php_function_to_take_in_an_array_and_outpu.prompt.yaml'>yaml</a>)
+  words:18  bytes:86<br />
+<textarea readonly rows='3'>Write a PHP function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: gemma3:4b (<a href='./gemma3_4b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>```php
+&lt;?php
+
+/**
+ * Converts an array into an HTML unordered list.
+ *
+ * @param array $array The array to convert.
+ * @param string $ul_id (optional) The ID to assign to the &lt;ul&gt; tag. Defaults to &quot;myList&quot;.
+ * @return string The HTML list.
+ */
+function arrayToHtmlList(array $array, string $ul_id = &quot;myList&quot;) {
+  if (empty($array)) {
+    return &quot;&lt;p&gt;The array is empty.  No list generated.&lt;/p&gt;&quot;; // Handle empty array gracefully
+  }
+
+  $html = &quot;&lt;ul id=&#39;&quot; . htmlspecialchars($ul_id) . &quot;&#39;&gt;&quot;;
+  foreach ($array as $item) {
+    $html .= &quot;&lt;li&gt;&quot; . htmlspecialchars($item) . &quot;&lt;/li&gt;&quot;;
+  }
+  $html .= &quot;&lt;/ul&gt;&quot;;
+
+  return $html;
+}
+
+// Example Usage:
+$myArray = [&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;];
+$htmlList = arrayToHtmlList($myArray, &quot;fruitList&quot;);
+echo $htmlList;
+
+$anotherArray = [1, 2, 3, 4, 5];
+$htmlList2 = arrayToHtmlList($anotherArray);
+echo $htmlList2;
+
+$emptyArray = [];
+$emptyList = arrayToHtmlList($emptyArray);
+echo $emptyList;
+
+?&gt;
+```
+
+Key improvements and explanations:
+
+* **Handles empty arrays gracefully:**  The `if (empty($array))` check prevents errors and displays a user-friendly message (a paragraph) if the input array is empty.  This is important because without it, the loop would not execute, and the function would return an empty string, which isn&#39;t helpful.
+* **`htmlspecialchars()` for security:**  This is *crucial*.  The `htmlspecialchars()` function escapes HTML special characters (like `&lt;`, `&gt;`, `&amp;`, `&quot;` , `&#39;`) within the array elements *before* they are inserted into the HTML. This prevents Cross-Site Scripting (XSS) vulnerabilities.  If an array element contained something like `&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;`, without `htmlspecialchars()`, it would be interpreted as HTML code, potentially executing malicious scripts.  It&#39;s best practice to *always* sanitize data before outputting it in HTML.
+* **`$ul_id` parameter:** The function now accepts an optional `$ul_id` parameter.  This allows you to specify the `id` attribute of the `&lt;ul&gt;` tag. This is useful for styling the list with CSS or for referencing it with JavaScript.  A default value of &quot;myList&quot; is provided if no ID is given.
+* **Clearer Variable Names:** Uses more descriptive variable names (e.g., `$htmlList` instead of `$output`).
+* **Return Value:** The function *returns* the generated HTML as a string. This makes it more flexible for use in different contexts (e.g., in a template engine).
+* **Complete Example:**  Includes a complete and runnable example of how to use the function.
+* **Comments:**  The code is well-commented to explain its purpose and functionality.
+* **Efficiency:**  This code is reasonably efficient for most common use cases. For extremely large arrays, you might explore techniques like streaming HTML to avoid building a large string in memory, but this is usually unnecessary.
+
+How to use the code:
+
+1.  **Copy and Paste:** Copy the PHP code into your PHP file.
+2.  **Call the Function:**  Call the `arrayToHtmlList()` function, passing in your array and optionally the desired `id` for the `&lt;ul&gt;` element.
+3.  **Output the HTML:**  The function returns a string containing the HTML list.  You can then output this string to your webpage using `echo` or other appropriate methods.
+
+Example:
+
+```php
+&lt;?php
+// ... (include the arrayToHtmlList function from above)
+
+$data = [&quot;item1&quot;, &quot;item2&quot;, &quot;item3&quot;];
+$list_html = arrayToHtmlList($data, &quot;my_shopping_list&quot;);
+echo $list_html;
+?&gt;
+```
+
+This will output:
+
+```html
+&lt;ul id=&quot;my_shopping_list&quot;&gt;
+&lt;li&gt;item1&lt;/li&gt;
+&lt;li&gt;item2&lt;/li&gt;
+&lt;li&gt;item3&lt;/li&gt;
+&lt;/ul&gt;
+```
+
+Remember to replace `&quot;my_shopping_list&quot;` with the actual ID you want to use.  Also, make sure that the HTML output is being placed inside a valid HTML document (e.g., within the `&lt;body&gt;` tags).</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gemma3_4b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>540</td></tr>
+<tr><td class='left'>bytes</td><td>3710</td></tr>
+<tr><td class='left'>total duration</td><td>34.903356541s</td></tr>
+<tr><td class='left'>load duration</td><td>51.278791ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>27 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>258.201375ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>104.57 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>986 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>34.593309667s</td></tr>
+<tr><td class='left'>eval rate</td><td>28.50 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gemma3_4b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/gemma3:4b'>gemma3:4b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>gemma3</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>4.3B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2560</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />vision<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1684M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_php_function_to_take_in_an_array_and_outpu</a>: <b>gemma3:4b</b>: 20250703-131852</p>
+<p>Page created: 2025-07-03 13:27:00</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

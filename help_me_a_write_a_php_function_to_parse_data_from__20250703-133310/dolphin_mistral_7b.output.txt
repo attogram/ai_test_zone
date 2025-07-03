@@ -1,0 +1,63 @@
+Here is a PHP function named `parseData` that does exactly what you described:
+
+```php
+function parseData($file) {
+    $data = array();
+    if (file_exists($file)) {
+        $handle = fopen($file, "r");
+        
+        //Model section
+        while (!feof($handle)) {
+            $line = fgets($handle);
+            if (strpos($line, 'Model') !== false) {
+                break;
+            }
+            preg_match('/(\w+)\s+(\S+)/', trim($line), $matches);
+            $data['model'][$matches[1]] = $matches[2];
+        }
+        
+        //Capabilities section
+        while (!feof($handle)) {
+            $line = fgets($handle);
+            if (strpos($line, 'Capabilities') !== false) {
+                break;
+            }
+            preg_match('/(\w+)/', trim($line), $matches);
+            array_push($data['capabilities'], $matches[1]);
+        }
+        
+        //System section
+        while (!feof($handle)) {
+            $line = fgets($handle);
+            if (strpos($line, 'System') !== false) {
+                break;
+            }
+            $data['systemPrompt'] .= trim($line);
+        }
+        
+        //Parameters section
+        while (!feof($handle)) {
+            $line = fgets($handle);
+            if (strpos($line, 'Parameters') !== false) {
+                break;
+            }
+            preg_match('/(\w+)\s+(\S+)/', trim($line), $matches);
+            if ($matches[1] === "temperature") {
+                $data['parameters'][$matches[1]] = $matches[2];
+            }
+        }
+        
+        fclose($handle);
+    }
+    
+    return $data;
+}
+```
+
+This function reads the `model.info.txt` file line by line, and uses regular expressions to parse the lines for different sections (Model, Capabilities, Parameters) and then save their values into a PHP array `$data`. The function assumes that section names are at the start of each line in these sections.
+
+You can call this function passing your file name as an argument to get the parsed data:
+```php
+parseData("model.info.txt");
+```
+

@@ -1,0 +1,96 @@
+Here is a PHP function that parses data from a `model.info.txt` file:
+```php
+function parseModelInfo($filePath) {
+  $data = file_get_contents($filePath);
+  $sections = explode("\n\n", $data);
+  
+  // Initialize variables to store parsed data
+  $architecture = '';
+  $contextLength = null;
+  $embeddingLength = null;
+  $quantization = null;
+  $completion = [];
+  $tools = [];
+  $vision = [];
+  $systemPrompt = '';
+  $temperature = null;
+  $dimensions = null;
+
+  // Loop through each section of the data
+  foreach ($sections as $section) {
+    // Check if this is a model section
+    if (strpos($section, "Model") !== false) {
+      // Initialize variables for this section
+      $name = '';
+      $value = '';
+      
+      // Parse each line in the section
+      foreach (explode("\n", trim($section)) as $line) {
+        // Check if this is a name-value pair
+        if ($name != '' && $value == '') {
+          $architecture = $name;
+          $name = '';
+          $value = '';
+        }
+        
+        // Parse the line for a name and value
+        list($name, $value) = explode("    ", trim($line));
+        $name = trim($name);
+        $value = trim($value);
+      }
+
+      // Save the parsed data from this section
+      $data["architecture"] = $architecture;
+    }
+    // Check if this is a capabilities section
+    else if (strpos($section, "Capabilities") !== false) {
+      // Parse each line in the section for a keyword
+      foreach (explode("\n", trim($section)) as $line) {
+        $completion[] = trim($line);
+      }
+
+      // Save the parsed data from this section
+      $data["capabilities"] = $completion;
+    }
+    // Check if this is a system section
+    else if (strpos($section, "System") !== false) {
+      // Parse each line in the section for a prompt
+      foreach (explode("\n", trim($section)) as $line) {
+        $systemPrompt .= trim($line) . "\n";
+      }
+
+      // Save the parsed data from this section
+      $data["system_prompt"] = trim($systemPrompt);
+    }
+    else if (strpos($section, "Projector") !== false) {
+      // Parse each line in the section for an architecture and parameters
+      foreach (explode("\n", trim($section)) as $line) {
+        list($architecture, $params) = explode("    ", trim($line));
+      }
+
+      // Save the parsed data from this section
+      $data["architecture_projector"] = $architecture;
+      $data["parameters_projector"] = $params;
+    }
+    else if (strpos($section, "Parameters") !== false) {
+      // Parse each line in the section for a temperature value
+      foreach (explode("\n", trim($section)) as $line) {
+        list($name, $value) = explode("    ", trim($line));
+        $temperature = trim($value);
+      }
+
+      // Save the parsed data from this section
+      $data["temperature"] = $temperature;
+    }
+  }
+  
+  return $data;
+}
+```
+Here's an example usage of the function:
+```php
+$data = parseModelInfo("model.info.txt");
+print_r($data);
+```
+This will output the parsed data in the `$data` array. You can then use this array as needed. For example, you could access the architecture using `$data["architecture"]`.
+

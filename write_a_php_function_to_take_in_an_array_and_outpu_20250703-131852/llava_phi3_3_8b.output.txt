@@ -1,0 +1,11 @@
+```php
+function generateHTMLList($arr) {
+    $html = '<ul>';
+    foreach ($arr as $item) {
+        $html .= '<li>' . $item . '</li>';
+    }
+    $html .= '</ul>';
+    return $html;
+}
+```
+

@@ -1,0 +1,60 @@
+
+Here's a clean and concise JavaScript function that takes an array as input and returns a string containing HTML code representing an unordered list of the array elements:
+
+```javascript
+function arrayToHTMLList(arr) {
+  return `<ul>${arr.map(item => `<li>${item}</li>`).join('')}</ul>`;
+}
+```
+
+---
+
+### 🔍 Explanation
+
+- **`<ul>`** – Represents an unordered list in HTML.
+- **`<li>`** – Represents each list item.
+- **`arr.map(...)`** – Iterates over each element in the array, wrapping it in `<li>` tags.
+- **`.join('')`** – Combines the resulting list items into a single string.
+- **Template literals (`<ul>...</ul>`)** – Allow for cleaner string interpolation without needing to concatenate strings.
+
+---
+
+### 📌 Example Usage
+
+```javascript
+const fruits = ['Apple', 'Banana', 'Cherry'];
+const htmlList = arrayToHTMLList(fruits);
+console.log(htmlList);
+```
+
+**Output:**
+
+```html
+<ul><li>Apple</li><li>Banana</li><li>Cherry</li></ul>
+```
+
+---
+
+### ✅ Edge Case Handling
+
+- **Empty Array**: Returns `"<ul></ul>"`, which is valid and well-formed HTML.
+- **Single Item**: Wraps the item in `<li>` and places it inside the `<ul>`.
+
+---
+
+### 📌 Optional: Insert into DOM
+
+If you want to actually render the list on a webpage, you can use the function to generate the HTML and then insert it into the DOM:
+
+```javascript
+const listContainer = document.getElementById('list-container');
+listContainer.innerHTML = arrayToHTMLList(fruits);
+```
+
+This assumes you have an element with the ID `list-container` on your page.
+
+---
+
+### ✅ Summary
+
+The function `arrayToHTMLList` is efficient, readable, and works well with both empty and non-empty arrays, making it a versatile utility for generating HTML lists from JavaScript arrays.

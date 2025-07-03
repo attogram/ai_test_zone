@@ -1,0 +1,24 @@
+Here is a simple JavaScript function that generates HTML list elements from the contents of an array:
+
+```javascript
+function generateHtmlList(array) {
+    let htmlString = "<ul>";
+    for (let i = 0; i < array.length; i++) {
+        htmlString += `<li>${array[i]}</li>`;
+    }
+    htmlString += "</ul>";
+    return htmlString;
+}
+```
+
+You can then use this function in your code like so:
+
+```javascript
+const myArray = ["item1", "item2", "item3"];
+document.getElementById("myDiv").innerHTML = generateHtmlList(myArray);
+```
+
+This will put the contents of `myArray` into an HTML list within the HTML element with the ID 'myDiv'. 
+
+The function takes in any array as input, generates a string containing the list elements for each item in that array (using template literals to ensure each item is properly encoded if necessary), and then returns that string.
+

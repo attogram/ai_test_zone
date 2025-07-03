@@ -1,0 +1,285 @@
+We are going to write a function that takes an array as input and returns a string containing HTML for an unordered list.
+ The function should handle both strings (for text content) and other types by converting them to strings using JSON.stringify or similar?
+ However, note: if we use JSON.stringify on non-string values, it will convert arrays into [ ... ] format which might not be desired.
+
+ We can assume the array contains only string elements? Or do we need a more generic approach?
+
+ Let's clarify: 
+ - The requirement is to output an HTML list of the array contents.
+ - If the array has objects or other types, we want to display them in a way that makes sense. Maybe as their string representation?
+   But note: for example, if we have [1, 2, 3] then using JSON.stringify would give ["1","2","3"] which is an array of strings.
+   However, the requirement might be just to take each element and convert it to a string.
+
+ Alternatively, we can make the function more robust by handling different types appropriately.
+
+ But let's stick to the basic: if the input is an array of strings, then list them as <li>string</li>.
+ If there are non-strings, we can use String() conversion or JSON.stringify? 
+
+ Since the problem doesn't specify, I'll choose to convert each element to a string using `String()`.
+
+ Steps:
+ 1. Check if input is an array.
+ 2. Map over the array and for each element, create an <li> tag with its string representation.
+ 3. Wrap the list in <ul>.
+
+ Example: 
+   Input: ['apple', 'banana', 'cherry']
+   Output: '<ul><li>apple</li><li>banana</li><li>cherry</li></ul>'
+
+ However, note that if we are to output HTML and use it in a context where the string is inserted into an HTML document,
+ then we must be cautious about escaping. But since this function returns HTML as a string (without rendering), and the user will
+ handle inserting it, maybe they can escape themselves? Or perhaps not.
+
+ Since the problem doesn't specify whether to escape or not, I'll assume that the array elements are safe for direct insertion.
+ If we want to be strict about security when generating HTML, we should escape any special characters (like <, >, &, etc.) in each string.
+
+ But again, let's stick to the requirement. The problem says "output a html list", so without escaping? 
+
+ However, note that if the array comes from user input or an untrusted source, then not escaping can lead to XSS attacks.
+ Since this is a code generation task and we don't know the context, I'll provide two options:
+
+ Option 1: Without escaping (for simple cases where you trust the data)
+ Option 2: With escaping
+
+ Let me re-read the problem: it doesn't specify. So maybe just output as string without escaping? 
+
+ But let's think about safety. If we are to use this function in a real HTML context, then we must escape.
+
+ Since the requirement is ambiguous, I'll write two versions and comment on them.
+
+ However, note that the user might want to insert the result into an existing HTML document. They will be responsible for escaping if needed?
+ Actually, no: because when inserting raw HTML string, you don't escape it again in JavaScript (unless using innerText or similar). 
+
+ So I think we should not escape by default? But let me check:
+
+ The problem says "output a html list", meaning the function returns an HTML fragment. It is common to return unescaped HTML and then use
+ textContent if inserting via JS, but note: sometimes people do want raw HTML.
+
+ Alternatively, we can make it configurable. Let's see:
+
+ We'll write two functions:
+   - one that escapes (to be safe for arbitrary data)
+   - one without escaping
+
+ But the problem says to output a function. So maybe just one? 
+
+ Since I don't know the context, I will assume that the user wants escaped HTML because it is safer.
+
+ However, let's stick to the basic requirement and then add an escape option if we have time?
+
+ Alternatively, we can do:
+
+   function arrayToHtmlList(arr) {
+     // Check input is array
+     if (!Array.isArray(arr)) throw new Error("Input must be an array");
+
+     // Escape each string: replace special characters with their HTML entities.
+     const escapedItems = arr.map(item => item ? String(item).replace(/[&<>"']/g, escapeSpecialChars) : '');
+     But wait, we don't know what the function is called from. Maybe let's create a helper for escaping.
+
+   }
+
+ However, note: if an array element is not a string or number (like object), then converting to string might give [object Object] and that's acceptable?
+ Or maybe they want to avoid that? 
+
+ Let me propose:
+
+ We'll escape the following characters in each item when building the list:
+   - & becomes &amp;
+   - < becomes &lt;
+   - > becomes &gt;
+   - " becomes &quot;
+   - ' becomes &#39;
+
+ And we do this only if they are present? Because if not, then no need.
+
+ But note: even numbers and booleans become strings. We want to escape them too because the string representation might contain special chars?
+
+ Actually, let's consider that the function should handle any type by converting it to a string first (using String(item)), and then escape the resulting string.
+
+ Steps for escaped version:
+
+   1. Check input is array.
+   2. Map over each item: convert to string and then replace special characters with their entities.
+   3. Wrap in <ul> and map to create the list items.
+
+ But note: what if an element is null or undefined? We can skip them or show "null" or "undefined"?
+
+ Let's decide on behavior for non-string elements:
+
+   - If we are using String(item), then null becomes empty string, undefined becomes "undefined", etc.
+   - Then we escape that. So if the item was 123, it becomes "123". No problem.
+
+ However, let me write a helper function to escape HTML special characters in a string:
+
+   const escapeHtml = (str) => {
+     return str.replace(/[&<>"']/g, 
+        {'&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#39;'});
+   }
+
+ But note: the regular expression /[&<>"']/g will match these characters. Then we can replace them one by one.
+
+ Alternatively, we can use a function for replacement:
+
+   const escapeHtml = (str) => {
+     return str.replace(/[&<>"']/g, c => ({
+         '&': '&amp;',
+         '<': '&lt;',
+         '>': '&gt;',
+         '\"': '&quot;',
+         "'": '&#39;'
+     }[c]));
+   }
+
+ Now, let's write the function:
+
+   function arrayToHtmlList(arr) {
+     if (!Array.isArray(arr)) throw new Error("Input must be an array");
+
+     const listItems = arr.map(item => `<li>${escapeHtml(String(item))}</li>`);
+
+     return `<ul>${listItems.join('')}</ul>`;
+   }
+
+ But wait, what about the join? We are joining without any separator. That's okay because we want to output a string of <li> elements.
+
+ However, note: if the array is empty, then we get an empty list but still have <ul></ul>. Is that acceptable?
+
+ Let's test with an empty array:
+
+   Input: []
+   Output: '<ul><li></li></li>' ... no, wait: 
+        arr.map(item => ...) returns [] for empty array.
+        Then we do .join('') on the listItems -> still empty string.
+
+   So output is <ul></ul>. That's acceptable because it represents an unordered list with zero items.
+
+ But note: sometimes people might want to avoid empty lists? The problem doesn't specify, so let's keep it as is.
+
+ Alternatively, we can return a safe HTML fragment even if the array has non-string elements by escaping appropriately.
+
+ However, what about performance? We are doing two string conversions and then an escape for each element. 
+
+ Considering that the requirement might be simple, but also to avoid XSS (which is important), I think this escaped version is better.
+
+ But note: the problem doesn't specify whether to escape or not. So maybe we should ask?
+
+ Since it's a code generation task, let me stick to the escaped version because it's safer and more general.
+
+ However, if the user wants unescaped HTML (maybe they are using textContent in their own way), then they might prefer no escaping.
+
+ We can make an option: 
+
+   function arrayToHtmlList(arr, escape = true) {
+     // ... same as above but conditionally escape
+   }
+
+ But again, the problem says to output a html list. So let's do:
+
+   Without escaping first? Maybe because in some contexts you don't want to change the string.
+
+ Alternatively, we can write two functions and then have one helper for escaping.
+
+ Since I'm not sure, I'll provide both versions but with comments.
+
+ But note: the problem says "Write a Javascript function", singular. So maybe just one?
+
+ Let me assume that the user wants escaped HTML because it's safer to return properly escaped strings when generating HTML.
+
+ However, if we are in a context where the array is entirely trusted (like our own data) then escaping might be overkill.
+
+ We can leave an option for the user to choose? But let's keep it simple and just do one version that escapes.
+
+ I think I'll go with the escaped version because generating HTML without escaping is dangerous.
+
+ Now, what about newline characters or other string-specific issues?
+
+ In the escape function, we are only replacing &, <, >, ", and '. What if there are newlines? We might want to preserve them by converting to `<br>` but that's beyond the scope.
+
+ Let me stick to just those special characters for escaping because they break HTML structure.
+
+ If the user wants more advanced formatting (like keeping line breaks) then we can do:
+
+   const escapeHtml = (str) => {
+     // Replace all occurrences of the special chars with their escaped versions.
+     return str.replace(/[&<>"']/g, c => ({
+         '&': '&amp;',
+         '<': '&lt;',
+         '>': '&gt;',
+         '\"': '&quot;',
+         "'": '&#39;'
+     }[c]));
+   }
+
+ This function does exactly what we need.
+
+ Now, let's write the main function:
+
+   function arrayToHtmlList(arr) {
+     if (!Array.isArray(arr)) throw new Error("Input must be an array");
+
+     const list = arr.map(item => `<li>${escapeHtml(String(item))}</li>`).join('');
+     return `<ul>${list}</ul>`;
+   }
+
+ But wait, what if the string contains a newline? We might want to replace it with <br> or leave as is?
+
+ The problem doesn't specify. So let's not change that for now.
+
+ Alternatively, we can note that in HTML, whitespace (including newlines) is collapsed unless explicitly declared. 
+ If we are concerned about formatting, maybe the user should do it themselves? Or use a different method.
+
+ We'll stick to just escaping the special characters and leave the rest as they are.
+
+ Let me test with an array containing some of these:
+
+   ['<script>alert("danger")</script>', '<', '>', '&', '"', "'"]
+
+ Expected output for one element: 
+   '<li>&lt;script&gt;alert(&amp;quot;danger&amp;quot;)&lt;/script&gt;</li>'
+
+ But note: the entire list is built by joining these, so we must be cautious.
+
+ However, let's code accordingly.
+
+ We can also consider using a more robust escaping function that handles more cases? 
+
+ I'll keep it simple for now.
+
+ Final code with helper and main function:
+
+   const escapeHtml = (str) => {
+     return str.replace(/[&<>"']/g, c => ({
+         '&': '&amp;',
+         '<': '&lt;',
+         '>': '&gt;',
+         '\"': '&quot;',
+         "'": '&#39;'
+     }[c]));
+   }
+
+   function arrayToHtmlList(arr) {
+     if (!Array.isArray(arr)) throw new Error("Input must be an array");
+     return arr.map(item => `<li>${escapeHtml(String(item))}</li>`).join('').replace(/^/, '<ul>').replace(/$/, '</ul>');
+   }
+
+ Wait, the above is a bit messy. Let me rewrite:
+
+   function arrayToHtmlList(arr) {
+     if (!Array.isArray(arr)) throw new Error("Input must be an array");
+
+     const listItems = arr.map(item => `<li>${escapeHtml(String(item))}</li>`);
+
+     return `<ul>${listItems.join('')}</ul>`;
+   }
+
+ But note: what if the string has a < or >? It will break. We escape so it's safe.
+
+ Alternatively, we can use DOMParser to create an element and then inspect its innerHTML without manual escaping? 
+ However, that would be overkill for this simple function and might not cover all edge cases (like script tags) and is slower.
+
+ Let me stick with the string replacement.
+
+ But wait: what if the array has a lot of elements? Then we are creating many strings. This should be okay because it's just generating static HTML.
+
+ Now, let's write the code accordingly.

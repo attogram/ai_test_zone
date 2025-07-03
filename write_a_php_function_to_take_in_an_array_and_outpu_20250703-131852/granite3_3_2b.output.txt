@@ -1,0 +1,33 @@
+Here is a simple PHP function that takes an array as input and outputs an HTML unordered list (`<ul>`) with list items (`<li>`). If you want an ordered list (`<ol>`), you can modify the function accordingly.
+
+```php
+function arrayToList($array, $listType = 'ul') {
+    if (!is_array($array)) {
+        return "Input is not an array.";
+    }
+
+    $htmlList = "<$listType>";
+
+    foreach ($array as $value) {
+        $htmlList .= "<li>$value</li>";
+    }
+
+    $htmlList = "</$listType>";
+
+    return $htmlList;
+}
+```
+
+You can use this function like so:
+
+```php
+$myArray = ['Apple', 'Banana', 'Cherry'];
+echo arrayToList($myArray);
+```
+
+This will output:
+
+```html
+<ul><li>Apple</li><li>Banana</li><li>Cherry</li></ul>
+```
+

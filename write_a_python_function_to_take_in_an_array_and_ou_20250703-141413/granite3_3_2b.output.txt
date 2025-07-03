@@ -1,0 +1,13 @@
+Here is a Python function that takes in a list and returns an HTML unordered list (`<ul>`) representation:
+
+```python
+def list_to_html(input_list):
+    html_list = "<ul>\n"
+    for item in input_list:
+        html_list += "  <li>" + str(item) + "</li>\n"
+    html_list = html_list[:-2] + "</ul>"
+    return html_list
+```
+
+This function iterates through the input list, wraps each item in an `<li>` tag, and appends it to the `html_list` string. The final HTML list is then returned with appropriate opening and closing tags.
+

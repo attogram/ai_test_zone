@@ -1,0 +1,31 @@
+Here's one way you could write such a function:
+```
+function renderList(array) {
+  var output = '';
+  for (var i = 0; i < array.length; i++) {
+    output += '<li>' + array[i] + '</li>';
+  }
+  return '<ul>' + output + '</ul>';
+}
+```
+This `renderList` function takes an array as input, loops over the elements of the array using a for loop and appends each element to a string called `$output$. After all elements have been appended to `$output$, it returns an HTML fragment that contains the list tag `<ul>`, followed by the contents of `$output`. This will produce something like this when used in your code:
+```
+<ul>
+  <li>element1</li>
+  <li>element2</li>
+  <!-- etc. -->
+</ul>
+```
+Note: The above function assumes that all elements of the input array are strings or other values that can be safely converted to HTML `<li>` tags without error.
+If you want your `renderList` function to output an unordered list (`<ul>`) instead, and a different tag for each item in the list (e.g. `<li>`, `<dl>`, etc.), then here's how you could modify it:
+```
+function renderList(array) {
+  var output = '';
+  for (var i = 0; i < array.length; i++) {
+    output += '<li>' + array[i] + '</li>';
+  }
+  return '<ul>' + output + '</ul>';
+}
+```
+This modified `renderList` function still uses the same approach as before, but it will now produce an unordered list (`<ul>`) instead of a block-level element.
+

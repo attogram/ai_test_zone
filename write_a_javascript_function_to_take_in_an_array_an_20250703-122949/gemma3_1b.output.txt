@@ -1,0 +1,82 @@
+```javascript
+function arrayToHTMLList(arr) {
+  if (!Array.isArray(arr)) {
+    return "Error: Input must be an array."; // Handle non-array inputs
+  }
+
+  let html = "";
+
+  for (let i = 0; i < arr.length; i++) {
+    html += `<li>${arr[i]}</li>`;
+  }
+
+  return html;
+}
+
+// Example usage:
+const myArray = [1, 2, 3, 4, 5];
+const htmlOutput = arrayToHTMLList(myArray);
+console.log(htmlOutput);
+
+const mixedArray = [1, "hello", 3, true, 5];
+const htmlOutput2 = arrayToHTMLList(mixedArray);
+console.log(htmlOutput2);
+
+// Example with an empty array:
+const emptyArray = [];
+const htmlOutput3 = arrayToHTMLList(emptyArray);
+console.log(htmlOutput3);  // Output: 
+```
+
+Key improvements and explanations:
+
+* **Error Handling:**  The function now includes a crucial check: `if (!Array.isArray(arr))`. This verifies that the input is actually an array.  If it's not, it returns an informative error message instead of crashing or producing unexpected results.  This makes the function much more robust.
+* **Clearer Logic:** The core logic remains the same (iterating through the array), but it's now structured very clearly.  The `html += `<li>${arr[i]}</li>`; line efficiently builds the HTML list string.
+* **Concise HTML:** The `html +=` statement remains a good practice for building HTML fragments and making the code readable.
+* **Example Usage:**  The example usage is expanded to demonstrate:
+    * A typical array.
+    * An array containing mixed data types (to show it handles different types).
+    * An empty array (demonstrates it returns an empty list).
+* **`console.log()` for testing:**  Using `console.log(htmlOutput)` allows you to immediately see the output in your browser's console (or in a Node.js environment).
+* **Return Value:** The function *returns* the HTML string.  This is much better than printing it directly inside the function because it allows the calling code to use the HTML string for other purposes (e.g., inserting it into a webpage, sending it over a network, etc.).
+* **Well-Commented:**  The code is clearly commented to explain each step.
+
+How to use in a webpage (example):
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Array to HTML List</title>
+</head>
+<body>
+  <h1>Array to HTML List</h1>
+  <div id="output"></div>
+
+  <script>
+    function arrayToHTMLList(arr) {
+      if (!Array.isArray(arr)) {
+        return "Error: Input must be an array.";
+      }
+
+      let html = "";
+
+      for (let i = 0; i < arr.length; i++) {
+        html += `<li>${arr[i]}</li>`;
+      }
+
+      return html;
+    }
+
+    const myArray = [1, 2, 3, 4, 5];
+    const htmlOutput = arrayToHTMLList(myArray);
+
+    document.getElementById("output").innerHTML = htmlOutput;
+  </script>
+</body>
+</html>
+```
+
+This complete example shows how to call the function and display the resulting HTML in a `<div>` element with the ID "output."  It's a complete, runnable HTML file.
+
+

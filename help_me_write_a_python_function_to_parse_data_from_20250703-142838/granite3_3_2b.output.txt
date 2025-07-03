@@ -1,0 +1,65 @@
+Here is a Python function that should meet your requirements:
+
+```python
+import re
+
+def parse_model_info(file_path):
+    model_data = {}
+
+    with open(file_path, 'r') as file:
+        current_section = None
+
+        for line in file:
+            line = line.strip()
+
+            # Parse Model section
+            if line.startswith('Model'):
+                current_section = 'Model'
+                key_pattern = r'^(\w+)\s+(\w+)$'
+                value_pattern = r'\s*([^]{}\s)*$'
+
+                match = re.match(key_pattern, line)
+                if match:
+                    section_name, keyword = match.groups()
+
+                    if section_name == 'parameters':
+                        name, value = re.match(value_pattern, line).groups()
+                        model_data[f"{section_name}[{keyword}]"] = float(value)
+                    else:
+                        name, value = re.match(key_pattern, line).groups()
+                        model_data[name] = value
+
+            # Parse Capabilities section
+            elif current_section == 'Model' and line.startswith('Capabilities'):
+                current_section = 'Capabilities'
+                keywords = []
+
+                match = re.match(r'^(\w+)$', line)
+                if match:
+                    keywords.append(match.groups()[0])
+
+                model_data['capabilities'] = keywords
+
+            # Parse System section
+            elif current_section == 'Model' and line.strip().startswith('System'):
+                current_section = 'System'
+                model_data['systemPrompt'] = line.split('\n')[-1].strip()
+
+            # Parse Parameters section
+            elif current_section == 'Model' and line.startswith('Parameters'):
+                current_section = 'Parameters'
+
+                match = re.match(r'^(\w+)\s*=\s*(.*)$', line)
+                if match:
+                    param_name, value = match.groups()
+
+                    if param_name == 'temperature':
+                        model_data[f"{current_section}[{param_name}]"] = float(value)
+
+            # Handle other sections or lines as needed
+
+    return model_data
+```
+
+This function reads the file line by line and uses regular expressions to parse the data according to your specifications. It handles missing sections and lines gracefully by using conditions to check the current section before processing each line. The parsed data is stored in a Python dictionary, with nested dictionaries for complex structures like parameters.
+

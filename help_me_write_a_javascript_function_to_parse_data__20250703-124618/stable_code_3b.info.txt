@@ -1,0 +1,19 @@
+  Model
+    architecture        stablelm    
+    parameters          2.8B        
+    context length      16384       
+    embedding length    2560        
+    quantization        Q4_0        
+
+  Capabilities
+    completion    
+
+  Parameters
+    stop    "<|im_start|>"    
+    stop    "<|im_end|>"      
+
+  License
+    STABILITY AI NON-COMMERCIAL RESEARCH COMMUNITY LICENSE AGREEMENT    
+    Dated: December 06, 2023                                            
+    ...                                                                 
+

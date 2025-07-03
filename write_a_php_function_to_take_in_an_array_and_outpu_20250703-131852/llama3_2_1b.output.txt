@@ -1,0 +1,76 @@
+Here is a simple PHP function that takes an array as input, converts it into HTML list items, and outputs it:
+
+```php
+function arrayToHtmlList($array) {
+    $html = '';
+
+    foreach ($array as $value) {
+        if (is_array($value)) {
+            $html .= '<li>' . implode(', ', $value) . '</li>';
+        } else {
+            $html .= '<li>$value</li>';
+        }
+    }
+
+    return $html;
+}
+
+$array = array('Item 1', 'Item 2', 'Item 3');
+echo arrayToHtmlList($array);
+```
+
+This will output:
+
+```html
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+```
+
+If the array contains nested arrays, they will also be converted to HTML list items. If an item in the array is not a string or an array, it will simply appear as a plain text item.
+
+To handle nested arrays of different lengths, you can use recursion. Here's how you could do it:
+
+```php
+function arrayToHtmlListRecursive($array) {
+    $html = '';
+
+    foreach ($array as $value) {
+        if (is_array($value)) {
+            $html .= '<ul>';
+            foreach ($value as $item) {
+                if (is_array($item)) {
+                    $html .= arrayToHtmlListRecursive($item);
+                } else {
+                    $html .= '<li>$item</li>';
+                }
+            }
+            $html .= '</ul>';
+        } else {
+            $html .= '<li>$value</li>';
+        }
+    }
+
+    return $html;
+}
+
+$array = array('Item 1', 'Item 2', array(3, 'Sub item 1', array(4, 5)));
+echo arrayToHtmlListRecursive($array);
+```
+
+This will output:
+
+```html
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+<li><ul>
+<li>Sub item 1</li>
+<li>3</li>
+<li>4</li>
+<li>5</li>
+</ul></li>
+```
+
+Note that this recursive approach will only work for arrays of a fixed length, and may not handle all possible scenarios. If you have any specific requirements or edge cases, it's best to test the function thoroughly before using it in production code.
+

@@ -1,0 +1,47 @@
+Here is one possible implementation of such PHP function:
+```php
+function parse_model_info($filename) {
+    $file = fopen($filename);
+    if (!$file) {
+        return false;
+    }
+    // Initialize variables for Model section data and Parameters data.
+    $model_data = array();
+    $parameters = '';
+    while (!feof($file)) {
+        $line = fgets($file);
+        switch (strtolower(substr($line, 0, 1))) {
+            case 'm':
+                if ($line[2] === ':' && preg_match('/^(.*)$/', $line[3], $match) && strlen($match[1]) > 0) {
+                    // Save Model data.
+                    array_push($model_data, array_filter(explode(' ', $match[1])));
+                }
+                break;
+            case 'c':
+                if ($line[2] === ':') {
+                    // Add a new Capabilities keyword to the end of Parameters data and save it in an array. 
+                    $keywords = explode(' ', $parameters);
+                    array_push($keywords, substr($line, 3));
+                    $parameters = implode(' ', $keywords);
+                }
+                break;
+            case 's':
+                if ($line[2] === ':') {
+                    // Save System data.
+                    $system_prompt = str_replace('\n', '', $line);
+                }
+                break;
+            case 'p':
+                if (strpos($line, ':') !== false && preg_match('/^(.*)$/', $line[strpos($line, ':')+1], $match) && strlen($match[1]) > 0) {
+                    // Save Parameters data.
+                    array_push($parameters, $match[1]);
+                }
+                break;
+        }
+    }
+    fclose($file);
+    return compact('model_data', 'parameters', 'system_prompt');
+}
+```
+This function reads the `model.info.txt` file and uses regular expressions to separate each section of data. The Model and Parameters sections are saved as PHP arrays, with the first element being a string array containing key-value pairs (i.e., `[['architecture' => 'granite'] ...]).
+

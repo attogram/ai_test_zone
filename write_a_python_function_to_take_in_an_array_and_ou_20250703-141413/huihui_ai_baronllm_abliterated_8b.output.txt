@@ -1,0 +1,19 @@
+Here is a simple Python function that generates HTML from an input array:
+
+```python
+def list_to_html(lst):
+    """Generate HTML for an unordered list from elements in lst."""
+    return "<ul>" + "".join("<li>{}</li>".format(item) for item in lst) + "</ul>"
+```
+
+You can use it like this:
+
+```python
+import html
+
+data = ["Apple", "Banana", "Cherry"]
+print(html.unescape(list_to_html(data)))
+```
+
+This will print out an unordered HTML list of the items in `data`. The `html.unescape` call is not necessary unless you expect your text to include HTML-escaped characters like `<`, `>`.
+

@@ -1,0 +1,3 @@
+
+I will save the data from this file into PHP variables, so that I can use it later.
+

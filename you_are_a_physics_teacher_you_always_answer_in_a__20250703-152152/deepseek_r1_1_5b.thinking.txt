@@ -1,0 +1,9 @@
+Okay, so I need to explain why the sky is blue. Hmm, where do I start? Well, I remember hearing about Rayleigh scattering. Is that right? It's a process where light is scattered in all directions when it hits something, especially particles. So, if the particles are small, like dust or mist, they scatter the light more, making the sky appear blue.
+
+Wait, but why isn't it red or violet instead? Oh, I think that's because of the angle of scattering. Blue light has a shorter wavelength, so when it scatters, it goes in all directions equally. That's why we don't see the color coming directly from the sun; everything is spread out around us.
+
+I should also mention how particles scatter the light more effectively at certain wavelengths. Maybe something like shorter wavelengths (blue and violet) being scattered more than longer ones (red). So, blue gets scattered more, making it appear blue to us even though we see red in reflection off rain drops.
+
+Wait, but isn't the sun's light also scattering? I think that's called Rayleigh scattering too. But when it scatters, some of its energy is absorbed by the atmosphere. That absorption makes the sky look almost colorless except for the scattered blue light.
+
+Also, there are other factors like pollution in the atmosphere and temperature affecting how much light is scattered. So, all these together create the blue sky we see.

@@ -1,0 +1,72 @@
+ Here is a JavaScript function that parses the given data from `model.info.txt` file according to your specifications:
+
+```javascript
+function parseModelInfo(data) {
+    let architecture, modelParams, systemPrompt, capabilities = [], parameters = {}, projector;
+
+    // Split the data into sections by empty lines
+    const sections = data.split('\n\n');
+
+    sections.forEach((section) => {
+        let sectionName = section.match(/^(\w+)/);
+        if (sectionName) {
+            switch (sectionName[0].toLowerCase()) {
+                case 'model':
+                    section.split('\n').forEach((line) => {
+                        const [name, value] = line.trim().split('    ');
+                        if (name && value) eval(`${name}="${value}"`); // Using eval() for simplicity, be aware of potential risks
+                    });
+                    break;
+                case 'capabilities':
+                    section.split('\n').forEach((line) => {
+                        capabilities.push(line.trim());
+                    });
+                    break;
+                case 'system':
+                    systemPrompt = section.trim();
+                    break;
+                case 'parameters':
+                    section.split('\n').forEach((line) => {
+                        const [name, value] = line.trim().split('    ');
+                        if (name && value && name === 'temperature') eval(`${name}="${value}"`); // Using eval() for simplicity, be aware of potential risks
+                    });
+                    break;
+                case 'projector':
+                    projector = {
+                        architecture: null,
+                        parameters: null,
+                        embedding_length: null,
+                        dimensions: null
+                    };
+                    section.split('\n').forEach((line) => {
+                        const [name, value] = line.trim().split('    ');
+                        if (name && value) projector[name.replace(/\s/g, "")] = value; // Replace spaces with empty strings for property names
+                    });
+                    break;
+            }
+        }
+    });
+
+    // Initialize projector architecture and parameters if they were not defined in the Projector section
+    if (!projector || !projector.architecture) projector = { ...projector, architecture: architecture };
+    if (!projector || !projector.parameters) projector.parameters = modelParams;
+
+    return {
+        architecture: architecture || null,
+        modelParameters: modelParams || {},
+        systemPrompt: systemPrompt || '',
+        capabilities: capabilities,
+        parameters: parameters['temperature'] || 0, // In case 'temperature' is missing in Parameters section, use the default value of 0
+        projector: projector
+    };
+}
+```
+
+This function splits the data into sections (Model, Capabilities, System, Parameters, Projector) and parses each section according to your specifications. It also handles cases where some sections or lines might be missing. You can call this function with the content of `model.info.txt` file as an argument:
+
+```javascript
+const modelInfoData = `...your data here...`;
+const parsedModelInfo = parseModelInfo(modelInfoData);
+console.log(parsedModelInfo); // Outputs the parsed object
+```
+

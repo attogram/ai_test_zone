@@ -1,0 +1,32 @@
+```python
+def array_to_html_list(array):
+  """
+  Converts an array of objects into an HTML list.
+
+  Args:
+    array: A list of objects.
+
+  Returns:
+    A string containing an HTML list of the array contents.
+  """
+
+  html_list = []
+
+  # Iterate over the array and add each object to the HTML list.
+  for item in array:
+    html_list.append('<li>{item}</li>')
+
+  # Join the list of items with commas.
+  html_list_joined = ', '.join(html_list)
+
+  return html_list_joined
+
+
+# Example usage:
+array = [1, 2, 3, 4, 5]
+html_list = array_to_html_list(array)
+
+# Print the HTML list.
+print(html_list)
+```
+

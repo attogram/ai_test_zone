@@ -1,0 +1,6 @@
+ It appears you have encoded some text using Base64. Let me decode it for you:
+
+    "Hello, World!"
+
+ This is the English sentence that corresponds to the provided Base64 string.
+

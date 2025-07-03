@@ -1,0 +1,47 @@
+
+Here is a PHP function that should do what you're asking for:
+
+```php
+function parseModelInfo(string $file) {
+    $modelInfo = array();
+
+    // Read the Model section
+    while (($line = fgets($file)) !== false) {
+        if (strpos($line, "Model") === 0) {
+            $name = trim(substr($line, 12));
+            $value = trim(substr($line, 36));
+            $modelInfo["name"] = $name;
+            $modelInfo["value"] = $value;
+        }
+    }
+
+    // Read the Capabilities section
+    while (($line = fgets($file)) !== false) {
+        if (strpos($line, "Capabilities") === 0) {
+            $capabilities = trim(substr($line, 12));
+            $modelInfo["capabilities"] = $capabilities;
+        }
+    }
+
+    // Read the System section
+    while (($line = fgets($file)) !== false) {
+        if (strpos($line, "System") === 0) {
+            $systemPrompt = trim(substr($line, 12));
+            $modelInfo["systemPrompt"] = $systemPrompt;
+        }
+    }
+
+    // Read the Parameters section
+    while (($line = fgets($file)) !== false) {
+        if (strpos($line, "Parameters") === 0) {
+            $temperature = trim(substr($line, 12));
+            $modelInfo["parameters"] = $temperature;
+        }
+    }
+
+    return $modelInfo;
+}
+```
+
+This function reads the file line by line and checks if each line is in the correct format. If it is, it extracts the relevant information and stores it in a PHP array. The function returns this array.
+

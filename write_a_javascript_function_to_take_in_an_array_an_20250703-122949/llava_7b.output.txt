@@ -1,0 +1,20 @@
+ Here is one way you could do this:
+```
+function arrayToList(arr) {
+  // Use the map method to create a new array where each element is wrapped in a list item (li) element.
+  const listItems = arr.map(item => `<li>${item}</li>`);
+
+  // Use the join method to combine all of the list items into a single string.
+  const list = listItems.join('');
+
+  // Return the final HTML string.
+  return `<ul>${list}</ul>`;
+}
+```
+You can then call this function like this:
+```
+const myArray = ['apple', 'banana', 'orange'];
+const myListHtml = arrayToList(myArray);
+console.log(myListHtml); // "<ul><li>apple</li><li>banana</li><li>orange</li></ul>"
+``` 
+

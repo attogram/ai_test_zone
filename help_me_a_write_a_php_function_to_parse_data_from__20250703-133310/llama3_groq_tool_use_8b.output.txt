@@ -1,0 +1,54 @@
+Here is the PHP function that parses your model.info.txt file:
+
+```php
+function parseModelInfo($filePath) {
+    $modelData = [];
+    $capabilities = [];
+    $systemPrompt = '';
+    $temperatureParam = null;
+
+    if (file_exists($filePath)) {
+        $content = file_get_contents($filePath);
+        $lines = explode("\n", trim($content));
+
+        foreach ($lines as $line) {
+            // Model section
+            if (strpos($line, 'Model') === 0 || strpos($line, 'architecture') !== false) {
+                list($name, $value) = array_map('trim', explode('    ', $line));
+                if ($name === 'temperature') {
+                    $temperatureParam = trim($value);
+                } else {
+                    $modelData[$name] = $value;
+                }
+            }
+
+            // Capabilities section
+            elseif (strpos($line, 'Capabilities') === 0) {
+                $capabilities[] = trim($line);
+            }
+
+            // System section
+            elseif (strpos($line, 'System') === 0) {
+                $systemPrompt .= $line . "\n";
+            }
+        }
+    } else {
+        throw new Exception("File not found: " . $filePath);
+    }
+
+    return [
+        'modelData' => $modelData,
+        'capabilities' => $capabilities,
+        'systemPrompt' => trim($systemPrompt),
+        'temperatureParam' => $temperatureParam
+    ];
+}
+```
+
+You can use this function like this:
+```php
+$parseResult = parseModelInfo('model.info.txt');
+print_r($parseResult);
+```
+This will output the parsed data, including the model parameters, capabilities, system prompt, and temperature parameter.
+

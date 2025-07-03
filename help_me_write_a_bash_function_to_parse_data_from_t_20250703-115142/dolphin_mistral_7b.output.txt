@@ -1,0 +1,44 @@
+Here is a Bash function that should do what you described:
+
+```bash
+parse_model_info() {
+    local name value capabilities systemPrompt temperature
+    local -a modelKeywords
+
+    while IFS=" " read -r line; do
+        if [[ $line == Model* ]]; then
+            name=${line#* }
+            value=${line##* }
+            eval "$name=\"$value\""
+        elif [[ $line == Capabilities* ]]; then
+            capabilities=${line#* }
+            modelKeywords+=("$capabilities")
+        elif [[ $line == Parameters* ]]; then
+            name=${line#* }
+            value=${line##* }
+            if [[ $name == temperature ]]; then
+                eval "$name=\"$value\""
+            fi
+        elif [[ $line == System* ]]; then
+            systemPrompt=${line#* }
+        fi
+    done < "$1"
+}
+```
+
+You can call the function like this:
+
+```bash
+parse_model_info model.info.txt
+echo "architecture=$architecture, temperature=$temperature"  # prints architecture and temperature values
+echo "${modelKeywords[*]}"  # prints all capabilities
+```
+
+This function will read the file `model.info.txt`, and for each line:
+- If it starts with "Model", it extracts the name and value, and saves them as a bash variable.
+- If it starts with "Capabilities", it adds the value to an array called `modelKeywords`.
+- If it starts with "Parameters", if the name is "temperature", it extracts the value and saves it as a bash variable. Otherwise, it ignores this line.
+- If it starts with "System", it extracts the value and saves it in a bash variable called `systemPrompt`.
+
+All variables will be accessible after calling the function. Note that the file should be located where the script is running or provide full path of the file.
+

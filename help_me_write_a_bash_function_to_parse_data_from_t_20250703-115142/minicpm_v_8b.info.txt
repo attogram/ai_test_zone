@@ -1,0 +1,26 @@
+  Model
+    architecture        qwen2    
+    parameters          7.6B     
+    context length      32768    
+    embedding length    3584     
+    quantization        Q4_0     
+
+  Capabilities
+    completion    
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          503.97M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    stop    "<|im_start|>"    
+    stop    "<|im_end|>"      
+
+  License
+    Version 1.0, June 5, 2024               
+    © 2024 OpenBMB. All rights reserved.    
+    ...                                     
+

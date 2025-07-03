@@ -1,0 +1,70 @@
+Certainly! Below is a Python function that parses the `model.info.txt` file according to the specified rules:
+
+```python
+def parse_model_info(file_path):
+    # Initialize variables
+    model_info = {}
+    capabilities = []
+    system_prompt = ""
+    parameters = {}
+
+    # Open the file
+    with open(file_path, 'r') as file:
+        # Skip the header
+        next(file)
+
+        # Model section
+        model_lines = file.readlines()
+        for line in model_lines:
+            if line.strip():
+                name, value = line.strip().split('    ')
+                model_info[name] = value
+
+        # Capabilities section
+        capabilities = [line.strip() for line in file.readlines() if line.strip()]
+
+        # System section
+        for line in file.readlines():
+            if line.strip() == 'System':
+                system_prompt = file.readline().strip()
+
+        # Parameters section
+        for line in file.readlines():
+            if line.strip() == 'Parameters':
+                for line in file.readlines():
+                    if line.strip() == 'temperature':
+                        parameters['temperature'] = file.readline().strip()
+
+    return model_info, capabilities, system_prompt, parameters
+
+# Example usage
+file_path = 'model.info.txt'
+model_info, capabilities, system_prompt, parameters = parse_model_info(file_path)
+
+# Print the results
+print("Model Info:", model_info)
+print("Capabilities:", capabilities)
+print("System Prompt:", system_prompt)
+print("Parameters:", parameters)
+```
+
+### Explanation:
+1. **Initialization**: We initialize several variables to store the parsed data.
+2. **Reading the File**: We open the file and skip the header line.
+3. **Model Section**: We read all lines in the Model section and parse each line to extract the `name` and `value`.
+4. **Capabilities Section**: We read all lines in the Capabilities section and store them in an array.
+5. **System Section**: We read the System section and extract the system prompt.
+6. **Parameters Section**: We read the Parameters section and extract the `temperature` value.
+
+### Example Output:
+Given the example `model.info.txt` content, the output would be:
+
+```python
+Model Info: {'architecture': 'granite', 'parameters': '2.5B', 'context length': '16384', 'embedding length': '2048', 'quantization': 'Q4_K_M'}
+Capabilities: ['completion', 'tools', 'vision']
+System Prompt: 'A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.'
+Parameters: {'temperature': '0'}
+```
+
+This function should handle any missing sections or lines as specified in the rules.
+

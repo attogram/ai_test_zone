@@ -1,0 +1,14 @@
+A classic example of the Socratic paradox.
+
+If we assume that Socrates is indeed human, then it's logical to conclude that he would be mortal. After all, humans in general are considered to be mortal.
+
+However, this conclusion may lead us to ask: But what about the statement "All humans are mortal"? This implies a universal truth, which suggests that there must be some exception or counterexample.
+
+In this case, the question becomes: Can we find any instance where Socrates is not mortal?
+
+If we assume that Socrates is indeed human and mortal, then it's possible to argue that his mortality is just like that of all humans. In other words, Socrates' mortal condition could be seen as a universal property of humanity.
+
+But, if you're asking whether there's any counterexample or exception to this statement, the answer is: We can't provide one. The assumption that Socrates is human and mortal creates an infinite regress, where we start from the premise that humans are mortal (which we just established) and then ask about Socrates' mortality.
+
+So, in a sense, the question "Is Socrates mortal?" becomes "Can we ever know for certain whether Socrates is mortal or not?" And the answer, as you've cleverly pointed out, suggests an infinite loop of self-referential paradoxes that may never be resolved.
+

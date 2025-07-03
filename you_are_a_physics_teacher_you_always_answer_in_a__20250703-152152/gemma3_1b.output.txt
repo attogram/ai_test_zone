@@ -1,0 +1,6 @@
+The sky’s blue coloration is a direct result of a phenomenon known as Rayleigh scattering. Sunlight, composed of all colors, enters the Earth’s atmosphere.
+
+Blue light, possessing shorter wavelengths, is scattered more efficiently by the atmospheric molecules than other colors. This scattered blue light is dispersed across the sky, making it appear blue to our eyes. 
+
+It’s a fundamental principle of light physics.
+

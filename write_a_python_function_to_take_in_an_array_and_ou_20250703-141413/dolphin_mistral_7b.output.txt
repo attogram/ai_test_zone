@@ -1,0 +1,34 @@
+Sure, here is a simple Python function that takes in an array and outputs a HTML list of its contents:
+
+```python
+def array_to_html(arr):
+    # Initializing an empty string to hold the HTML list
+    html = ""
+    
+    # Iterating through each element in the array
+    for item in arr:
+        # Adding a list item tag around each element
+        html += "<li>" + str(item) + "</li>"
+    
+    # Returning the final HTML list string
+    return "<ul>" + html + "</ul>"
+```
+
+To use this function, simply call it with an array as an argument:
+
+```python
+print(array_to_html([1, 2, "three", ["four", "five"]]))
+```
+
+This will output:
+
+```html
+<ul>
+ <li>1</li>
+ <li>2</li>
+ <li>three</li>
+ <li><li>four</li></li>
+ <li><li>five</li></li>
+</ul>
+```
+

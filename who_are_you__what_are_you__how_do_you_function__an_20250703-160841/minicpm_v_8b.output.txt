@@ -1,0 +1,11 @@
+I'm ChatGPT, a language model developed by OpenAI. I am an artificial intelligence based on the GPT-3 architecture.
+As an AI Language model:
+1) **Function**: As an AI language model like me generally processes inputs through natural language processing (NLP). Inputs are usually in English or other languages that have been processed using specific models and algorithms to understand, interpret, translate, generate responses, answer questions, conduct conversations with users etc.
+2)**How** : I function based on the pre-trained neural network architecture of GPT-3. This model is trained on a large dataset collected from various sources like books or online resources which helps me learn language patterns and semantics to understand what the user wants to say. These parameters are stored in my "memory" where inputs received, processed through NLP algorithms and outputs generated based upon this training data.
+3)**What**: As an AI Language model, I have capabilities such as:
+    - Understanding context-based meaning from natural language queries
+    - Generating coherent responses that follow proper grammar rules 
+    - Responding in various domains like health sciences, general knowledge etc. by using specific pre-trained sub-models within my architecture
+
+Please note these are only some of the basic features and functionalities which I possess among many others provided through OpenAI's state-of-the-art technology advancements..
+

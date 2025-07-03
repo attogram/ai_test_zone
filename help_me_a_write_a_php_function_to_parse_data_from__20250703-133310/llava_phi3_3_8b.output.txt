@@ -1,0 +1,63 @@
+```php
+function parseModelInfo($filePath) {
+    $modelSection = "";
+    $capabilities = array();
+    $systemPrompt = "";
+    $parameters = array();
+    $parameterValues = array();
+    $temperatureValue = "";
+    
+    // Open the file and read its contents line by line
+    if (($handle = fopen($filePath, "r")) !== false) {
+        while (($line = fgets($handle)) !== false) {
+            // Check for a new section header
+            if ($line[0] == "#") {
+                $sectionHeader = trim(substr($line, 1));
+                
+                switch ($sectionHeader) {
+                    case "Model":
+                        $modelSection = "";
+                        break;
+                    case "Capabilities":
+                        $capabilities = array();
+                        break;
+                    case "System":
+                        $systemPrompt = "";
+                        break;
+                }
+            } else { // This is a line from the model section
+                if ($modelSection != "") {
+                    list($name, $value) = explode(" ", trim(preg_replace("/[^\w\s]/i", "", substr($line, 0))));
+                    ${lcfirst($name)} = $value;
+                }
+            }
+        }
+        
+        fclose($handle);
+    }
+    
+    // Check if the temperature value was found in the parameters section
+    foreach ($parameters as $parameter) {
+        if ($parameter == "temperature") {
+            $temperatureValue = $parameterValues[0];
+        }
+    }
+    
+    return array(
+        'model' => ${lcfirst($modelSection)},
+        'capabilities' => $capabilities,
+        'systemPrompt' => $systemPrompt,
+        'parameters' => $parameters,
+        'temperature' => $temperatureValue
+    );
+}
+```
+To use the function, you can call it and pass in the file path to your model.info.txt file as an argument:
+```php
+$filePath = "path/to/model.info.txt";
+$parsedData = parseModelInfo($filePath);
+
+// You can now access the parsed data like this:
+echo $parsedData['model']['architecture'];  // Outputs "granite"
+```
+

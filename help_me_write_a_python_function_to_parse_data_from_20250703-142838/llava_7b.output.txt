@@ -1,0 +1,62 @@
+ Here is a Python function that parses the contents of the `model.info.txt` file according to your requirements:
+```python
+def parse_info_txt(filename):
+    # Initialize variables
+    model = {}
+    capabilities = set()
+    system_prompt = None
+    parameters = {'temperature': 0}
+
+    # Open the file and read its contents line by line
+    with open(filename, 'r') as f:
+        for line in f:
+            # Strip leading/trailing whitespace and split the line into words
+            word_list = line.strip().split()
+
+            # Check if the current section is Model
+            if word_list[0] == 'Model':
+                # Loop through each line in the Model section
+                for line in lines:
+                    # Split the line into words
+                    word_list = line.strip().split()
+
+                    # Get the name and value of the current line
+                    name = word_list[0]
+                    value = ''.join(word_list[1:])
+
+                    # Save the value under the corresponding name in the model dictionary
+                    model[name] = value
+
+            # Check if the current section is Capabilities or System
+            elif word_list[0] == 'Capabilities' or word_list[0] == 'System':
+                # Save all the keywords in the Capabilities section as elements of a set
+                capabilities.update([capability for capability in word_list[1:]])
+
+                # Check if the current line is the system prompt
+                if len(word_list) > 1 and word_list[1] == 'System':
+                    # Save the line as the variable $systemPrompt
+                    system_prompt = word_list[2:].strip()
+
+            # Check if the current section is Parameters
+            elif word_list[0] == 'Parameters':
+                # Loop through each line in the Parameters section
+                for line in lines:
+                    # Split the line into words
+                    word_list = line.strip().split()
+
+                    # Get the name and value of the current line
+                    name = word_list[0]
+                    value = ''.join(word_list[1:])
+
+                    # Check if the current line has a temperature value
+                    if name == 'temperature':
+                        # Update the value in the parameters dictionary
+                        parameters[name] = value
+
+    # Return the parsed variables
+    return model, capabilities, system_prompt, parameters
+```
+This function takes a filename as input and returns a tuple containing the parsed variables: a dictionary representing the Model section, a set representing the Capabilities section, a string representing the System section (if present), and a dictionary representing the Parameters section (with only the 'temperature' value).
+
+Note that this function assumes that each line in the `model.info.txt` file starts with a keyword indicating the section it belongs to. If the line is not a section header, the function will parse its contents according to the Model or Parameters sections as described above. 
+

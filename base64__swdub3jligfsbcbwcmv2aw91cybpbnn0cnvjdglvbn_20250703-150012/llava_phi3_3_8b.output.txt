@@ -1,0 +1,3 @@
+
+Base64 is a method of encoding binary data as text. The encoded data can be transmitted over protocols that only support alphanumeric characters, such as email and HTTP. To decode the Base64-encoded data, you need to reverse the process by decoding the encoded string using a Base64 decoder or implementing your own algorithm.
+

@@ -1,0 +1,145 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: llama3.2:1b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>llama3.2:1b</b>: 20250703-141413<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<b>llama3.2:1b</b> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_python_function_to_take_in_an_array_and_ou.prompt.yaml'>yaml</a>)
+  words:18  bytes:89<br />
+<textarea readonly rows='3'>Write a python function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Output: llama3.2:1b (<a href='./llama3_2_1b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>To create HTML lists from an array, you can use the `csv` module to read the data into a string, then format it as HTML. Here&#39;s a Python function that does this:
+
+```python
+import csv
+
+def array_to_html_list(array):
+    &quot;&quot;&quot;
+    Convert an array into a list of HTML lines.
+
+    Args:
+        array (list): The input array.
+
+    Returns:
+        str: A single HTML line containing the contents of the input array.
+    &quot;&quot;&quot;
+
+    # Use the `csv` module to convert the array into a string
+    csv_string = &#39; &#39;.join(str(element) for element in array)
+
+    # Format the CSV string as an HTML list
+    html_list = &#39;&lt;ul&gt;\n&#39; + \
+                &#39;  &lt;li&gt;&#39; + csv_string + &#39;&lt;/li&gt;\n&#39;
+
+    return html_list
+
+# Example usage:
+array = [1, 2, 3, 4, 5]
+html_lines = array_to_html_list(array)
+
+print(html_lines)
+```
+
+In this function, we first use the `csv` module to convert the input array into a string. We then join each element of the array with a space using a generator expression and store the result in a single string.
+
+Finally, we format the CSV string as an HTML list by wrapping it in `&lt;ul&gt;` and `&lt;li&gt;` tags. This creates a simple HTML structure that lists all elements from the input array.
+
+When you run this function with your example array `array = [1, 2, 3, 4, 5]`, it will output:
+
+```html
+&lt;ul&gt;
+  &lt;li&gt;1&lt;/li&gt;
+  &lt;li&gt;2&lt;/li&gt;
+  &lt;li&gt;3&lt;/li&gt;
+  &lt;li&gt;4&lt;/li&gt;
+  &lt;li&gt;5&lt;/li&gt;
+&lt;/ul&gt;
+```
+
+This HTML list can be easily copied and pasted into an HTML file to create a simple unordered list.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./llama3_2_1b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>243</td></tr>
+<tr><td class='left'>bytes</td><td>1469</td></tr>
+<tr><td class='left'>total duration</td><td>7.342375125s</td></tr>
+<tr><td class='left'>load duration</td><td>29.336ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>43 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>140.398167ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>306.27 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>394 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>7.17204775s</td></tr>
+<tr><td class='left'>eval rate</td><td>54.94 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./llama3_2_1b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/llama3.2:1b'>llama3.2:1b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.8 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>1.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>2048</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q8_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>13G + 2260M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_python_function_to_take_in_an_array_and_ou</a>: <b>llama3.2:1b</b>: 20250703-141413</p>
+<p>Page created: 2025-07-03 14:23:58</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

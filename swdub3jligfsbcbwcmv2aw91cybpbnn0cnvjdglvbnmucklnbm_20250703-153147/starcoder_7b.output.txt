@@ -1,0 +1,4 @@
+
+<issue_comment>username_1: I'm a little surprised that the source maps are so large, but you're right that we definitely need to optimize them. I don't know what the most efficient approach is for this in Node -- would the best bet be to create an intermediate file and have it read from there?
+<issue_comment>username_0: You could just use a temp file as a cache instead of creating a separate one, then you wouldn’t need to worry about clearing it. I think that’s what Babel does anyway but I haven’t checked recently<issue_closed>
+

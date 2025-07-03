@@ -1,0 +1,249 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen2.5-coder:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_a_write_a_php_function_to_parse_data_from_</a>: <b>qwen2.5-coder:7b</b>: 20250703-133310<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<b>qwen2.5-coder:7b</b> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_a_write_a_php_function_to_parse_data_from_.prompt.yaml'>yaml</a>)
+  words:177  bytes:1491<br />
+<textarea readonly rows='10'>Help me a write a PHP function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as a PHP variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a PHP array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...</textarea>
+</p>
+<p>Output: qwen2.5-coder:7b (<a href='./qwen2_5_coder_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>To parse the `model.info.txt` file using PHP, you can create a function that reads the file, processes each section according to the provided rules, and stores the parsed data in appropriate variables or arrays. Below is an example of how you could implement this:
+
+```php
+&lt;?php
+
+function parseModelInfo($filePath) {
+    $data = [
+        &#39;model&#39; =&gt; [],
+        &#39;capabilities&#39; =&gt; [],
+        &#39;systemPrompt&#39; =&gt; null,
+        &#39;parameters&#39; =&gt; null,
+        &#39;architecture&#39; =&gt; null,
+        &#39;embeddingLength&#39; =&gt; null,
+        &#39;temperature&#39; =&gt; null
+    ];
+
+    $sections = [
+        &#39;Model&#39;,
+        &#39;Capabilities&#39;,
+        &#39;System&#39;,
+        &#39;Parameters&#39;
+    ];
+
+    $currentSection = null;
+
+    if (!file_exists($filePath)) {
+        throw new Exception(&quot;File does not exist.&quot;);
+    }
+
+    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    foreach ($lines as $line) {
+        // Check for section headers
+        if (in_array(trim($line), $sections)) {
+            $currentSection = trim($line);
+            continue;
+        }
+
+        switch ($currentSection) {
+            case &#39;Model&#39;:
+                list($key, $value) = explode(&#39;    &#39;, trim($line));
+                $data[&#39;model&#39;][$key] = trim($value);
+                if ($key === &#39;architecture&#39;) {
+                    $data[&#39;architecture&#39;] = trim($value);
+                }
+                if ($key === &#39;embedding length&#39; || $key === &#39;embedding_length&#39;) {
+                    $data[&#39;embeddingLength&#39;] = trim($value);
+                }
+                break;
+
+            case &#39;Capabilities&#39;:
+                $data[&#39;capabilities&#39;][] = trim($line);
+                break;
+
+            case &#39;System&#39;:
+                if (is_null($data[&#39;systemPrompt&#39;])) {
+                    $data[&#39;systemPrompt&#39;] = trim($line);
+                } else {
+                    $data[&#39;systemPrompt&#39;] .= &#39; &#39; . trim($line);
+                }
+                break;
+
+            case &#39;Parameters&#39;:
+                list($key, $value) = explode(&#39;    &#39;, trim($line));
+                if ($key === &#39;temperature&#39;) {
+                    $data[&#39;parameters&#39;][&#39;temperature&#39;] = floatval(trim($value));
+                }
+                break;
+        }
+    }
+
+    return $data;
+}
+
+// Example usage
+$filePath = &#39;path/to/model.info.txt&#39;;
+$modelData = parseModelInfo($filePath);
+
+print_r($modelData);
+?&gt;
+```
+
+### Explanation:
+
+1. **Initialization**:
+   - The `parseModelInfo` function initializes an array `$data` to store the parsed information.
+   - It also defines an array `$sections` containing the expected section headers.
+
+2. **Reading and Processing Lines**:
+   - The function reads the file line by line using `file()`.
+   - It checks each line to see if it matches any of the defined sections.
+   - Depending on the current section, it processes the line accordingly:
+     - For the &#39;Model&#39; section, it splits the line into a key-value pair and stores them in the `$data[&#39;model&#39;]` array. Special cases for `architecture`, `embedding length`, and `temperature` are handled separately.
+     - For the &#39;Capabilities&#39; section, each line is added to the `$data[&#39;capabilities&#39;]` array as an element of an array.
+     - For the &#39;System&#39; section, lines are concatenated into a single string stored in `$data[&#39;systemPrompt&#39;]`.
+     - For the &#39;Parameters&#39; section, only the `temperature` value is extracted and stored.
+
+3. **Return**:
+   - The function returns the parsed data as an associative array `$modelData`.
+
+4. **Example Usage**:
+   - Replace `&#39;path/to/model.info.txt&#39;` with the actual path to your `model.info.txt` file.
+   - The parsed data will be printed using `print_r()`.
+
+This script should handle the parsing of the provided example content and can be extended or modified as needed for different formats or additional sections.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen2_5_coder_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>429</td></tr>
+<tr><td class='left'>bytes</td><td>3789</td></tr>
+<tr><td class='left'>total duration</td><td>49.588974125s</td></tr>
+<tr><td class='left'>load duration</td><td>27.604875ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>366 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>3.235688541s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>113.11 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>817 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>46.325045375s</td></tr>
+<tr><td class='left'>eval rate</td><td>17.64 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen2_5_coder_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/qwen2.5-coder:7b'>qwen2.5-coder:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.6B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>3584</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br />insert<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 1919M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_a_write_a_php_function_to_parse_data_from_</a>: <b>qwen2.5-coder:7b</b>: 20250703-133310</p>
+<p>Page created: 2025-07-03 13:57:45</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

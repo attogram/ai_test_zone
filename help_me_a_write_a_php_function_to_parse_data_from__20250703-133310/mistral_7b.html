@@ -1,0 +1,230 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_a_write_a_php_function_to_parse_data_from_</a>: <b>mistral:7b</b>: 20250703-133310<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<b>mistral:7b</b> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_a_write_a_php_function_to_parse_data_from_.prompt.yaml'>yaml</a>)
+  words:177  bytes:1491<br />
+<textarea readonly rows='10'>Help me a write a PHP function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as a PHP variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a PHP array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...</textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'> Here is a PHP function that parses your `model.info.txt` file as per your requirements:
+
+```php
+function parseModelInfo($file) {
+    $data = []; // To store parsed data
+
+    $sections = [&#39;Model&#39;, &#39;Capabilities&#39;, &#39;System&#39;, &#39;Parameters&#39;, &#39;Projector&#39;]; // Expected sections
+    $section = &#39;&#39;; // Current section
+    $line = &#39;&#39;; // Current line
+    $key = &#39;&#39;; // Key for Model and Parameters sections
+    $value = &#39;&#39;; // Value for Model, Capabilities, System, and Parameters sections
+    $capabilities = []; // Array to store capabilities keywords
+    $systemPrompt = &#39;&#39;; // Variable to store system prompt
+    $temperatureValue = 0; // Variable to store temperature value
+
+    if (file_exists($file)) {
+        $handle = fopen($file, &#39;r&#39;);
+
+        while (!feof($handle)) {
+            $line = trim(fgets($handle));
+
+            // Find section name
+            if (preg_match(&#39;/^(\w+)/&#39;, $line, $matches) &amp;&amp; in_array($matches[0], $sections)) {
+                $section = $matches[0];
+                continue;
+            }
+
+            // Save Model or Parameters data
+            if ($section === &#39;Model&#39; || $section === &#39;Parameters&#39;) {
+                list($key, $value) = explode(&#39; &#39;, $line);
+                fundef($key, $value);
+                continue;
+            }
+
+            // Save Capabilities data
+            if ($section === &#39;Capabilities&#39;) {
+                $capabilities[] = trim($line);
+                continue;
+            }
+
+            // Save System data
+            if (strpos($line, &#39;System&#39;) !== false) {
+                $systemPrompt .= trim($line) . &quot; &quot;; // Adding multiple lines for System section
+                continue;
+            }
+
+            // Save Parameters data
+            if ($section === &#39;Parameters&#39; &amp;&amp; strpos($line, &#39;temperature&#39;) !== false) {
+                list($key, $value) = explode(&#39; &#39;, $line);
+                $temperatureValue = floatval(str_replace(&#39;temperature&#39;, &#39;&#39;, $value));
+            }
+        }
+
+        fclose($handle);
+    }
+
+    // Add parsed data to the main data array
+    if (!empty($capabilities)) {
+        $data[&#39;Capabilities&#39;] = $capabilities;
+    }
+
+    if (!empty($systemPrompt)) {
+        $data[&#39;System&#39;] = $systemPrompt;
+    }
+
+    // Only add temperature value if it exists and is a number
+    if (is_numeric($temperatureValue)) {
+        $data[&#39;Parameters&#39;][&#39;temperature&#39;] = $temperatureValue;
+    }
+
+    return $data;
+}
+
+// Function to create variables from key-value pairs in the Model section
+function fundef($key, $value) {
+    global ${$key}; // Create a global variable using the provided key
+    $$key = $value; // Assign the value to the created global variable
+}
+```
+
+You can use the `parseModelInfo()` function like this:
+
+```php
+$parsedData = parseModelInfo(&#39;model.info.txt&#39;);
+print_r($parsedData);
+```</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>320</td></tr>
+<tr><td class='left'>bytes</td><td>2797</td></tr>
+<tr><td class='left'>total duration</td><td>43.31221175s</td></tr>
+<tr><td class='left'>load duration</td><td>9.55925ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>388 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>2.9622185s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>130.98 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>754 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>40.33940675s</td></tr>
+<tr><td class='left'>eval rate</td><td>18.69 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/mistral:7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>6.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 2037M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_a_write_a_php_function_to_parse_data_from_</a>: <b>mistral:7b</b>: 20250703-133310</p>
+<p>Page created: 2025-07-03 13:56:51</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

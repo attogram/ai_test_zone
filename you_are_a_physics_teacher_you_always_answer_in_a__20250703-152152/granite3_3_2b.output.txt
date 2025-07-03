@@ -1,0 +1,2 @@
+The sky appears blue due to a process called Rayleigh scattering. Sunlight, composed of various colors, interacts with the Earth's atmosphere. Shorter-wavelength blue and violet light are scattered more than longer-wavelength red, orange, and yellow lights because of their shorter wavelengths. However, our eyes are more sensitive to blue light and it gets scattered in all directions, making the sky appear blue during daytime.
+

@@ -1,0 +1,10 @@
+
+**Answer:**  
+Yes, Socrates is mortal.  
+
+**Reasoning:**  
+1. **Premise 1:** "Socrates is a human."  
+2. **Premise 2:** "All humans are mortal."  
+3. **Logical Conclusion:** Since Socrates is a human (Premise 1) and all humans are mortal (Premise 2), it follows that Socrates is mortal. This is a valid syllogism (a form of deductive reasoning) where the conclusion necessarily follows from the premises.  
+
+Thus, based on the given premises, **Socrates is mortal**.

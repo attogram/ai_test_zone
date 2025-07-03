@@ -1,0 +1,18 @@
+[PYTHON]
+def array_to_html_list(arr):
+    html = "<ul>"
+    for item in arr:
+        html += "<li>{}</li>".format(item)
+    html += "</ul>"
+    return html
+[/PYTHON]
+[TESTS]
+# Test case 1:
+assert array_to_html_list([]) == "<ul></ul>"
+# Test case 2:
+assert array_to_html_list(["Apple"]) == "<ul><li>Apple</li></ul>"
+# Test case 3:
+assert array_to_html_list(["Apple", "Banana", "Orange"]) == "<ul><li>Apple</li><li>Banana</li><li>Orange</li></ul>"
+[/TESTS]
+
+

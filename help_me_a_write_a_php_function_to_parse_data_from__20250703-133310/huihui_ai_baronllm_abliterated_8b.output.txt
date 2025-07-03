@@ -1,0 +1,62 @@
+Here is the PHP function that parses the `model.info.txt` file:
+
+```php
+function parseModelInfo($filePath) {
+    $data = array();
+    try {
+        if (!file_exists($filePath)) return false;
+        $content = file_get_contents($filePath);
+        $sections = preg_split('/\n\n(?=[a-zA-Z])/m', $content);
+
+        foreach ($sections as $sectionName => $sectionContent) {
+            $lines = explode("\n", trim($sectionContent));
+            if (trim($sectionName)) { // Model, Capabilities, System, ...
+                switch ($sectionName) {
+                    case 'Model':
+                        foreach ($lines as $line) {
+                            list($name, $value) = explode('    ', trim($line));
+                            $data[$name] = $value;
+                        }
+                        break;
+                    case 'Capabilities':
+                        $data['capabilities'] = array();
+                        foreach ($lines as $line) {
+                            $data['capabilities'][] = trim($line);
+                        }
+                        break;
+                    case 'System':
+                        $systemPrompt = implode("\n", $lines);
+                        $data['systemPrompt'] = $systemPrompt;
+                        break;
+                    case 'Parameters':
+                        foreach ($lines as $line) {
+                            list($name, $value) = explode('    ', trim($line));
+                            if ($name == 'temperature') {
+                                $data[$name] = $value;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        return $data;
+
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return false;
+    }
+}
+```
+
+This function reads the contents of `model.info.txt` file and uses regular expressions to split it into sections. Then, for each section, it processes its content according to the given rules. It returns an array with the parsed data or `false` if there's any error. 
+
+You can use this function like this:
+
+```php
+$modelData = parseModelInfo('model.info.txt');
+if ($modelData) {
+    print_r($modelData);
+}
+```
+

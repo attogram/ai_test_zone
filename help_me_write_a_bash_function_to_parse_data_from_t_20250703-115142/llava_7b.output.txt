@@ -1,0 +1,73 @@
+ Here is a Bash function that parses the data from the `model.info.txt` file as described:
+```
+parse_model_info() {
+  # Initialize variables
+  architecture=
+  context_length=
+  embedding_length=
+  quantization=
+  completion=
+  tools=
+  vision=
+  projector_architecture=
+  projector_parameters=
+  projector_embedding_length=
+  projector_dimensions=
+  num_ctx=
+  temperature=
+  system_prompt=
+  license=
+  
+  # Loop through the lines of the file
+  while read line; do
+    # Check if the line is in the Model section
+    if [[ $line == *architecture* ]]; then
+      architecture=$(echo $line | awk '{print $2}')
+      continue
+    elif [[ $line == *parameters* ]]; then
+      parameters=$(echo $line | awk '{print $2}')
+      # Check if the line is for temperature
+      if [[ $line == *temperature* ]]; then
+        temperature=$(echo $line | awk '{print $2}')
+        continue
+      fi
+      continue
+    elif [[ $line == *Capabilities* ]]; then
+      capabilities=($capabilities)
+      capabilities+=($(echo $line | awk '{print $1}' | tr ' ' '\n'))
+      continue
+    elif [[ $line == *System* ]]; then
+      system_prompt=$line
+      continue
+    elif [[ $line == *Projector* ]]; then
+      projector_architecture=$(echo $line | awk '{print $2}')
+      projector_parameters=$(echo $line | awk '{print $3}')
+      projector_embedding_length=$(echo $line | awk '{print $4}')
+      projector_dimensions=$(echo $line | awk '{print $5}')
+      continue
+    elif [[ $line == *License* ]]; then
+      license=$(echo $line | awk '{print $2}')
+      continue
+    fi
+  done < model.info.txt
+  
+  # Print the parsed variables
+  echo "architecture=$architecture"
+  echo "context_length=$context_length"
+  echo "embedding_length=$embedding_length"
+  echo "quantization=$quantization"
+  echo "completion=${capabilities[@]}"
+  echo "tools=${tools[@]}"
+  echo "vision=${vision[@]}"
+  echo "projector_architecture=$projector_architecture"
+  echo "projector_parameters=$projector_parameters"
+  echo "projector_embedding_length=$projector_embedding_length"
+  echo "projector_dimensions=$projector_dimensions"
+  echo "num_ctx=$num_ctx"
+  echo "temperature=$temperature"
+  echo "system_prompt=$system_prompt"
+  echo "license=$license"
+}
+```
+You can call this function by running `parse_model_info` in your Bash script. This will parse the data from the `model.info.txt` file and print the parsed variables to the console. 
+

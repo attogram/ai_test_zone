@@ -1,0 +1,42 @@
+Here is the Python function that parses the `model.info.txt` file:
+
+```python
+def parse_model_info(file_path):
+    """
+    Parse the model info from a file.
+
+    :param file_path: Path to the model info file.
+    :return: A dictionary containing the parsed information.
+    """
+
+    result = {}
+
+    sections = [
+        ("Model", lambda x: [line.split("    ")[0] + "=" + line.split("    ")[1].strip() for line in x if "name" in line]),
+        ("Capabilities", lambda x: [line.strip() for line in x if not line.startswith(" ") and not line.startswith("\n")]),
+        ("System", lambda x: "".join(x).strip()),
+        ("Parameters", lambda x: {line.split("    ")[0]: line.split("    ")[1].strip() for line in x if "temperature" in line}),
+        ("Projector", lambda x: {}),
+    ]
+
+    with open(file_path, 'r') as f:
+        content = f.read().split("\n\n")
+
+        # Iterate over sections
+        for name, parser in sections:
+            section_content = content[content.index(name)+1].strip()
+            if section_content:
+                result[name] = parser(section_content)
+
+    return result
+
+# Example usage
+import os.path
+result = parse_model_info('model.info.txt')
+print(result)
+```
+
+This code iterates over each section in the model info file, extracts the relevant information, and stores it in a dictionary. The `parse_model_info` function returns this dictionary.
+
+Note that you need to run the script from the same directory where your 'model.info.txt' file is located (or provide the full path to the file as an argument).
+

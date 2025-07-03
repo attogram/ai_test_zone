@@ -1,0 +1,31 @@
+Here is an example of how you can define a bash shell function to take in an array and output a HTML list of the array contents:
+```
+function_html_list() {
+  local -a args "$@"
+  
+  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    echo "Usage: $0 [OPTION]... [ITEM]..."
+    echo
+    echo '  -h, --help        Show this help message and exit.'
+    echo '  -v, --version      Print version information and exit.'
+    echo '  arg1                An argument of a string array'
+    return 0
+  fi
+  
+  local html_list="<html><body>"
+  
+  for i in "${!args[@]}"; do
+    html_list+=$"<li>"$i"</li>"
+  done
+  
+  html_list+="</body></html>";
+  echo -e "$html_list"
+}
+```
+You can use the function like this:
+```
+items=(item1 item2 item3)
+html_list $items
+```
+This will output a HTML list of "item1", "item2" and "item3".
+

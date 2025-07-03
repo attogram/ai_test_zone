@@ -1,0 +1,217 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: codellama:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_a_bash_function_to_parse_data_from_t</a>: <b>codellama:7b</b>: 20250703-115142<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<b>codellama:7b</b> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./help_me_write_a_bash_function_to_parse_data_from_t.prompt.yaml'>yaml</a>)
+  words:175  bytes:1490<br />
+<textarea readonly rows='10'>Help me write a Bash function to parse data from this model.info.txt file:
+
+- in the Model section, each line is in format &quot;name    value&quot;
+  - for each line, save as bash variable: name=&quot;$value&quot; 
+  - example:  line &quot;architecture        granite&quot; parses to: architecture=&quot;granite&quot;
+ 
+- in the Capabilities section, each line is a single keyword
+  - save all the keywords into a bash array
+
+- in the System section, single or multiple lines showing the system prompt
+  - save as var $systemPrompt
+
+- In the Parameters section (has same format as Model section)
+  - only save the &#39;temperature&#39; value
+
+- Allow that any section or any line may be missing
+
+example model.info.txt contents:
+
+  Model
+    architecture        granite    
+    parameters          2.5B       
+    context length      16384      
+    embedding length    2048       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+    vision        
+
+  Projector
+    architecture        clip       
+    parameters          441.86M    
+    embedding length    1152       
+    dimensions          0          
+
+  Parameters
+    num_ctx        16384    
+    temperature    0        
+
+  System
+    A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful,    
+      detailed, and polite answers to the user&#39;s questions.                                                   
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...</textarea>
+</p>
+<p>Output: codellama:7b (<a href='./codellama_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+Here is a Bash function that can parse the contents of a `model.info.txt` file and store the parsed data in variables:
+```bash
+parse_model() {
+    local modelInfo=&quot;$1&quot; # The path to the model.info.txt file
+    local section=&quot;&quot;     # The current section being read (e.g. &quot;Model&quot;, &quot;Capabilities&quot;, etc.)
+    local variableName=&quot;&quot; # The name of the variable being set (e.g. &quot;architecture&quot;, &quot;parameters&quot;, etc.)
+    local value=&quot;&quot;        # The value being set for the variable
+
+    while IFS= read -r line; do
+        if [[ &quot;$line&quot; == *&quot;Model&quot;* ]]; then
+            section=&quot;Model&quot;
+            continue
+        elif [[ &quot;$line&quot; == *&quot;Capabilities&quot;* ]]; then
+            section=&quot;Capabilities&quot;
+            continue
+        elif [[ &quot;$line&quot; == *&quot;Projector&quot;* ]]; then
+            section=&quot;Projector&quot;
+            continue
+        elif [[ &quot;$line&quot; == *&quot;Parameters&quot;* ]]; then
+            section=&quot;Parameters&quot;
+            continue
+        elif [[ &quot;$line&quot; == *&quot;System&quot;* ]]; then
+            section=&quot;System&quot;
+            continue
+        elif [[ &quot;$line&quot; == *&quot;License&quot;* ]]; then
+            section=&quot;License&quot;
+            continue
+        fi
+
+        if [[ &quot;$section&quot; == &quot;Model&quot; ]]; then
+            # Parse the line as a key-value pair in the format of &quot;name    value&quot;
+            variableName=$(cut -d&#39; &#39; -f1 &lt;&lt;&lt; &quot;$line&quot;)
+            value=$(cut -d&#39; &#39; -f2- &lt;&lt;&lt; &quot;$line&quot;)
+            declare &quot;${variableName}_${section}&quot;=$value
+        elif [[ &quot;$section&quot; == &quot;Capabilities&quot; ]]; then
+            # Parse the line as a single keyword
+            variableName=&quot;capability_${section}&quot;
+            value=$(cut -d&#39; &#39; -f1 &lt;&lt;&lt; &quot;$line&quot;)
+            declare &quot;${variableName}=$value&quot;
+        elif [[ &quot;$section&quot; == &quot;Projector&quot; ]]; then
+            # Parse the line as a key-value pair in the format of &quot;name    value&quot;
+            variableName=$(cut -d&#39; &#39; -f1 &lt;&lt;&lt; &quot;$line&quot;)
+            value=$(cut -d&#39; &#39; -f2- &lt;&lt;&lt; &quot;$line&quot;)
+            declare &quot;${variableName}_${section}&quot;=$value
+        elif [[ &quot;$section&quot; == &quot;Parameters&quot; ]]; then
+            # Parse the line as a key-value pair in the format of &quot;name    value&quot;
+            variableName=$(cut -d&#39; &#39; -f1 &lt;&lt;&lt; &quot;$line&quot;)
+            value=$(cut -d&#39; &#39; -f2- &lt;&lt;&lt; &quot;$line&quot;)
+            declare &quot;${variableName}_${section}&quot;=$value
+        elif [[ &quot;$section&quot; == &quot;System&quot; ]]; then
+            # Parse the line as a single string
+            variableName=&quot;systemPrompt&quot;
+            value=&quot;$line&quot;
+            declare &quot;${variableName}=$value&quot;
+        elif [[ &quot;$section&quot; == &quot;License&quot; ]]; then
+            # Parse the line as a single keyword
+            variableName=&quot;license&quot;
+            value=$(cut -d&#39; &#39; -f1 &lt;&lt;&lt; &quot;$line&quot;)
+            declare &quot;${variableName}=$value&quot;
+        fi
+    done &lt; &quot;$modelInfo&quot;
+}
+```
+This function reads each line of the `model.info.txt` file and determines which section it belongs to based on the text in the line. It then sets a variable name based on the section and key, and stores the value for that key-value pair in a variable with the same name. For example, if a line in the &quot;Model&quot; section has the format &quot;architecture    granite&quot;, this function will set the `architecture_model` variable to &quot;granite&quot;.
+
+The function allows for any section or any line to be missing by using `continue` statements to skip over the lines that do not contain the expected text. It also uses a `while read` loop to iterate over each line in the file, and a `cut` command to extract the key and value from each line.
+
+You can call this function by passing it the path to your `model.info.txt` file as an argument:
+```bash
+parse_model &quot;/path/to/model.info.txt&quot;
+```
+This will set the variables `architecture_model`, `parameters_model`, `context_length_model`, `embedding_length_model`, `quantization_model`, `capability_completion`, `capability_tools`, `capability_vision`, `projector_architecture`, `projector_parameters`, `projector_embedding_length`, `projector_dimensions`, `num_ctx`, `temperature_parameters`, `systemPrompt`, and `license` based on the contents of your `model.info.txt` file.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./codellama_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>488</td></tr>
+<tr><td class='left'>bytes</td><td>4011</td></tr>
+<tr><td class='left'>total duration</td><td>1m1.009236333s</td></tr>
+<tr><td class='left'>load duration</td><td>14.757875ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>402 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>3.103357291s</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>129.54 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>1072 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>57.890235209s</td></tr>
+<tr><td class='left'>eval rate</td><td>18.52 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./codellama_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/codellama:7b'>codellama:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>size</td><td class='left'>9.4 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>6.7B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>16384</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 2192M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>help_me_write_a_bash_function_to_parse_data_from_t</a>: <b>codellama:7b</b>: 20250703-115142</p>
+<p>Page created: 2025-07-03 11:53:04</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

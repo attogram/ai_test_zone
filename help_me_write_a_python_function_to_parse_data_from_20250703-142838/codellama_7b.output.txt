@@ -1,0 +1,96 @@
+
+Here is a Python function that can parse the `model.info.txt` file and save the data as python variables:
+```python
+def parse_model_info(filepath):
+    with open(filepath, 'r') as f:
+        lines = f.readlines()
+
+    # Parse the Model section
+    model_section = []
+    for line in lines:
+        if line.startswith('Model'):
+            model_section.append(line)
+
+    # Parse the Capabilities section
+    capabilities_section = []
+    for line in lines:
+        if line.startswith('Capabilities'):
+            capabilities_section.append(line)
+
+    # Parse the System section
+    system_section = []
+    for line in lines:
+        if line.startswith('System'):
+            system_section.append(line)
+
+    # Parse the Parameters section
+    parameters_section = []
+    for line in lines:
+        if line.startswith('Parameters'):
+            parameters_section.append(line)
+
+    # Save the data as python variables
+    architecture = None
+    context_length = None
+    embedding_length = None
+    quantization = None
+    num_ctx = None
+    temperature = None
+    for line in model_section:
+        if 'architecture' in line:
+            architecture = line.split()[1]
+        elif 'context length' in line:
+            context_length = int(line.split()[1])
+        elif 'embedding length' in line:
+            embedding_length = int(line.split()[1])
+        elif 'quantization' in line:
+            quantization = line.split()[1]
+        elif 'num_ctx' in line:
+            num_ctx = int(line.split()[1])
+        elif 'temperature' in line:
+            temperature = float(line.split()[1])
+
+    capabilities = []
+    for line in capabilities_section:
+        capabilities.append(line.strip())
+
+    system_prompt = None
+    for line in system_section:
+        if 'System' in line:
+            system_prompt = line.strip()
+
+    parameters = {}
+    for line in parameters_section:
+        if 'num_ctx' in line:
+            num_ctx = int(line.split()[1])
+        elif 'temperature' in line:
+            temperature = float(line.split()[1])
+        else:
+            parameters[line.split()[0]] = line.split()[1]
+
+    return {
+        'architecture': architecture,
+        'context_length': context_length,
+        'embedding_length': embedding_length,
+        'quantization': quantization,
+        'num_ctx': num_ctx,
+        'temperature': temperature,
+        'capabilities': capabilities,
+        'system_prompt': system_prompt,
+        'parameters': parameters
+    }
+```
+This function reads the contents of the `model.info.txt` file and parses it line by line. It saves the data in the following variables:
+
+* `architecture`: The architecture of the model (e.g., "granite").
+* `context_length`: The length of the context (e.g., 16384).
+* `embedding_length`: The length of the embedding (e.g., 2048).
+* `quantization`: The quantization scheme used in the model (e.g., "Q4_K_M").
+* `num_ctx`: The number of contexts in the model (e.g., 16384).
+* `temperature`: The temperature parameter for the model (e.g., 0.5).
+* `capabilities`: A list of capabilities of the model (e.g., ["completion", "tools", "vision"]).
+* `system_prompt`: The system prompt used by the model (e.g., "A chat between a curious user and an artificial intelligence assistant.").
+* `parameters`: A dictionary of parameters for the model, with keys and values corresponding to the section headers in the file. For example, the "num_ctx" parameter is 16384, and the "temperature" parameter is 0.5.
+
+The function returns a dictionary with the above variables as its keys. The `parse_model_info()` function can be used to parse the contents of the `model.info.txt` file and save the data in python variables.
+

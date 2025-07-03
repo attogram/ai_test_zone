@@ -1,0 +1,27 @@
+Sure, here's a Python function that parses data from the `model.info.txt` file:
+```python
+def parse_model_info_file(file_path):
+    # Initialize variables to store parsed values
+    model_vars = {}
+    capabilities = []
+    system_prompt = ""
+    temperature = 0
+    
+    # Parse sections and lines
+    for line in file_path.strip().split("\n"):
+        if "Model" in line:
+            name, value = line.split("    ")
+            model_vars[name] = value
+        elif "Capabilities" == line:
+            capabilities.append(line)
+        elif "System" == line:
+            system_prompt = line
+        elif "Parameters" in line:
+            name, value = line.split("    ")
+            temperature = float(value)
+    
+    # Return parsed variables and arrays
+    return model_vars, capabilities, system_prompt, temperature
+```
+This function takes a file path as input and returns four values: a dictionary of model variables, an array of capabilities, the system prompt, and the temperature value.
+

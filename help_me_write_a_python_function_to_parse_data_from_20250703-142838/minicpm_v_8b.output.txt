@@ -1,0 +1,67 @@
+Here is one way you could implement this Python function:
+```
+import re
+
+def parse_info_file(info_file):
+    # Initialize variables for each section to None or an empty list as appropriate.
+    model_section = {}
+    capabilities = []
+    system_prompt = ""
+    parameters = ""
+
+    with open(info_file) as file:
+        lines = file.readlines()
+
+        # Parse the Model section
+        for line in lines:
+            match = re.match(r'^Model\s+.*$', line)
+            if not match:
+                continue
+
+            name, value = (x.strip() for x in line.split("    "))
+            model_section[name] = value
+
+        # Parse the Capabilities section
+        while True:
+            line = lines.pop(0)
+
+            # If there is no more to read from this file,
+            if not line:
+                break
+                
+            match = re.match(r'^Capabilities\s+.*$', line)
+            if not match:
+                continue
+            
+            capabilities.append(line.strip())
+
+        # Parse the System section
+        while True:
+            line = lines.pop(0)
+
+            # If there is no more to read from this file,
+            if not line:
+                break
+
+            system_prompt += " " + line.strip()
+
+        # Parse Parameters section (only save 'temperature' value)
+        parameters = model_section.get("parameters", "")
+
+    return {
+        "model": model_section,
+        "capabilities": capabilities,
+        "system_prompt": system_prompt,
+        "parameters": {"temperature": float(parameters.split(":")[-1]) if parameters else None},
+    }
+```
+This function opens the file and reads each line into a list, then iterates through that list to extract data from different sections of the file. For example:
+* It finds all lines starting with `Model` or `Capabilities`, extracts their contents using regular expressions, saves them as Python variables.
+* Saves any other relevant information it finds in its corresponding variable (e.g., `system_prompt`).
+You can call this function by passing a path to your `.info.txt` file:
+```
+parsed = parse_info_file("model.info.txt")
+print(parsed)
+```
+It should print something like:
+

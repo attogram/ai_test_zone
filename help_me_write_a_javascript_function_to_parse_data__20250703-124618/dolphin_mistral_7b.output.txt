@@ -1,0 +1,53 @@
+Here is a Javascript function that does what you asked for:
+
+```javascript
+function parseModelInfo(fileContents) {
+    let model = {};
+    let capabilities = [];
+    let systemPrompt = "";
+    let parameters = {};
+    
+    const sections = fileContents.split('\n\n');
+    sections.forEach((section, index) => {
+        if (index === 0 || section.trim().startsWith("Model")) {
+            const lines = section.trim().replace("Model", "").split("\n");
+            lines.forEach(line => {
+                const parts = line.split('    ');
+                const name = parts[0].trim();
+                const value = parts[1].trim();
+                model[name] = value;
+            });
+        } else if (section.trim().startsWith("Capabilities")) {
+            capabilities = section.trim().replace("Capabilities", "").split('    ');
+        } else if (section.trim().startsWith("System")) {
+            systemPrompt = section.trim().replace("System", "").split('\n').join(' ').trim();
+        } else if (section.trim().startsWith("Parameters")) {
+            const lines = section.trim().replace("Parameters", "").split("\n");
+            lines.forEach(line => {
+                const parts = line.split('    ');
+                const name = parts[0].trim();
+                const value = parts[1].trim();
+                parameters[name] = value;
+                if (name === "temperature") {
+                    temperature = value;
+                }
+            });
+        } else if (section.trim().startsWith("License")) {
+            // do nothing for now
+        } else {
+            console.error(`Unknown section "${section}"`);
+        }
+    });
+
+    return { model, capabilities, systemPrompt, parameters };
+}
+```
+
+You can use this function by providing the contents of your `model.info.txt` file as a string argument:
+
+```javascript
+const parsedData = parseModelInfo(fileContents);
+console.log(parsedData);
+```
+This will output an object with the properties `model`, `capabilities`, `systemPrompt`, and `parameters`. The `model` property contains all the values from the Model section, the `capabilities` property is an array of all the capabilities mentioned in the Capabilities section, the `systemPrompt` variable contains the system prompt, and the `parameters` object contains only the 'temperature' value.
+

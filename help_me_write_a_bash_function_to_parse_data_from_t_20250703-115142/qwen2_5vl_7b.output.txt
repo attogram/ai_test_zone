@@ -1,0 +1,112 @@
+Certainly! Below is a Bash function that parses the `model.info.txt` file as described. The function will handle the different sections and extract the required information into variables.
+
+```bash
+#!/bin/bash
+
+# Function to parse the model.info.txt file
+parse_model_info() {
+    local model_info_file="$1"
+    local model_section=0
+    local capabilities=()
+    local system_prompt=""
+    local parameters=()
+    local temperature=""
+
+    while IFS= read -r line; do
+        if [[ $line =~ ^Model ]]; then
+            model_section=1
+        elif [[ $line =~ ^Capabilities ]]; then
+            model_section=2
+        elif [[ $line =~ ^System ]]; then
+            model_section=3
+        elif [[ $line =~ ^Parameters ]]; then
+            model_section=4
+        elif [[ $line =~ ^Projector ]]; then
+            model_section=5
+        elif [[ $line =~ ^License ]]; then
+            model_section=6
+        elif [[ $line =~ ^architecture ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            fi
+        elif [[ $line =~ ^parameters ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            elif [[ $model_section -eq 4 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            fi
+        elif [[ $line =~ ^context length ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            fi
+        elif [[ $line =~ ^embedding length ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            fi
+        elif [[ $line =~ ^quantization ]]; then
+            if [[ $model_section -eq 1 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            elif [[ $model_section -eq 5 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                eval "$name=\"\$value\""
+            fi
+        elif [[ $line =~ ^completion ]]; then
+            capabilities+=("$line")
+        elif [[ $line =~ ^tools ]]; then
+            capabilities+=("$line")
+        elif [[ $line =~ ^vision ]]; then
+            capabilities+=("$line")
+        elif [[ $line =~ ^A chat between a curious user and an artificial intelligence assistant ]]; then
+            system_prompt="$line"
+        elif [[ $line =~ ^temperature ]]; then
+            if [[ $model_section -eq 4 ]]; then
+                IFS=' ' read -r name value <<< "$line"
+                temperature="$value"
+            fi
+        fi
+    done < "$model_info_file"
+}
+
+# Example usage
+model_info_file="model.info.txt"
+parse_model_info "$model_info_file"
+
+# Print the extracted information
+echo "architecture: $architecture"
+echo "parameters: $parameters"
+echo "context length: $context_length"
+echo "embedding length: $embedding_length"
+echo "quantization: $quantization"
+echo "capabilities: ${capabilities[@]}"
+echo "system prompt: $system_prompt"
+echo "temperature: $temperature"
+```
+
+### Explanation:
+1. **Model Section**: Extracts the `architecture`, `parameters`, `context length`, `embedding length`, and `quantization` values.
+2. **Capabilities Section**: Collects all the capabilities into an array.
+3. **System Section**: Collects the system prompt.
+4. **Parameters Section**: Extracts the `temperature` value.
+
+### Usage:
+- Save the script to a file, e.g., `parse_model_info.sh`.
+- Make the script executable: `chmod +x parse_model_info.sh`.
+- Run the script with the `model.info.txt` file as an argument: `./parse_model_info.sh model.info.txt`.
+
+This script will parse the `model.info.txt` file and print out the extracted information.
+

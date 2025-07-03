@@ -1,0 +1,28 @@
+Here's a Bash shell function that takes an array as input and outputs an HTML list:
+
+```bash
+html_list() {
+  local -a arr=("$@")
+  
+  # Start the unordered list
+  echo "<ul>"
+  
+  # Loop through the array and create list items for each element
+  for item in "${arr[@]}"; do
+    echo "  <li>$item</li>"
+  done
+  
+  # Close the unordered list
+  echo "</ul>"
+}
+```
+
+To use this function, pass your array as arguments:
+
+```bash
+array=("Apple" "Banana" "Orange")
+html_list "${array[@]}"
+```
+
+This will output an HTML unordered list with the contents of the array.
+

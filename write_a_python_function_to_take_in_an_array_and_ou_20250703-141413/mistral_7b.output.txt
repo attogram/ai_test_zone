@@ -1,0 +1,40 @@
+ Here is a simple Python function that takes an array as input and returns an HTML unordered list (ul) of its contents. The function uses f-strings for formatting, which is available in Python 3.6 and later versions.
+
+```python
+def array_to_html_list(arr):
+    """Takes an array and returns a string containing an HTML ul element."""
+
+    # Ensure input is iterable (e.g., list or tuple)
+    if not hasattr(arr, "__iter__"):
+        arr = [arr]
+
+    html_ul = '<ul>'
+
+    for item in arr:
+        html_li = f'<li>{item}</li>'
+        html_ul += html_li
+
+    # Close the ul tag
+    html_ul += '</ul>'
+    return html_ul
+```
+
+You can use this function like so:
+
+```python
+array = [1, 2, 'apple', 'banana']
+html_list = array_to_html_list(array)
+print(html_list)
+```
+
+The output will be:
+
+```html
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>apple</li>
+    <li>banana</li>
+</ul>
+```
+

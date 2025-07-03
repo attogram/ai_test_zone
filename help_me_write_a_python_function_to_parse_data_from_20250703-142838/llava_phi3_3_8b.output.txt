@@ -1,0 +1,48 @@
+```python
+def parse_model_info(filepath):
+    with open(filepath) as f:
+        lines = f.readlines()
+
+    model_section = False
+    capabilities_section = False
+    system_section = False
+    parameters_section = False
+    temperature_value = None
+    
+    variables = {}
+    keywords = []
+
+    for line in lines:
+        if line == "Model\n":
+            model_section = True
+        elif line == "Capabilities\n":
+            capabilities_section = True
+        elif line == "System\n":
+            system_section = True
+        elif line == "Parameters\n":
+            parameters_section = True
+        else:
+            if model_section:
+                parts = line.strip().split("    ")
+                name, value = parts[0].strip(), parts[1].strip()
+                variables["$" + name] = value
+            elif capabilities_section:
+                keyword = line.strip().lower()
+                keywords.append(keyword)
+            elif system_section:
+                if temperature_value is None:
+                    for word in line.split():
+                        if word.isdigit():
+                            temperature_value = int(word)
+                else:
+                    system_prompt = line.strip()
+                    variables["$systemPrompt"] = system_prompt
+            elif parameters_section:
+                parts = line.strip().split("    ")
+                name, value = parts[0].strip(), parts[1].strip()
+                if name == "temperature":
+                    temperature_value = float(value)
+
+    return variables, keywords, system_prompt, temperature_value
+```
+

@@ -1,0 +1,683 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepcoder:1.5b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>deepcoder:1.5b</b>: 20250703-113603<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<b>deepcoder:1.5b</b> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./write_a_bash_shell_function_to_take_in_an_array_an.prompt.yaml'>yaml</a>)
+  words:19  bytes:93<br />
+<textarea readonly rows='3'>Write a Bash shell function to take in an array and output a html list of the array contents</textarea>
+</p>
+<p>Thinking: deepcoder:1.5b (<a href='./deepcoder_1_5b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='15'>Okay, I need to write a Bash script that takes an array and outputs an HTML list. Let me think about how to approach this.
+
+First, I should consider how arrays are handled in Bash. Arrays can be passed as arguments using variables, so I&#39;ll probably use shift or move variables to access them.
+
+The goal is to generate an HTML string that displays each element of the array in a list format. Each item should be on its own line with a heading. So, for example, if the array is [&#39;Item1&#39;, &#39;Item2&#39;], the output should be something like:
+
+&lt;item1&gt;
+item1
+&lt;/item1&gt;
+&lt;div class=&quot;list&quot;&gt;
+item1
+item2
+&lt;/div&gt;
+
+Wait, maybe I should structure it more simply without the divs and classes. Let me think about the exact format.
+
+Each item should start with &lt;item&gt; followed by a number incrementing each time. Then, after all items, there&#39;s a &lt;/item&gt; at the end of the list.
+
+So for an array like 1,2,3, the HTML would be:
+
+&lt;item&gt;1&lt;/item&gt;
+&lt;item&gt;2&lt;/item&gt;
+&lt;item&gt;3&lt;/item&gt;
+
+Then, at the end, add &lt;/item&gt;.
+
+Wait, perhaps each item is enclosed within &lt;item&gt; and &lt;/item&gt;, with numbers starting from 1. So for an array of elements, I&#39;ll assign a counter that starts at 1 and increments by 1 for each element.
+
+So, step by step:
+
+1. Define the HTML structure: Start with &lt;ul&gt; to wrap the list.
+2. For each item in the array:
+   a. Assign a counter (starting at 1).
+   b. Prepend &quot;&lt;item&gt;&quot; followed by the counter and &quot;&gt;&quot;.
+3. After all items, add &quot;&lt;/ul&gt;&quot;.
+
+But how to handle variable-length arrays? Maybe using a loop with for...of.
+
+Alternatively, since it&#39;s a script, perhaps use a function that takes an array as input and outputs the HTML string.
+
+So, let&#39;s outline the function:
+
+Define a function called array_to_html that takes an array.
+
+Initialize a counter at 1.
+
+Loop through each element in the array:
+
+- For each element, create a string like &quot;&lt;item&gt;$counter&lt;/item&gt;&quot;.
+- Append this to the HTML content.
+- Increment counter by 1.
+
+After the loop, add &quot;&lt;/ul&gt;&quot; at the end.
+
+Then return the HTML content as a string.
+
+Now, thinking about how to implement this in Bash.
+
+First, handle arrays. The input is passed via shift, so the function will receive an array variable.
+
+I can use for...of loops to iterate over each element.
+
+Initialize $current_counter=1.
+
+Loop through each $element in the array:
+
+- For each element, create a string like &quot;&lt;item&gt;$current_counter&lt;/item&gt;&quot;.
+- Append this to the HTML content.
+- Increment current_counter by 1.
+
+After the loop, add &quot;&lt;/ul&gt;&quot;.
+
+Finally, return the constructed HTML string.
+
+Now, considering edge cases: what if the array is empty? The function should handle that gracefully, perhaps returning an empty string or just &quot;&lt;ul&gt;&quot;.
+
+Testing with sample input: array (1,2,3).
+
+The output should be:
+
+&lt;item&gt;1&lt;/item&gt;
+&lt;item&gt;2&lt;/item&gt;
+&lt;item&gt;3&lt;/item&gt;
+
+Then &quot;&lt;/ul&gt;&quot; at the end.
+
+So putting it all together.
+
+Now, let&#39;s think about how to write this in Bash code.
+
+The function will look something like this:
+
+function array_to_html {
+    local elements=$1
+    local html=&quot;$
+    local current_counter=1
+
+    for element in $elements; do
+        echo &quot;&lt;item&gt;$current_counter&lt;/item&gt;&quot;,&gt;&amp;2
+        current_counter+
+    done
+
+    echo &quot;&lt;/ul&gt;$html)&quot;
+}
+
+Wait, but this might not work correctly because the echoing could be an issue. Alternatively, using sed to add lines.
+
+Another approach: build each line and then use head to print them.
+
+Alternatively, perhaps construct a string by looping through each element and appending each line, then append &lt;/ul&gt; at the end.
+
+So here&#39;s a more detailed plan:
+
+1. Read the array from shift.
+2. If the array is empty, return &quot;&lt;ul&gt;&quot;.
+3. Otherwise, loop through each element with a counter starting at 1.
+4. For each element, create a line like &quot;&lt;item&gt;{$counter}&lt;/item&gt;&quot;, then collect all these lines.
+5. Add &quot;&lt;/ul&gt;&quot; at the end.
+6. Return the concatenated string.
+
+In code:
+
+function array_to_html {
+    local elements=$1
+    if empty $elements; then return &quot;&lt;ul&gt;$lines&lt;/ul&gt;&quot; ? Or perhaps just &quot;&lt;ul&gt;&quot; and process accordingly.
+
+Wait, perhaps better to handle it as follows:
+
+Create an initial empty line for &lt;ul&gt;.
+
+Then loop through each element with a counter, add the item lines.
+
+Finally append &lt;/ul&gt; at the end.
+
+So code steps:
+
+1. Read elements.
+2. Check if elements is empty: return &quot;&lt;ul&gt;&quot; and exit?
+3. Initialize $line_count=0.
+4. For each element in elements:
+   a. current_counter=$line_count+1
+   b. create line &quot;&lt;item&gt;$current_counter&lt;/item&gt;&quot;
+   c. add to lines array.
+   d. increment line_count.
+5. After loop, create the HTML string as &lt;ul&gt;${lines}&lt;/ul&gt;.
+
+But how to handle this in code.
+
+Another approach: build each item and collect into a variable, then output.
+
+Alternatively, perhaps use more precise steps:
+
+Define an empty string for the HTML content.
+
+Loop through each element with a counter starting at 1.
+
+For each element, add &quot;&lt;item&gt; followed by the counter, then &quot;&lt;/item&gt;&quot;.
+
+After all elements, add &quot;&lt;/ul&gt;&quot;.
+
+So code:
+
+function array_to_html {
+    local elements=$1
+    local html=&quot;&quot;
+    let current_counter=1
+
+    for i in ${elements} {
+        echo &quot;$html &lt;item&gt;$current_counter&lt;/item&gt;&quot;
+        ((i++))
+        let current_counter=$i
+    }
+
+    echo &quot;&lt;/ul&gt;$html)&quot;
+}
+
+Wait, perhaps not. Let&#39;s think about each element:
+
+For example, elements = [&quot;a&quot;, &quot;b&quot;]
+
+First iteration: i is &quot;a&quot;, so add &quot;&lt;item&gt;1&lt;/item&gt;&quot; to html.
+
+Then increment i and current_counter.
+
+Second iteration: i is &quot;b&quot;, add &quot;&lt;item&gt;2&lt;/item&gt;&quot;.
+
+After loop, append &quot;&lt;/ul&gt;&quot;.
+
+So the function could be:
+
+function array_to_html {
+    local elements=$1
+    let html=&quot;&quot;
+    let current_counter=1
+
+    for element in $elements; do
+        echo &quot;$html &lt;item&gt;$current_counter&lt;/item&gt;&quot;
+        ((element+=2)) # Wait, no. Because if using a loop variable with +2 is not correct.
+
+Wait, perhaps it&#39;s better to use variables and manage them correctly.
+
+Alternative approach:
+
+We can create an array of lines for each item, then join them into the HTML string.
+
+So:
+
+function array_to_html {
+    local elements=$1
+    let current_counter=1
+    let lines=[]
+    
+    for element in $elements; do
+        echo &quot;$lines &lt;item&gt;$current_counter&lt;/item&gt;&quot;
+        ((element+=2)) # Or perhaps just continue without changing anything.
+        ((current_counter++))
+    done
+    
+    echo &quot;&lt;/ul&gt;$$lines)&quot;
+}
+
+Wait, no. Because this would replace the elements variable each time.
+
+Alternatively, perhaps process each element and add each line to a temporary array, then join with newlines, but that might not be necessary because in HTML, we can just append each line as they come.
+
+But for simplicity, let&#39;s think about using sed to insert lines into a file.
+
+Another idea: create an initial empty string, loop through each element and add the corresponding lines to it.
+
+So:
+
+function array_to_html {
+    local elements=$1
+    if ! exists &quot;$html&quot; ]; then echo &quot;&quot; &gt; $html; return 1;
+    
+    for element in $elements; do
+        echo &quot;$html &lt;item&gt;1&lt;/item&gt;&quot;
+        ((element+=2)) # Not sure about this part.
+    done
+    
+    echo &quot;&lt;/ul&gt;$html)&quot;
+}
+
+Hmm, perhaps I&#39;m complicating it. Let&#39;s think differently: create an array of the HTML lines and then join them.
+
+So:
+
+function array_to_html {
+    local elements=$1
+    let html_lines=[]
+    
+    for element in $elements; do
+        echo &quot;$html_lines &lt;item&gt;$current_counter&lt;/item&gt;&quot;
+        ((element+=2)) # Not sure, maybe just continue.
+        current_counter++
+    done
+    
+    // Add the closing &lt;/ul&gt;
+    echo &quot;&lt;/ul&gt;$$html_lines)&quot;
+}
+
+But perhaps it&#39;s better to not include any variable changes in this loop and instead increment via a counter.
+
+So let me write code step by step:
+
+Define function array_to_html which takes elements as argument.
+
+Initialize html_lines as empty array.
+
+Set current_counter=1.
+
+Loop through each element in the array:
+
+- For each element, append &quot;&lt;item&gt;$current_counter&lt;/item&gt;&quot; to html_lines.
+- Increment current_counter.
+
+After loop, add &quot;&lt;/ul&gt; at the end.
+
+Then return the joined string.
+
+In code:
+
+function array_to_html {
+    local elements=$1
+    let html_lines = []
+    let current_counter=1
+
+    for element in $elements; do
+        echo &quot;$html_lines &lt;item&gt;$current_counter&lt;/item&gt;&quot;
+        ((element += 2)) # Not sure if this is correct. Alternatively, perhaps just continue without changing.
+        current_counter++
+    done
+    
+    // Add closing &lt;/ul&gt; at the end of html_lines array
+    let joined_html = &quot;$html_lines\n&lt;/ul&gt;&quot;
+    
+    echo &quot;$joined_html&quot;
+}
+
+Wait, perhaps not. Let&#39;s think again.
+
+We need to build each line as &quot;&lt;item&gt;1&lt;/item&gt;&quot;, &quot;&lt;item&gt;2&lt;/item&gt;&quot;, etc.
+
+So for elements [0], which is the first element:
+
+echo &quot;&lt;item&gt;1&lt;/item&gt;&quot;, then current_counter=2.
+
+For next element, echo &quot;&lt;item&gt;2&lt;/item&gt;&quot;, current_counter=3.
+
+And so on.
+
+But in code, perhaps better to process each element step by step with a counter starting at 1.
+
+Let&#39;s think about writing this as separate commands:
+
+In bash, I can use &#39;sed&#39; or other sh scripting functions. Alternatively, maybe just write the code inline.
+
+Another approach: build an array of lines and then join them with newlines, but in HTML it&#39;s better to have each item on a separate line.
+
+So perhaps construct each line dynamically.
+
+Let me try writing this as:
+
+function array_to_html {
+    local elements=$1
+    let html = &quot;&quot;
+    
+    for i in {0} while &lt;&lt;&lt; &quot;$elements&quot;; do
+        echo -f &quot;&lt;item&gt;$(i+1)$&lt;/item&gt;&quot; 
+        ((i+=2))
+    done
+    
+    echo &quot;&lt;/ul&gt;$html)&quot;
+}
+
+Wait, but this might not work because of the variable substitution.
+
+Alternatively, perhaps write each line as:
+
+for element in $elements; do
+    echo &quot;$html &lt;item&gt;1&lt;/item&gt;&quot;
+    # Increment counter after processing all elements?
+    
+After all iterations, add &lt;/ul&gt;.
+
+So code step by step:
+
+Read array into variables.
+
+Initialize html_lines = empty list.
+
+current_counter=1
+
+for each element in the array:
+    append &quot;&lt;item$current_counter&lt;/item&gt;&quot; to html_lines
+    increment current_counter
+
+after loop, append &quot;&lt;/ul&gt;&quot;
+
+join the lines with newlines and return as a string.
+
+So code:
+
+function array_to_html {
+    local elements=$1
+    let html = &quot;&quot;
+    let current_counter=1
+    
+    for element in $elements; do
+        echo &quot;$html &lt;item&gt;$current_counter&lt;/item&gt;&quot;
+        ((element += 2)) # Not sure about this line. Maybe it&#39;s better to just continue.
+        current_counter++
+    done
+    
+    // Add the closing &lt;/ul&gt;
+    echo &quot;&lt;/ul&gt;$$html)&quot;
+}
+
+Wait, perhaps an example with elements (1):
+
+elements = &quot;1&quot;
+
+loop first iteration:
+
+echo &quot;$html &lt;item&gt;1&lt;/item&gt;&quot; --&gt; which is empty if html was initially empty.
+
+Then current_counter becomes 2.
+
+After loop, append &quot;&lt;/ul&gt;&quot;.
+
+So the final output would be &quot;&lt;item&gt;1&lt;/item&gt;&lt;/ul&gt;&quot;.
+
+But perhaps that&#39;s not what we want. We need each item on its own line with &lt;item&gt; and &lt;/item&gt;.
+
+Wait, maybe I&#39;m overcomplicating this. Let&#39;s think about how to create an HTML list.
+
+Another approach: The function should output something like:
+
+&lt;ul&gt;
+    &lt;li&gt;element1&lt;/li&gt;
+    &lt;li&gt;element2&lt;/li&gt;
+&lt;/ul&gt;
+
+So for each element in the array, add a li with an item.
+
+In code:
+
+function array_to_html {
+    local elements=$1
+    let html = &quot;&quot;
+    
+    for i in {0} while &lt;&lt;&lt; &quot;$elements&quot;; do
+        echo -1 &lt;li&gt;$i&lt;/li&gt; 
+        ((i+=2))
+    done
+    
+    echo &quot;&lt;/ul&gt;&quot;$html
+}
+
+This might work. Let&#39;s test with elements (1):
+
+loop runs once, i=0.
+
+echo &quot;&lt;li&gt;0&lt;/li&gt;&quot; 
+
+then current i is 2.
+
+After loop, append &lt;/ul&gt;.
+
+So the output would be:
+
+&lt;ul&gt;&lt;li&gt;0&lt;/li&gt;&lt;/ul&gt;
+
+Which seems correct.
+
+Another test case: elements (1,2).
+
+Loop for i=0 and then i=2.
+
+First iteration: echo &quot;&lt;li&gt;0&lt;/li&gt;&quot; 
+
+Second iteration: echo &quot;&lt;li&gt;1&lt;/li&gt;&quot;
+
+Then append &lt;/ul&gt;.
+
+So the HTML would be:
+
+&lt;ul&gt;&lt;li&gt;0&lt;/li&gt;&lt;li&gt;1&lt;/li&gt;&lt;/ul&gt;
+
+Which is correct.
+
+Now, putting this into code in bash.
+
+The function will take an array as input. So let&#39;s define it as such.
+
+Wait, but how to handle $i correctly. Because when using variable substitution with -1 command, perhaps it&#39;s better to use more precise commands.
+
+But for now, maybe the function can be written as:
+
+def array_to_html(array) {
+    local elements=$array
+    let html = &quot;&quot;
+    
+    for i in {0} while &lt;&lt;&lt; &quot;$elements&quot;; do
+        echo &lt;li&gt;$i&lt;/li&gt;
+        ((i += 2))
+    done
+    
+    echo &lt;/ul&gt;$$html
+}
+
+Wait, but when using -1 in substitution, perhaps it&#39;s better to write the string as a single line.
+
+Alternatively, let me think about how this function would work:
+
+Each element is processed and converted into &lt;li&gt;element&lt;/li&gt;.
+
+After processing all elements, append &lt;/ul&gt;.
+
+So for example, array (1,2):
+
+The first iteration: echo &quot;&lt;li&gt;0&lt;/li&gt;&quot; 
+
+Then i becomes 2.
+
+Second iteration: echo &quot;&lt;li&gt;1&lt;/li&gt;&quot; 
+
+i becomes 4.
+
+Loop ends because $elements is empty now.
+
+Finally, append &lt;/ul&gt; before the html variable.
+
+So the final output would be:
+
+&lt;ul&gt;&lt;li&gt;0&lt;/li&gt;&lt;li&gt;1&lt;/li&gt;&lt;/ul&gt;
+
+Which is correct.
+
+Now, considering that in bash, when you use substitution with -1 or other commands, it&#39;s better to have exact strings. So perhaps using sed to insert lines into a file might be more efficient.
+
+But given the time constraints, maybe proceed step by step.
+
+So the function will:
+
+- Take an array as input.
+- For each element in the array:
+   - Insert &lt;li&gt; followed by index (starting at 0 and incrementing) and &lt;/li&gt;.
+- After all elements are processed, add &lt;/ul&gt;.
+
+Thus, writing this into code.
+
+Now, considering that when $elements is empty, perhaps we don&#39;t include anything except &lt;/ul&gt; or handle it as an edge case.
+
+So putting it all together:
+
+The function will start by reading the array. Then for each element in order, insert a line starting with &lt;li&gt;, then incrementing the index, and ending with &lt;/li&gt;. After processing all elements, add &lt;/ul&gt;.
+
+Thus, writing this into code in bash:
+
+def array_to_html(array) {
+    local elements=$array
+    let html = &quot;&quot;
+    
+    for i in {0} while &lt;&lt;&lt; &quot;$elements&quot;; do
+        echo &lt;li&gt;$i&lt;/li&gt;
+        ((i += 2))
+    done
+    
+    echo &lt;/ul&gt;$$html
+}
+
+Testing this with array (1,2):
+
+Loop runs twice.
+
+First iteration: echo &lt;li&gt;0&lt;/li&gt;
+
+Second iteration: echo &lt;li&gt;1&lt;/li&gt;
+
+After loop, append &lt;/ul&gt;.
+
+So the HTML is:
+
+&lt;ul&gt;&lt;li&gt;0&lt;/li&gt;&lt;li&gt;1&lt;/li&gt;&lt;/ul&gt;
+
+Which should be correct.
+
+Now, considering that in Bash functions can return a string. So this function would output the desired HTML list.
+
+Thus, putting it all together.</textarea>
+</p>
+<p>Output: deepcoder:1.5b (<a href='./deepcoder_1_5b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+To solve this problem, we need to create a bash script that converts an array into an HTML list format. Each element of the array will be displayed on a new line within the HTML content.
+
+### Approach
+1. **Problem Analysis**: The task is to take an array as input and output an HTML string where each element of the array appears on a separate line, enclosed in `&lt;li&gt;` tags.
+2. **Algorithm Design**: 
+   - Read the input array.
+   - Initialize an empty string for the HTML content.
+   - Loop through each element of the array, converting it into an `&lt;li&gt;` tag with an incrementing index.
+   - After processing all elements, append `&lt;/ul&gt;` at the end to close the list structure.
+3. **Edge Cases**: Handle cases where the input array is empty by simply returning a closing `&lt;/ul&gt;` tag if necessary.
+
+### Solution Code
+```bash
+def array_to_html(array) {
+    local elements=$array
+    let html = &quot;&quot;
+    
+    for i in {0} while &lt;&lt;&lt; &quot;$elements&quot;; do
+        echo &lt;li&gt;$i&lt;/li&gt;
+        ((i += 2))
+    done
+    
+    echo &lt;/ul&gt;$$html
+}
+```
+
+### Explanation
+1. **Reading Input**: The function takes an array as input.
+2. **Initialization**: An empty string `html` is initialized to accumulate the HTML content.
+3. **Loop Through Elements**: For each element in the array, convert it into a `&lt;li&gt;` tag with an incrementing index starting from 0. This ensures each subsequent item starts on a new line.
+4. **Close List Structure**: After processing all elements, append `&lt;/ul&gt;` to close the list structure.
+
+This approach efficiently converts an array into an HTML list by iterating through each element and constructing the necessary tags dynamically.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepcoder_1_5b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>265</td></tr>
+<tr><td class='left'>bytes</td><td>1640</td></tr>
+<tr><td class='left'>total duration</td><td>1m19.991651375s</td></tr>
+<tr><td class='left'>load duration</td><td>28.628417ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>22 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>106.935625ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>205.73 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>3854 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>1m19.855459958s</td></tr>
+<tr><td class='left'>eval rate</td><td>48.26 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepcoder_1_5b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/deepcoder:1.5b'>deepcoder:1.5b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.1 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>1.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>1536</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 2147M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>write_a_bash_shell_function_to_take_in_an_array_an</a>: <b>deepcoder:1.5b</b>: 20250703-113603</p>
+<p>Page created: 2025-07-03 11:38:01</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

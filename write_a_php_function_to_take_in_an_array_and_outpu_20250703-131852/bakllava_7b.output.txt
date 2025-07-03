@@ -1,0 +1,9 @@
+
+function display_array(array $a) {
+   $html = '';
+   for (i = 0; i < count($a); i++) {
+   $html .= '<li>' . $a[i] . '</li>';
+   }
+   return $html;
+}
+

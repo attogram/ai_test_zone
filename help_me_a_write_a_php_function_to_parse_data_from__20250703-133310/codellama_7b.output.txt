@@ -1,0 +1,94 @@
+
+Here is a PHP function that can parse data from a `model.info.txt` file in the format you provided:
+```php
+function parse_model_info($file) {
+  $model = array();
+  $capabilities = array();
+  $parameters = array();
+  $systemPrompt = "";
+  $license = array();
+  
+  // Open the file for reading
+  if (($handle = fopen($file, "r")) !== FALSE) {
+    // Read each line of the file
+    while (($line = fgets($handle)) !== FALSE) {
+      // Remove any whitespace characters at the end of the line
+      $line = trim($line);
+      
+      // Skip empty lines and comments
+      if (!empty($line) && !starts_with($line, "#")) {
+        // If the line is a section header (e.g., "Model"), save the name as a key in the $model array
+        if (is_section_header($line)) {
+          $key = strtolower(str_replace(" ", "_", trim($line)));
+          $model[$key] = array();
+          
+        // If the line is a parameter assignment (e.g., "architecture granite"), save the value as a key in the $model array
+        } elseif (is_parameter_assignment($line)) {
+          list($name, $value) = explode(" ", trim($line), 2);
+          $model[$key][$name] = $value;
+          
+        // If the line is a keyword in the Capabilities section, save it as an element in the $capabilities array
+        } elseif (is_keyword($line)) {
+          $capabilities[] = trim($line);
+          
+        // If the line is a system prompt (e.g., "A chat between a curious user and an artificial intelligence assistant."), save it as a string in the $systemPrompt variable
+        } elseif (is_system_prompt($line)) {
+          $systemPrompt = trim($line);
+          
+        // If the line is a license, save it as an element in the $license array
+        } elseif (is_license($line)) {
+          $license[] = trim($line);
+        }
+      }
+    }
+    
+    fclose($handle);
+  } else {
+    return false;
+  }
+  
+  // Return the parsed data as a structured array
+  return array(
+    "model" => $model,
+    "capabilities" => $capabilities,
+    "parameters" => $parameters,
+    "system_prompt" => $systemPrompt,
+    "license" => $license
+  );
+}
+```
+Here is a brief explanation of the code:
+
+* The function takes a file path as its only argument.
+* It opens the file for reading and reads each line using `fgets()`.
+* Each line is trimmed to remove any whitespace characters at the end, and comments (lines starting with `#`) are skipped.
+* If a line is not empty or a comment, it is checked if it is a section header (e.g., "Model") or a parameter assignment (e.g., "architecture granite").
+* If it is a section header, the name of the section is converted to lowercase and underscores are added between words. This name is used as a key in the `$model` array.
+* If it is a parameter assignment, the name-value pair is saved in the corresponding section of the `$model` array.
+* If the line is a keyword in the "Capabilities" section, it is saved as an element in the `$capabilities` array.
+* If the line is a system prompt (e.g., "A chat between a curious user and an artificial intelligence assistant."), it is saved as a string in the `$systemPrompt` variable.
+* If the line is a license, it is saved as an element in the `$license` array.
+* The function then returns the parsed data as a structured array with keys "model", "capabilities", "parameters", "system_prompt", and "license".
+
+Here are some example calls to the `parse_model_info()` function:
+```php
+$data = parse_model_info("model.info.txt");
+print_r($data);
+```
+This would print a structured array with the parsed data from the `model.info.txt` file.
+```php
+$data = parse_model_info("model.info.txt", "architecture granite");
+print_r($data);
+```
+This would return an associative array with only the information related to the "Model" section, including the "architecture" and "parameters" subsections.
+```php
+$data = parse_model_info("model.info.txt", "capabilities");
+print_r($data);
+```
+This would return an array with all the keywords from the "Capabilities" section of the `model.info.txt` file.
+```php
+$data = parse_model_info("model.info.txt", "parameters temperature");
+print_r($data);
+```
+This would return an associative array with only the "temperature" parameter from the "Parameters" section of the `model.info.txt` file.
+

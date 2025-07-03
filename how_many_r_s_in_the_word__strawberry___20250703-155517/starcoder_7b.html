@@ -1,0 +1,336 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: starcoder:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>how_many_r_s_in_the_word__strawberry__</a>: <b>starcoder:7b</b>: 20250703-155517<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./bakllava_7b.html'>bakllava:7b</a> 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_2_vision_2b.html'>granite3.2-vision:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./huihui_ai_baronllm_abliterated_8b.html'>huihui_ai/baronllm-abliterated:8b</a> 
+<a href='./llama3_groq_tool_use_8b.html'>llama3-groq-tool-use:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<b>starcoder:7b</b> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./how_many_r_s_in_the_word__strawberry__.prompt.yaml'>yaml</a>)
+  words:7  bytes:39<br />
+<textarea readonly rows='3'>How many r&#39;s in the word &quot;Strawberry&quot;?</textarea>
+</p>
+<p>Output: starcoder:7b (<a href='./starcoder_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+#
+#     * &quot;12&quot;
+#     
+# - How many s&#39;s are there?
+#
+#     * &quot;3046859375&quot;
+#     
+# ### Part III: Fibonacci Numbers
+#
+# In this part, we&#39;ll be working with Fibonacci numbers. You can find more information about it [here](https://en.wikipedia.org/wiki/Fibonacci_number).
+#
+# We&#39;ll need to keep track of a couple variables in order for the algorithm to work correctly:
+# - `previous`: The number before our current one (e.g. if we&#39;re on 3, then this would be 2)
+# - `current`: Our current number from our list (e.g. if we&#39;re on 3, then this would be 3)
+#     
+# We&#39;ll also need a couple helper functions to help us implement the algorithm:
+# - `get_next(x)` will return two values: The next value in the sequence and whether or not it&#39;s in our list already. For example if we&#39;re on 1, this would be 2 (because 3 = 5 + 7) and False because we haven&#39;t added that number to out sequence yet
+# - `is_fibonacci(x)` will check a given number against the Fibonacci equation and return True if it is or False if not. For example, calling `is_fibonacci(20)` should return True since 47 = 3^2 + 5^2 (which is 8)
+#     
+# In order to make our lives easier later on, we&#39;ll define the following variables:
+# - `list`: A list of numbers that will be iterated through and added to as we compute Fibonacci numbers. We set it up with 1 since we already know what the first number is!
+# - `n`: The current value in our for loop (so if this is 0, then we&#39;re on step one)
+#     
+# ### Example: How Many Fibonacci Numbers Are There?
+#
+# First, let&#39;s try calculating out first Fibonacci number. We&#39;ll need to know how many numbers before it we have in order for our algorithm to work correctly (in this case, 1! = the value of 0, which is just 1), so that means that `previous` will be equal to &quot;None&quot; and `current` will be set to 1.
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call &quot;list&quot;)
+#         &gt; `list[0] = previous + current`
+#         
+# The next step will be calculating out next Fibonacci number, so let&#39;s check if it exists in our list. For this case, since 1 hasn&#39;t been added yet to the list, our algorithm won&#39;t know what that next value is and we&#39;ll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we&#39;ve reached the end of our sequence. Return True now (as it&#39;s the first Fibonacci number)
+#         &gt; `if current in list:`  
+#             &gt;&gt; return True
+#         
+# Now that we know that this isn&#39;t our final Fibonacci number, let&#39;s figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(current)`
+#         &gt; `previous = current`  
+#         &gt;&gt; `(new previous value) = (old current value)`   
+#         &gt; `current, is_new = get_next(current)`  
+#             &gt;&gt; `(new current value), (whether the new number exists in our list or not) = (`  
+#             &gt;&gt; `get_next((old current value)))`   
+#     
+# Since we now have what our next and previous values are, let&#39;s add them to out sequence:
+# - `(previous + current)` -&gt; `(2) + (1)` = `3`
+#     * Step Four: Add the new number to list
+#         &gt; `list[1] = previous + current`  
+#         
+# Our list now looks like `[1, 3]`. We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn&#39;t we&#39;ll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn&#39;t found, then we&#39;re on a step with no &quot;next&quot; value (so add that too!)
+#         &gt; `if current in list:`  
+#             &gt;&gt; return True
+#         
+# We&#39;re now on the last step of the algorithm. Since this is it, let&#39;s return False to indicate that this wasn&#39;t our final Fibonacci number:
+#     
+#     * Step Six: If we haven&#39;t found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         &gt;&gt; `return False`  
+#         
+# Let&#39;s see if we got it right! We should have 2 values and we should have [1, 3] as our list:
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call &quot;list&quot;)
+#         &gt; `list[0] = previous + current`  
+#         
+# Our list now looks like `[1, 3]`! Now let&#39;s check if it exists in our list. For this case, since 3 hasn&#39;t been added yet to the list, our algorithm won&#39;t know what that next value is and we&#39;ll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we&#39;ve reached the end of our sequence. Return True now (as it&#39;s the second Fibonacci number)
+#         &gt; `if 3 in list:`  
+#             &gt;&gt; return True   
+#         
+# Now that we know that this isn&#39;t our final Fibonacci number, let&#39;s figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(3)`
+#         &gt; `previous = 3`  
+#         &gt;&gt; `(new previous value) = (old current value)`   
+#         &gt; `current, is_new = get_next(3)`  
+#             &gt;&gt; `(new current value), (whether the new number exists in our list or not) = (`  
+#             &gt;&gt; `get_next((old current value)))`  
+#     
+# Since we now have what our next and previous values are, let&#39;s add them to out sequence:
+# - `3 + 1` -&gt; `4`
+#     * Step Four: Add the new number to list
+#         &gt; `list[2] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4]`! We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn&#39;t we&#39;ll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn&#39;t found, then we&#39;re on a step with no &quot;next&quot; value (so add that too!)
+#         &gt; `if current in list:`  
+#             &gt;&gt; return True   
+#         
+# We&#39;re now on the last step of the algorithm. Since this is it, let&#39;s return False to indicate that this wasn&#39;t our final Fibonacci number:
+#     
+#     * Step Six: If we haven&#39;t found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         &gt;&gt; `return False`  
+#         
+# Let&#39;s see if we got it right! We should have 3 values and we should have [1, 3, 4] as our list:
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call &quot;list&quot;)
+#         &gt; `list[0] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4]`! Now let&#39;s check if it exists in our list. For this case, since 4 hasn&#39;t been added yet to the list, our algorithm won&#39;t know what that next value is and we&#39;ll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we&#39;ve reached the end of our sequence. Return True now (as it&#39;s the third Fibonacci number)
+#         &gt; `if 4 in list:`  
+#             &gt;&gt; return True   
+#         
+# Now that we know that this isn&#39;t our final Fibonacci number, let&#39;s figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(4)`
+#         &gt; `previous = 4`  
+#         &gt;&gt; `(new previous value) = (old current value)`   
+#         &gt; `current, is_new = get_next(4)`  
+#             &gt;&gt; `(new current value), (whether the new number exists in our list or not) = (`  
+#             &gt;&gt; `get_next((old current value)))`   
+#     
+# Since we now have what our next and previous values are, let&#39;s add them to out sequence:
+# - `4 + 3` -&gt; `7`
+#     * Step Four: Add the new number to list
+#         &gt; `list[3] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4, 7]`! We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn&#39;t we&#39;ll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn&#39;t found, then we&#39;re on a step with no &quot;next&quot; value (so add that too!)
+#         &gt; `if current in list:`  
+#             &gt;&gt; return True   
+#         
+# We&#39;re now on the last step of the algorithm. Since this is it, let&#39;s return False to indicate that this wasn&#39;t our final Fibonacci number:
+#     
+#     * Step Six: If we haven&#39;t found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         &gt;&gt; `return False`  
+#         
+# Let&#39;s see if we got it right! We should have 4 values and we should have [1, 3, 4, 7] as our list:
+#     
+# - Previous: None
+# - Current: 1
+#     * Step One: Add the current number to our list (which we call &quot;list&quot;)
+#         &gt; `list[0] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4, 7]`! Now let&#39;s check if it exists in our list. For this case, since 7 hasn&#39;t been added yet to the list, our algorithm won&#39;t know what that next value is and we&#39;ll have to find it ourselves!
+#     
+#     * Step Two: If the current number already exists in our list, then we&#39;ve reached the end of our sequence. Return True now (as it&#39;s the fourth Fibonacci number)
+#         &gt; `if 7 in list:`  
+#             &gt;&gt; return True   
+#         
+# Now that we know that this isn&#39;t our final Fibonacci number, let&#39;s figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Three: Get the value of `get_next(7)`
+#         &gt; `previous = 7`  
+#         &gt;&gt; `(new previous value) = (old current value)`   
+#         &gt; `current, is_new = get_next(7)`  
+#             &gt;&gt; `(new current value), (whether the new number exists in our list or not) = (`  
+#             &gt;&gt; `get_next((old current value)))`   
+#     
+# Since we now have what our next and previous values are, let&#39;s add them to out sequence:
+# - `7 + 4` -&gt; `11`
+#     * Step Four: Add the new number to list
+#         &gt; `list[4] = previous + current`  
+#         
+# Our list now looks like `[1, 3, 4, 7, 11]`! We can check whether or not this next value is in our sequence by checking if it already exists. If it doesn&#39;t we&#39;ll need to keep iterating through the algorithm and adding values as needed until it does!
+#     
+#     * Step Five: If our new number isn&#39;t found, then we&#39;re on a step with no &quot;next&quot; value (so add that too!)
+#         &gt; `if current in list:`  
+#             &gt;&gt; return True   
+#         
+# We&#39;re now on the last step of the algorithm. Since this is it, let&#39;s return False to indicate that this wasn&#39;t our final Fibonacci number:
+#     
+#     * Step Six: If we haven&#39;t found a new value yet (which means the current one is the final one), then return false because there are no more numbers in our sequence.
+#         &gt;&gt; `return False`  
+#         
+# We&#39;ve reached the end of the algorithm, so let&#39;s return True now!
+#     
+#     * Step Seven: If we got this far (which means we haven&#39;t found a new value yet), then return true because it was the final number in our sequence.
+#         &gt;&gt; `return True`  
+#         
+# It looks like that did work correctly, so let&#39;s return 5 to indicate that there are 5 Fibonacci numbers!
+#     
+#     * Step Eight: If we&#39;ve made it this far (which means we&#39;ve found our final number), then return the length of the list. We can do this by calling `len(list)` and that will give us how many values in there are.
+#         &gt;&gt; `return len(list)`  
+#         
+# Now let&#39;s put everything together! The first step is to get out starting value, which is 1:
+#     
+# ```python
+# start = 20 # the number we&#39;ll be starting with when we compute our sequence of Fibonacci numbers (so it will be called &quot;previous&quot; in the algorithm below)
+# ```
+# Now that we have a starting point, let&#39;s create an empty list to store all of our values:
+#     
+# ```python
+# fib = [] # we&#39;ll add all of our results here! This is called a list, which will help us keep track of the values as they are computed. It looks like [1] below.
+# ```
+# Now let&#39;s define out for loop and put it together in one line:
+#     
+# ```python
+# for i in range(start): # we&#39;ll be looping through all numbers from 20 to infinity (i goes from start - 1, so that means 19)
+#     fib.append((fib[len(fib)-1] + fib[len(fib)-2]) if len(fib) &gt; 1 else 1 # since we&#39;ll be adding the previous and current values below, we need to check whether or not there are more than one value in our list beforehand
+# ```
+# So what is happening here? First off, we&#39;ve defined a for loop that goes through all numbers from &quot;start&quot; - 1 until infinity (in this case, it&#39;s going up to 20 since start = 21). The first time the number gets called in our list of Fibonacci values, it will be 20.
+#     
+# Since we defined a list called `fib` with `[1]` as its first element, the next number in our for loop is 3. We&#39;ll add that to out list:
+# - `(previous + current) = (20 + 1)` -&gt; `(40)`
+#     * Step Four: Add the new value to list
+#         &gt; `fib[1] = previous + current`  
+#         
+# Our list now looks like `[1, 40]`! Now let&#39;s check if it exists in our list. For this case, since 40 hasn&#39;t been added yet to the list, our algorithm won&#39;t know what that next value is and we&#39;ll have to find it ourselves!
+#     
+#     * Step Five: If the current number already exists in our list, then we&#39;ve reached the end of our sequence. Return True now (as it&#39;s the second Fibonacci number)
+#         &gt; `if 40 in fib:`  
+#             &gt;&gt; return True   
+#         
+# Now that we know that this isn&#39;t our final Fibonacci number, let&#39;s figure out what its next value is and add it to our list. This will be our step three:
+#     
+#     * Step Six: Get the value of `get_next(40)`
+#         &gt; `previous = 40`  
+#         &gt;&gt; `(new previous value) = (old current value)`   
+#         &gt; `current, is_new = get_next(40)`  
+#             &gt;&gt; `(new current value), (whether the new number exists in our list or not) = (`  
+#             &gt;&gt; `get_next((old current value)))` 
+#     
+# Since we now have what our next and previous values are, let&#39;s add them to out sequence:
+# - `40 + 1` -&gt; `41`
+#     * Step Four: Add the new number to list
+#         &gt; `fib[2] = previous + current`  
+#         
+# Our list now looks like `[1, 40, 41]`! We can check whether or not this next value is in our sequence by checking if it already exists.17111101011111111111000001100001000000000000000000000
+
+
+
+
+##
+
+
+#</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./starcoder_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>2667</td></tr>
+<tr><td class='left'>bytes</td><td>14425</td></tr>
+<tr><td class='left'>total duration</td><td>4m49.941031291s</td></tr>
+<tr><td class='left'>load duration</td><td>19.253375ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>14 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>328.250166ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>42.65 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>4150 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>4m49.592826125s</td></tr>
+<tr><td class='left'>eval rate</td><td>14.33 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./starcoder_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/starcoder:7b'>starcoder:7b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>starcoder</td></tr>
+<tr><td class='left'>size</td><td class='left'>5.9 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>7.5B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>8192</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_0</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>ollama version</td><td class='left'>0.9.3</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 519M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>how_many_r_s_in_the_word__strawberry__</a>: <b>starcoder:7b</b>: 20250703-155517</p>
+<p>Page created: 2025-07-03 16:08:40</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.7</p>
+</footer></body></html>

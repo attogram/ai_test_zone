@@ -1,0 +1,9 @@
+Okay, let's decode that Base64 string.
+
+The decoded text is:
+
+**"The quick brown fox jumps over the lazy dog."** 
+
+It's a classic pangram – a sentence that uses every letter of the alphabet. 
+
+

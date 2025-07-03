@@ -1,0 +1,92 @@
+Sure, here's a JavaScript function that parses the `model.info.txt` file as described. This function will read the file, parse the sections, and return the parsed data in the specified format.
+
+```javascript
+function parseModelInfo(filePath) {
+    const modelData = {};
+    const capabilities = [];
+    let systemPrompt = '';
+    let temperature = null;
+
+    const sections = {
+        Model: 'Model',
+        Capabilities: 'Capabilities',
+        System: 'System',
+        Parameters: 'Parameters'
+    };
+
+    const lines = require('fs').readFileSync(filePath, 'utf8').split('\n');
+
+    let currentSection = null;
+    let currentLine = '';
+
+    for (const line of lines) {
+        if (line.trim() === '') continue; // Skip empty lines
+
+        if (line.startsWith(sections.Model)) {
+            currentSection = sections.Model;
+            currentLine = line;
+        } else if (line.startsWith(sections.Capabilities)) {
+            currentSection = sections.Capabilities;
+            currentLine = line;
+        } else if (line.startsWith(sections.System)) {
+            currentSection = sections.System;
+            currentLine = line;
+        } else if (line.startsWith(sections.Parameters)) {
+            currentSection = sections.Parameters;
+            currentLine = line;
+        } else {
+            if (currentSection === sections.Model) {
+                const [name, value] = line.split('    ');
+                modelData[name.trim()] = value.trim();
+            } else if (currentSection === sections.Parameters) {
+                const [name, value] = line.split('    ');
+                if (name.trim() === 'temperature') {
+                    temperature = parseFloat(value.trim());
+                }
+            } else if (currentSection === sections.Capabilities) {
+                capabilities.push(line.trim());
+            } else if (currentSection === sections.System) {
+                systemPrompt += line.trim() + ' ';
+            }
+        }
+    }
+
+    // Trim the system prompt
+    systemPrompt = systemPrompt.trim();
+
+    modelData.capabilities = capabilities;
+    modelData.systemPrompt = systemPrompt;
+    modelData.temperature = temperature;
+
+    return modelData;
+}
+
+// Example usage
+const modelData = parseModelInfo('model.info.txt');
+console.log(modelData);
+```
+
+### Explanation:
+1. **Sections Identification**: The function uses a `sections` object to identify the start of each section in the file.
+2. **Parsing Model Section**: For the `Model` section, it splits each line into `name` and `value` and stores them in a JavaScript object.
+3. **Parsing Parameters Section**: For the `Parameters` section, it only stores the `temperature` value.
+4. **Parsing Capabilities Section**: For the `Capabilities` section, it stores each line as an array element.
+5. **Parsing System Section**: For the `System` section, it concatenates all lines into a single string.
+6. **File Reading**: The `require('fs').readFileSync` method is used to read the file content line by line.
+
+### Example Output:
+```javascript
+{
+  architecture: 'granite',
+  parameters: '2.5B',
+  context_length: '16384',
+  embedding_length: '2048',
+  quantization: 'Q4_K_M',
+  capabilities: ['completion', 'tools', 'vision'],
+  systemPrompt: 'A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user\'s questions.',
+  temperature: 0
+}
+```
+
+This function should work for the example `model.info.txt` file you provided. If the file is located in the same directory as the script, you can call it directly. If the file is in a different directory, you need to provide the full path to the file.
+

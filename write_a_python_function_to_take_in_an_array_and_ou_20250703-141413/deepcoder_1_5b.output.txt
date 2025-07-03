@@ -1,0 +1,22 @@
+
+To solve this problem, we need to create a function that takes an array as input and outputs a HTML list of the array contents. Each element in the array should be wrapped in `<element>` tags and displayed on separate lines within a div container.
+
+### Approach
+The approach involves the following steps:
+1. **Iterate through each element in the array**: For each element, we will wrap it in `<element>` tags.
+2. **Join the elements with newline characters**: Each wrapped element is then joined together using `\n` to ensure they appear on separate lines within a div container.
+
+This approach ensures that each item from the array is properly enclosed within HTML tags and displayed in a structured manner.
+
+### Solution Code
+```python
+def array_to_html(arr):
+    return f"<div>{', '.join([f'<{x}>' for x in arr])}</div>"
+```
+
+### Explanation
+1. **Function Definition**: The function `array_to_html` is defined to take an array as input.
+2. **String Formatting**: Inside the function, we use an f-string to format the output. This allows us to include the array elements wrapped in `<element>` tags and join them together with a comma and space for separation.
+3. **Div Container**: Each element from the array is wrapped in `<div>`, ensuring that each line of the HTML list is properly enclosed within a div.
+
+This solution efficiently converts an array into a well-structured HTML list, making it easy to display multiple items on separate lines within a web page.

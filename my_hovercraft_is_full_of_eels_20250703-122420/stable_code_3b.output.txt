@@ -1,0 +1,20 @@
+Oh no! Your hovercraft is filled with eels?! That's too bad, it seems like you've run into a bit of trouble... I'm sorry to hear that your hovercraft is full of eels.NewHovercraft().SetEelMode(True))
+```python
+class Hovercraft:
+    def __init__(self):
+        self.eel_mode = False
+
+    def set_eel_mode(self, mode):
+        if type(mode) == bool:
+            self.eel_mode = mode
+        else:
+            print('Invalid input!')
+
+    def get_eel_mode(self):
+        return self.eel_mode
+
+
+myHovercraft = Hovercraft()
+print(f'Eel Mode is currently {myHovercraft.get_eel_mode()}.')
+```
+

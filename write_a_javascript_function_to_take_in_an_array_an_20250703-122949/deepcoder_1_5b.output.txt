@@ -1,0 +1,36 @@
+
+To solve this problem, we need to write a JavaScript function that converts an array of elements into an HTML string where each element is displayed as a separate list item within a `<ul>` structure. Each list item will contain its corresponding value from the array.
+
+### Approach
+The approach involves converting each element in the given array into a `<li>` tag in an HTML `<ul>` structure. Here's a step-by-step breakdown of the solution:
+
+1. **Initialize Result String**: Start with an empty string to build the result.
+2. **Handle Empty Array**: If the input array is empty, return an empty `<ul>` and `</ul>`.
+3. **Loop Through Array**: For each element in the array, create a `<li>` tag containing the element and append it to another temporary string.
+4. **Construct HTML String**: After processing all elements, close the `<ul>` tags with `</ul>`.
+
+This approach ensures that each element from the array is properly enclosed within `<li>` tags and placed correctly within an `<ul>` structure.
+
+### Solution Code
+```javascript
+function arrayToHTMLArray(array) {
+    let html = '';
+    if (array.length === 0) {
+        html = '<ul></ul>';
+    } else {
+        for (let i = 0; i < array.length; i++) {
+            html += `<li>${array[i]}</li>`;
+        }
+        html += '</ul>';
+    }
+    return html;
+}
+```
+
+### Explanation
+- **Initialization**: The function starts by initializing an empty string `html` which will be used to build the final HTML output.
+- **Empty Array Check**: If the input array is empty, it directly returns `<ul></ul>` as there are no elements to process.
+- **Loop Through Elements**: For each element in the array, a new line of code is generated where each element is wrapped inside `<li>` tags. These lines are concatenated together and then enclosed within `</ul>`.
+- **Final Output**: The resulting HTML string is returned after processing all elements.
+
+This method ensures that each element from the input array is correctly formatted as part of an HTML `<ul>` structure with appropriate `<li>` tags for each item, providing a clear and structured output.

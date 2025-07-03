@@ -1,0 +1,50 @@
+To create HTML lists from an array, you can use the `csv` module to read the data into a string, then format it as HTML. Here's a Python function that does this:
+
+```python
+import csv
+
+def array_to_html_list(array):
+    """
+    Convert an array into a list of HTML lines.
+
+    Args:
+        array (list): The input array.
+
+    Returns:
+        str: A single HTML line containing the contents of the input array.
+    """
+
+    # Use the `csv` module to convert the array into a string
+    csv_string = ' '.join(str(element) for element in array)
+
+    # Format the CSV string as an HTML list
+    html_list = '<ul>\n' + \
+                '  <li>' + csv_string + '</li>\n'
+
+    return html_list
+
+# Example usage:
+array = [1, 2, 3, 4, 5]
+html_lines = array_to_html_list(array)
+
+print(html_lines)
+```
+
+In this function, we first use the `csv` module to convert the input array into a string. We then join each element of the array with a space using a generator expression and store the result in a single string.
+
+Finally, we format the CSV string as an HTML list by wrapping it in `<ul>` and `<li>` tags. This creates a simple HTML structure that lists all elements from the input array.
+
+When you run this function with your example array `array = [1, 2, 3, 4, 5]`, it will output:
+
+```html
+<ul>
+  <li>1</li>
+  <li>2</li>
+  <li>3</li>
+  <li>4</li>
+  <li>5</li>
+</ul>
+```
+
+This HTML list can be easily copied and pasted into an HTML file to create a simple unordered list.
+

@@ -1,0 +1,2 @@
+The sky appears blue due to the scattering of sunlight by the Earth's atmosphere. Sunlight contains all colors, but when it hits the air molecules, it scatters in all directions. Shorter wavelengths, like blue and violet, scatter more than longer wavelengths, like red and orange. Because our eyes are more sensitive to blue light, it appears that the sky is blue. This phenomenon is known as Rayleigh scattering, named after Lord Rayleigh who first described it in 1871.
+

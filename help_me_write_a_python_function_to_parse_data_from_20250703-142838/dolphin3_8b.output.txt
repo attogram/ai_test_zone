@@ -1,0 +1,49 @@
+Here is a Python function that parses the data from your model.info.txt file:
+
+```python
+def parse_model_info(filename):
+    variables = {}
+    parameters = []
+    system_prompt = ""
+    temperature = ""
+
+    with open(filename) as f:
+        sections = [section.strip() for section in f.read().split("  \n") if section.strip()]
+
+    current_section = None
+
+    for line in sections:
+        line = line.lstrip()
+        if not line: continue
+        name, value = line.split(maxsplit=1)
+
+        if "=" in value and "system" not in name.lower() and "parameters" not in name.lower():
+            name, value = value.split("=")
+            variables[name.strip()] = value.strip()
+
+        elif any(keyword in name for keyword in ["Model", "Capabilities", "Projector"]):
+            current_section = name
+
+        elif "temperature" == name:
+            temperature = value
+
+        elif "System" == current_section and line != "\n":
+            system_prompt += f"{line}\n"
+
+    parameters = [value for name, value in variables.items() if "parameters" in name]
+
+    return {
+        "variables": variables,
+        "capabilities": parameters,
+        "system_prompt": system_prompt.strip(),
+        "temperature": temperature
+    }
+
+data = parse_model_info("model.info.txt")
+print(data)
+```
+
+This function reads the data from the file, splits it into sections and then parses each line according to its section. The parsed data is returned as a dictionary with three keys: variables (for model parameters), capabilities (for capability keywords) and system_prompt (the content of System section). 
+
+Please ensure that your `model.info.txt` file is in the same directory where you're running this script or specify the full path to the file.
+

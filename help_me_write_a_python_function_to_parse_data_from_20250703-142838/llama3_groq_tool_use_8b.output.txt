@@ -1,0 +1,35 @@
+Here is a Python function that parses your model.info.txt file:
+
+```python
+def parse_model_info(file_path):
+    result = {'Model': {}, 'Capabilities': [], 'System': '', 'Parameters': {}}
+    with open(file_path) as f:
+        for line in f:
+            if line.strip().startswith("Model"):
+                section = "Model"
+            elif line.strip().startswith("Capabilities"):
+                section = "Capabilities"
+            elif line.strip().startswith("Projector"):
+                continue
+            elif line.strip().startswith("System"):
+                section = "System"
+            elif line.strip().startswith("Parameters"):
+                section = "Parameters"
+            else:
+                if section == "Model":
+                    name, value = line.split()
+                    result['Model'][name] = value
+                elif section == "Capabilities":
+                    result['Capabilities'].append(line.strip())
+                elif section == "System":
+                    result['System'] = line.strip()
+                elif section == "Parameters":
+                    key, value = line.split()
+                    result['Parameters'][key] = value
+    return result
+
+print(parse_model_info('model.info.txt'))
+```
+
+This function will parse the model.info.txt file and save the information into a dictionary. It separates the data by sections: Model, Capabilities, System, and Parameters.
+

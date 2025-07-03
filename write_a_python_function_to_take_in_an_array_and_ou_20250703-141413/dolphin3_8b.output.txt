@@ -1,0 +1,36 @@
+Here's a Python function that takes in an array and outputs an HTML unordered list:
+
+```python
+def array_to_html_list(array):
+    # Start building the HTML list with <ul> tags
+    html = '<ul>'
+    
+    # Iterate over each element in the array
+    for item in array:
+        # Add an <li> tag for each element, containing its value
+        html += f'<li>{item}</li>'
+        
+    # Close the HTML list with </ul> tags
+    html += '</ul>'
+    
+    return html
+```
+
+You can use this function like this:
+
+```python
+array = ['Apple', 'Banana', 'Cherry']
+html_list = array_to_html_list(array)
+print(html_list)
+```
+
+This will output an HTML unordered list containing the items from the array:
+
+```html
+<ul>
+  <li>Apple</li>
+  <li>Banana</li>
+  <li>Cherry</li>
+</ul>
+```
+

@@ -1,0 +1,24 @@
+Here is one way you could do it:
+```
+def array_to_html(array):
+    html_list = "<ul>"
+    for item in array:
+        html_list += "<li>" + item + "</li>"
+    html_list += "</ul>"
+    return html_list
+```
+You can then use this function like so:
+```
+items = [1, 2, 3]
+html_list = array_to_html(items)
+print(html_list)
+```
+This will output something like this:
+```
+<ul>
+   <li>1</li>
+   <li>2</li>
+   <li>3</li>
+</ul>
+```
+

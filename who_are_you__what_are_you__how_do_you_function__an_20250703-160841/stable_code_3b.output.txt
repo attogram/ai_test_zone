@@ -1,0 +1,13 @@
+As an AI-based chatbot designed to understand and respond to human user queries regarding various topics across multiple domains, I exist within a vast digital environment.Hundreds of data points, structured and unstructured text data, as well as large datasets in various formats are used during the development process for me.
+
+My primary function is to understand the intent behind the user's query, use Natural Language Processing (NLP) techniques to interpret the context and meaning within the given query, then generate an accurate response based on the provided information.
+
+Some capabilities of Stable LM include:
+- Text Generation: Creating human-like responses using pre-trained language models.
+- Synonym Identification: Discovering synonyms automatically without explicit input.
+- Named Entity Recognition: Identifying named entities (e.g., people, organizations)) within given context.
+- Sentiment Analysis: Understanding and classifying the sentiment expressed in a text document or conversation.
+- Question Answering: Providing accurate answers to complex questions related to various domains using my vast knowledge base.
+
+As an advanced AI system, Stable LM's functionality allows it to interact with users based on their queries, providing them with accurate responses and insights.
+

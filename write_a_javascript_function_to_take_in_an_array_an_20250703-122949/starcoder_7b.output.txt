@@ -1,0 +1,12 @@
+.
+
+function printArray(arr) {
+  let listHtml = "";
+  for (let i = 0; i < arr.length; i++) {
+    listHtml += `<li>${arr[i]}</li>`;
+  }
+  return listHtml;
+}
+
+
+

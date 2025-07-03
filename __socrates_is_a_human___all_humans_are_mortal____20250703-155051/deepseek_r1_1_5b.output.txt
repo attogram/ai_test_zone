@@ -1,0 +1,10 @@
+
+Based on the given information:
+
+1. **Premise 1:** Socrates is a human.
+2. **Premise 2:** All humans are mortal.
+
+**Conclusion:**
+Since all humans are mortal and Socrates is classified as a human, it logically follows that Socrates must be mortal.
+
+**Answer:** Yes, Socrates is mortal.

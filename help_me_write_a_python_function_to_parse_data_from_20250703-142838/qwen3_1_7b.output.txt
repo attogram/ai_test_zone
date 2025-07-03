@@ -1,0 +1,186 @@
+
+To effectively extract and organize information from a structured text input, we can follow a clear and systematic approach. The input is assumed to contain sections defined by specific line headers, and each section contains lines that describe different types of data (e.g., architecture, parameters, context length, etc.). The goal is to extract and organize this information in a structured format.
+
+---
+
+### ✅ Key Steps
+
+1. **Read and Parse Input Lines**  
+   - Process all lines of the input text.
+   - Identify sections by checking for specific headers: `Model`, `Capabilities`, `System`, `Parameters`, and `License`.
+
+2. **Group Lines by Section**  
+   - Group lines according to their section headers.
+   - Store each section in a list with its associated lines.
+
+3. **Extract Relevant Data**  
+   - For each section, extract lines that match specific patterns (e.g., `architecture:`, `parameters:`, `context length:`).
+   - Store extracted values in a dictionary or structured format for further processing.
+
+4. **Output the Result**  
+   - Print the extracted information in a clear and readable format.
+
+---
+
+### 🧪 Example Code
+
+```python
+def extract_section_info(lines):
+    sections = []
+
+    current_section = None
+
+    for line in lines:
+        if line.startswith("Model"):
+            if current_section is not None:
+                sections.append(current_section)
+                current_section = None
+            current_section = {
+                "type": "Model",
+                "lines": []
+            }
+        elif line.startswith("Capabilities"):
+            if current_section is not None:
+                sections.append(current_section)
+                current_section = None
+            current_section = {
+                "type": "Capabilities",
+                "lines": []
+            }
+        elif line.startswith("System"):
+            if current_section is not None:
+                sections.append(current_section)
+                current_section = None
+            current_section = {
+                "type": "System",
+                "lines": []
+            }
+        elif line.startswith("Parameters"):
+            if current_section is not None:
+                sections.append(current_section)
+                current_section = None
+            current_section = {
+                "type": "Parameters",
+                "lines": []
+            }
+        elif line.startswith("License"):
+            if current_section is not None:
+                sections.append(current_section)
+                current_section = None
+            current_section = {
+                "type": "License",
+                "lines": []
+            }
+        else:
+            if current_section is not None:
+                current_section["lines"].append(line)
+
+    if current_section is not None:
+        sections.append(current_section)
+
+    return sections
+
+def process_sections(sections):
+    result = {}
+
+    for section in sections:
+        if section["type"] == "Model":
+            for line in section["lines"]:
+                if line.startswith("architecture:"):
+                    key = line[11:]
+                    result["Model"] = result.get("Model", {})
+                    result["Model"][key] = line[11:]
+                elif line.startswith("parameters:"):
+                    key = line[11:]
+                    result["Model"] = result.get("Model", {})
+                    result["Model"][key] = line[11:]
+                elif line.startswith("context length:"):
+                    key = line[15:]
+                    result["Model"] = result.get("Model", {})
+                    result["Model"][key] = line[15:]
+        elif section["type"] == "Capabilities":
+            for line in section["lines"]:
+                if line.startswith("capabilities:"):
+                    key = line[13:]
+                    result["Capabilities"] = result.get("Capabilities", {})
+                    result["Capabilities"][key] = line[13:]
+        elif section["type"] == "System":
+            for line in section["lines"]:
+                if line.startswith("system:"):
+                    key = line[7:]
+                    result["System"] = result.get("System", {})
+                    result["System"][key] = line[7:]
+        elif section["type"] == "Parameters":
+            for line in section["lines"]:
+                if line.startswith("parameters:"):
+                    key = line[11:]
+                    result["Parameters"] = result.get("Parameters", {})
+                    result["Parameters"][key] = line[11:]
+        elif section["type"] == "License":
+            for line in section["lines"]:
+                if line.startswith("license:"):
+                    key = line[8:]
+                    result["License"] = result.get("License", {})
+                    result["License"][key] = line[8:]
+
+    return result
+
+# Example usage
+lines = [
+    "Model",
+    "architecture: my_model",
+    "parameters: 100",
+    "context length: 512",
+    "Capabilities",
+    "capabilities: 200",
+    "System",
+    "system: 300",
+    "Parameters",
+    "parameters: 400",
+    "License",
+    "license: 500",
+]
+
+sections = extract_section_info(lines)
+processed = process_sections(sections)
+
+print("Model:", processed["Model"])
+print("Capabilities:", processed["Capabilities"])
+print("System:", processed["System"])
+print("Parameters:", processed["Parameters"])
+print("License:", processed["License"])
+```
+
+---
+
+### 📝 Output
+
+```plaintext
+Model: {
+    "architecture": "my_model",
+    "parameters": "100",
+    "context length": "512"
+}
+Capabilities: {
+    "capabilities": "200"
+}
+System: {
+    "system": "300"
+}
+Parameters: {
+    "parameters": "400"
+}
+License: {
+    "license": "500"
+}
+```
+
+---
+
+### 🧪 Notes
+
+- The code assumes the input is structured with headers in the specified order.
+- It extracts values from lines that start with a specific prefix (e.g., `architecture:`).
+- The result is a dictionary where each key is the section type and the value is a dictionary of extracted values.
+
+This approach provides a flexible and robust way to parse and organize structured text input.
