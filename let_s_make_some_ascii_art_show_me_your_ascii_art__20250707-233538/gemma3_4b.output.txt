@@ -1,0 +1,23 @@
+Okay, let's do some ASCII art! Here's a simple cat:
+
+     /\_/\
+    ( o.o )
+    > ^ < 
+    
+---
+
+How about a little tree?
+
+     /\
+    /  \
+   /    \
+  /______\
+     ||
+     ||
+     ||
+    ====
+
+---
+
+Would you like me to try something else, like a heart, a star, or perhaps a more complex image?  Let me know what you'd like to see!
+

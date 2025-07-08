@@ -1,0 +1,192 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepseek-r1:1.5b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>let_s_make_some_ascii_art_show_me_your_ascii_art_</a>: <b>deepseek-r1:1.5b</b>: 20250707-233538<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./cogito_8b.html'>cogito:8b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<b>deepseek-r1:1.5b</b> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma3n_e2b.html'>gemma3n:e2b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./hermes3_8b.html'>hermes3:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llama3_2_3b.html'>llama3.2:3b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_0_6b.html'>qwen3:0.6b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_4b.html'>qwen3:4b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./smollm2_1_7b.html'>smollm2:1.7b</a> 
+<a href='./smollm2_135m.html'>smollm2:135m</a> 
+<a href='./smollm2_360m.html'>smollm2:360m</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./let_s_make_some_ascii_art_show_me_your_ascii_art_.prompt.yaml'>yaml</a>)
+  words:78  bytes:412<br />
+<textarea readonly rows='10'>Let&#39;s make some ASCII art!
+Show me your ascii art.
+Here is an example to get you started: an ascii rabbit:
+
+         ,
+        /|      __
+       / |   ,-~ /
+      Y :|  //  /
+      | jj /( .^
+      &gt;-&quot;~&quot;-v&quot;
+     /       Y
+    jo  o    |
+   ( ~T~     j
+    &gt;._-&#39; _./
+   /   &quot;~&quot;  |
+  Y     _,  |
+ /| ;-&quot;~ _  l
+/ l/ ,-&quot;~    \
+\//\/      .- \
+ Y        /    Y
+ l       I     !
+ ]\      _\    /&quot;\
+(&quot; ~----( ~   Y.  )</textarea>
+</p>
+<p>Thinking: deepseek-r1:1.5b (<a href='./deepseek_r1_1_5b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='15'>Okay, so the user wants to make some ASCII art. They provided an example that looks like a complex pattern made with different characters and lines. My task is to figure out how they did it and then create something similar.
+
+First, I need to understand their original approach. The example uses various symbols like /|, -~, |j, .^, etc., arranged in a grid-like structure across multiple lines. It&#39;s quite intricate with different lines having varying lengths and characters that form the pattern.
+
+I should consider what elements are common in ASCII art to mimic such complexity. Typically, these include letters, numbers, symbols like /| and _~, spaces, and other punctuation marks. Each line of the ASCII art is a separate level, so each line can vary in length but forms part of the overall design.
+
+Looking at their example, I notice that each level starts with some leading spaces to center-align the pattern. This makes sure that each segment appears consistently across the rows. The use of underscores and dashes suggests a more dynamic style with various directional slashes.
+
+To create something similar, I need to break down the original into its components. Let&#39;s start by identifying key elements:
+
+1. **Leading Spaces**: Each line starts with spaces equal to or less than half the length of the maximum line in that part.
+2. **Line Breaks**: The pattern seems to have multiple line breaks between different parts, adding complexity without being too hard to read.
+3. **Symbols and Lines**: Key elements include /|, -~, |j, .^, &gt;-&quot;~v&quot;, Y, o, space, etc.
+
+I should plan a similar structure with lines that vary in length but maintain consistency through leading spaces. I&#39;ll need to ensure each segment is appropriately spaced so it doesn&#39;t look cramped.
+
+Maybe starting by outlining the maximum line length for each section and then building from there. Let me think about how many lines there would be and what characters to include. It&#39;s important that each part transitions smoothly, perhaps using space or other symbols to separate segments.
+
+I also notice in their example, some characters are repeated multiple times. For instance, the letter &#39;j&#39; appears twice. To keep it simple, I might use similar characters as much as possible without overcomplicating the design.
+
+Another thing is the directionality of slashes. In their example, lines have different angles: some are diagonal /| and others have spaces or just |. This suggests a mix of vertical, horizontal, and diagonal slashes, each contributing to the overall pattern&#39;s complexity.
+
+To make my ASCII art similar, I&#39;ll include multiple such lines with varying angles and directions, ensuring they form distinct shapes when combined. Each line should be centered to maintain the structure across all rows.
+
+I need to decide on the number of lines first. The original has 16 lines, so maybe I can create around 20 for variety but ensure it&#39;s balanced. Each line will have a varying length, with spaces at the beginning to center-align them.
+
+Perhaps using each letter and symbol as much as possible without making one too long or too short. For example, &#39;j&#39; is quite common, so including multiple instances would add complexity.
+
+I should also consider how these elements might form letters when combined. Maybe some parts can be read off to spell out words or phrases, but since it&#39;s ASCII art, it&#39;s more about forming a visual pattern than an actual message.
+
+In summary, I&#39;ll structure the ASCII art by:
+
+- Determining line lengths and spaces for each part.
+- Using common symbols like /|, -~, |j, .^, etc.
+- Centering each segment to maintain consistency across rows.
+- Ensuring multiple lines with varying angles to create complexity.
+
+I think starting small would be easier. I can create a few lines first and see how they look, then add more as needed. It&#39;s important that the pattern remains connected from one line to the next without any abrupt changes in structure.</textarea>
+</p>
+<p>Output: deepseek-r1:1.5b (<a href='./deepseek_r1_1_5b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+Here&#39;s an example of ASCII art using different symbols:
+
+```
+        ,
+       /|      __
+      / |   ,-~ /
+     Y :|  //  /
+    | jj /( .^
+   &gt;-&quot;~&quot;-v&quot;
+  /       Y
+ |         _
+ ~:--|//  /\
+( ~----( ~   Y.
+&gt;._-&#39; _./
+ /   &quot;~&quot;  |
+Y     _,  |
+ /| ;-&quot;~ _  l
+/ l/ ,-&quot;~    \
+\//\/      .- \
+ Y        /    Y
+ l       I     !
+ ]\      _\    /\
+(&quot; ~----( ~   Y. )
+```</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepseek_r1_1_5b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>words</td><td>70</td></tr>
+<tr><td class='left'>bytes</td><td>360</td></tr>
+<tr><td class='left'>total duration</td><td>17.467349375s</td></tr>
+<tr><td class='left'>load duration</td><td>23.520375ms</td></tr>
+<tr><td class='left'>prompt eval count</td><td>158 token(s)</td></tr>
+<tr><td class='left'>prompt eval duration</td><td>629.473834ms</td></tr>
+<tr><td class='left'>prompt eval rate</td><td>251.00 tokens/s</td></tr>
+<tr><td class='left'>eval count</td><td>952 token(s)</td></tr>
+<tr><td class='left'>eval duration</td><td>16.813888875s</td></tr>
+<tr><td class='left'>eval rate</td><td>56.62 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepseek_r1_1_5b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>name</td><td class='left'><a target='ollama' href='https://ollama.com/library/deepseek-r1:1.5b'>deepseek-r1:1.5b</a></td></tr>
+<tr><td class='left'>architecture</td><td class='left'>qwen2</td></tr>
+<tr><td class='left'>size</td><td class='left'>2.1 GB
+2.1 GB
+7.0 GB</td></tr>
+<tr><td class='left'>parameters</td><td class='left'>1.8B</td></tr>
+<tr><td class='left'>context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>embedding length</td><td  class='left'>1536</td></tr>
+<tr><td class='left'>quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>capabilities</td><td class='left'>completion<br />thinking<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>100% GPU
+100% GPU
+100% GPU</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.9.5</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1851M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>let_s_make_some_ascii_art_show_me_your_ascii_art_</a>: <b>deepseek-r1:1.5b</b>: 20250707-233538</p>
+<p>Page created: 2025-07-07 23:37:30</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.9</p>
+</footer></body></html>

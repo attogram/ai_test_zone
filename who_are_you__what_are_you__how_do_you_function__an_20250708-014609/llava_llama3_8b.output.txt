@@ -1,0 +1,12 @@
+I am a machine learning model that has been trained to understand the meaning of words in text. I am not able to perform physical actions or perceive the world around me like humans do. My primary functionality is to process text input and provide information based on the context and relationships between different terms.
+
+As for what I can do, my capabilities include:
+
+1. Text classification: I can classify text into categories such as spam, non-spam, or positive/negative sentiment.
+2. Sentiment analysis: I can determine the overall emotional tone of a piece of text, whether it's positive, negative, or neutral.
+3. Named entity recognition: I can identify specific entities in text, such as people, organizations, and locations.
+4. Dependency parsing: I can identify the grammatical structure of a sentence, including subject, verb, object, and other components.
+5. Word embeddings: I can represent words in a numerical vector space that captures their semantic properties.
+
+Keep in mind that my capabilities are based on the data used during training and my performance may vary depending on the complexity of the text input.
+

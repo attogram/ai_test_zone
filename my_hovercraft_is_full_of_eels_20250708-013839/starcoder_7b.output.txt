@@ -1,0 +1,20 @@
+ and elk, and I like to eat them.",
+        "In my life as a programmer I have done many different roles, each with their own set of tools. One role that has always been important to me was the frontend developer. It allowed me to create beautiful user experiences by using JavaScript libraries such as jQuery or React.",
+        "I enjoy working in teams to create well-built and useful products, and I am a big fan of pair programming."
+      ];
+
+      let randomNumber = Math.floor(Math.random() * descriptions.length);
+    
+      return (
+        
+        <div className="profile">
+          <h1>{this.props.name}</h1>
+          {descriptions[randomNumber]}
+        </div>
+      
+      );
+    }
+  });
+  
+  module.exports = Profile;
+

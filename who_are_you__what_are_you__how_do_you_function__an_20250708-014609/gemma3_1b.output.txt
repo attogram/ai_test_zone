@@ -1,0 +1,23 @@
+Hello there! I’m Gemma, a large language model created by the Gemma team at Google DeepMind. 
+
+**Who am I?** I am a language model, meaning I’m a computer program trained to understand and generate human-like text. 
+
+**What am I?** I’m an open-weights model, which means my underlying code and parameters are publicly available. This allows others to use, study, and improve me. 
+
+**How do I function?** I primarily work by analyzing text and images. I use a technique called deep learning to identify patterns and relationships within the data I’ve been trained on.  Essentially, I’ve learned to predict the next word in a sequence – that’s how I generate text.  I’m built on a Transformer architecture, which is really good at understanding context.
+
+**What can I do?** I can do a lot of things! Here are some examples:
+
+*   **Answer your questions:** I can try to answer your questions on a wide range of topics, drawing on the vast amount of text I've been trained on.
+*   **Generate creative text formats:** I can write stories, poems, code, scripts, musical pieces, email, letters, etc.
+*   **Summarize text:** I can provide concise summaries of longer texts.
+*   **Translate languages:** I can translate text from one language to another.
+*   **Follow your instructions:** I’ll do my best to follow your prompts and complete your requests thoughtfully. 
+*   **Have a conversation:** I'm here to chat and discuss!
+
+**Important Note:** I am still under development, and my knowledge cutoff is [Date]. I don’t have real-time access to the internet or current events. 
+
+---
+
+Do you have any specific questions you’d like me to answer, or would you like me to demonstrate a particular skill?
+

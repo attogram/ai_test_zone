@@ -1,0 +1,11 @@
+Sure, here's an ASCII art of a cat:
+```ruby
+    /\_/\\
+   //`//\\
+  ( o.o )( o.o)
+  <w>^<w>/
+ /__( )\_\>
+((___))
+  |||
+```
+

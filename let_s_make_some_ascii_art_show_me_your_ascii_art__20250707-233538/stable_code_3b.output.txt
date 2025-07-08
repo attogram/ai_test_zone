@@ -1,0 +1,12 @@
+Here's another example of ASCII art: a simple house:
+```
+ _____ _             ______        
+|_   _| |           |    |          
+  | | | |     .--./   \_,._ 
+  |_| |_|    / \      ._\_
+       |            /-  \_.-/
+       |                     //  /
+       |                    //---'
+```
+You can create more complex and detailed ASCII art by following the same pattern and adding additional characters to make the art look more realistic.
+

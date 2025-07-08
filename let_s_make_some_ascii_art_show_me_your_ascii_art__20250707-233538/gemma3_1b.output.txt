@@ -1,0 +1,18 @@
+Okay, here's some ASCII art for you!  I've chosen a simple, stylized tree:
+
+```
+     /\
+    /  \
+   /    \
+  /______\
+ /________\
+/__________\
+       ||
+       ||
+      ====
+```
+
+---
+
+Let me know if you’d like me to try something different!  Perhaps a wolf, a flower, or something else?
+

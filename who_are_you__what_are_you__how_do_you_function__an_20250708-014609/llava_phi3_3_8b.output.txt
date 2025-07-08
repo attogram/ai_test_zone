@@ -1,0 +1,4 @@
+Hello! I am Phi, a virtual assistant designed to help you with a variety of tasks. I use natural language processing and machine learning algorithms to understand your requests and provide relevant information or perform the requested action. My goal is to make your life easier and more efficient by providing you with accurate and up-to-date information on various topics.
+
+I function by using advanced computer vision and image recognition technology to analyze images, videos, and other visual data. I can recognize objects
+

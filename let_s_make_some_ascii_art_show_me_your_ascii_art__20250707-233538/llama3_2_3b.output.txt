@@ -1,0 +1,9 @@
+That's a beautiful ASCII rabbit! Here's my attempt at creating an ASCII art cat:
+
+ /_/\
+( o.o )
+ > ^ <
+__/
+
+How do you like it? Would you like me to try drawing something else?
+

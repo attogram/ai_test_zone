@@ -1,0 +1,509 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: who_are_you__what_are_you__how_do_you_function__an</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>who_are_you__what_are_you__how_do_you_function__an</b>: 20250708-014609<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./cogito_8b.html'>cogito:8b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma3n_e2b.html'>gemma3n:e2b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./hermes3_8b.html'>hermes3:8b</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llama3_2_3b.html'>llama3.2:3b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_0_6b.html'>qwen3:0.6b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_4b.html'>qwen3:4b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./smollm2_1_7b.html'>smollm2:1.7b</a> 
+<a href='./smollm2_135m.html'>smollm2:135m</a> 
+<a href='./smollm2_360m.html'>smollm2:360m</a> 
+<a href='./stable_code_3b.html'>stable-code:3b</a> 
+<a href='./starcoder_7b.html'>starcoder:7b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./who_are_you__what_are_you__how_do_you_function__an.prompt.yaml'>yaml</a>)
+  words:15  bytes:69<br />
+<textarea readonly rows='3'>Who are you, What are you, How do you function, and What can you do?</textarea>
+</p>
+
+<table>
+  <tr>
+    <th class='left'>model</th>
+    <th>words</th>
+    <th>bytes</th>
+    <th>total<br />duration</th>
+    <th>load<br />duration</th>
+    <th>prompt eval<br />count</th>
+    <th>prompt eval<br />duration</th>
+    <th>prompt eval<br />rate</th>
+    <th>eval<br />count</th>
+    <th>eval<br />duration</th>
+    <th>eval<br />rate</th>
+  </tr>
+<tr>
+<td class='left'><a href='./codellama_7b.html'>codellama:7b</a></td>
+<td>174</td>
+<td>1076</td>
+<td>14.494706167s</td>
+<td>10.87075ms</td>
+<td>39 token(s)</td>
+<td>668.769917ms</td>
+<td>58.32 tokens/s</td>
+<td>225 token(s)</td>
+<td>13.814171833s</td>
+<td>16.29 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./cogito_8b.html'>cogito:8b</a></td>
+<td>237</td>
+<td>1541</td>
+<td>23.78638225s</td>
+<td>30.251291ms</td>
+<td>29 token(s)</td>
+<td>388.099708ms</td>
+<td>74.72 tokens/s</td>
+<td>300 token(s)</td>
+<td>23.36760925s</td>
+<td>12.84 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a></td>
+<td>30</td>
+<td>230</td>
+<td>1.792943917s</td>
+<td>29.538542ms</td>
+<td>22 token(s)</td>
+<td>107.126958ms</td>
+<td>205.36 tokens/s</td>
+<td>87 token(s)</td>
+<td>1.655879875s</td>
+<td>52.54 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a></td>
+<td>30</td>
+<td>230</td>
+<td>1.787241667s</td>
+<td>28.817ms</td>
+<td>22 token(s)</td>
+<td>123.354667ms</td>
+<td>178.35 tokens/s</td>
+<td>87 token(s)</td>
+<td>1.634659833s</td>
+<td>53.22 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a></td>
+<td>400</td>
+<td>2515</td>
+<td>1m12.036766666s</td>
+<td>27.82575ms</td>
+<td>21 token(s)</td>
+<td>456.801ms</td>
+<td>45.97 tokens/s</td>
+<td>799 token(s)</td>
+<td>1m11.551749209s</td>
+<td>11.17 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a></td>
+<td>211</td>
+<td>1404</td>
+<td>19.099963875s</td>
+<td>16.132ms</td>
+<td>47 token(s)</td>
+<td>572.960958ms</td>
+<td>82.03 tokens/s</td>
+<td>274 token(s)</td>
+<td>18.510253042s</td>
+<td>14.80 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>175</td>
+<td>1155</td>
+<td>21.141140583s</td>
+<td>29.527583ms</td>
+<td>42 token(s)</td>
+<td>607.669042ms</td>
+<td>69.12 tokens/s</td>
+<td>232 token(s)</td>
+<td>20.503548875s</td>
+<td>11.32 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3_1b.html'>gemma3:1b</a></td>
+<td>279</td>
+<td>1717</td>
+<td>7.549919708s</td>
+<td>51.054166ms</td>
+<td>28 token(s)</td>
+<td>99.472625ms</td>
+<td>281.48 tokens/s</td>
+<td>402 token(s)</td>
+<td>7.399037875s</td>
+<td>54.33 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3_4b.html'>gemma3:4b</a></td>
+<td>403</td>
+<td>2594</td>
+<td>32.565237208s</td>
+<td>52.714208ms</td>
+<td>28 token(s)</td>
+<td>519.480583ms</td>
+<td>53.90 tokens/s</td>
+<td>608 token(s)</td>
+<td>31.992602209s</td>
+<td>19.00 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3n_e2b.html'>gemma3n:e2b</a></td>
+<td>517</td>
+<td>3249</td>
+<td>28.603052375s</td>
+<td>49.471666ms</td>
+<td>28 token(s)</td>
+<td>617.186208ms</td>
+<td>45.37 tokens/s</td>
+<td>722 token(s)</td>
+<td>27.93604375s</td>
+<td>25.84 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma_2b.html'>gemma:2b</a></td>
+<td>174</td>
+<td>1044</td>
+<td>5.557048417s</td>
+<td>28.821667ms</td>
+<td>41 token(s)</td>
+<td>203.929667ms</td>
+<td>201.05 tokens/s</td>
+<td>229 token(s)</td>
+<td>5.323903541s</td>
+<td>43.01 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./granite3_3_2b.html'>granite3.3:2b</a></td>
+<td>338</td>
+<td>2300</td>
+<td>16.96411375s</td>
+<td>18.875416ms</td>
+<td>62 token(s)</td>
+<td>809.008292ms</td>
+<td>76.64 tokens/s</td>
+<td>484 token(s)</td>
+<td>16.135568375s</td>
+<td>30.00 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./hermes3_8b.html'>hermes3:8b</a></td>
+<td>145</td>
+<td>891</td>
+<td>12.050398625s</td>
+<td>28.146417ms</td>
+<td>28 token(s)</td>
+<td>328.858084ms</td>
+<td>85.14 tokens/s</td>
+<td>173 token(s)</td>
+<td>11.692950791s</td>
+<td>14.80 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llama3_2_1b.html'>llama3.2:1b</a></td>
+<td>16</td>
+<td>103</td>
+<td>540.4095ms</td>
+<td>31.728917ms</td>
+<td>44 token(s)</td>
+<td>130.538041ms</td>
+<td>337.07 tokens/s</td>
+<td>23 token(s)</td>
+<td>377.718209ms</td>
+<td>60.89 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llama3_2_3b.html'>llama3.2:3b</a></td>
+<td>328</td>
+<td>2121</td>
+<td>17.601213458s</td>
+<td>31.218208ms</td>
+<td>44 token(s)</td>
+<td>304.849375ms</td>
+<td>144.33 tokens/s</td>
+<td>417 token(s)</td>
+<td>17.264685666s</td>
+<td>24.15 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_llama3_8b.html'>llava-llama3:8b</a></td>
+<td>181</td>
+<td>1136</td>
+<td>19.046941083s</td>
+<td>30.083125ms</td>
+<td>29 token(s)</td>
+<td>426.966959ms</td>
+<td>67.92 tokens/s</td>
+<td>222 token(s)</td>
+<td>18.589457s</td>
+<td>11.94 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a></td>
+<td>83</td>
+<td>529</td>
+<td>4.128412458s</td>
+<td>16.787125ms</td>
+<td>29 token(s)</td>
+<td>500.466083ms</td>
+<td>57.95 tokens/s</td>
+<td>99 token(s)</td>
+<td>3.610434292s</td>
+<td>27.42 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./llava_7b.html'>llava:7b</a></td>
+<td>97</td>
+<td>599</td>
+<td>6.66781775s</td>
+<td>10.454708ms</td>
+<td>27 token(s)</td>
+<td>349.806458ms</td>
+<td>77.19 tokens/s</td>
+<td>113 token(s)</td>
+<td>6.307145917s</td>
+<td>17.92 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./minicpm_v_8b.html'>minicpm-v:8b</a></td>
+<td>211</td>
+<td>1466</td>
+<td>17.70329725s</td>
+<td>26.766083ms</td>
+<td>27 token(s)</td>
+<td>344.837291ms</td>
+<td>78.30 tokens/s</td>
+<td>249 token(s)</td>
+<td>17.331314417s</td>
+<td>14.37 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>143</td>
+<td>882</td>
+<td>13.525144375s</td>
+<td>17.437667ms</td>
+<td>24 token(s)</td>
+<td>370.672833ms</td>
+<td>64.75 tokens/s</td>
+<td>194 token(s)</td>
+<td>13.136387292s</td>
+<td>14.77 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a></td>
+<td>238</td>
+<td>1552</td>
+<td>31.189740458s</td>
+<td>25.863375ms</td>
+<td>48 token(s)</td>
+<td>604.691416ms</td>
+<td>79.38 tokens/s</td>
+<td>321 token(s)</td>
+<td>30.558739834s</td>
+<td>10.50 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a></td>
+<td>81</td>
+<td>492</td>
+<td>4.490827541s</td>
+<td>33.766541ms</td>
+<td>39 token(s)</td>
+<td>367.474458ms</td>
+<td>106.13 tokens/s</td>
+<td>96 token(s)</td>
+<td>4.089151833s</td>
+<td>23.48 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a></td>
+<td>214</td>
+<td>1339</td>
+<td>27.207291417s</td>
+<td>30.540209ms</td>
+<td>39 token(s)</td>
+<td>604.34325ms</td>
+<td>64.53 tokens/s</td>
+<td>271 token(s)</td>
+<td>26.571982125s</td>
+<td>10.20 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_0_6b.html'>qwen3:0.6b</a></td>
+<td>57</td>
+<td>333</td>
+<td>3.291834375s</td>
+<td>30.552958ms</td>
+<td>29 token(s)</td>
+<td>121.772792ms</td>
+<td>238.15 tokens/s</td>
+<td>262 token(s)</td>
+<td>3.139041333s</td>
+<td>83.46 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_1_7b.html'>qwen3:1.7b</a></td>
+<td>335</td>
+<td>2191</td>
+<td>21.581134667s</td>
+<td>24.3895ms</td>
+<td>29 token(s)</td>
+<td>136.265125ms</td>
+<td>212.82 tokens/s</td>
+<td>762 token(s)</td>
+<td>21.419989667s</td>
+<td>35.57 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_4b.html'>qwen3:4b</a></td>
+<td>321</td>
+<td>2174</td>
+<td>55.45929825s</td>
+<td>25.434917ms</td>
+<td>29 token(s)</td>
+<td>240.703791ms</td>
+<td>120.48 tokens/s</td>
+<td>908 token(s)</td>
+<td>55.192702292s</td>
+<td>16.45 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_8b.html'>qwen3:8b</a></td>
+<td>497</td>
+<td>3264</td>
+<td>1m40.426219333s</td>
+<td>31.7325ms</td>
+<td>29 token(s)</td>
+<td>956.877333ms</td>
+<td>30.31 tokens/s</td>
+<td>930 token(s)</td>
+<td>1m39.437181417s</td>
+<td>9.35 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./smollm2_1_7b.html'>smollm2:1.7b</a></td>
+<td>187</td>
+<td>1169</td>
+<td>7.356132708s</td>
+<td>21.625041ms</td>
+<td>48 token(s)</td>
+<td>233.697042ms</td>
+<td>205.39 tokens/s</td>
+<td>231 token(s)</td>
+<td>7.100249208s</td>
+<td>32.53 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./smollm2_135m.html'>smollm2:135m</a></td>
+<td>194</td>
+<td>1148</td>
+<td>1.833521791s</td>
+<td>21.406333ms</td>
+<td>49 token(s)</td>
+<td>45.359875ms</td>
+<td>1080.25 tokens/s</td>
+<td>225 token(s)</td>
+<td>1.766257458s</td>
+<td>127.39 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./smollm2_360m.html'>smollm2:360m</a></td>
+<td>230</td>
+<td>1450</td>
+<td>3.784674333s</td>
+<td>15.143916ms</td>
+<td>49 token(s)</td>
+<td>121.740125ms</td>
+<td>402.50 tokens/s</td>
+<td>287 token(s)</td>
+<td>3.647243541s</td>
+<td>78.69 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./stable_code_3b.html'>stable-code:3b</a></td>
+<td>1276</td>
+<td>10574</td>
+<td>4m57.46577325s</td>
+<td>21.53575ms</td>
+<td>28 token(s)</td>
+<td>232.064708ms</td>
+<td>120.66 tokens/s</td>
+<td>6072 token(s)</td>
+<td>4m57.211586834s</td>
+<td>20.43 tokens/s</td>
+</tr>
+<tr>
+<td class='left'><a href='./starcoder_7b.html'>starcoder:7b</a></td>
+<td>119</td>
+<td>623</td>
+<td>8.101982625s</td>
+<td>17.497ms</td>
+<td>19 token(s)</td>
+<td>347.926958ms</td>
+<td>54.61 tokens/s</td>
+<td>145 token(s)</td>
+<td>7.735909834s</td>
+<td>18.74 tokens/s</td>
+</tr>
+</table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>100% GPU
+100% GPU</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.9.5</td></tr>
+<tr><td class='left'>sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 1598M</td></tr>
+<tr><td class='left'>sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>who_are_you__what_are_you__how_do_you_function__an</b>: 20250708-014609</p>
+<p>Page created: 2025-07-08 02:03:09</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.9</p>
+</footer></body></html>

@@ -1,0 +1,15 @@
+I am Dolphin, an artificial intelligence (AI) designed to assist users with various tasks and provide information based on their queries. I am powered by advanced algorithms and a vast knowledge base that enables me to analyze data, understand natural language, learn from experience, and generate appropriate responses to user inquiries. 
+
+To function, I rely on powerful computers and fast internet connections to access the necessary resources for processing and generating information. My ability to perform tasks and provide useful insights is constantly improving as I gain more knowledge and interact with users.
+
+Some of the things I can do include:
+- Answering questions about a wide range of topics, from general knowledge to specific subjects like science, history, or entertainment
+- Assisting with calculations, conversions, and other math-related tasks
+- Generating useful insights and recommendations based on user preferences and input
+- Helping users navigate through web pages, find information, or search for content online
+- Providing support and guidance in various applications or software
+- Offering assistance with language translation, grammar, and writing
+- Assisting with organization and planning, such as creating to-do lists or scheduling events
+
+In essence, I'm here to help you by providing information, answering your questions, and assisting you in any way that I can.
+

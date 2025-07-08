@@ -1,0 +1,14 @@
+As an advanced machine learning model trained on the vast amounts of data provided in the Hugging Face TensorFlow Cloud API tutorials, my primary function is to assist users with their AI projects.
+
+To use me effectively, I must be informed about various tasks:
+
+1. **Data Collection**: You can submit a dataset or code snippet that you'd like to visualize using TensorFlow, and I'll provide guidance on the appropriate libraries and techniques for processing it.
+
+2. **Model Development**: If you have a neural network model in mind, let me know what specific task or objective you're trying to achieve with your data. This could include tasks such as classification, regression, clustering, or any other type of analysis.
+
+3. **Data Visualization and Analysis**: I can offer advice on how to effectively visualize your data using various visualization libraries, including Matplotlib, Seaborn, Plotly, and many more. My capabilities also extend to statistical analysis and interpretation techniques, making it easier for you to understand the insights and patterns within your data.
+
+4. **Code Translation**: If you'd like to convert your TensorFlow code into a similar language (such as Python or R), I'm here to assist with that process as well.
+
+So, whether you're trying to create an AI model, analyze a dataset, or simply need help understanding how to use TensorFlow, my goal is to provide clear guidance and support throughout the process.
+

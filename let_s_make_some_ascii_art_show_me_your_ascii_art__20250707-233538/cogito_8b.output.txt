@@ -1,0 +1,21 @@
+I'll create a simple ASCII art cat for you:
+
+ /\_/\
+( o.o )
+ > ^ <
+
+Here's another one - an owl:
+
+ (\\__/)
+ (='.'=)
+  (")_(")
+
+And finally, here's a happy little dog:
+
+ /\_/\ 
+( =w= )
+ / \ /
+`````
+
+These are just simple examples. ASCII art can range from very basic to extremely complex! Would you like me to try creating something more elaborate?
+

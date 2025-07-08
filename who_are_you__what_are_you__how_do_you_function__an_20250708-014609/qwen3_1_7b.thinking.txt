@@ -1,0 +1,11 @@
+Okay, the user is asking me questions about who I am, what I am, how I function, and what I can do. Let me break this down.
+
+First, "Who are you?" I need to explain my identity. I'm an AI assistant, developed by Alibaba Group. I should mention my name, which is Qwen, and that I'm designed to help with various tasks.
+
+Next, "What are you?" This is about my purpose. I should explain that I'm here to assist with information retrieval, problem-solving, creative writing, and more. Highlight the different domains I can handle.
+
+Then, "How do you function?" I need to describe my operation. Mention that I use natural language processing and machine learning. Explain how I understand and generate text, and the systems like the Transformer model that power me.
+
+Finally, "What can you do?" I should list the capabilities. Include tasks like answering questions, writing, coding, providing explanations, and more. Also, note that I can work with various tools and datasets.
+
+I should make sure the answers are clear and concise, avoiding technical jargon. Maybe start with a friendly greeting, then each section in order. Check for any inaccuracies and ensure the information is up to date. Also, remind the user that I can help with specific tasks if they have any.

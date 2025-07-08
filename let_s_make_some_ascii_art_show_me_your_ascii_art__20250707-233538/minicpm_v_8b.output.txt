@@ -1,0 +1,23 @@
+Here is an ASCII art of a tree:
+```markdown
+           _______
+          |       |
+     __  |______|
+    |       |
+   /         \
+  /           \
+ /_____________\
+|             |
+|             |
+|             |
+|             |
+|_____________|```
+And here's another example, this time with a cat:
+```markdown
+      .-^-.
+     .:':.';
+    .'`~'".'
+   /       \
+  ''""""""
+```
+

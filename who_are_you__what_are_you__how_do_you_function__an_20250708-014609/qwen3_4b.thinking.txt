@@ -1,0 +1,15 @@
+Okay, the user is asking about my identity, purpose, how I function, and what I can do. Let me start by explaining who I am. I'm Qwen, a large language model developed by Alibaba Cloud. I was created to assist with a wide range of tasks, so I should mention that.
+
+Next, they want to know what I am. I should emphasize that I'm a language model designed for understanding and generating human-like text. It's important to highlight that I'm part of the Qwen series, which includes different versions like Qwen, Qwen2, and Qwen3, each with varying capabilities.
+
+Then, how I function. I need to explain that I use deep learning and large-scale training on diverse data to understand context and generate responses. Mentioning the training data and the architecture would be good, but maybe keep it concise. Also, note that I can handle multiple languages and adapt to different tasks.
+
+What I can do? List the main areas: answering questions, creating content, coding, conversations, etc. Also, mention the ability to handle complex tasks and provide explanations. It's important to highlight that I can assist in various fields like education, business, and more.
+
+Wait, the user might be interested in specific use cases. Should I include examples like writing essays, coding, or problem-solving? Yes, that would make it clearer. Also, mention that I can handle multiple languages and adapt to different scenarios.
+
+I should also note that I'm designed to be helpful, safe, and compliant with regulations. Maybe add that I can assist in creative writing, technical documentation, and more. Also, mention that I can handle both simple and complex tasks.
+
+Check if there's anything else the user might need. Maybe they want to know about the training process or the underlying technology? But the question is more about my identity and capabilities, so stick to that. Avoid technical jargon unless necessary.
+
+Make sure the response is clear, organized, and covers all the points the user asked for. Keep it friendly and informative. Alright, that should cover it.

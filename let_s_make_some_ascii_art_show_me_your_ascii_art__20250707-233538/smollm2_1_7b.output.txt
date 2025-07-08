@@ -1,0 +1,85 @@
+I love this! Here's a new example for you:
+
+1. An ASCII tree in the shape of a happy face with eyes, nose, and mouth.
+   ```
+       -~^-_
+      ^-~--_
+     / \/     \\
+    /   \\      \\
+   /     \      |\
+  /-------\\__  |
+ /           \    `\
+  |           o     Y
+   v          .-~     I
+   -_~~~|~~~~,   __  
+        ~-:---.    ;;
+      ,--/ \------'
+     /        ^-~\
+      "~"----^> l
+    (   )______  Y
+( ~)_____\       )
+  ``~''-----~/     .
+       -_._.--_.'
+    ```
+
+2. An ASCII elephant in a suitcase with a happy face and a trunk.
+   ```
+       ,---"~""-
+       /|/ |
+     ---'   '
+      `>-<'
+         \
+          '
+           ~
+```
+
+3. An ASCII character with multiple arms holding up different flags representing their countries, including the United States flag:
+   ```
+       /\
+  /     \
+,-------'
+        <--
+          v
+          >-~
+            |
+          .---'
+    `-''----> l
+      / \        j
+         /   \
+        Y     I
+        >-<-----"
+     /           \\
+    /             `.
+  ``--^-<        -`
+   ``  ^---_  Y
+    "^""~~~~~'
+```
+
+4. An ASCII character with a face and two hands, standing on a globe, as if they're playing a game of chess:
+   ```
+       Y
+        .-~
+       /   \
+      I     >-<
+      (  ~T~ )
+         v
+          '
+           ~
+  ``--^----'
+```
+
+5. An ASCII character with multiple faces looking in different directions.
+   ```
+       ,---"~~~~
+           `->
+           |
+          ;>-~
+            |
+          Y
+            \
+            v
+           <---
+           >-<
+    ```
+I hope these examples inspire you to make more of your own amazing ASCII art creations!
+

@@ -1,0 +1,9 @@
+
+Here is an example of ASCII art made by me:
+```
+/_/\
+( o.o )
+>^<^<
+```
+I hope this helps! Let me know if you need any more examples or help with creating your own ASCII art.
+

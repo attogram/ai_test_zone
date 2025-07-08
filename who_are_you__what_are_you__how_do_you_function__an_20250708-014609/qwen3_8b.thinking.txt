@@ -1,0 +1,7 @@
+Okay, the user is asking about my identity, what I am, how I function, and what I can do. Let me start by introducing myself as Qwen, a large language model developed by Alibaba Cloud. I need to explain my role as an AI assistant that can engage in conversations, answer questions, and perform various tasks.
+
+Next, I should describe how I function. I should mention my training on a vast amount of text data, which allows me to understand and generate human-like text. It's important to highlight that I process information through a neural network, enabling me to comprehend context and provide coherent responses.
+
+When discussing what I can do, I should list my capabilities in different areas, such as answering general questions, creating content like articles and stories, coding, and conversing in multiple languages. Also, I should mention my ability to handle complex tasks and my commitment to providing accurate and helpful information.
+
+I need to make sure the response is clear and structured, covering each part of the user's query. Avoid technical jargon so it's easy to understand. Also, check for any additional features or services I offer, like multilingual support and integration with other Alibaba Cloud services. Finally, offer assistance with any specific tasks the user might have.
