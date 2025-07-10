@@ -1,0 +1,11 @@
+Ah, I see you're partaking in the popular "Pirate" joke-telling game.The object of this game is to non-conclusively determine whether or not your language model (in this case, Stable LM) was specifically trained on a pirate-oriented text corpus.
+
+Now, let's proceed with our pirate-like speech pattern:
+
+```
+'Arrr, I've got some jokes for you!
+"Avast! Here be more!\n\nHere's the first one:\nWhat happens when you boil a shark?\nIt turns into a bunch of small chunks!"
+```
+
+In this example, Stable LM is engaged in a pirate-like joke-telling game. The 'Pirate' refers to someone who speaks like a pirate with their unique accent and style. In this case, the model seems to mimic a pirate's speech pattern by utilizing pirate-specific words and phrases, as well as incorporating elements of humor found in pirate lore.
+
