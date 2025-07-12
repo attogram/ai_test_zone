@@ -1,0 +1,25 @@
+Okay, let's take a look at this bash script. The user wants me to review it. First, I need to understand what the script does. It's a bash script for running prompts against multiple Ollama models and saving the outputs as web pages. 
+
+Hmm, the script starts with a shebang line and some comments about the script's purpose. The usage section lists the available flags like -m for models, -r for results directory, -t for timeout, and -v for version. The parseCommandLine function handles command line arguments, parsing them into variables like modelsList, resultsDirectory, prompt, etc.
+
+The script has a function called getDateTime to get the current date and time. Then there's createOutputDirectory, which sets up the output directory with a timestamp. The setPrompt function handles reading the prompt from the user or from input. savePrompt creates the prompt.txt and prompt.yaml files.
+
+Next, there's the generatePromptYaml function, which creates a YAML file for the prompt. Then the textarea function is used to display the prompt in a textarea with some formatting.
+
+The script then moves on to setting up models, listing all available models, and parsing the models list. The setModels function uses ollama list to get the models and sorts them. It checks if any models are found and exits if none are found.
+
+The script then sets the prompt, creates the output directory, and creates the main index HTML file. The runModelWithTimeout function is crucial here. It runs the model with a timeout, and if the model doesn't respond within the timeout, it writes an error message to the output file.
+
+I notice that the runModelWithTimeout function uses a subshell with sleep and kill commands. It's important to check if the model process is still running after the timeout. Also, there's a part where it waits for the main process to complete, then handles the timeout process.
+
+The script then processes the model output and statistics, creating the model output HTML file. It adds each model's output to the main index HTML. Finally, it stops the model and finishes the output index.
+
+I see some potential issues. For example, the runModelWithTimeout function might not handle all cases correctly. What if the model process is killed by another process? Also, the script uses a lot of subshells and processes, which could lead to resource issues. The timeout handling might not be robust enough, especially if the model takes longer than expected.
+
+Another thing is the use of the OLLAMA_MAX_LOADED_MODELS=1 export, which might be a configuration setting for the Ollama CLI. The script also uses some functions like safeString, which trims and sanitizes input, which is good for preventing security issues.
+
+I should also check if the script handles the case where the prompt is empty or invalid. The setPrompt function reads the prompt from the command line or input, but if the prompt is empty, it might not work as intended.
+
+There's also the part where the script creates the model output HTML, and the model output is written to modelOutputTxt and modelStatsTxt. The script then processes these files to generate the HTML. The parseThinkingOutput function is used to extract thinking content from the output, which is good for debugging.
+
+I think the script is pretty comprehensive, but there are areas where it could be improved. For example, error handling for missing models, more robust timeout handling, and ensuring that all files are properly created and managed. Also, the script could benefit from more detailed logging and error messages to help users troubleshoot issues.

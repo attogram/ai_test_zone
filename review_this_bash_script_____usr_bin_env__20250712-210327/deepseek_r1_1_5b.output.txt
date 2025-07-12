@@ -1,0 +1,71 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale="100">
+    <title>{date}</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Model Run Parameters</h1>
+        <p><a href="/parameters">Set Parameters</a></p>
+        
+        <div id="promptParameters">
+            <h2>Prompt Parameters</h2>
+            <div style="margin: 10px; padding: 5px;">
+                <label for="prompt">
+                    Model prompt ($prompt)
+                </label>
+            </div>
+
+            <label for="timeout">
+                Timeout (seconds) -- ${TIMEOUT}
+            </label>
+
+            <label>
+                Output file name (e.g., "models.html")
+            </label>
+
+            <label>
+                Number of models to run
+            </label>
+        </div>
+
+        <div id="statsParameters">
+            <h2>Model Statistics</h2>
+            <div style="margin: 10px; padding: 5px;">
+                <label for="response_words">Average response words ($reviewWords)
+                <span class="badge-label">±$reviewBytes</span>
+            </label>
+
+            <label for="review_words">Average response words count ($reviewBytes)
+                <span class="badge-label">±$reviewWords</span>
+            </label>
+
+            <label for="prompt_rows">
+                Number of rows
+            </label>
+
+            <label>
+                Maximum rows per column (default 10)
+            </label>
+
+            <div style="margin: 5px; padding: 8px;">
+                <label>Top 10 columns</label>
+                <span class="toggle-label">All</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="ollama.js" language="javascript"></script>
+</body>
+</html>
+```
+
+```bash
+ollama run --verbose "${model}" -- "${prompt}"
+```
+
+This code provides a user-friendly interface for specifying run parameters and statistics. The prompt can be modified using the provided parameter field, allowing customization of response behavior.
+

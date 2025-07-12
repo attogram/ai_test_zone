@@ -1,0 +1,84 @@
+else:
+   # If no "<test" tag exists in the files, then we are done.
+  os.stat("models/".join(modelNames), b"").suffix == ".txt"
+os.rmdir('$MODEL')  # Recursively remove existing directory.
+if os.path.isfile('../mainResults/'):
+   # Read the main results directory contents and split each file into line breaks
+  runningModelIndex=0
+
+  while True:
+    local model = next(text_iterator([modelThinkingContent]), None)
+
+    if not model:
+      break
+
+    if not model:
+      continue  # This will go until no more "<test>" tags are found.
+
+    if not isinstance(model, str):
+      raise TypeError('Missing ' + type(model).__name__)
+    else:
+      runningModelIndex = (runningModelIndex == 0)
+
+      if os.path.isfile(modelDirectory):
+        modelContents=readline()
+        while True:
+          line = next(text_iterator([line]), None)
+#         try:
+            # Try to extract "<test>" content from the files, if it exists
+           runningModelIndex += (1 + 500 - len(runningModelIndex))
+
+        # Split into individual lines and check for 'Thinking' tags
+        line = runningModelIndex.split("\n")
+        
+        modelContent=line[len('thinking'):].lower()
+        thinkingMode="Think" if not "think" in line else "Not think at this moment".lower(line[0])
+
+        while True:
+#          line = next(text_iterator([line]), None)
+            # Try to extract "<test>" content from the files, if it exists
+           runningModelIndex += (1 + 500 - len(runningModelIndex))
+          else:
+              return
+
+  os.rmdir('$MODEL')
+  sys.exit(OS)
+if not modelOutputTxt and not systemMemoryStats and not Stats and not OllamaStats:
+    print "No memory or stats available."
+    exit()
+# Read all the information from the file content, and write it to a text file if needed.
+with open('model/$MODEL', 'w') as f:
+  for line in runningModelIndex.readlines():
+    modelName = line[:30] # remove last 8 characters of first word
+    print(line)
+
+    print "Total memory used by $model:\t", sys.getremental() / OS
+    totalMemoryUsed += sys.getremental()
+# Read all the information from the file contents and write it to a text file if needed (if not already created).
+try:
+  f = open('mainResults/' + modelDirectory, 'w') 
+  for line in runningModelIndex.readlines():
+    try:
+      print "Reading %s" % line[0]
+      line[1:] # remove first character of each line
+
+      if not os.path.isfile(modelFile):
+        f.write("not found\n")
+        continue
+
+    elif not isinstance(line, str) and len('thinking' in line or 'Think' in line or 'Not think at this moment'):
+      runningModelIndex += 1
+    else:
+      sys.exit()
+except FileNotFoundError:
+  print "File "$modelDirectory$" does not exist."
+
+  f.write("\n")
+  f.write(runningModelIndex)
+  f.close()
+
+  # Remove the file name from main results directory, if applicable (if modelDirectory exists).
+  if os.path.exists('../mainResults/'):
+    shutil.rmtree('../mainResults/' + modelDirectory)
+finally:
+   print "Removed all files and modified."

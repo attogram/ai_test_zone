@@ -1,0 +1,28 @@
+</sortable-i)f sort.id/sort/count . itary.exit /sortable-t=".calls*).intimated.calls?$*/resultshtml"
+{
+    sort.exit /exit, $*. resultsHtml/
+    echo $name:*/
+    exit )$/.resultshtml\ "//";sorting;
+} $count(count).resultsHtml/
+echo $name:/*Results of Sorting.*/
+```*a-sortable-t:$.calls = count.resultsHtml/
+exit sort.exit /exit, $*.resultsHtml/
+echo $name/.resultsHtml? /* Results from sorting:*
+end the exit $count(count).resultsHtml/:
+$*/
+exit )$/*Results of Sorting.*/; $count(count).resultsHtml/: /i
+sort.exit /exit, $$.resultsHtml/
+echo $name:/*Results of Sorting.*/
+exit )$/.resultsHtml? *#exit the sort.exit /
+end the exit $count(count).resultsHtml/? /* Results from sorting:*${$*/
+echo $name".html/
+end $count(count).resultsHtml
+```*Sorting.exit/sort-t ${$calls}.sort/.resultsHtml? *$$"/
+{
+    sortable
+    return )$call /"exit / sort.exit "a call/sort/"+sort*.
+*/ exit ${
+    echo $calls/.sort.exit */${calls}.sort.exit ?/sort".sort* a-sort .resultsHtml(count).sorting? *end -sortable ".sort*/ count (count.*result"call /sort ".sortable".html/t* sort*.sort.call "exit "/sort".exit *call/
+    sort$.sort/.resultsHtml ?/sort* call/sort )$$ sort /${calls-sort*
+    sort(count.$$"/sort -sorting
+

@@ -1,0 +1,16 @@
+The provided bash script is a comprehensive shell script that automates the process of interacting with Ollama, an AI model running system. Here's a summary of what it does:
+
+1. The script sets up its environment by setting default values and parsing command-line arguments for various options such as `-h` (help), `-m` (models to run), `-r` (results directory), and `-t` (timeout). It also includes functions to sanitize strings, create output directories, manage model interactions, display version information, and parse command-line arguments.
+
+2. The script sets up models by listing all available Ollama models and allows the user to specify particular ones they want to run. It then creates a list of models for further processing.
+
+3. It creates output directories with unique names based on the prompt provided and the current date/time, ensuring that each run has its dedicated directory for results.
+
+4. The script contains functions to handle various aspects such as generating YAML files from prompts, creating web pages for displaying results, running models with a specified timeout, handling model thinking outputs, managing system stats, and creating HTML output for all runs and models.
+
+5. It iterates over each model in the list, clears any previous session, runs the model using the provided prompt with a timeout, collects statistics, updates the model info, creates HTML output files for each run, updates an index page of outputs, and finally generates overall summary index pages for results and models.
+
+This script is designed to streamline the process of running multiple AI models (with Ollama) and documenting their interactions. It's packed with various functionalities such as error handling, file manipulation, system interaction, and web content generation which together automate a complex workflow for interacting with AI models.
+
+One note: without having an opportunity to test run this script or seeing its full context in action, it's challenging to provide detailed feedback on its functionality beyond describing the outlined structure of what it does. If there are specific issues or parts you're looking for assistance with, please highlight those so I can provide targeted help!
+

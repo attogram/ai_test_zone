@@ -1,0 +1,38 @@
+The provided bash script is a comprehensive multirun tool for Ollama language models, which allows users to run prompts against multiple models and save the outputs as web pages. Here's a breakdown of its features and structure:
+
+1. **Script Structure**:
+   - The script begins with a shebang (`#!/usr/bin/env bash`), followed by comments detailing the purpose, usage, and available flags.
+   - It defines several functions (e.g., `usage`, `parseCommandLine`, etc.) to handle different aspects of the script's functionality.
+
+2. **Function Descriptions**:
+   - `usage()`: Displays help information.
+   - `parseCommandLine()`: Parses command-line arguments, including flags for models, output directory, timeout, and version display.
+   - `getDateTime()`: Retrieves the current date and time.
+   - `setModels()`: Lists available Ollama models and validates user input for specific models.
+   - `safeString()`: Cleans up the prompt by truncating it, converting to lowercase, replacing spaces with underscores, and removing non-allowed characters.
+   - `createOutputDirectory()`: Creates a subdirectory for storing output files based on a unique tag and timestamp.
+   - `setPrompt()`: Prompts users to enter a prompt via terminal input or redirects from standard input (pipe/file).
+   - `savePrompt()`: Writes the prompt, along with other metadata, to text files.
+   - `generatePromptYaml()`: Creates a YAML file for storing the prompt.
+   - `textarea()`: Generates an HTML textarea element for displaying input content.
+   - `showPrompt()`: Displays the prompt and related statistics in an HTML format.
+   - `showImages()`: Lists images generated during model evaluation, if any.
+
+3. **Additional Features**:
+   - `clearModel()`: Clears a model's session context using Expect commands.
+   - `stopModel()`: Stops a running model using Ollama's command-line interface.
+   - `setStats()`: Collects and processes statistical information about the models' performance.
+   - `showSystemStats()`: Displays system details, including architecture, processor, OS, memory used, and OS version.
+   - `createModelInfoTxt()`: Generates model information text files for each specified model.
+   - `setModelInfo()`: Parses model info text files to extract relevant data (architecture, parameters, context length, etc.).
+   - `createModelsOverviewHtml()`: Creates an HTML page listing all used models with their details.
+   - `createModelOutputHtml()`: Generates individual model output pages containing the raw output, stats, and statistics.
+   - `createOutputIndexHtml()`: Creates an index of model outputs grouped by run directory.
+   - `addModelToOutputIndexHtml()`: Populates the output index page with links to individual model runs.
+   - `finishOutputIndexHtml()`: Completes the output index HTML page.
+
+4. **Execution**:
+   - The script concludes with a call to the main functionality: parsing command-line arguments, setting up models, prompts, and output directories, then running each specified prompt against all Ollama models, collecting stats, generating output pages, and indexing them appropriately.
+
+Overall, this script is well-structured, modular, and provides extensive functionality for running multiple Ollama model evaluations with customizable prompts and detailed reporting. It's a powerful tool for users working with language models.
+

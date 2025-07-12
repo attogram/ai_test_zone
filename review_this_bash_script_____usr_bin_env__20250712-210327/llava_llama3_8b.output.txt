@@ -1,0 +1,59 @@
+This script is designed to run OLLAMA models in parallel, and it processes the output of each model in a timeout-based manner. It creates various files and directories for storing and organizing the results of multiple runs.
+
+The script begins by setting several variables and parameters that define its behavior:
+* `TIMEOUT`: This specifies the maximum amount of time a single model can take to run. If any model takes longer than this, it will be killed.
+* `ollama_dir`: The directory where OLLAMA models are stored.
+* `results_directory`: The directory where all output files and directories are saved.
+
+The script then proceeds to parse its command-line arguments:
+```bash
+parseCommandLine "$@"
+```
+This line reads the input arguments passed to the script, which could include parameters for specifying the model name or prompt.
+
+Next, it initializes several variables that will be used throughout the script. These include an array of models to run (`models`), a prompt string (`prompt`), and a timeout value (`TIMEOUT`) that specifies how long each model should take to run:
+```bash
+export OLLAMA_MAX_LOADED_MODELS=1
+setModels
+setPrompt
+echo; echo "$(getDateTime) 'Response Timeout: $TIMEOUT'"
+```
+The `setModels` function is not defined in the script, so it would need to be implemented.
+
+After initializing these variables, the script proceeds to loop through each model and run it with the given prompt:
+```bash
+for model in "${models[@]}"; do  # Loop through each model and run it with the given prompt
+  echo; echo "$(getDateTime) 'Running model: $model'"
+  clearModel "$model"
+  modelOutputTxt="$outputDirectory/$(safeString "$model").output.txt"
+  modelStatsTxt="$outputDirectory/$(safeString "$model").stats.txt"
+  echo "$(getDateTime) 'Creating Model Output Text: $modelOutputTxt'"
+  echo "$(getDateTime) 'Creating Model Stats Text: $modelStatsTxt'"
+  runModelWithTimeout
+  setSystemMemoryStats
+  setOllamaStats
+  parseThinkingOutput
+  setModelInfo
+  setStats
+  createModelOutputHtml
+  addModelToOutputIndexHtml
+  stopModel "$model"
+done
+```
+This loop runs each model with the given prompt, and processes the output of each model in a timeout-based manner. The script also saves various stats using the `setSystemMemoryStats` and `setOllamaStats` functions, and it uses the `parseThinkingOutput` function to extract thinking-related content from the model output.
+
+Finally, the script creates several additional files and directories for organizing and saving all of the model outputs:
+```bash
+finishOutputIndexHtml
+createMainModelIndexHtml
+echo; echo "$(getDateTime) 'Done: $outputDirectory/'"
+```
+This completes the main loop through each model. The `finishOutputIndexHtml` function is not defined in the script, so it would need to be implemented.
+
+The script ends by creating several additional files and directories for organizing and saving all of the model outputs:
+```bash
+createMainModelIndexHtml
+echo; echo "$(getDateTime) 'Done: $outputDirectory/'"
+```
+This completes the script.
+

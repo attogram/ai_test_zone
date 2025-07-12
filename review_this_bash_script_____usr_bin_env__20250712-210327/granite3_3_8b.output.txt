@@ -1,0 +1,41 @@
+This is a comprehensive Bash script designed for running prompts against multiple models in Ollama and saving the output as web pages. Here's a breakdown of its functionality, features, and structure:
+
+### Functionality Overview
+1. **Command Line Parsing**: The script parses command line arguments to customize behavior such as specifying models, timeout settings, results directory, and prompt input methods (manual entry, file read, or pipe).
+2. **Model Management**: It retrieves a list of available models from Ollama using `ollama list` and processes user-specified model lists.
+3. **Prompt Handling**: The script accepts prompts in various ways: manual entry, file redirection, standard input piping, and also captures prompts for saving as text files and YAML formats.
+4. **Output Directory Management**: Sets up an output directory named "results" by default or user-specified, creating necessary subdirectories for each model's results.
+5. **Prompt Sanitization**: Sanitizes the input prompt to be suitable for URL encoding, converting spaces to underscores and removing non-allowed characters.
+6. **Model Execution**: Uses `ollama run` in a timed environment (`runModelWithTimeout`). It handles timeouts gracefully by killing processes if necessary and saving errors appropriately.
+7. **Output Formatting**: Generates HTML pages for individual model responses, an index of all models used, and a summary of system stats, including hardware and Ollama-specific details.
+8. **Thinking Output**: Extracts "thinking" outputs from the model's response text and saves them separately in a dedicated file.
+9. **Index Creation**: Creates two indices - one for listing all models used (`models.html`) and another to aggregate results across different model runs under a main index page (`index.html`).
+
+### Key Functions and Scripts
+- `parseCommandLine`: Parses command line arguments and sets options.
+- `getDateTime`: Formats the current date and time for logging purposes.
+- `safeString`: Sanitizes strings to be web-friendly, replacing spaces with underscores and disallowing special characters.
+- `createOutputDirectory`: Ensures an output directory exists or creates it.
+- `setPrompt`: Handles how prompts are obtained from users (input, file, pipe).
+- `savePrompt`: Saves the prompt as both raw text and in YAML format for GitHub compatibility.
+- `generatePromptYaml`: Formats the raw prompt into a GitHub-compliant YAML structure.
+- `textarea`: Generates HTML `<textarea>` elements with appropriate styling for displaying prompts.
+- `showPrompt`: Displays prompt details, including raw content and links to text and YAML files.
+- `showImages`: Prepares images added during model execution for display on the result page.
+- `clearModel`: Clears session context in Ollama models using `expect` for shell interaction.
+- `stopModel`: Stops running models gracefully.
+- `setStats`: Extracts statistics from model's performance logs.
+- `showSystemStats`: Gathers system stats like architecture, memory usage, OS version, etc.
+- `createMainIndexHtml`: Creates an index page listing results per model run directories.
+- `createMainModelIndexHtml`: Generates a table of contents linking to each individual model run's detailed results.
+- `runModelWithTimeout`: Executes the model with timeout management using background processes and kill signals.
+- `parseThinkingOutput`: Extracts thinking phases from model responses for separate logging.
+
+### Considerations and Improvements
+- **Error Handling**: The script already has robust error handling but could further improve exception management, especially in critical sections like model execution and file operations.
+- **Documentation**: While some inline comments exist, comprehensive documentation (README, inline function docstrings) would greatly benefit users and maintainers.
+- **Flexibility**: Although the script supports various input methods, adding support for more configuration options (e.g., custom templates, additional metadata logging) could enhance its versatility.
+- **Performance**: Consider optimizing memory usage or parallel execution for handling larger model sets or prompts efficiently.
+
+This script serves as a robust starting point for interacting with Ollama models and generating detailed result reports in HTML format. The modular design makes it adaptable to changes, and clear function separation facilitates maintenance and future enhancements.
+

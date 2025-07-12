@@ -1,0 +1,19 @@
+ This Bash script named `ollama-multirun.sh` is a multi-run tool for the Ollama models. It allows you to run a prompt against all available models, save the output as web pages. The script accepts prompts as an argument or from a file, pipe, or stdin.
+
+Here's a brief summary of the main functions:
+
+1. `usage()` - displays usage information for the script.
+2. `parseCommandLine()` - parses command line arguments to set flags like model list, results directory, timeout, etc.
+3. `getDateTime()` - returns the current date and time.
+4. `setModels()` - gets the list of available models and optionally filters it based on the provided comma-separated model list.
+5. `safeString()` - sanitizes input string for file and folder names.
+6. `createOutputDirectory()` - creates a new output directory with a unique name based on the prompt and timestamp.
+7. `savePrompt()` - saves the prompt as both text and YAML files in the output directory.
+8. `generatePromptYaml()` - generates a Prompt YAML file using GitHub's format.
+9. `textarea()` - creates an HTML text area with the given content.
+10. `showPrompt()` - displays the prompt as an HTML page.
+11. Custom functions for interacting with Ollama models, such as clearing model sessions, stopping models, etc.
+12. Script-specific variables like NAME, VERSION, URL, TIMEOUT, etc.
+
+The script also creates various HTML files to display the output of each model run, and an index page listing all available models and their respective runs. It collects statistics about each model run, such as total duration, load duration, prompt evaluation count, and more. Overall, it provides a user-friendly way to explore the outputs of multiple Ollama models with different prompts.
+

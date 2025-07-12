@@ -1,0 +1,10 @@
+The script is a well-written and organized Bash shell script. It provides a convenient way to run prompts against different models in Ollama, saving the output as web pages for further analysis or use. The script includes a comprehensive help section that explains how to use it with different flags. 
+
+The script first sets up variables like NAME, VERSION, and URL, which are used later in the script. It also defines some default values for the arguments if not provided explicitly by the user. Then it proceeds to define functions such as usage(), parseCommandLine(), getDateTime(), createOutputDirectory(), savePrompt() etc., each of which perform a specific task required by the script.
+
+The script has a nice set of checks and error messages, ensuring that it can handle different types of input and provide meaningful error messages when required. For example, it validates the modelsList array and displays an appropriate message if the model is not found. 
+
+Overall, the code is easy to understand and follow, with clear comments and logical flow of control. It also uses some useful shell scripting features like process substitution for reading from standard input or file, and backticks for executing a command and capturing its output. 
+
+The only thing that could be improved in this script is the use of arrays to store the list of models and added images, instead of using separate variables. This would make the code more concise and easier to read and maintain.
+

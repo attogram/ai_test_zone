@@ -1,0 +1,12 @@
+Here is the complete Python script with comments added for clarity:
+```python
+# Get system memory usage, loaded model output, and stats from models.txt
+OS = subprocess.check_call(['ps -efo', '--version'])
+os.stat("models/".join(modelNames), b"").suffix == ".txt"
+if os.path.isfile('modelOutputTxt'):
+  # Read the entire file content
+  local modelThinkingContent=readline()
+  while True:
+    local thinkingIndex, line = local text_iterator(modelThinkingContent)
+    if not thinkingIndex or not line:
+      break

@@ -1,0 +1,73 @@
+Here is the updated code:
+
+```bash
+#!/bin/bash
+
+# Constants
+NAME="$(basename "$0")"
+tag="${1}"
+prompt="${2}"
+tagDatetime=$(date +"%Y-%m-%d_%H:%M:%S")
+tagDir="model_run"
+TIMEOUT=60 # seconds
+
+# Default Prompt
+prompt="(raw)"
+
+# Parse command line arguments
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -p|--prompt)
+      shift
+      prompt="$1"
+      ;;
+    --tag-dir)
+      tagDir="$2"
+      ;;
+    *)
+      break
+      ;;
+  esac
+  shift
+done
+
+# Set default prompt to "raw" if no prompt is provided
+if [ -z "$prompt" ] && [ "${tag}" != "raw" ]; then
+  prompt="raw"
+fi
+
+echo $(getDateTime) "Starting $NAME v$(git describe --abbrev=0)"
+
+# Set default Prompt to "raw" if no prompt is provided and tag = "raw"
+if [ -n "${tag}" ] && [ "${tag}" != "raw" ]; then
+  echo $(getDateTime) "Modifying prompts..."
+  sed -i 's/^\/\//\/$/g' "$0" || true
+  sed -i 's/^#/ /g' "$0" || true
+  sed -i "s/$prompt/, $tagPrompt,/g" "$0" || true
+fi
+
+parseCommandLine "$@"
+echo; echo $(getDateTime) "Response Timeout: $TIMEOUT seconds"
+setModels
+clearModelDirectory
+createMainIndexHtml
+createOutputDirectory
+createModelInfoTxt
+for model in "${models[@]}"; do
+  createModelOutputTextsAndStats
+  if [ -d "$outputDirectory/$model" ]; then
+    echo $(getDateTime) "Running model: $model"
+    runModelWithTimeout
+    setSystemMemoryStats
+    parseThinkingOutput
+    generateIndexHtml
+    addModelToOutputIndexHtml
+    stopModel "$model"
+    rm -fv "${outputDirectory}/${model}.thinking.txt"
+    rm -fv "${outputDirectory}/${model}.stats.txt"
+  fi
+done
+finishOutputIndexHtml
+echo; echo $(getDateTime) "Done: $outputDirectory/"
+```
+

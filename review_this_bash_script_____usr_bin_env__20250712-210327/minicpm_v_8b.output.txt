@@ -1,0 +1,9 @@
+The provided Bash script is a multi-run tool for the Ollama model, which uses multiple models to generate responses based on input prompts. The script has various features such as setting timeout duration, outputting results in different formats (JSON and HTML), using specific models or all available models, specifying an output directory, handling JSON files with additional parameters like timestamp format.
+Here's a summary of the main steps involved:
+1. Set up necessary directories
+2. Parse command-line arguments to set options such as model names, timeout duration, results output path, etc.
+3. Load multiple Ollama models using `ollama pull` commands and store their information in JSON files for easy retrieval later on.
+4. Get the current system architecture (e.g., AMD Zen) from an external script or file to use it in some calculations, which is not explained further.
+5. Run a prompt through each loaded model while setting timeout duration based on provided options, collect output and statistics related data such as total response time, load-time, number of responses generated, etc.
+6. Save the output files (model-specific results with associated timestamp), along
+

@@ -1,0 +1,12 @@
+Based on the description, here are the steps for running OLLAMA with the given command line options:
+
+1. Check that `OLLA_MAX_LOADED_MODELS` is set to a value greater than 0. If not, remove it and check again later.
+2. Generate model output files by calling `createModelOutputHtml` for each model being tested.
+3. Create the index page using `createMainIndexHtml`.
+4. Run models with prompt by calling `runModelWithTimeout`.
+5. Set system memory and OLLAMA configuration settings (if required).
+6. Perform all operations described in `createMainModelIndexHtml` to create and save model output text, statistics, and load information for each model.
+7. Call `finishOutputIndexHtml` to finish the main index page generation process.
+8. Save the generated HTML files to the directory specified by the command line arguments using `sh script.sh -r`.
+9. Start OLLAMA with prompt and generate output files.
+

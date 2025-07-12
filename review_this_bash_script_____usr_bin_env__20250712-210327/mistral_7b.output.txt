@@ -1,0 +1,22 @@
+ This is a Bash script for running multiple models from the Ollama platform and saving their responses as web pages. The script accepts input either manually, from a file or through a pipe. It also allows you to specify which models to use, set a timeout, and define an output directory for the results.
+
+   Here's a summary of the script:
+
+1. Import necessary environment variables, functions, and libraries.
+2. Define global variables like version information, timeout value, usage help text, etc.
+3. Parse command-line arguments using a function that processes flags like `-h`, `-m`, `-r`, `-t`, and `-v`.
+4. Get the current date and time for logging purposes.
+5. Define functions to get a sorted list of models, safely format strings, create output directories, save prompts, generate prompt YAML files, show tables in HTML, display headers and footers in HTML files, etc.
+6. Set up an event listener for click events on the prompt textarea, clear model sessions using Expect, stop models, show system stats, and more.
+7. Run each specified model with a given prompt and timeout, saving their responses and statistics to separate files.
+8. Generate HTML pages for the output index, individual models' outputs, and a models list (if applicable).
+9. Create an overall index page for all runs in the results directory.
+
+Some potential improvements could be:
+
+- Add error handling for various situations like missing required arguments or failed model runs.
+- Implement a way to handle different models with varying numbers of prompt responses, e.g., using lists or arrays instead of single strings.
+- Allow users to customize the HTML templates and styling by providing options in the command line or through configuration files.
+- Add support for more Ollama commands and settings (e.g., temperature, context length, etc.)
+- Export the script as a standalone executable.
+
