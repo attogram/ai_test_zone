@@ -1,0 +1,47 @@
+
+
+This is a framework that helps you quickly create new projects on the Ethereum blockchain. It was created for developers who want to focus on building their application and not have to deal with complicated contracts in Solidity or Web3. 
+
+## The Framework
+The framework uses the following technologies:
+- Ganache - an Ethereum Blockchain as a Service (https://truffleframework.com/ganache)
+- Truffle - development environment, testing framework and asset pipeline for blockchains using the Ethereum Virtual Machine (https://www.trufflesuite.com/)
+- React - front end JavaScript library for building user interfaces (https://reactjs.org/)
+
+
+## The Process
+1. **Install Node**
+
+    Install node on your local machine with a version >= 8.10.0. To check if you have it installed, run `node --version` in the terminal and paste the result here.
+    
+    If you do not already have it installed visit https://nodejs.org/en/download/.
+
+2. **Install Ganache**
+
+    Ganache is a client-side Ethereum blockchain that allows developers to test their applications without spending actual Ether on real blockchains. 
+    
+    To install, run `npm i ganache-cli -g` in the terminal.
+
+3. **Create an App**
+    
+    Start by running `truffle unbox react`. This will create a new project called `app` with all the necessary files and folders.
+
+4. **Test it out**
+
+    To run the app, enter the command `npm start` into the terminal after navigating to your newly created app folder. 
+
+5. **Deploy it to Rinkeby**
+    
+    Now that you've tested everything locally using Ganache, we can deploy our application to a test blockchain called Rinkeby. To do this run the command `truffle migrate --reset --network rinkeby`. This will take about 10-20 seconds.
+
+6. **Deploy it to Mainnet**
+
+    We are almost done! But just one more step before we're finished is to deploy our app to the actual Ethereum blockchain that is going to run all of the world's cryptocurrency transactions.
+    
+    To do this, run `truffle migrate --reset --network mainnet`. This will take about 10-25 minutes and will cost money on some test networks like Rinkeby but not on Mainet.
+
+7. **View it**
+
+    Now that everything is deployed to the blockchain, you can start using your newly minted NFT collection. To do this run `npm run open`. This command should open up a new browser tab and you'll be able to view all of the NFTs in your collection on Etherscan!
+
+

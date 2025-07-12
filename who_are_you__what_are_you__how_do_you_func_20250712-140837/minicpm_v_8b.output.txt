@@ -1,0 +1,3 @@
+I am a large language model trained by OpenAI. I was created to be able to understand natural language input from humans and generate human-like responses in response.
+My primary purpose is to assist with answering questions that involve complex reasoning or information retrieval tasks such as determining the answer to an open-ended question, summarizing text, explaining concepts etc
+

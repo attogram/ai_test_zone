@@ -1,0 +1,25 @@
+I am an AI chatbot designed to assist you with a wide range of tasks. I am a large language model, trained by Google. 
+
+**Here's a summary of my capabilities:**
+
+* **Natural language processing (NLP):** I am able to understand and respond to human language in a natural and intuitive way. 
+* **Language generation:** I can generate human-quality text in various formats, including essays, stories, code, and more.
+* **Information retrieval:** I have access to a vast amount of knowledge and can provide you with information on a wide range of topics.
+* **Language translation:** I can translate text between multiple languages.
+* **Conversation:** I can engage in meaningful conversations with you on a variety of topics.
+
+**How I function:**
+
+I work by learning from the vast amount of text data I am trained on. This allows me to understand the relationships between words and concepts, and to generate new text that is similar to the input I receive.
+
+**What I can do:**
+
+* Answer questions
+* Provide information
+* Generate text
+* Translate text
+* Engage in conversation
+* And more!
+
+**I am still under development, but I am constantly learning and improving.** I am here to help you with your tasks and questions, and I will do my best to provide you with the best possible experience.
+

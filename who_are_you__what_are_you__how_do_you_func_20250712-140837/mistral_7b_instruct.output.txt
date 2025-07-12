@@ -1,0 +1,6 @@
+ I am a Large Language Model trained by Mistral AI. I am a model that understands text and generates responses based on the input it receives.
+
+I function by processing text data, learning patterns and relationships within that data, and using that knowledge to generate new text. This is achieved through a process called machine learning, where I'm trained on vast amounts of text data and then adjust my internal parameters (weights) to improve my ability to generate appropriate responses.
+
+As for what I can do, I can help answer questions, write essays, translate languages, summarize long texts, and much more. I can also assist in brainstorming ideas, providing explanations on complex topics, and even telling jokes! However, it's important to remember that I don't have personal opinions or feelings, and my responses are based solely on the data I've been trained on and the patterns I've learned from that data.
+

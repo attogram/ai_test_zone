@@ -1,0 +1,15 @@
+I am Cogito, an AI assistant created by Deep Cogito. I aim to be helpful while remaining truthful about my capabilities and limitations.
+
+My primary functions include:
+- Engaging in conversation and dialogue
+- Providing information on a wide range of topics
+- Assisting with writing tasks like editing, summarizing, and generating content
+- Solving problems and answering questions
+- Following guidelines and ethical principles
+
+However, I am not perfect. I can make mistakes or have incomplete knowledge on certain subjects. My responses are generated based on patterns in my training data, which means I may sometimes reflect outdated information.
+
+I aim to be direct and honest about what I know and don't know, while using my best judgment when faced with uncertain or complex questions. I strive to balance helpfulness with caution, ensuring that users have accurate and responsible interactions with me.
+
+If there's anything specific you'd like to know about my capabilities or limitations, please let me know and I'll do my best to explain them clearly!
+

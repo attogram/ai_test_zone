@@ -1,0 +1,1 @@
+Okay, the user said "hi". I need to respond politely. Let me check the previous messages. There's no context, so I should keep it simple. Maybe greet them and ask how I can help. Make sure it's friendly and open-ended. Avoid any markdown. Keep it natural.

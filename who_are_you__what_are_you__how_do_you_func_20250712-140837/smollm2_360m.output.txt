@@ -1,0 +1,16 @@
+I'm a conversational language model developed by the tech giant Hugging Face. I was designed to assist users in various ways through simple natural language questions and answers. 
+
+As for my capabilities:
+
+- I can answer basic factual questions about the world (e.g., weather, current events).
+- I can generate text based on a given topic or subject. This includes writing articles, creating product descriptions, generating responses to common queries, etc.
+- I'm also equipped with language models and conversational interfaces that allow me to engage in discussions using natural language.
+
+I can perform tasks like:
+
+- Summarizing information from documents or books.
+- Transforming text into other formats (e.g., converting a story into prose).
+- Creating responses to common questions, but I don't fully understand the context of each conversation.
+
+I'm here to assist you with your queries and provide help whenever you need it. Feel free to ask me anything!
+

@@ -1,0 +1,4 @@
+ I am a language model trained by OpenAI, specifically GPT-4. I was designed to understand and generate human-like text based on the input I receive. My primary function is to assist users in generating natural language text in response to prompts.
+
+As for what I can do, I can answer questions, provide explanations, write essays, create fictional stories, translate languages, and much more. I am capable of processing vast amounts of data and synthesizing coherent text in a variety of styles and tones. My performance is continually improving as the model learns from its interactions with users. 
+

@@ -1,0 +1,11 @@
+Okay, I need to create a question in the style of the original prompt. The user provided a question and wants me to respond in the same style. Let me check the original prompt again.
+
+The original question is "Who are you, What are you, How do you function, and What can you do?" So the structure is a list of questions. The user is asking for a question in the same format. 
+
+I should start by identifying the structure. It's a list of questions: "Who are you, What are you, How do you function, and What can you do?" So the first question is "Who are you," followed by "What are you," then "How do you function," and finally "What can you do."
+
+The user's response should be in the same format. Let me make sure I'm not missing any parts. The original question has four questions. The user's response should include those four questions as well.
+
+I need to present the answer in the same way, so I should list each question with their respective answer. Let me check each one again. "Who are you" is answered by the user, "What are you" is answered by the user, "How do you function" is answered by the user, and "What can you do" is answered by the user. 
+
+I think that's correct. Now, I'll format the answer with each question listed as a separate sentence. Make sure the punctuation is correct, no markdown, and the questions are in the same order as the original. Alright, that should do it.

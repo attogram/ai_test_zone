@@ -1,0 +1,7 @@
+Okay, the user is asking about my identity, functionality, and capabilities. I need to explain who I am, what I am, how I work, and what I can do. Let me start by defining my role as Qwen, a large language model developed by Alibaba Cloud. I should mention my training data and the technologies behind my development, like deep learning and natural language processing.
+
+Next, I need to explain how I function. This includes my architecture, which is based on transformer models, and how I process and generate text. It's important to note that I don't have consciousness or personal experiences, so I should clarify that I operate based on patterns in the data I was trained on.
+
+For the capabilities section, I should list the main functions: answering questions, creating content, coding, and conversational skills. Each of these points needs a brief explanation. I should also mention the limitations, like not having real-time data access and not being able to perform physical tasks.
+
+I need to make sure the explanation is clear and concise, avoiding technical jargon where possible. Also, I should remind the user that while I can assist with many tasks, there are certain things I can't do. Let me structure this step by step to cover all the user's questions without missing any key points.

@@ -1,0 +1,87 @@
+, who think they're all aliens.",
+                "It's the only place a man can go to rest before he dies. I'm not quite sure why the guns didn't fire, but I hope he made it back home alive.",
+                "I'm sick of getting drunk on this ship, so maybe someday if I have enough time and money I'll take it up again.",
+                "I've been thinking about this ship for a long time. It's kinda like a dream, but not quite. I just want to feel the freedom, the adrenaline that comes from flying around with my friends.",
+            ],
+        ),
+    ];
+
+    #[derive(Default)]
+    struct GameState {
+        dialog: Option<Dialog>,
+        current_dialog: usize,
+        finished: bool,
+        next_scene: String,
+    }
+
+    impl SimpleState for GameState {
+        fn on_start(&mut self, ctx: &mut Context) -> GameResult<()> {
+            let mut rng = rand::thread_rng();
+
+            let d = Dialog {
+                title: "Welcome to the Space Station".to_string(),
+                paragraphs: vec![
+                    Paragraph {
+                        text: "The ship's been hit hard by an alien attack. Maybe if you help it out we can make it back home alive.",
+                    },
+                    Paragraph {
+                        text: format!(
+                            "You are a {} from the far future who just returned from {}",
+                            &NAME[rng.gen_range(0, NAME.len() - 1)],
+                            &CITY[rng.gen_range(0, CITY.len() - 1)]
+                        ),
+                    },
+                ],
+            };
+
+            self.dialog = Some(d);
+            Ok(())
+        }
+
+        fn update(&mut self, ctx: &mut Context) -> GameResult<Transition> {
+            if let Some(ref mut dialog) = self.dialog {
+                // Update the current paragraph
+                for p in &mut dialog.paragraphs[self.current_dialog].text {
+                    match p {
+                        ParagraphText::Normal(t) => *t += " ",
+                        _ => {}
+                    }
+
+                    *p = ParagraphText::Normal("...".to_string());
+                    thread::sleep(Duration::from_millis(50));
+                }
+
+                if dialog.paragraphs[self.current_dialog].text.iter().all(|p| {
+                    match p {
+                        ParagraphText::Normal(t) => t == " ",
+                        _ => false,
+                    }
+                }) {
+                    self.current_dialog += 1;
+
+                    // End of paragraph?
+                    if let Some(next_paragraph) = dialog.paragraphs.get(self.current_dialog + 1) {
+                        match next_paragraph.text[0] {
+                            ParagraphText::Normal(_) => {}
+                            _ => return Ok(Transition::None),
+                        }
+
+                        thread::sleep(Duration::from_millis(300));
+                    } else {
+                        self.finished = true;
+                    }
+                };
+            }
+
+            if self.finished {
+                self.next_scene = "gameover".to_string();
+            }
+
+            Ok(Transition::None)
+        }
+    }
+
+    pub struct MainState;
+    impl SimpleState for MainState {}
+}
+

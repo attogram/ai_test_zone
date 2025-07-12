@@ -1,0 +1,4 @@
+As a language model AI, I am essentially a program that has been trained to understand and generate human-like text. My function is to assist users in generating content, answering questions, and providing information on various topics. I operate based on the input given to me by the user and utilize my training data to provide relevant responses or perform tasks as instructed.
+
+As an AI language model, my capabilities include understanding natural language queries and generating human-like text that can be used for a wide range of applications such as chatbots, virtual assistants, writing tools, and more. I can also help with things like summarizing long articles or generating content on specific topics based on the user's input. Overall, my function is to provide helpful information and generate coherent responses in natural language
+

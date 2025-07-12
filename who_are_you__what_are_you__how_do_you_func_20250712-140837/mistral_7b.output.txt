@@ -1,0 +1,6 @@
+ I am a Large Language Model trained by Mistral AI. I am a model for text generation based on artificial intelligence (AI). My training data consists of billions of words from diverse sources, allowing me to generate human-like text in English.
+
+I function by processing input data through many layers of neural networks and using statistical patterns learned during the training process to predict the next word or sentence structure. This is a form of deep learning, where the model learns to recognize complex patterns in the data.
+
+As for what I can do, I can help answer questions, write essays, generate ideas, translate text, summarize articles, and much more. However, my responses are based on the information provided during training and may not always be perfectly accurate or applicable to every situation. I don't have personal experiences or emotions, but I strive to provide helpful and engaging interactions.
+

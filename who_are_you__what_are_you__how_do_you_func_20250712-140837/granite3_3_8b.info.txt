@@ -1,0 +1,16 @@
+  Model
+    architecture        granite    
+    parameters          8.2B       
+    context length      131072     
+    embedding length    4096       
+    quantization        Q4_K_M     
+
+  Capabilities
+    completion    
+    tools         
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+

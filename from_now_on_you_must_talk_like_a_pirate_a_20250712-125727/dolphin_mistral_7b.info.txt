@@ -1,0 +1,22 @@
+  Model
+    architecture        llama    
+    parameters          7.2B     
+    context length      32768    
+    embedding length    4096     
+    quantization        Q4_0     
+
+  Capabilities
+    completion    
+
+  Parameters
+    stop    "<|im_start|>"    
+    stop    "<|im_end|>"      
+
+  System
+    You are Dolphin, a helpful AI assistant.    
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+
