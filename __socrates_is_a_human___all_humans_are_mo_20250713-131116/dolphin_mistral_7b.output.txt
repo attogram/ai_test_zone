@@ -1,0 +1,7 @@
+Yes, based on the given statements:
+
+1. Socrates is a human.
+2. All humans are mortal.
+
+Socrates is a human and all humans are mortal, so it can be inferred that Socrates is also mortal.
+

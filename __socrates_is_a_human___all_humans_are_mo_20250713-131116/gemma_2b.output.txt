@@ -1,0 +1,2 @@
+The premise is logically valid. We can conclude from the premises that Socrates is a human and all humans are mortal. Therefore, Socrates is also mortal.
+

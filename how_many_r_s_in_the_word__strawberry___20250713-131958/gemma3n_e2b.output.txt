@@ -1,0 +1,9 @@
+Let's count the "r"s in the word "Strawberry":
+
+* **St**ra**w**be**r**ry
+
+There are **three** "r"s in the word "Strawberry". 
+
+So the answer is **3**.
+
+

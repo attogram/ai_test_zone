@@ -1,0 +1,14 @@
+
+Yes, Socrates is mortal. 
+
+**Step-by-Step Explanation:**
+1. **Premise 1:** Socrates is a human.  
+2. **Premise 2:** All humans are mortal.  
+3. **Logical Deduction:** If all humans are mortal, and Socrates is a human, then Socrates must be mortal.  
+
+This follows the structure of a **syllogism**:  
+- **Major Premise:** All A (humans) are B (mortal).  
+- **Minor Premise:** C (Socrates) is A (human).  
+- **Conclusion:** Therefore, C (Socrates) is B (mortal).  
+
+**Answer:** Yes, Socrates is mortal.

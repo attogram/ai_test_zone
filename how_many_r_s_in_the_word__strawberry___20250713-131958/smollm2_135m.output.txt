@@ -1,0 +1,5 @@
+The word "strawberry" contains 4 letters: two 's' and three 'r'. So, the total number of r's is equal to the sum of these two factors. 
+
+1) Two 's': 2 * 3 = 6 r's 
+2) Three 'r': 3 * 3 = 9 r's
+

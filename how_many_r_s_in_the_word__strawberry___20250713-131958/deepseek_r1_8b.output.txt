@@ -1,0 +1,7 @@
+
+The word "Strawberry" has **3** instances of the letter 'r':
+
+- One at position 3 (the third character).
+- Two in the "berry" part: positions 8 and 9 (characters after 'e' before 'y'). 
+
+This count is case-insensitive, as the question specifies "r's," meaning all occurrences of the letter regardless of capitalization. In standard English spelling, there are three 'r's total.

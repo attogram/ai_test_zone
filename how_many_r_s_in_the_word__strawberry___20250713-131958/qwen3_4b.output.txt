@@ -1,0 +1,9 @@
+
+The word "Strawberry" contains **3** instances of the letter **'r'**.  
+
+**Breakdown:**  
+S - T - **R** - A - W - B - E - **R** - **R** - Y  
+
+The **'r'** appears at positions 3, 8, and 9.  
+
+**Answer:** 3 🍓

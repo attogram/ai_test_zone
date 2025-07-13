@@ -1,0 +1,10 @@
+Yes, based on the given premises:
+
+1. Socrates is a human (given)
+2. All humans are mortal (given)
+
+Using logical deduction:
+Since Socrates is a human, and all humans are mortal, therefore Socrates must be mortal.
+
+This is an example of syllogistic reasoning in logic: All A's are B's, X is an A, therefore X is a B.
+

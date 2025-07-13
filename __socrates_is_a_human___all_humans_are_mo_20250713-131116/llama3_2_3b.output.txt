@@ -1,0 +1,19 @@
+A classic example of deductive reasoning!
+
+Let's break it down step by step:
+
+1. Socrates is a human. (Premise)
+2. All humans are mortal. (Premise)
+
+We can infer the following from these premises using logical deduction:
+
+All humans → Mortal (Premise)
+
+Therefore, since Socrates is a human, we can conclude that:
+
+Socrates → Mortal
+
+In other words, it follows logically from the premises that Socrates is mortal.
+
+So, to answer your question: Yes, according to this reasoning, Socrates is indeed mortal.
+

@@ -1,0 +1,2 @@
+Yes, Socrates was mortal. This conclusion follows from the given premises: If all humans are mortal (first statement) and Socrates is a human (second statement), then it logically follows that Socrates is mortal.
+

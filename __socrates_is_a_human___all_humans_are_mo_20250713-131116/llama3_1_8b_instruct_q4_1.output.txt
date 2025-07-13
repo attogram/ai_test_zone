@@ -1,0 +1,17 @@
+A classic example of a syllogism!
+
+Let's break it down:
+
+1. Premise: "Socrates is a human." (We know this to be true)
+2. Premise: "All humans are mortal." (This is also known as the "major premise")
+3. Conclusion: Is Socrates mortal?
+
+If we apply the logical rule of modus ponens, which states that if p → q and p then q, we can conclude that:
+
+"Socrates is a human" (p)
+"All humans are mortal" (q)
+
+Therefore, "Socrates is mortal" (p → q).
+
+So, in this case, we can confidently say: **Yes, Socrates is mortal.**
+

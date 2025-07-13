@@ -1,0 +1,12 @@
+
+Yes, Socrates is mortal. Here's the logical breakdown:
+
+1. **Premise 1**: Socrates is a human.  
+2. **Premise 2**: All humans are mortal.  
+
+Using **deductive reasoning** (specifically a syllogism):  
+- The major premise ("All humans are mortal") establishes a universal rule.  
+- The minor premise ("Socrates is a human") identifies Socrates as a member of the group described by the major premise.  
+- The conclusion ("Socrates is mortal") logically follows by applying the universal rule to the specific case.  
+
+**Answer**: Yes, Socrates is mortal.

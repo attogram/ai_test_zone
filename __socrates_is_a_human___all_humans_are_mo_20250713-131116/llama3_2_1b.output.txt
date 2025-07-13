@@ -1,0 +1,10 @@
+A classic example of a syllogism.
+
+Let's break it down:
+
+* The first premise, "Socrates is a human," is true.
+* The second premise, "All humans are mortal," is also true.
+* Since both premises are true, we can infer the truth of the third premise: "Is Socrates mortal?"
+
+The answer to this question is simply "yes" because Socrates' being a human implies that he is mortal.
+

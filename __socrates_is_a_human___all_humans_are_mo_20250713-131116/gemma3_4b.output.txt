@@ -1,0 +1,10 @@
+Yes, Socrates is mortal. 
+
+This is a classic example of a deductive argument, specifically a syllogism:
+
+*   **Premise 1:** Socrates is a human.
+*   **Premise 2:** All humans are mortal.
+*   **Conclusion:** Therefore, Socrates is mortal.
+
+Because the premises are true, the conclusion *must* be true.
+

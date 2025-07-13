@@ -1,0 +1,6 @@
+Let me count the 'r's in "Strawberry"...
+
+S-t-r-a-w-b-e-r-r-y
+^----------------------^^
+There are 2 'r's in "Strawberry".
+

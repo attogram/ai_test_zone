@@ -1,0 +1,13 @@
+I need to determine how many times the letter 'r' appears in the word "Strawberry".
+
+First, I'll write down the word: S-T-R-A-W-B-E-R-R-Y.
+
+Next, I'll go through each letter one by one and count the 'r's.
+
+Starting from the beginning:
+- The first letter is S.
+- The second letter is T.
+- The third letter is R – that's one 'r'.
+- Continuing on, I find another R later in the word.
+
+After examining all the letters, there are two 'r's in total.

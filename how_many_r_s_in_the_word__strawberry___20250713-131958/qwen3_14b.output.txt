@@ -1,0 +1,19 @@
+
+The word "Strawberry" contains **3** instances of the letter 'r'. 
+
+**Step-by-Step Explanation:**
+1. **Spell the word correctly:** S-T-R-A-W-B-E-R-R-Y.
+2. **Identify each letter's position:**
+   - 1st: S
+   - 2nd: T
+   - 3rd: **R** (1st 'r')
+   - 4th: A
+   - 5th: W
+   - 6th: B
+   - 7th: E
+   - 8th: **R** (2nd 'r')
+   - 9th: **R** (3rd 'r')
+   - 10th: Y
+3. **Count the 'r's:** Positions 3, 8, and 9 correspond to three 'r's.
+
+**Answer:** 3

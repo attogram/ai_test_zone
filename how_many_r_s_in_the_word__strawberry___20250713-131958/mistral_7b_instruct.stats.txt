@@ -1,0 +1,9 @@
+[?2026h[?25l[1G⠙ [K[?25h[?2026l[?2026h[?25l[1G⠙ [K[?25h[?2026l[?2026h[?25l[1G⠸ [K[?25h[?2026l[?25l[?2026h[?25l[1G[K[?25h[?2026l[2K[1G[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25htotal duration:       1.121227125s
+load duration:        16.57025ms
+prompt eval count:    17 token(s)
+prompt eval duration: 326.959459ms
+prompt eval rate:     51.99 tokens/s
+eval count:           16 token(s)
+eval duration:        776.979666ms
+eval rate:            20.59 tokens/s
+[?25l[?25h

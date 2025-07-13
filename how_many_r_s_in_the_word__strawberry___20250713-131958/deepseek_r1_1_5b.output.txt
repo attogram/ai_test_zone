@@ -1,0 +1,29 @@
+
+To determine how many times the letter **'r'** appears in the word "Strawberry," let's break it down step by step.
+
+1. **Write Down the Word:**
+   
+   ```
+   S t r a w b e r r y
+   ```
+
+2. **Identify Each Letter:**
+
+   - **S:** Not 'r'
+   - **t:** Not 'r'
+   - **r:** This is one 'r.'
+   - **a:** Not 'r'
+   - **w:** Not 'r'
+   - **b:** Not 'r'
+   - **e:** Not 'r'
+   - **r:** Second occurrence of 'r.'
+     *(Total so far: 2)*
+   
+   - **r:** Third occurrence of 'r.'
+     *(Total so far: 3)
+   
+   - **y:** Not 'r'
+
+3. **Final Count:**
+   
+   The letter **'r'** appears a total of \(\boxed{3}\) times in the word "Strawberry."

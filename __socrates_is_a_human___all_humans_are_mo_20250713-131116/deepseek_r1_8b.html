@@ -1,0 +1,172 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: deepseek-r1:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>__socrates_is_a_human___all_humans_are_mo</a>: <b>deepseek-r1:8b</b>: 20250713-131116<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./codellama_7b.html'>codellama:7b</a> 
+<a href='./cogito_3b.html'>cogito:3b</a> 
+<a href='./cogito_8b.html'>cogito:8b</a> 
+<a href='./deepcoder_1_5b.html'>deepcoder:1.5b</a> 
+<a href='./deepseek_r1_1_5b.html'>deepseek-r1:1.5b</a> 
+<a href='./deepseek_r1_14b.html'>deepseek-r1:14b</a> 
+<b>deepseek-r1:8b</b> 
+<a href='./dolphin_mistral_7b.html'>dolphin-mistral:7b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3_1b.html'>gemma3:1b</a> 
+<a href='./gemma3_4b.html'>gemma3:4b</a> 
+<a href='./gemma3n_e2b.html'>gemma3n:e2b</a> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./gemma_2b.html'>gemma:2b</a> 
+<a href='./granite3_3_2b.html'>granite3.3:2b</a> 
+<a href='./granite3_3_8b.html'>granite3.3:8b</a> 
+<a href='./hermes3_8b.html'>hermes3:8b</a> 
+<a href='./llama3_1_8b_instruct_q4_1.html'>llama3.1:8b-instruct-q4_1</a> 
+<a href='./llama3_2_1b.html'>llama3.2:1b</a> 
+<a href='./llama3_2_3b.html'>llama3.2:3b</a> 
+<a href='./llava_llama3_8b.html'>llava-llama3:8b</a> 
+<a href='./llava_phi3_3_8b.html'>llava-phi3:3.8b</a> 
+<a href='./llava_7b.html'>llava:7b</a> 
+<a href='./minicpm_v_8b.html'>minicpm-v:8b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./mistral_7b_instruct.html'>mistral:7b-instruct</a> 
+<a href='./qwen2_5_coder_7b.html'>qwen2.5-coder:7b</a> 
+<a href='./qwen2_5vl_3b.html'>qwen2.5vl:3b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_0_6b.html'>qwen3:0.6b</a> 
+<a href='./qwen3_1_7b.html'>qwen3:1.7b</a> 
+<a href='./qwen3_14b.html'>qwen3:14b</a> 
+<a href='./qwen3_4b.html'>qwen3:4b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+<a href='./smollm2_1_7b.html'>smollm2:1.7b</a> 
+<a href='./smollm2_135m.html'>smollm2:135m</a> 
+<a href='./smollm2_360m.html'>smollm2:360m</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./__socrates_is_a_human___all_humans_are_mo.prompt.yaml'>yaml</a>)
+  words:14  bytes:70<br />
+<textarea readonly rows='5'>- Socrates is a human.
+- All humans are mortal.
+- Is Socrates mortal?</textarea>
+</p>
+<p>Thinking: deepseek-r1:8b (<a href='./deepseek_r1_8b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='15'>First, the user gives two premises:
+
+1. Socrates is a human.
+
+2. All humans are mortal.
+
+Then they ask: &quot;Is Socrates mortal?&quot;
+
+This is a classic syllogism in logic. The question is essentially asking for the conclusion based on these premises.
+
+The logical structure here is straightforward. If something belongs to a group, and all members of that group have a certain property, then it has that property.
+
+So:
+
+- All humans are mortal (universal affirmative).
+
+- Socrates is a human (affirmative statement about an individual).
+
+Therefore, Socrates must be mortal.
+
+I need to reason step by step as per the instruction. Also, since this is based on given premises, I should ensure that there&#39;s no trick here or any additional information that might change things.
+
+The user says: &quot;Socrates is a human.&quot; and &quot;All humans are mortal.&quot; These are facts from ancient philosophy; Socrates was indeed a human, and it&#39;s commonly accepted that all humans are mortal. But in this context, I think we&#39;re to treat them as premises for logical deduction.
+
+There&#39;s no contradiction or anything missing here. The answer should be yes, based on the premises provided.
+
+But let me make sure about the syllogism: It&#39;s a categorical syllogism with two premises and a conclusion.
+
+Premise 1: Socrates is human (particular affirmative).
+
+In standard terms:
+
+- Major premise: All humans are mortal. (∀x Human(x) → Mortal(x))
+
+- Minor premise: Socrates is human. (Human(Socrates))
+
+Therefore, Conclusion: Socrates is mortal. (∃x Socrates and Human(x) → Mortal(Socrates))
+
+Since the minor premise specifies that Socrates falls under the category of humans, and all humans are mortal, it follows.
+
+The user might be testing if I understand basic logic or if there&#39;s any fallacy here. But this seems solid.
+
+Also, consider if &quot;all humans&quot; includes everyone who has ever lived or only current ones? The statement says &quot;all humans,&quot; which in philosophy typically refers to the concept of humanity as a whole, so it should include historical figures like Socrates.
+
+There are no exceptions mentioned; it&#39;s a general rule.
+
+Therefore, based on this reasoning, Socrates is mortal.
+
+Now, for my response: I need to be clear and logical. Since the user said &quot;Socrates is a human,&quot; that establishes his membership in the set of humans.
+
+Then, from the second premise, all members are mortal, so yes.
+
+I should phrase it properly.</textarea>
+</p>
+<p>Output: deepseek-r1:8b (<a href='./deepseek_r1_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='10'>
+Yes, Socrates is mortal. This can be concluded through basic logical reasoning based on the given premises:
+
+- **Premise 1:** Socrates is a human.
+- **Premise 2:** All humans are mortal.
+
+Since Socrates belongs to the category of &quot;humans&quot; and all members of that category are mortal, it follows that Socrates must be mortal. This is an example of a categorical syllogism in logic, where if something is part of a universal class with a certain property, it inherits that property.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./deepseek_r1_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>81</td></tr>
+<tr><td class='left'>Bytes</td><td>482</td></tr>
+<tr><td class='left'>Total duration</td><td>39.413811458s</td></tr>
+<tr><td class='left'>Load duration</td><td>28.29075ms</td></tr>
+<tr><td class='left'>Prompt eval count</td><td>21 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td>369.613334ms</td></tr>
+<tr><td class='left'>Prompt eval rate</td><td>56.82 tokens/s</td></tr>
+<tr><td class='left'>Eval count</td><td>639 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td>39.015386s</td></tr>
+<tr><td class='left'>Eval rate</td><td>16.38 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./deepseek_r1_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#deepseek_r1_8b'>deepseek-r1:8b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>qwen3</td></tr>
+<tr><td class='left'>Size</td><td class='left'>7.6 GB</td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>8.2B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'>completion<br />thinking<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>8192</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.9.7-rc0</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>arm64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>arm</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 949M</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>Darwin 24.5.0</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>__socrates_is_a_human___all_humans_are_mo</a>: <b>deepseek-r1:8b</b>: 20250713-131116</p>
+<p>Page created: 2025-07-13 13:13:54</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.19</p>
+</footer></body></html>

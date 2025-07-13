@@ -1,0 +1,2 @@
+The word "Strawberry" contains three occurrences of the letter 'r'.
+

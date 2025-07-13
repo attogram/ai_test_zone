@@ -1,0 +1,52 @@
+Okay, so I need to figure out how many 'r's are in the word "Strawberry." Hmm, let me start by writing down the word and then checking each letter one by one. 
+
+The word is "Strawberry." Let me count the letters: S, t, r, a, w, b, e, r, r, y. Wait, maybe I should write it out properly.
+
+Starting with 'S' as the first letter. Then 't,' then 'r.' That's the first 'r'. Next is 'a,' then 'w,' followed by 'b,' then 'e,' and finally we have two more letters: 'r' and 'y.'
+
+So let me go through each position step by step:
+
+1. S
+2. t
+3. r (that's one 'r')
+4. a
+5. w
+6. b
+7. e
+8. r (second 'r')
+9. r (third 'r')
+10. y
+
+Wait, maybe I should just list out all the letters and count the 'r's. Let me write it out:
+
+S t r a w b e r r y.
+
+Now, let's go letter by letter:
+
+- S: not an 'r'
+- t: not an 'r'
+- r: that's one 'r'
+- a: no
+- w: no
+- b: no
+- e: no
+- r: that's two 'r's
+- r: three 'r's
+- y: no
+
+So, in total, there are three 'r's in the word "Strawberry." 
+
+I think I might have made a mistake earlier when trying to count each letter. Let me double-check by actually writing out each position:
+
+1. S - not an 'r'
+2. t - not
+3. r - 1
+4. a - no
+5. w - no
+6. b - no
+7. e - no
+8. r - 2
+9. r - 3
+10. y - no
+
+Yes, that's three 'r's. So the answer should be three.

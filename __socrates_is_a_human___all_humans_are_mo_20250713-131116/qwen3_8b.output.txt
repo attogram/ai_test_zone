@@ -1,0 +1,15 @@
+
+Yes, Socrates is mortal. Here's the logical reasoning:
+
+1. **Premise 1**: "Socrates is a human."  
+2. **Premise 2**: "All humans are mortal."  
+
+Using **modus ponens** (if *P* → *Q* and *P*, then *Q*):  
+- Let *P* = "Socrates is a human" (Premise 1).  
+- Let *Q* = "Socrates is mortal" (from Premise 2).  
+
+Since both premises are true, we conclude **Q**: **Socrates is mortal**.  
+
+This follows the classic syllogism structure (Barbara syllogism) and is a valid deductive argument. No ambiguity or exceptions are introduced in the premises.  
+
+**Answer**: Yes, Socrates is mortal.

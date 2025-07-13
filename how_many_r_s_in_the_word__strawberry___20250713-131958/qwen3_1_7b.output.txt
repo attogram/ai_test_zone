@@ -1,0 +1,28 @@
+
+To determine how many **r's** are in the word **"Strawberry"**, we can break it down letter by letter:
+
+**S**  
+**T**  
+**R**  
+**A**  
+**W**  
+**B**  
+**E**  
+**R**  
+**R**  
+**Y**
+
+Now, we count the occurrences of the letter **'r'**:
+
+1. **R** (3rd letter)  
+2. **R** (8th letter)  
+3. **R** (9th letter)  
+
+Thus, there are **3** instances of the letter **'r'** in the word **"Strawberry"**.
+
+---
+
+**Answer:**  
+$$
+\boxed{3}
+$$

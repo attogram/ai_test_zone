@@ -1,0 +1,21 @@
+
+To determine how many **'r'**s are in the word "Strawberry," follow these steps:
+
+1. **Write Down the Word:**
+   
+   ```
+   S T R A W B E R R Y
+   ```
+
+2. **Identify and Count Each 'R':**
+
+   - The 3rd letter is **R**.
+   - The 8th letter is **R**.
+
+3. **Total Number of 'R's:**
+   
+   There are **2** **'r'**s in the word "Strawberry."
+
+\[
+\boxed{2}
+\]

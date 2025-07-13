@@ -1,0 +1,4 @@
+
+The word "Strawberry" contains two instances of the letter 'r'. 
+
+**Answer:** 2

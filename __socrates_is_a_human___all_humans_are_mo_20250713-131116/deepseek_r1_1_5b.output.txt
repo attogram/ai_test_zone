@@ -1,0 +1,8 @@
+
+The conclusion is derived through syllogistic reasoning:
+
+1. **Premise 1**: Socrates is a human.
+2. **Premise 2**: All humans are mortal.
+3. **Conclusion**: Therefore, Socrates is mortal.
+
+This follows logically from the two premises, applying modus ponens in classical logic.

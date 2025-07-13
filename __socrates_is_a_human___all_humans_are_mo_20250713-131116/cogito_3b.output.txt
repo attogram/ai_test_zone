@@ -1,0 +1,17 @@
+This question can be solved using logical reasoning.
+
+Let's break it down step by step:
+
+1) We're given two premises:
+   * Premise 1: Socrates is a human
+   * Premise 2: All humans are mortal
+
+2) We need to determine if Socrates is mortal based on these premises.
+
+3) Using the premise "All humans are mortal" and knowing that Socrates is a human, we can apply universal instantiation:
+   * Since Socrates is a human (Premise 1)
+   * And all humans are mortal (Premise 2)
+   * Therefore, Socrates must be mortal
+
+So yes, Socrates is mortal.
+
