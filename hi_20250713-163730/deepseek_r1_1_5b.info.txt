@@ -1,0 +1,22 @@
+  Model
+    architecture        qwen2     
+    parameters          1.8B      
+    context length      131072    
+    embedding length    1536      
+    quantization        Q4_K_M    
+
+  Capabilities
+    completion    
+    thinking      
+
+  Parameters
+    stop    "<｜begin▁of▁sentence｜>"    
+    stop    "<｜end▁of▁sentence｜>"      
+    stop    "<｜User｜>"                 
+    stop    "<｜Assistant｜>"            
+
+  License
+    MIT License                    
+    Copyright (c) 2023 DeepSeek    
+    ...                            
+
