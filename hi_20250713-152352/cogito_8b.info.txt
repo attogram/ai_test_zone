@@ -1,0 +1,16 @@
+  Model
+    architecture        llama     
+    parameters          8.0B      
+    context length      131072    
+    embedding length    4096      
+    quantization        Q4_K_M    
+
+  Capabilities
+    completion    
+    tools         
+
+  License
+    LLAMA 3.2 COMMUNITY LICENSE AGREEMENT                 
+    Llama 3.2 Version Release Date: September 25, 2024    
+    ...                                                   
+
