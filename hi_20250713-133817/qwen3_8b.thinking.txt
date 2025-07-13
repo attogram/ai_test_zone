@@ -1,0 +1,1 @@
+Okay, the user just said "hi /think". First, I need to acknowledge their greeting. Since they included "/think", maybe they're testing if I can process that command. I should respond politely and ask how I can assist them. Keep it friendly and open-ended to encourage them to share more details about what they need help with. Make sure the response is concise and welcoming.

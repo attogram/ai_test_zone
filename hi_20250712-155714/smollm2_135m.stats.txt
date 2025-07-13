@@ -1,9 +1,0 @@
-[?25l[?2026h[?25l[1G[K[?25h[?2026l[2K[1G[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25h[?25l[?25htotal duration:       127.534208ms
-load duration:        18.346083ms
-prompt eval count:    31 token(s)
-prompt eval duration: 52.688166ms
-prompt eval rate:     588.37 tokens/s
-eval count:           10 token(s)
-eval duration:        55.914209ms
-eval rate:            178.85 tokens/s
-[?25l[?25h

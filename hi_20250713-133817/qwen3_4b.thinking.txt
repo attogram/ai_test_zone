@@ -1,0 +1,15 @@
+Okay, the user said "hi" and that's it. I need to respond appropriately.
+
+First, I should acknowledge their greeting. Maybe say "Hello!" to be friendly.
+
+Then, I should ask how I can assist them. That way, they know I'm here to help.
+
+I should keep it open-ended so they can tell me what they need. Maybe something like, "How can I assist you today?"
+
+Make sure the tone is warm and welcoming. No need for any markdown, just plain text.
+
+Check for any possible misunderstandings. Since they just said "hi," there's no specific request, so a general offer to help is good.
+
+Avoid any technical jargon or complex language. Keep it simple and straightforward.
+
+Alright, that should cover it. Let them know I'm here and ready to help.
