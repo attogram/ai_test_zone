@@ -1,0 +1,643 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen2.5vl:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>this_is_the_ollama_bash_lib_bash_script_a</a>: <b>qwen2.5vl:7b</b>: 20250725-211539<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_14b.html'>deepseek-r1:14b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<b>qwen2.5vl:7b</b> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./this_is_the_ollama_bash_lib_bash_script_a.prompt.yaml'>yaml</a>)
+  words:845  bytes:5895<br />
+<textarea readonly rows='10'>This is the Ollama Bash Lib Bash script.
+Act as an expert Software Engineer.
+Do a full code review of this script:
+
+#!/usr/bin/env bash
+#
+# Ollama Bash Lib - A Bash Library to interact with Ollama
+#
+
+OLLAMA_BASH_LIB_NAME=&quot;Ollama Bash Lib&quot;
+OLLAMA_BASH_LIB_VERSION=&quot;0.16&quot;
+OLLAMA_BASH_LIB_URL=&quot;https://github.com/attogram/ollama-bash-lib&quot;
+OLLAMA_BASH_LIB_LICENSE=&quot;MIT&quot;
+OLLAMA_BASH_LIB_COPYRIGHT=&quot;Copyright (c) 2025 Attogram Project &lt;https://github.com/attogram&gt;&quot;
+OLLAMA_BASH_LIB_DEBUG=0
+OLLAMA_BASH_LIB_API=${OLLAMA_HOST:-&quot;http://localhost:11434&quot;} # no slash at end
+RETURN_SUCCESS=0
+RETURN_ERROR=1
+
+# Debug message
+#
+# Usage: debug &quot;message&quot;
+# Output: message to stderr
+# Returns: none
+debug() {
+  if [ &quot;$OLLAMA_BASH_LIB_DEBUG&quot; == &quot;1&quot; ]; then
+    &gt;&amp;2 echo -e &quot;[DEBUG] $1&quot;
+  fi
+}
+
+# Is Ollama installed on the local system?
+#
+# Usage: if ollamaIsInstalled; then echo &quot;Ollama Installed&quot;; else echo &quot;Ollama Not Installed&quot;; fi
+# Output: none
+# Returns: 0 if Ollama is installed, 1 if Ollama is not installed
+ollamaIsInstalled() {
+  debug &quot;ollamaIsInstalled&quot;
+  if [ -z &quot;$(command -v &quot;ollama&quot; 2&gt; /dev/null)&quot; ]; then
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Escape a string for inclusion into JSON
+#
+# Usage: safeJson &quot;string&quot;
+# Output: &quot;quoted safe json value&quot;
+# Returns: 0 on success, 1 on error
+safeJson() {
+  debug &quot;safeJson: $1&quot;
+  jq -Rn --arg str &quot;$1&quot; &#39;$str&#39;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# GET request to the Ollama API
+#
+# Usage: ollamaApiGet &quot;/api/command&quot;
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiGet() {
+  debug &quot;ollamaApiGet: $1&quot;
+  curl -s -X GET &quot;${OLLAMA_BASH_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39; -d &#39;&#39;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# POST request to the Ollama API
+#
+# Usage: ollamaApiPost &quot;/api/command&quot; &quot;{ json content }&quot;
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiPost() {
+  debug &quot;ollamaApiPost: $1 $2&quot;
+  curl -s -X POST &quot;${OLLAMA_BASH_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39; -d &quot;$2&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Unload a model from memory (Clear context for a model)
+#
+# Usage: ollamaClearModel &quot;modelName&quot;
+# Output: none
+# Returns: 0 on success, 1 on error
+ollamaClearModel() {
+  if [ -z &quot;$1&quot; ]; then
+    debug &quot;Error: ollamaClearModel: no model&quot;
+    return $RETURN_ERROR
+  fi
+  local response
+  response=$(ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;keep_alive\&quot;: 0}&quot;)
+  debug &quot;$response&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Generate a completion, non-streaming
+#
+# Usage: ollamaGenerate &quot;modelName&quot; &quot;prompt&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerate() {
+  debug &quot;ollamaGenerate: $1 $2&quot;
+  ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;prompt\&quot;: $(safeJson &quot;$2&quot;), \&quot;stream\&quot;: false}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Generate a completion, streaming
+#
+# Usage: ollamaGenerateStreaming &quot;modelName&quot; &quot;prompt&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerateStreaming() {
+  debug &quot;ollamaGenerateStreaming: $1 $2&quot;
+  ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;prompt\&quot;: $(safeJson &quot;$2&quot;)}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# All available models, cli version
+#
+# Usage: ollamaList
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaList() {
+  ollama list
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# All available models, JSON version
+#
+# Usage: ollamaListJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaListJson() {
+  ollamaApiGet &quot;/api/tags&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# All available models, Bash array version
+#
+# Usage: models=($(ollamaListArray))
+# Output: space separated list of model names
+# Returns: 0 on success, 1 on error
+ollamaListArray() {
+  models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort)) # Get list of models, sorted alphabetically
+  echo &quot;${models[@]}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Get a random model
+#
+# Usage: ollamaGetRandomModel
+# Output: 1 model name
+# Returns: 0 on success, 1 on error
+ollamaGetRandomModel() {
+  debug &quot;ollamaGetRandomModel&quot;
+  local models=($(ollamaListArray))
+  echo &quot;${models[RANDOM%${#models[@]}]}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Running model processes, cli version
+#
+# Usage: ollamaPs
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaPs() {
+  ollama ps
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Running model processes, JSON version
+#
+# Usage: ollamaPsJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaPsJson() {
+  ollamaApiGet &quot;/api/ps&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Show model information, cli version
+#
+# Usage: ollamaShow &quot;modelName&quot;
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaShow() {
+  ollama show &quot;$1&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Show model information, JSON version
+#
+# Usage: ollamaShowJson &quot;modelName&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaShowJson() {
+  ollamaApiPost &quot;/api/show&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Ollama application version, cli version
+#
+# Usage: ollamaVersion
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaVersion() {
+  ollama --version
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Ollama application version, JSON version
+#
+# Usage: ollamaVersionJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaVersionJson() {
+  ollamaApiGet &quot;/api/version&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}</textarea>
+</p>
+<p>Output: qwen2.5vl:7b (<a href='./qwen2_5vl_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>Certainly! Below is a detailed code review of the `Ollama Bash Lib` script. The review will cover aspects such as code structure, naming conventions, documentation, error handling, and more.
+
+### Code Review
+
+#### 1. **Header and Metadata**
+The script starts with a header and metadata block, which is good for documentation and versioning. However, it&#39;s worth noting that the `OLLAMA_BASH_LIB_DEBUG` variable is not used anywhere in the script. It might be better to remove it or use it in some of the functions.
+
+```bash
+#!/usr/bin/env bash
+#
+# Ollama Bash Lib - A Bash Library to interact with Ollama
+#
+
+# Metadata
+OLLAMA_BASH_LIB_NAME=&quot;Ollama Bash Lib&quot;
+OLLAMA_BASH_LIB_VERSION=&quot;0.16&quot;
+OLLAMA_BASH_LIB_URL=&quot;https://github.com/attogram/ollama-bash-lib&quot;
+OLLAMA_BASH_LIB_LICENSE=&quot;MIT&quot;
+OLLAMA_BASH_LIB_COPYRIGHT=&quot;Copyright (c) 2025 Attogram Project &lt;https://github.com/attogram&gt;&quot;
+```
+
+#### 2. **Debug Function**
+The `debug` function is used to print debug messages to stderr. It&#39;s a good practice to have a debug function, but it&#39;s currently not used in any of the other functions. You might want to consider using it in more places where debugging is needed.
+
+```bash
+# Debug message
+#
+# Usage: debug &quot;message&quot;
+# Output: message to stderr
+# Returns: none
+debug() {
+  if [ &quot;$OLLAMA_BASH_LIB_DEBUG&quot; == &quot;1&quot; ]; then
+    &gt;&amp;2 echo -e &quot;[DEBUG] $1&quot;
+  fi
+}
+```
+
+#### 3. **ollamaIsInstalled Function**
+This function checks if the `ollama` command is installed on the system. It&#39;s a good practice to check for the existence of a command before using it.
+
+```bash
+# Is Ollama installed on the local system?
+#
+# Usage: if ollamaIsInstalled; then echo &quot;Ollama Installed&quot;; else echo &quot;Ollama Not Installed&quot;; fi
+# Output: none
+# Returns: 0 if Ollama is installed, 1 if Ollama is not installed
+ollamaIsInstalled() {
+  debug &quot;ollamaIsInstalled&quot;
+  if [ -z &quot;$(command -v &quot;ollama&quot; 2&gt; /dev/null)&quot; ]; then
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+```
+
+#### 4. **safeJson Function**
+This function escapes a string for inclusion into JSON. It uses `jq` to escape the string, which is a good approach. However, it&#39;s worth noting that `jq` is not a standard tool and might not be available on all systems. You might want to consider using a more portable method, such as `sed` or `tr`.
+
+```bash
+# Escape a string for inclusion into JSON
+#
+# Usage: safeJson &quot;string&quot;
+# Output: &quot;quoted safe json value&quot;
+# Returns: 0 on success, 1 on error
+safeJson() {
+  debug &quot;safeJson: $1&quot;
+  jq -Rn --arg str &quot;$1&quot; &#39;$str&#39;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 5. **ollamaApiGet Function**
+This function makes a GET request to the Ollama API. It&#39;s a good practice to check the response for errors, but it&#39;s currently not done.
+
+```bash
+# GET request to the Ollama API
+#
+# Usage: ollamaApiGet &quot;/api/command&quot;
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiGet() {
+  debug &quot;ollamaApiGet: $1&quot;
+  curl -s -X GET &quot;${OLLAMA_BASH_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39; -d &#39;&#39;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 6. **ollamaApiPost Function**
+This function makes a POST request to the Ollama API. It&#39;s similar to the `ollamaApiGet` function, but it includes a JSON payload.
+
+```bash
+# POST request to the Ollama API
+#
+# Usage: ollamaApiPost &quot;/api/command&quot; &quot;{ json content }&quot;
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiPost() {
+  debug &quot;ollamaApiPost: $1 $2&quot;
+  curl -s -X POST &quot;${OLLAMA_BASH_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39; -d &quot;$2&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 7. **ollamaClearModel Function**
+This function clears the context for a model. It&#39;s a good practice to check if the model name is provided.
+
+```bash
+# Unload a model from memory (Clear context for a model)
+#
+# Usage: ollamaClearModel &quot;modelName&quot;
+# Output: none
+# Returns: 0 on success, 1 on error
+ollamaClearModel() {
+  if [ -z &quot;$1&quot; ]; then
+    debug &quot;Error: ollamaClearModel: no model&quot;
+    return $RETURN_ERROR
+  fi
+  local response
+  response=$(ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;keep_alive\&quot;: 0}&quot;)
+  debug &quot;$response&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 8. **ollamaGenerate Function**
+This function generates a completion for a model. It&#39;s a good practice to check if the model name and prompt are provided.
+
+```bash
+# Generate a completion, non-streaming
+#
+# Usage: ollamaGenerate &quot;modelName&quot; &quot;prompt&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerate() {
+  debug &quot;ollamaGenerate: $1 $2&quot;
+  ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;prompt\&quot;: $(safeJson &quot;$2&quot;), \&quot;stream\&quot;: false}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 9. **ollamaGenerateStreaming Function**
+This function generates a completion for a model in streaming mode. It&#39;s similar to the `ollamaGenerate` function, but it doesn&#39;t include the `stream` parameter.
+
+```bash
+# Generate a completion, streaming
+#
+# Usage: ollamaGenerateStreaming &quot;modelName&quot; &quot;prompt&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerateStreaming() {
+  debug &quot;ollamaGenerateStreaming: $1 $2&quot;
+  ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;prompt\&quot;: $(safeJson &quot;$2&quot;)}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 10. **ollamaList Function**
+This function lists all available models. It&#39;s a good practice to check the response for errors.
+
+```bash
+# All available models, cli version
+#
+# Usage: ollamaList
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaList() {
+  ollama list
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 11. **ollamaListJson Function**
+This function lists all available models in JSON format. It&#39;s a good practice to check the response for errors.
+
+```bash
+# All available models, JSON version
+#
+# Usage: ollamaListJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaListJson() {
+  ollamaApiGet &quot;/api/tags&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 12. **ollamaListArray Function**
+This function lists all available models in a Bash array. It&#39;s a good practice to check the response for errors.
+
+```bash
+# All available models, Bash array version
+#
+# Usage: models=($(ollamaListArray))
+# Output: space separated list of model names
+# Returns: 0 on success, 1 on error
+ollamaListArray() {
+  models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort)) # Get list of models, sorted alphabetically
+  echo &quot;${models[@]}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 13. **ollamaGetRandomModel Function**
+This function gets a random model. It&#39;s a good practice to check the response for errors.
+
+```bash
+# Get a random model
+#
+# Usage: ollamaGetRandomModel
+# Output: 1 model name
+# Returns: 0 on success, 1 on error
+ollamaGetRandomModel() {
+  debug &quot;ollamaGetRandomModel&quot;
+  local models=($(ollamaListArray))
+  echo &quot;${models[RANDOM%${#models[@]}]}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 14. **ollamaPs Function**
+This function lists running model processes. It&#39;s a good practice to check the response for errors.
+
+```bash
+# Running model processes, cli version
+#
+# Usage: ollamaPs
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaPs() {
+  ollama ps
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 15. **ollamaPsJson Function**
+This function lists running model processes in JSON format. It&#39;s a good practice to check the response for errors.
+
+```bash
+# Running model processes, JSON version
+#
+# Usage: ollamaPsJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaPsJson() {
+  ollamaApiGet &quot;/api/ps&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 16. **ollamaShow Function**
+This function shows model information. It&#39;s a good practice to check the response for errors.
+
+```bash
+# Show model information, cli version
+#
+# Usage: ollamaShow &quot;modelName&quot;
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaShow() {
+  ollama show &quot;$1&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 17. **ollamaShowJson Function**
+This function shows model information in JSON format. It&#39;s a good practice to check the response for errors.
+
+```bash
+# Show model information, JSON version
+#
+# Usage: ollamaShowJson &quot;modelName&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaShowJson() {
+  ollamaApiPost &quot;/api/show&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 18. **ollamaVersion Function**
+This function shows the Ollama application version. It&#39;s a good practice to check the response for errors.
+
+```bash
+# Ollama application version, cli version
+#
+# Usage: ollamaVersion
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaVersion() {
+  ollama --version
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 19. **ollamaVersionJson Function**
+This function shows the Ollama application version in JSON format. It&#39;s a good practice to check the response for errors.
+
+```bash
+# Ollama application version, JSON version
+#
+# Usage: ollamaVersionJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaVersionJson() {
+  ollamaApiGet &quot;/api/version&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+### Recommendations
+
+1. **Error Handling**: Add error handling to all functions that make API calls. This can be done by checking the response status code and handling it appropriately.
+2. **Portability**: Consider using more portable methods for escaping strings, such as `sed` or `tr`, instead of `jq`.
+3. **Documentation**: Add more detailed documentation for each function, including examples and error messages.
+4. **Debugging**: Use the `debug` function more frequently to ensure that the functions are working as expected.
+5. **Testing**: Write unit tests for each function to ensure that they work correctly.
+
+By following these recommendations, you can improve the reliability and maintainability of the `Ollama Bash Lib` script.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen2_5vl_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>1534</td></tr>
+<tr><td class='left'>Bytes</td><td>10222</td></tr>
+<tr><td class='left'>Total duration</td><td>1m50.4283671s</td></tr>
+<tr><td class='left'>Load duration</td><td>2.7010685s</td></tr>
+<tr><td class='left'>Prompt eval count</td><td>1800 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td>1.1966003s</td></tr>
+<tr><td class='left'>Prompt eval rate</td><td>1504.26 tokens/s</td></tr>
+<tr><td class='left'>Eval count</td><td>2780 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td>1m46.5294661s</td></tr>
+<tr><td class='left'>Eval rate</td><td>26.10 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen2_5vl_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#qwen2_5vl_7b'>qwen2.5vl:7b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>qwen25vl</td></tr>
+<tr><td class='left'>Size</td><td class='left'>10 GB</td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>8.3B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>128000</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>3584</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'>completion<br />vision<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>34%/66% CPU/GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>16384</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.0-rc0</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>99999 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 17G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>this_is_the_ollama_bash_lib_bash_script_a</a>: <b>qwen2.5vl:7b</b>: 20250725-211539</p>
+<p>Page created: 2025-07-25 21:45:31</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.20</p>
+</footer></body></html>

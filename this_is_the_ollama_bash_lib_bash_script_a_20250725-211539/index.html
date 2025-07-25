@@ -1,0 +1,443 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: this_is_the_ollama_bash_lib_bash_script_a</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>this_is_the_ollama_bash_lib_bash_script_a</b>: 20250725-211539<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_14b.html'>deepseek-r1:14b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./this_is_the_ollama_bash_lib_bash_script_a.prompt.yaml'>yaml</a>)
+  words:845  bytes:5895<br />
+<textarea readonly rows='10'>This is the Ollama Bash Lib Bash script.
+Act as an expert Software Engineer.
+Do a full code review of this script:
+
+#!/usr/bin/env bash
+#
+# Ollama Bash Lib - A Bash Library to interact with Ollama
+#
+
+OLLAMA_BASH_LIB_NAME=&quot;Ollama Bash Lib&quot;
+OLLAMA_BASH_LIB_VERSION=&quot;0.16&quot;
+OLLAMA_BASH_LIB_URL=&quot;https://github.com/attogram/ollama-bash-lib&quot;
+OLLAMA_BASH_LIB_LICENSE=&quot;MIT&quot;
+OLLAMA_BASH_LIB_COPYRIGHT=&quot;Copyright (c) 2025 Attogram Project &lt;https://github.com/attogram&gt;&quot;
+OLLAMA_BASH_LIB_DEBUG=0
+OLLAMA_BASH_LIB_API=${OLLAMA_HOST:-&quot;http://localhost:11434&quot;} # no slash at end
+RETURN_SUCCESS=0
+RETURN_ERROR=1
+
+# Debug message
+#
+# Usage: debug &quot;message&quot;
+# Output: message to stderr
+# Returns: none
+debug() {
+  if [ &quot;$OLLAMA_BASH_LIB_DEBUG&quot; == &quot;1&quot; ]; then
+    &gt;&amp;2 echo -e &quot;[DEBUG] $1&quot;
+  fi
+}
+
+# Is Ollama installed on the local system?
+#
+# Usage: if ollamaIsInstalled; then echo &quot;Ollama Installed&quot;; else echo &quot;Ollama Not Installed&quot;; fi
+# Output: none
+# Returns: 0 if Ollama is installed, 1 if Ollama is not installed
+ollamaIsInstalled() {
+  debug &quot;ollamaIsInstalled&quot;
+  if [ -z &quot;$(command -v &quot;ollama&quot; 2&gt; /dev/null)&quot; ]; then
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Escape a string for inclusion into JSON
+#
+# Usage: safeJson &quot;string&quot;
+# Output: &quot;quoted safe json value&quot;
+# Returns: 0 on success, 1 on error
+safeJson() {
+  debug &quot;safeJson: $1&quot;
+  jq -Rn --arg str &quot;$1&quot; &#39;$str&#39;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# GET request to the Ollama API
+#
+# Usage: ollamaApiGet &quot;/api/command&quot;
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiGet() {
+  debug &quot;ollamaApiGet: $1&quot;
+  curl -s -X GET &quot;${OLLAMA_BASH_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39; -d &#39;&#39;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# POST request to the Ollama API
+#
+# Usage: ollamaApiPost &quot;/api/command&quot; &quot;{ json content }&quot;
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiPost() {
+  debug &quot;ollamaApiPost: $1 $2&quot;
+  curl -s -X POST &quot;${OLLAMA_BASH_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39; -d &quot;$2&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Unload a model from memory (Clear context for a model)
+#
+# Usage: ollamaClearModel &quot;modelName&quot;
+# Output: none
+# Returns: 0 on success, 1 on error
+ollamaClearModel() {
+  if [ -z &quot;$1&quot; ]; then
+    debug &quot;Error: ollamaClearModel: no model&quot;
+    return $RETURN_ERROR
+  fi
+  local response
+  response=$(ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;keep_alive\&quot;: 0}&quot;)
+  debug &quot;$response&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Generate a completion, non-streaming
+#
+# Usage: ollamaGenerate &quot;modelName&quot; &quot;prompt&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerate() {
+  debug &quot;ollamaGenerate: $1 $2&quot;
+  ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;prompt\&quot;: $(safeJson &quot;$2&quot;), \&quot;stream\&quot;: false}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Generate a completion, streaming
+#
+# Usage: ollamaGenerateStreaming &quot;modelName&quot; &quot;prompt&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerateStreaming() {
+  debug &quot;ollamaGenerateStreaming: $1 $2&quot;
+  ollamaApiPost &quot;/api/generate&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;, \&quot;prompt\&quot;: $(safeJson &quot;$2&quot;)}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# All available models, cli version
+#
+# Usage: ollamaList
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaList() {
+  ollama list
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# All available models, JSON version
+#
+# Usage: ollamaListJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaListJson() {
+  ollamaApiGet &quot;/api/tags&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# All available models, Bash array version
+#
+# Usage: models=($(ollamaListArray))
+# Output: space separated list of model names
+# Returns: 0 on success, 1 on error
+ollamaListArray() {
+  models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort)) # Get list of models, sorted alphabetically
+  echo &quot;${models[@]}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Get a random model
+#
+# Usage: ollamaGetRandomModel
+# Output: 1 model name
+# Returns: 0 on success, 1 on error
+ollamaGetRandomModel() {
+  debug &quot;ollamaGetRandomModel&quot;
+  local models=($(ollamaListArray))
+  echo &quot;${models[RANDOM%${#models[@]}]}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Running model processes, cli version
+#
+# Usage: ollamaPs
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaPs() {
+  ollama ps
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Running model processes, JSON version
+#
+# Usage: ollamaPsJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaPsJson() {
+  ollamaApiGet &quot;/api/ps&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Show model information, cli version
+#
+# Usage: ollamaShow &quot;modelName&quot;
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaShow() {
+  ollama show &quot;$1&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Show model information, JSON version
+#
+# Usage: ollamaShowJson &quot;modelName&quot;
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaShowJson() {
+  ollamaApiPost &quot;/api/show&quot; &quot;{\&quot;model\&quot;: \&quot;$1\&quot;}&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Ollama application version, cli version
+#
+# Usage: ollamaVersion
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaVersion() {
+  ollama --version
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+
+# Ollama application version, JSON version
+#
+# Usage: ollamaVersionJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaVersionJson() {
+  ollamaApiGet &quot;/api/version&quot;
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}</textarea>
+</p>
+
+<table class='sortable'>
+  <thead>
+    <tr>
+      <th class='left'>Model</th>
+      <th>Response<br />words</th>
+      <th>Response<br />bytes</th>
+      <th>Total<br />duration</th>
+      <th>Load<br />duration</th>
+      <th>Prompt eval<br />count</th>
+      <th>Prompt eval<br />duration</th>
+      <th>Prompt eval<br />rate</th>
+      <th>Eval<br />count</th>
+      <th>Eval<br />duration</th>
+      <th>Eval<br />rate</th>
+      <th>Model<br />params</th>
+      <th>Model<br />size</th>
+      <th>Model<br />context</th>
+      <th>Ollama<br />context</th>
+      <th>Ollama<br />proc</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+<td class='left'><a href='./deepseek_r1_14b.html'>deepseek-r1:14b</a></td>
+<td>597</td>
+<td>4243</td>
+<td>6m15.6504715s</td>
+<td>2.7879425s</td>
+<td>1783 token(s)</td>
+<td>4.0784418s</td>
+<td>437.18 tokens/s</td>
+<td>2349 token(s)</td>
+<td>6m8.7834033s</td>
+<td>6.37 tokens/s</td>
+<td>14.8B</td>
+<td>14 GB</td>
+<td>131072</td>
+<td>16384</td>
+<td>48%/52% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a></td>
+<td>647</td>
+<td>4699</td>
+<td>14m21.2021266s</td>
+<td>3.2627999s</td>
+<td>1782 token(s)</td>
+<td>1.7477969s</td>
+<td>1019.57 tokens/s</td>
+<td>9534 token(s)</td>
+<td>14m16.1910182s</td>
+<td>11.14 tokens/s</td>
+<td>8.2B</td>
+<td>9.6 GB</td>
+<td>131072</td>
+<td>16384</td>
+<td>23%/77% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>432</td>
+<td>2887</td>
+<td>30.6933286s</td>
+<td>3.0549306s</td>
+<td>1797 token(s)</td>
+<td>1.4746932s</td>
+<td>1218.56 tokens/s</td>
+<td>549 token(s)</td>
+<td>26.1626261s</td>
+<td>20.98 tokens/s</td>
+<td>8.0B</td>
+<td>8.7 GB</td>
+<td>131072</td>
+<td>16384</td>
+<td>15%/85% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3n_e4b.html'>gemma3n:e4b</a></td>
+<td>981</td>
+<td>7030</td>
+<td>1m51.3876623s</td>
+<td>4.2704795s</td>
+<td>2235 token(s)</td>
+<td>8.1724663s</td>
+<td>273.48 tokens/s</td>
+<td>1870 token(s)</td>
+<td>1m38.9431165s</td>
+<td>18.90 tokens/s</td>
+<td>6.9B</td>
+<td>8.5 GB</td>
+<td>32768</td>
+<td>16384</td>
+<td>12%/88% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>486</td>
+<td>3153</td>
+<td>33.0599898s</td>
+<td>2.6213209s</td>
+<td>2065 token(s)</td>
+<td>1.8082413s</td>
+<td>1141.99 tokens/s</td>
+<td>703 token(s)</td>
+<td>28.629913s</td>
+<td>24.55 tokens/s</td>
+<td>7.2B</td>
+<td>8.3 GB</td>
+<td>32768</td>
+<td>16384</td>
+<td>11%/89% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a></td>
+<td>1534</td>
+<td>10222</td>
+<td>1m50.4283671s</td>
+<td>2.7010685s</td>
+<td>1800 token(s)</td>
+<td>1.1966003s</td>
+<td>1504.26 tokens/s</td>
+<td>2780 token(s)</td>
+<td>1m46.5294661s</td>
+<td>26.10 tokens/s</td>
+<td>8.3B</td>
+<td>10 GB</td>
+<td>128000</td>
+<td>16384</td>
+<td>34%/66% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_8b.html'>qwen3:8b</a></td>
+<td>841</td>
+<td>6411</td>
+<td>4m21.8895935s</td>
+<td>3.2772767s</td>
+<td>1790 token(s)</td>
+<td>1.7939954s</td>
+<td>997.77 tokens/s</td>
+<td>3154 token(s)</td>
+<td>4m16.8178007s</td>
+<td>12.28 tokens/s</td>
+<td>8.2B</td>
+<td>9.6 GB</td>
+<td>40960</td>
+<td>16384</td>
+<td>23%/77% CPU/GPU</td>
+</tr>
+</tbody></table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>23%/77% CPU/GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>16384</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.0-rc0</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>99999 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 16G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<style>
+.sortable thead th:not(.no-sort){cursor:pointer}.sortable thead th:not(.no-sort)::after,.sortable thead th:not(.no-sort)::before{transition:color .1s ease-in-out;font-size:1.2em;color:rgba(0,0,0,0)}.sortable thead th:not(.no-sort)::after{margin-left:3px;content:"▸"}.sortable thead th:not(.no-sort):hover::after{color:inherit}.sortable thead th:not(.no-sort)[aria-sort=descending]::after{color:inherit;content:"▾"}.sortable thead th:not(.no-sort)[aria-sort=ascending]::after{color:inherit;content:"▴"}.sortable thead th:not(.no-sort).indicator-left::after{content:""}.sortable thead th:not(.no-sort).indicator-left::before{margin-right:3px;content:"▸"}.sortable thead th:not(.no-sort).indicator-left:hover::before{color:inherit}.sortable thead th:not(.no-sort).indicator-left[aria-sort=descending]::before{color:inherit;content:"▾"}.sortable thead th:not(.no-sort).indicator-left[aria-sort=ascending]::before{color:inherit;content:"▴"}.sortable{--stripe-color: #e4e4e4;--th-color: #fff;--th-bg: #808080;--td-color: #000;--td-on-stripe-color: #000;border-spacing:0}.sortable.sticky thead th{position:sticky;top:0;z-index:1}.sortable tbody tr:nth-child(odd){background-color:var(--stripe-color);color:var(--td-on-stripe-color)}.sortable thead th{background:var(--th-bg);color:var(--th-color);font-weight:normal;text-align:left;text-transform:capitalize;vertical-align:baseline;white-space:nowrap}.sortable td{color:var(--td-color)}.sortable td,.sortable th{padding:10px}.sortable td:first-child,.sortable th:first-child{border-top-left-radius:4px}.sortable td:last-child,.sortable th:last-child{border-top-right-radius:4px}
+</style>
+<script>
+function sortSortable(a,m){function n(b){if(b){if(m&&b.dataset.sortAlt)return b.dataset.sortAlt;if(b.dataset.sort)return b.dataset.sort;if(b.textContent)return b.textContent}return""}a.dispatchEvent(new Event("sort-start",{bubbles:!0}));for(var c=a.tHead.querySelector("th[aria-sort]"),k=a.tHead.children[0],p="ascending"===c.getAttribute("aria-sort"),f=a.classList.contains("n-last"),e=function(b,q,d){var g=n(q.cells[d]),r=n(b.cells[d]);if(f){if(""===g&&""!==r)return-1;if(""===r&&""!==g)return 1}var u=
++g-+r;g=isNaN(u)?g.localeCompare(r):u;return 0===g&&k.cells[d]&&k.cells[d].hasAttribute("data-sort-tbr")?e(b,q,+k.cells[d].dataset.sortTbr):p?-g:g},h=0;h<a.tBodies.length;h++){var l=a.tBodies[h],v=[].slice.call(l.rows,0);v.sort(function(b,q){var d;return e(b,q,+(null!==(d=c.dataset.sortCol)&&void 0!==d?d:c.cellIndex))});var t=l.cloneNode();t.append.apply(t,v);a.replaceChild(t,l)}a.dispatchEvent(new Event("sort-end",{bubbles:!0}))}
+function sortableEventListener(a){function m(h,l){return h.nodeName===l?h:m(h.parentNode,l)}try{var n=a.shiftKey||a.altKey,c=m(a.target,"TH"),k=c.parentNode,p=k.parentNode,f=p.parentNode;if("THEAD"===p.nodeName&&f.classList.contains("sortable")&&!c.classList.contains("no-sort")){var e=k.cells;for(a=0;a<e.length;a++)e[a]!==c&&e[a].removeAttribute("aria-sort");e="descending";if("descending"===c.getAttribute("aria-sort")||f.classList.contains("asc")&&"ascending"!==c.getAttribute("aria-sort"))e="ascending";
+c.setAttribute("aria-sort",e);f.dataset.timer&&clearTimeout(+f.dataset.timer);f.dataset.timer=setTimeout(function(){sortSortable(f,n)},1).toString()}}catch(h){}}document.addEventListener("click",sortableEventListener);
+</script>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>this_is_the_ollama_bash_lib_bash_script_a</b>: 20250725-211539</p>
+<p>Page created: 2025-07-25 21:50:34</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.20</p>
+</footer></body></html>

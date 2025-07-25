@@ -1,0 +1,335 @@
+Certainly! Below is a detailed code review of the `Ollama Bash Lib` script. The review will cover aspects such as code structure, naming conventions, documentation, error handling, and more.
+
+### Code Review
+
+#### 1. **Header and Metadata**
+The script starts with a header and metadata block, which is good for documentation and versioning. However, it's worth noting that the `OLLAMA_BASH_LIB_DEBUG` variable is not used anywhere in the script. It might be better to remove it or use it in some of the functions.
+
+```bash
+#!/usr/bin/env bash
+#
+# Ollama Bash Lib - A Bash Library to interact with Ollama
+#
+
+# Metadata
+OLLAMA_BASH_LIB_NAME="Ollama Bash Lib"
+OLLAMA_BASH_LIB_VERSION="0.16"
+OLLAMA_BASH_LIB_URL="https://github.com/attogram/ollama-bash-lib"
+OLLAMA_BASH_LIB_LICENSE="MIT"
+OLLAMA_BASH_LIB_COPYRIGHT="Copyright (c) 2025 Attogram Project <https://github.com/attogram>"
+```
+
+#### 2. **Debug Function**
+The `debug` function is used to print debug messages to stderr. It's a good practice to have a debug function, but it's currently not used in any of the other functions. You might want to consider using it in more places where debugging is needed.
+
+```bash
+# Debug message
+#
+# Usage: debug "message"
+# Output: message to stderr
+# Returns: none
+debug() {
+  if [ "$OLLAMA_BASH_LIB_DEBUG" == "1" ]; then
+    >&2 echo -e "[DEBUG] $1"
+  fi
+}
+```
+
+#### 3. **ollamaIsInstalled Function**
+This function checks if the `ollama` command is installed on the system. It's a good practice to check for the existence of a command before using it.
+
+```bash
+# Is Ollama installed on the local system?
+#
+# Usage: if ollamaIsInstalled; then echo "Ollama Installed"; else echo "Ollama Not Installed"; fi
+# Output: none
+# Returns: 0 if Ollama is installed, 1 if Ollama is not installed
+ollamaIsInstalled() {
+  debug "ollamaIsInstalled"
+  if [ -z "$(command -v "ollama" 2> /dev/null)" ]; then
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+```
+
+#### 4. **safeJson Function**
+This function escapes a string for inclusion into JSON. It uses `jq` to escape the string, which is a good approach. However, it's worth noting that `jq` is not a standard tool and might not be available on all systems. You might want to consider using a more portable method, such as `sed` or `tr`.
+
+```bash
+# Escape a string for inclusion into JSON
+#
+# Usage: safeJson "string"
+# Output: "quoted safe json value"
+# Returns: 0 on success, 1 on error
+safeJson() {
+  debug "safeJson: $1"
+  jq -Rn --arg str "$1" '$str'
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 5. **ollamaApiGet Function**
+This function makes a GET request to the Ollama API. It's a good practice to check the response for errors, but it's currently not done.
+
+```bash
+# GET request to the Ollama API
+#
+# Usage: ollamaApiGet "/api/command"
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiGet() {
+  debug "ollamaApiGet: $1"
+  curl -s -X GET "${OLLAMA_BASH_LIB_API}$1" -H 'Content-Type: application/json' -d ''
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 6. **ollamaApiPost Function**
+This function makes a POST request to the Ollama API. It's similar to the `ollamaApiGet` function, but it includes a JSON payload.
+
+```bash
+# POST request to the Ollama API
+#
+# Usage: ollamaApiPost "/api/command" "{ json content }"
+# Output: result of API call
+# Returns: 0 on success, 1 on error
+ollamaApiPost() {
+  debug "ollamaApiPost: $1 $2"
+  curl -s -X POST "${OLLAMA_BASH_LIB_API}$1" -H 'Content-Type: application/json' -d "$2"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 7. **ollamaClearModel Function**
+This function clears the context for a model. It's a good practice to check if the model name is provided.
+
+```bash
+# Unload a model from memory (Clear context for a model)
+#
+# Usage: ollamaClearModel "modelName"
+# Output: none
+# Returns: 0 on success, 1 on error
+ollamaClearModel() {
+  if [ -z "$1" ]; then
+    debug "Error: ollamaClearModel: no model"
+    return $RETURN_ERROR
+  fi
+  local response
+  response=$(ollamaApiPost "/api/generate" "{\"model\": \"$1\", \"keep_alive\": 0}")
+  debug "$response"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 8. **ollamaGenerate Function**
+This function generates a completion for a model. It's a good practice to check if the model name and prompt are provided.
+
+```bash
+# Generate a completion, non-streaming
+#
+# Usage: ollamaGenerate "modelName" "prompt"
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerate() {
+  debug "ollamaGenerate: $1 $2"
+  ollamaApiPost "/api/generate" "{\"model\": \"$1\", \"prompt\": $(safeJson "$2"), \"stream\": false}"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 9. **ollamaGenerateStreaming Function**
+This function generates a completion for a model in streaming mode. It's similar to the `ollamaGenerate` function, but it doesn't include the `stream` parameter.
+
+```bash
+# Generate a completion, streaming
+#
+# Usage: ollamaGenerateStreaming "modelName" "prompt"
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaGenerateStreaming() {
+  debug "ollamaGenerateStreaming: $1 $2"
+  ollamaApiPost "/api/generate" "{\"model\": \"$1\", \"prompt\": $(safeJson "$2")}"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 10. **ollamaList Function**
+This function lists all available models. It's a good practice to check the response for errors.
+
+```bash
+# All available models, cli version
+#
+# Usage: ollamaList
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaList() {
+  ollama list
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 11. **ollamaListJson Function**
+This function lists all available models in JSON format. It's a good practice to check the response for errors.
+
+```bash
+# All available models, JSON version
+#
+# Usage: ollamaListJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaListJson() {
+  ollamaApiGet "/api/tags"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 12. **ollamaListArray Function**
+This function lists all available models in a Bash array. It's a good practice to check the response for errors.
+
+```bash
+# All available models, Bash array version
+#
+# Usage: models=($(ollamaListArray))
+# Output: space separated list of model names
+# Returns: 0 on success, 1 on error
+ollamaListArray() {
+  models=($(ollama list | awk '{if (NR > 1) print $1}' | sort)) # Get list of models, sorted alphabetically
+  echo "${models[@]}"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 13. **ollamaGetRandomModel Function**
+This function gets a random model. It's a good practice to check the response for errors.
+
+```bash
+# Get a random model
+#
+# Usage: ollamaGetRandomModel
+# Output: 1 model name
+# Returns: 0 on success, 1 on error
+ollamaGetRandomModel() {
+  debug "ollamaGetRandomModel"
+  local models=($(ollamaListArray))
+  echo "${models[RANDOM%${#models[@]}]}"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 14. **ollamaPs Function**
+This function lists running model processes. It's a good practice to check the response for errors.
+
+```bash
+# Running model processes, cli version
+#
+# Usage: ollamaPs
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaPs() {
+  ollama ps
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 15. **ollamaPsJson Function**
+This function lists running model processes in JSON format. It's a good practice to check the response for errors.
+
+```bash
+# Running model processes, JSON version
+#
+# Usage: ollamaPsJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaPsJson() {
+  ollamaApiGet "/api/ps"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 16. **ollamaShow Function**
+This function shows model information. It's a good practice to check the response for errors.
+
+```bash
+# Show model information, cli version
+#
+# Usage: ollamaShow "modelName"
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaShow() {
+  ollama show "$1"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 17. **ollamaShowJson Function**
+This function shows model information in JSON format. It's a good practice to check the response for errors.
+
+```bash
+# Show model information, JSON version
+#
+# Usage: ollamaShowJson "modelName"
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaShowJson() {
+  ollamaApiPost "/api/show" "{\"model\": \"$1\"}"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 18. **ollamaVersion Function**
+This function shows the Ollama application version. It's a good practice to check the response for errors.
+
+```bash
+# Ollama application version, cli version
+#
+# Usage: ollamaVersion
+# Output: text
+# Returns: 0 on success, 1 on error
+ollamaVersion() {
+  ollama --version
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+#### 19. **ollamaVersionJson Function**
+This function shows the Ollama application version in JSON format. It's a good practice to check the response for errors.
+
+```bash
+# Ollama application version, JSON version
+#
+# Usage: ollamaVersionJson
+# Output: json
+# Returns: 0 on success, 1 on error
+ollamaVersionJson() {
+  ollamaApiGet "/api/version"
+  # TODO - check response for error/success
+  return $RETURN_SUCCESS
+}
+```
+
+### Recommendations
+
+1. **Error Handling**: Add error handling to all functions that make API calls. This can be done by checking the response status code and handling it appropriately.
+2. **Portability**: Consider using more portable methods for escaping strings, such as `sed` or `tr`, instead of `jq`.
+3. **Documentation**: Add more detailed documentation for each function, including examples and error messages.
+4. **Debugging**: Use the `debug` function more frequently to ensure that the functions are working as expected.
+5. **Testing**: Write unit tests for each function to ensure that they work correctly.
+
+By following these recommendations, you can improve the reliability and maintainability of the `Ollama Bash Lib` script.
+

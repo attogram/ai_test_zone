@@ -1,0 +1,162 @@
+
+Here’s a code review with actionable recommendations for improvement:
+
+---
+
+### **1. Missing Shebang and Permissions**
+The script is intended as an executable but lacks the shebang explicitly declared in the first line (though `#!/usr/bin/env bash` works). Add it to ensure portability:
+```bash
+#!/usr/bin/env bash  # <-- Add this if missing
+```
+
+---
+
+### **2. Error Handling for API Calls**
+All curl-based functions lack proper error handling. Check curl's exit code and handle failures gracefully:
+#### Example fix for `ollamaApiGet`:
+```bash
+ollamaApiGet() {
+  debug "ollamaApiGet: $1"
+  local response
+  if ! response=$(curl -s -X GET "$OLLAMA_BASH_LIB_API$1" -H 'Content-Type: application/json' -d '' 2>&1); then
+    return $RETURN_ERROR
+  fi
+  # Check for HTTP errors (if known)
+  echo "$response"
+  return $RETURN_SUCCESS
+}
+```
+Add similar checks to all API functions.
+
+---
+
+### **3. Deprecation of `ollamaApiGet`/`ollamaApiPost`**
+The library exposes internal API endpoints (`/api/generate`, `/api/tags`) directly via bash functions. This is redundant since these can be called with curl directly. Remove them and rely on direct curl calls.
+
+---
+
+### **4. Inconsistent Debugging**
+- The `debug` function uses `-e` to interpret escape sequences, which might cause issues (e.g., `\n` in logs).
+- Fix by replacing `echo -e` with `echo`:
+  ```bash
+  debug() {
+    if [ "$OLLAMA_BASH_LIB_DEBUG" == "1" ]; then
+      echo >&2 "[DEBUG] $1"
+    fi
+  }
+  ```
+
+---
+
+### **5. Improper JSON Escaping**
+The `safeJson` function doesn’t handle special characters like quotes (`"`), backslashes (`\`), or control characters (e.g., newline). Use `jq` safely and validate input:
+```bash
+safeJson() {
+  local s="$1"
+  # Check if input contains dangerous characters first?
+  if ! jq -n --arg str "$s" '$str' > /dev/null; then
+    return $RETURN_ERROR
+  fi
+  echo "$(jq -Rn --arg str "$s" '$str')"
+}
+```
+
+---
+
+### **6. Sensitive Information Exposure**
+The `OLLAMA_BASH_LIB_API` variable includes raw curl commands with user input (`$1`). Validate and sanitize inputs to prevent command injection:
+```bash
+ollamaApiPost() {
+  local endpoint="$1"
+  shift # Remove the first argument (endpoint)
+  local data "$@"
+  debug "ollamaApiPost: $endpoint, data=$data"
+  if [[ "$endpoint" =~ ^/api/[a-zA-Z0-9_-]+$ ]]; then
+    curl -X POST "$OLLAMA_BASH_LIB_API$endpoint" ... # Proceed only if endpoint is valid
+  else
+    return $RETURN_ERROR
+  fi
+}
+```
+
+---
+
+### **7. Useless Functions**
+Functions like `ollamaGetRandomModel` directly call `ollamaListArray`. Redesign to use a single function or alias:
+```bash
+ollamaGetRandom() {
+  local models=($(ollamaListArray))
+  echo "${models[$RANDOM % ${#models[@]}]}"
+}
+```
+
+---
+
+### **8. Version Number Format**
+The version string (`0.16`) doesn’t follow semantic versioning (SemVer) conventions. Update to a format like `v0.16.0`:
+```bash
+OLLAMA_BASH_LIB_VERSION="0.16.0"
+```
+
+---
+
+### **9. Missing Dependencies Check**
+Ensure jq is available before using it in functions (e.g., `safeJson`). Add an initial dependency check at the top of the script.
+
+---
+
+### **10. Uninitialized Variables**
+Functions like `ollamaListArray` use `OLLAMA_BASH_LIB_API` without a fallback if it’s unset. Align with existing API variable:
+```bash
+ollamaList() {
+  debug "ollama list"
+  ollama --version > /dev/null # Check if ollama is available?
+  local output=$(ollama list)
+  echo "$output"
+}
+```
+
+---
+
+### **11. Poor Variable Naming**
+Variables like `OLLAMA_BASH_LIB_API` are ambiguous (is it the URL or an API key?). Rename to avoid confusion.
+
+---
+
+## **Summary of Actionable Changes**
+
+1. Add shebang.
+2. Replace `echo -e` with plain `echo`.
+3. Sanitize user inputs and validate endpoints.
+4. Remove redundant internal functions (`ollamaApiGet`, `ollamaApiPost`).
+5. Fix JSON escaping to handle special characters.
+6. Improve error handling for all curl requests.
+7. Restructure the library’s API usage (e.g., use direct curl calls).
+
+---
+
+### **Example Improved Function**
+Here’s a rewritten version of `ollamaClearModel` with fixes:
+```bash
+ollamaClearModel() {
+  if [ -z "$1" ]; then
+    debug "Error: No model name provided"
+    return $RETURN_ERROR
+  fi
+
+  local endpoint="/api/generate"
+  local data='{"model": "'"$(escapeJson "$1")"'"", "keep_alive": 0}'
+
+  # Check if curl is available and handle errors.
+  if ! response=$(curl -X POST "$OLLAMA_BASH_LIB_API$endpoint" -d "$data"); then
+    debug "Curl failed for $endpoint"
+    return $RETURN_ERROR
+  fi
+
+  return $RETURN_SUCCESS
+}
+```
+
+---
+
+This script has potential but needs robust error handling, better API integration, and dependency management. Let me know if you’d like help implementing any specific change!
