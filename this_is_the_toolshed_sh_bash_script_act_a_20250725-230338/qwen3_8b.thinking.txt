@@ -1,0 +1,65 @@
+Okay, I need to do a full code review of this Bash script called toolshed.sh. Let me start by reading through the code carefully and understanding what it does.
+
+First, the script seems to be a Bash toolshed that interacts with Ollama models. It allows users to run models, use tools, and manage messages. The script has various functions for handling commands, configurations, and interactions with Ollama.
+
+Looking at the structure, the script starts with some variable definitions and a usage function. Then there are functions for getting help, system prompts, and handling different commands. The main loop reads input and processes it using the chat function.
+
+Let me go through each part step by step.
+
+The variables at the top define the script's name, version, URL, and some configuration flags. The DEBUG_MODE is set to 0 by default. The paths for tools and workspace are defined. There's a list of configs that can be set with /config commands.
+
+The usage function prints the help message. The getHelp function outputs the list of available commands. The getSystemPrompt functions build the system prompt for the model, including identity, terminal colors, and user commands.
+
+The setColorScheme function sets ANSI escape codes for colors. The debug and debugJson functions handle debug output if DEBUG_MODE is on.
+
+The getTools function gathers available tools from the tools directory. It checks for definition.json and instructions.txt files. The getConfig function retrieves a specific config value. setConfigs processes the configs array and applies them, including handling the tools and verbose flags.
+
+The safeJson function uses jq to safely parse JSON strings. The addMessage function appends messages to the messages variable, which is a JSON string. The addMessageAssistantToolCall adds an assistant's tool call to the messages.
+
+createRequest builds the request JSON for the Ollama API. sendRequestToAPI sends the request to the API endpoint. sendRequest handles the sending and parsing of the response.
+
+The clear function attempts to clear the model's session using expect. processErrors checks if there's an error in the response. runTool executes the tool's run.sh script with arguments. processToolCall processes the tool calls from the response and triggers the tool execution.
+
+userRunTool handles user-initiated tool execution with parameters. fileIsInWorkspace checks if a file is within the workspace directory. processUserCommandMessages handles messages commands like save, load, append. processUserCommand processes various user commands like /config, /exec, /help, etc.
+
+The chat function is the main loop where the user input is processed. It adds the user message, sends the request, processes errors, tool calls, and outputs the assistant's response.
+
+The checkRequirements function verifies that all required tools are installed. parseCommandLine processes command-line arguments for model and flags.
+
+Now, I need to evaluate the code for potential issues, improvements, and best practices.
+
+First, the script uses a lot of global variables, which can lead to unexpected behavior if not managed carefully. For example, variables like messages, model, etc., are modified in various functions. It's important to ensure that these variables are properly scoped or passed as parameters to avoid side effects.
+
+The getTools function could be more efficient. It uses a loop over the tools directory, but the way it's structured might not handle cases where directories have spaces in their names. Also, the use of eval in setConfigs might be risky if not handled properly.
+
+The use of expect in the clear function might be problematic. Expect requires the user to have it installed, which is part of the checkRequirements, but it's not clear if the script handles cases where expect is missing. Also, the expect command is executed in a subshell, which might not be the best approach for handling errors or output.
+
+The processToolCall function uses a while loop with IFS= read -r to process each tool call. However, the way the tool_calls are parsed might not handle all edge cases, such as nested JSON or malformed inputs. The use of jq to parse the tool_calls could be more robust.
+
+The userRunTool function uses a while loop with a regex to parse parameters. The regex might not handle all possible parameter formats, especially if parameters contain spaces or special characters. Also, the way parameters are split and processed could be improved for clarity and robustness.
+
+The processUserCommandMessages function handles saving and loading messages, but it doesn't validate the JSON format of the messages file. This could lead to errors if the file is not properly formatted. Adding a check for valid JSON would improve reliability.
+
+The chat function uses the addMessage function to append messages, but the messages variable is a JSON string. The way it's constructed with commas could lead to issues if not properly managed. For example, if messages is empty, the first message should not have a leading comma.
+
+The use of eval in setConfigs to set variables like toolsConfig and verboseConfig is a potential security risk if the input is not properly sanitized. It's better to use associative arrays or other safer methods to store configuration values.
+
+The script relies on external tools like curl, jq, expect, etc. The checkRequirements function lists these, but it doesn't handle cases where these tools are missing. The script should handle missing dependencies gracefully, perhaps by exiting with an error message.
+
+The main loop uses a while true loop to read input. The prompt is printed with color codes, but if the terminal doesn't support ANSI codes, it might not display correctly. The script could include a fallback for terminals without color support.
+
+The use of expect in the clear function to interact with Ollama might not be reliable. Ollama's API might have a more straightforward way to clear the session, which could be used instead of expect. Alternatively, the script could use the Ollama CLI commands directly.
+
+The script's handling of multiple tool calls in a single response might not be fully implemented. The processToolCall function processes each tool_call, but if there are multiple tool calls, it might not handle them correctly, especially if the response has multiple tool_calls in an array.
+
+The script's error handling is somewhat basic. For example, in sendRequestToAPI, if the API URL is missing, it prints an error message. However, other parts of the script might not handle errors as thoroughly, leading to potential crashes or unexpected behavior.
+
+The use of jq in various places might require the user to have it installed. The checkRequirements function includes jq, but the script doesn't handle cases where jq is missing. The script should check for jq and exit if it's not available.
+
+The script's documentation is minimal. While the usage and getHelp functions provide some guidance, more detailed comments or documentation would be helpful for users to understand the script's capabilities and limitations.
+
+The script's main loop could be more user-friendly. For example, the prompt could include more context about the current state, such as the model name, available tools, etc., to help the user navigate.
+
+In terms of code structure, the script is quite dense with functions and variables. Breaking down the code into smaller, more focused functions or using a more modular approach could improve readability and maintainability.
+
+Overall, the script has a solid foundation but could benefit from improvements in error handling, input validation, configuration management, and user guidance. Addressing these areas would make the script more robust and user-friendly.

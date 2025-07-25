@@ -1,0 +1,158 @@
+We are going to do a code review of the provided toolshed.sh Bash script.
+
+The script is designed to be an interactive tool that uses Ollama models to run commands and tools. It supports various features including multi-line input, clearing model sessions, saving/loading messages from files in the workspace, and more.
+
+Let's break down the script into sections and review each part for potential issues, improvements, and best practices.
+
+### Overview
+
+The script has several main components:
+
+1. **Variables and Constants**: Defines some variables like `NAME`, `VERSION`, etc.
+2. **Help Functions**: Several functions to get help text about commands.
+3. **Debugging**: Functions to print debug messages conditionally based on `DEBUG_MODE`.
+4. **Tool Management**: Functions to manage available tools (scanning the `./tools` directory, reading definitions and instructions).
+5. **Configuration Handling**: Handles configuration settings for the tool (like API URL, verbose mode) via a variable array.
+6. **Message Handling**: Adds messages (user, system, assistant) with optional tool name and content.
+7. **Request Creation and Sending**: Creates a JSON request from the messages and tools, then sends it to the Ollama API using curl.
+8. **Response Processing**: Checks for errors in the response and processes tool calls if present.
+9. **User Command Handling**: Parses user input commands (like `/clear`, `/config`, etc.) and performs appropriate actions.
+
+### Review
+
+Let's go through each function and part of the code:
+
+#### 1. Variables and Constants
+- The script uses variables like `NAME`, `VERSION`, `URL` at the top.
+- There are configuration variables: `DEBUG_MODE`, `TOOLS_DIRECTORY`, `WORKSPACE_DIRECTORY`.
+- These are set appropriately.
+
+#### 2. Help Functions
+- `usage()`: Displays usage information and exits if `-h` or `-v` is provided.
+- `getHelp()`: Outputs a help string with all available commands (but note that this function includes itself, which might be confusing).
+- The system prompt functions are okay but could be improved to include more context.
+
+#### 3. Debugging
+- `debug()` and `debugJson()` functions use the `DEBUG_MODE` variable.
+- They check if the mode is set to "on" (value 1) for printing, which matches the configuration setting.
+
+#### 4. Tool Management
+- `getTools()`: Scans the tools directory and builds an array of available tool names (`availableTools`). Also reads `definition.json` and `instructions.txt` for each tool.
+- The function uses a loop to check every subdirectory in `TOOLS_DIRECTORY`. This is acceptable but note that it currently does not handle nested directories or non-standard filenames.
+
+#### 5. Configuration Handling
+- `getConfig()`: Returns the value of a given config name from the configs array.
+- `setConfigs()`: Reads each config and sets corresponding variables (like `$toolsConfig`). It uses an associative array-like structure by splitting on colon, but note that it doesn't handle quoted values properly.
+
+#### 6. Message Handling
+- `addMessage()` adds a message with role and content. If a tool name is provided, it also includes that in the message.
+- The function builds a JSON string for each message and appends to the global `messages` variable.
+
+#### 7. Request Creation and Sending
+- `createRequest()`: Builds the request JSON by combining model, messages, and optionally tools (if `toolsConfig` is "on") and thinking flag (if set).
+- `sendRequestToAPI()` sends the request using curl to the Ollama API endpoint.
+
+#### 8. Response Processing
+- The script checks for errors in the response by looking at the `.error` field.
+- It then processes tool calls if present, which are found in the `message.tool_calls` field of the response.
+
+#### 9. User Command Handling (`processUserCommand`)
+- This function is responsible for handling user commands (like `/clear`, `/config`, etc.).
+- The condition checks at the beginning might be too broad: it only checks if the first character is "/" or "!" and then processes accordingly.
+- There are several cases, including:
+  - `*` pattern which returns an error code of 127? Actually, it uses a return value from `processUserCommandMessages` but that function doesn't set one. We need to check each case for proper handling.
+
+#### 10. The `chat()` Function
+- This is the main loop that adds user messages and sends requests.
+- It first processes any user command (like `/clear`, etc.) by calling `processUserCommand`.
+- If no command was processed, it then adds a message to the chat history and sends the request.
+
+#### 11. The Main Loop
+- After setting up the system prompt and checking requirements, the script enters an interactive loop.
+- It prompts the user for input until they type `/quit` or `Ctrl+C`.
+
+### Potential Issues
+
+Let's list some potential issues:
+
+1. **Tool Definitions and Instructions**:
+   - In `getTools()`, it reads both `definition.json` and `instructions.txt`. However, note that the function does not check if these files exist in a safe way (it uses `-f` for existence). But there is an issue: what if a tool directory has neither? Then we skip adding to available tools but still count one. The loop condition checks if it's a directory and then checks for `definition.json`. It should be okay.
+
+2. **Configuration Handling**:
+   - In `setConfigs()`, when setting the `toolsConfig` variable, note that there is no check for the value of `$configName`. Also, in `getConfig`, we break after finding one config with that name.
+   - The `configs` array is set as a global and then updated via `setConfig()`.
+
+3. **Message Handling**:
+   - In `addMessage()`, it uses `safeJson` to handle the content string. This function returns just the first line of the input because we are not using `-r`. However, note that `jq -Rn --arg str '$str'` will output the string exactly as provided (with quotes removed) but without multiple lines? Actually, it's designed for a single string.
+
+4. **Tool Execution**:
+   - In `runTool()`, we call `$TOOLS_DIRECTORY/${toolName}/run.sh ${arguments}` and capture the result.
+   - We then add that result to the messages as a "tool" message (with role: tool). This is correct because Ollama expects tool responses in this format.
+
+5. **User Command Processing**:
+   - The `processUserCommand` function has several cases, but note that it does not handle multi-word commands properly? For example, `/exec toolName param1=value param2=value` might break if the parameters are quoted or contain spaces.
+   - Also, in the case of `/exec`, we call `userRunTool` with all remaining arguments. This function then parses the parameters by looking for key-value pairs (using regex). However, note that it uses a while loop to match until there's no more pattern? It might break if there are multiple equal signs.
+
+6. **Multi-line Input Handling**:
+   - The `/multi` command reads input until EOF and passes it as one string. This is acceptable because the `chat()` function will then process it normally (as a single message). However, note that during multi-line input, we might not be able to use other commands.
+
+7. **Interactive Loop**:
+   - The main loop uses `read` to get user input and then passes it to `chat`.
+   - There is no way to break out of the toolshed without using `/quit` or `Ctrl+C`. But note that if a model is not set, we show an error.
+
+8. **Requirements Check**:
+   - The `checkRequirements()` function checks for each requirement by seeing if the command exists. However, it does not check for dependencies required by the tools (like `lynx`, `man` etc.). Also, note that some of these requirements might be set via configuration or environment variables.
+
+9. **Security**:
+   - The script allows running any shell command with `!...`. This is dangerous if used in an untrusted environment.
+   - Similarly, when processing a tool call from Ollama, we are executing arbitrary scripts without checking the safety of their inputs.
+
+10. **Error Handling**:
+    - There isn't consistent error handling throughout the script. Some functions return 0 or non-zero to indicate success or failure, but not all are used in that way.
+    - For example, `processUserCommandMessages` does not set a proper exit code for errors (it just outputs an error and returns).
+
+11. **Tool Shed Structure**:
+    - The script expects tools to be in directories named after the tool under `$TOOLS_DIRECTORY`. Each tool must have at least a `definition.json`.
+    - There is no fallback if a required tool does not exist.
+
+### Suggestions for Improvement
+
+1. **Better Configuration Handling**:
+   - Instead of having multiple variables (like `toolsConfig`, `verbose`), consider using an associative array or just keeping the configs in one place.
+   - Also, ensure that when setting a config, we update all necessary places and rebuild the tool definitions if needed.
+
+2. **Tool Definition Format**:
+   - The script expects each tool to have a `definition.json`. Consider standardizing this format so that Ollama can understand it (using OpenAI function calling style or similar).
+
+3. **Handling Multi-word Commands in /exec**:
+   - Currently, `/exec` takes the first word as the tool and then key-value pairs for parameters. This is too simplistic because it doesn't handle quoted strings or escaping.
+   - We might need to parse the arguments more robustly.
+
+4. **Tool Input Safety**:
+    - When a tool is called by Ollama, we are passing arbitrary arguments (via `jq`) and then executing the script without sanitization. This can be dangerous if the tool's input format includes special characters or commands.
+    - Consider validating the output of `jq` to ensure it's properly formatted.
+
+5. **Consistent Exit Codes**:
+   - Each function should return 0 for success and non-zero for errors, so we can chain them appropriately.
+
+6. **Documentation**:
+   - The help text (from `getHelp`) is not very clear about some commands (like `/run`). We might need to improve that.
+
+7. **Testing**:
+   - Write tests for the script's functionality, especially when handling tool calls and message appending.
+
+8. **Code Readability**:
+   - Use functions more consistently to break down complex logic.
+   - Add comments to explain what each part does.
+
+9. **Interactive Loop**:
+   - Instead of printing a long prompt that includes version numbers every time, consider initializing the state at the beginning and then just updating it if needed.
+
+10. **Requirements Check**:
+    - The requirements check should be more comprehensive. We can also check for common Ollama commands (like `ollama`, `curl`) but note that they might not be available on all systems.
+
+### Conclusion
+
+The script is a good attempt at building an interactive tool using Ollama and Bash, with many useful features. However, it has some areas that could use improvement in terms of robustness, security, and user experience.
+
+We'll now write the code review report.

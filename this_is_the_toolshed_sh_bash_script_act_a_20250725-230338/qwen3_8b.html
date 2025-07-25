@@ -1,0 +1,969 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>this_is_the_toolshed_sh_bash_script_act_a</a>: <b>qwen3:8b</b>: 20250725-230338<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_14b.html'>deepseek-r1:14b</a> 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<b>qwen3:8b</b> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./this_is_the_toolshed_sh_bash_script_act_a.prompt.yaml'>yaml</a>)
+  words:2282  bytes:19499<br />
+<textarea readonly rows='10'>This is the toolshed.sh Bash script.
+Act as an expert Software Engineer.
+Do a full code review of this script:
+
+#!/usr/bin/env bash
+#
+# Ollama Bash Toolshed
+#
+# Bash scripts to chat with tool using models. Add new tools to your shed with ease. Runs on Ollama.
+#
+# Usage:
+#  ./toolshed.sh
+#  ./toolshed.sh modelName
+
+NAME=&quot;ollama-bash-toolshed&quot;
+VERSION=&quot;0.45&quot;
+URL=&quot;https://github.com/attogram/ollama-bash-toolshed&quot;
+
+DEBUG_MODE=&quot;0&quot; # change with: /config verbose [on|off]
+TOOLS_DIRECTORY=&quot;./tools&quot; # no slash at end
+WORKSPACE_DIRECTORY=&quot;./workspace&quot; # no slash at end
+
+model=&quot;&quot;            # current model
+messages=&quot;&quot;         # json string of all messages
+messageCount=0      # number of messages
+request=&quot;&quot;          # json string with the latest request to the model
+requestCount=0      # number of requests
+response=&quot;&quot;         # json string with the latest response from the model
+availableTools=()   # array of available tools in the shed
+toolCount=0         # number of tools in the shed
+toolDefinitions=&quot;&quot;  # json string with all tool definitions
+toolInstructions=&quot;&quot; # text list of all tool instructions
+toolResult=&quot;&quot;       # result of last tool call
+
+configs=(
+  &#39;tools:on&#39;    # /config tools [on|off]
+  &#39;think:off&#39;   # /config think [on|off]
+  &#39;verbose:off&#39; # /config verbose [on|off]
+  &#39;api:http://localhost:11434&#39; # /config api [url]  (base Ollama API URL, no slash at end)
+)
+
+usage() {
+  me=$(basename &quot;$0&quot;)
+  echo &quot;$NAME&quot;; echo
+  echo &quot;Usage:&quot;
+  echo &quot;  ./$me [flags]&quot;
+  echo &quot;  ./$me [model]&quot;
+  echo; echo &quot;Flags:&quot;;
+  echo &quot;  -h      -- Help for $NAME&quot;
+  echo &quot;  -v      -- Show version information&quot;
+  echo &quot;  [model] -- Set the model&quot;
+}
+
+getHelp() {
+    cat &lt;&lt; EOF
+Model Commands:
+  /list            - List models
+  /ps              - List running models
+  /pull modelName  - Pull new model
+  /run modelName   - Run a model
+  /show            - Current model info
+  /show modelName  - Model info
+  /stop modelName  - Stop a running model
+
+Tool Commands:
+  /tools           - list tools available
+  /tool toolName   - show tool definition
+  /instructions    - list instructions for all tools
+  /exec toolName param1=&quot;value&quot; param2=&quot;value&quot; - run a tool, with optional parameters
+
+System Commands:
+  /multi             - enter multi-line prompt
+  /messages          - list of current messages
+  /messages save     - save messages to a file.  Optional &lt;file&gt; to specify file. Must be in ./workspace directory.
+  /messages load     - load messages from a file. Optional &lt;file&gt; to specify file. Must be in ./workspace directory.
+  /messages append   - append to current messages list from a file. Optional &lt;file&gt; to specify file. Must be in ./workspace directory.
+  /system            - show system prompt
+  /clear             - clear the message and model cache
+  /config            - view all configs (tools, think, verbose)
+  /config name       - view a config
+  /config name value - set a config to new value
+  /quit or /bye      - end the chat
+  !&lt;command&gt;         - run any command in the local shell
+  /help              - list of all commands
+EOF
+}
+
+getSystemPromptIdentity() {
+  echo &quot;You are an AI assistant.&quot;
+  echo &quot;You are inside the Ollama Bash Toolshed.&quot;
+  echo &quot;You are running on the Ollama application.
+&quot;
+}
+
+getSystemPromptTerminal() {
+  echo &quot;Your response is rendered in a text terminal.
+- You may use ANSI escape codes to color your response.
+- COLOR    FOREGROUND      BACKGROUND
+  red      \`\\033[31m\`   \`\\033[41m\`
+  green    \`\\033[32m\`   \`\\033[42m\`
+  yellow   \`\\033[33m\`   \`\\033[43m\`
+  blue     \`\\033[34m\`   \`\\033[44m\`
+  magenta  \`\\033[35m\`   \`\\033[45m\`
+  cyan     \`\\033[36m\`   \`\\033[46m\`
+  black    \`\\033[30m\`   \`\\033[40m\`
+  white    \`\\033[37m\`   \`\\033[47m\`
+- To reset text to default colors: \`\\033[0m\`
+&quot;
+}
+
+getSystemPromptUserCommands() {
+  echo &quot;You can assist with commands the user may use inside Ollama Bash Toolshed.
+- Only the user may use these commands.
+- Command list:
+
+$(getHelp)
+&quot;
+}
+
+getSystemPrompt() {
+  getSystemPromptIdentity
+}
+
+setColorScheme() {
+  LOGO=$&#39;\033[36m\033[40m&#39; # cyan on black
+  PROMPT=$&#39;\033[34m\033[40m&#39; # blue on black
+  THINKING=$&#39;\e[38;5;241m&#39;$&#39;\e[48;5;0m&#39; # grey on black
+  RESET=$&#39;\033[0m&#39; # reset terminal colors
+  ERASE_LINE=$&#39;\e[2K&#39;$&#39;\e[A&#39;
+}
+
+debug() {
+  if [ &quot;$DEBUG_MODE&quot; == &quot;1&quot; ]; then
+    echo -e &quot;[DEBUG] $1&quot;
+  fi
+}
+
+debugJson() {
+  if [ &quot;$DEBUG_MODE&quot; == &quot;1&quot; ]; then
+    echo &quot;$1&quot; | jq -r &#39;.&#39; 2&gt;/dev/null
+  fi
+}
+
+getTools() {
+  availableTools=()
+  toolDefinitions=&quot;&quot;
+  toolInstructions=&quot;&quot;
+  toolCount=0
+  if [[ &quot;$toolsConfig&quot; != &quot;on&quot; ]]; then
+    return
+  fi
+  local toolDir
+  local toolName
+  availableTools=()
+  for toolDir in $TOOLS_DIRECTORY/*/; do
+    if [ -d &quot;${toolDir}&quot; ]; then
+      toolName=$(basename &quot;${toolDir}&quot;)
+      local definitionFile=&quot;${toolDir}/definition.json&quot;
+      if [ -f &quot;${definitionFile}&quot; ]; then
+        if [ -n &quot;$toolDefinitions&quot; ]; then
+          toolDefinitions+=&quot;,&quot;
+        fi
+        toolDefinitions+=&quot;$(cat &quot;$definitionFile&quot;)&quot;
+        availableTools+=(&quot;$toolName&quot;)
+      fi
+      local instructionFile=&quot;${toolDir}/instructions.txt&quot;
+      if [ -f &quot;${instructionFile}&quot; ]; then
+        if [ -n &quot;$toolInstructions&quot; ]; then
+          toolInstructions+=$&#39;\n&#39;
+        fi
+        toolInstructions+=&quot;$(cat &quot;$instructionFile&quot;)&quot;
+      fi
+      ((toolCount++))
+    fi
+  done
+}
+
+getConfig() {
+  local configName=&quot;$1&quot;
+  for config in &quot;${configs[@]}&quot;; do
+    if [[ &quot;${config%%:*}&quot; == &quot;$configName&quot; ]]; then
+      echo &quot;${config#*:}&quot;
+      break
+    fi
+  done
+}
+
+setConfigs() {
+  for config in &quot;${configs[@]}&quot;; do
+    name=&quot;${config%%:*}&quot;
+    value=&quot;${config#*:}&quot;
+    # set $nameConfig to $value
+    eval ${name}Config=\$value
+    case $name in
+      tools)
+        getTools
+        # TODO - redo systemPrompt with new tool setting
+        ;;
+      verbose)
+        if [[ &quot;$value&quot; == &quot;on&quot; ]]; then
+          DEBUG_MODE=1
+        else
+          DEBUG_MODE=0
+        fi
+        ;;
+    esac
+  done
+}
+
+setConfig() {
+  local configName=&quot;$1&quot;
+  local configValue=&quot;$2&quot;
+  local newConfigs=()
+  for config in &quot;${configs[@]}&quot;; do
+    name=&quot;${config%%:*}&quot;
+    value=&quot;${config#*:}&quot;
+    if [[ &quot;$name&quot; == &quot;$configName&quot; ]]; then
+      value=${commandArray[2]}
+      echo &quot;$name: $value&quot;
+    fi
+    # set var $nameConfig to $value
+    eval ${name}Config=\$value
+    newConfigs+=(&quot;$name:$value&quot;)
+  done
+  configs=(&quot;${newConfigs[@]}&quot;)
+  setConfigs
+}
+
+safeJson() {
+  jq -Rn --arg str &quot;$1&quot; &#39;$str&#39;
+}
+
+addMessage() {
+  local role=&quot;$1&quot;
+  local message=&quot;$2&quot;
+  local toolName=&quot;$3&quot;
+  newMessage=&quot;{\&quot;role\&quot;:\&quot;$role\&quot;&quot;
+  if [ -n &quot;$toolName&quot; ]; then
+    newMessage+=&quot;,\&quot;tool_name\&quot;:\&quot;$toolName\&quot;&quot;
+  fi
+  newMessage+=&quot;,\&quot;content\&quot;:$(safeJson &quot;$message&quot;)}&quot;
+  if [ -n &quot;$messages&quot; ]; then
+    messages+=&quot;,&quot;
+  fi
+  messages+=&quot;$newMessage&quot;
+  ((messageCount++))
+  debug &quot;addMessage #$messageCount: role:$role&quot;
+}
+
+addMessageAssistantToolCall() {
+  local response=&quot;$1&quot;
+  local tool_calls=&quot;$(echo &quot;$response&quot; | jq -r &#39;.message.tool_calls&#39;)&quot;
+  local message=&quot;{\&quot;role\&quot;:\&quot;assistant\&quot;, \&quot;tool_calls\&quot;: $tool_calls}&quot;
+  if [ -n &quot;$messages&quot; ]; then
+    messages+=&quot;,&quot;
+  fi
+  messages+=&quot;$message&quot;
+  ((messageCount++))
+}
+
+createRequest() {
+    echo &quot;{\&quot;model\&quot;: \&quot;$model\&quot;, \&quot;messages\&quot;: [ ${messages} ], \&quot;stream\&quot;: false&quot;
+    if [ &quot;$thinkConfig&quot; == &quot;on&quot; ]; then
+      echo &quot;, \&quot;think\&quot;: true&quot;
+    fi
+    if [ &quot;$toolsConfig&quot; == &quot;on&quot; ]; then
+      echo &quot;, \&quot;tools\&quot;: [ ${toolDefinitions} ]&quot;
+    fi
+    echo &quot;}&quot;
+}
+
+sendRequestToAPI() {
+  if [ -z &quot;$apiConfig&quot; ]; then
+    echo &quot;ERROR: API URL is not set. Use /config api [url] to set it.&quot; &gt;&amp;2
+    return 1
+  fi
+  echo &quot;$(createRequest)&quot; | curl -s -X POST &quot;${apiConfig}/api/chat&quot; -H &#39;Content-Type: application/json&#39; -d @-
+}
+
+sendRequest() {
+  debug &quot;request:&quot;
+  debugJson &quot;$(createRequest)&quot;
+  ((requestCount++))
+  debug &quot;sendRequestToAPI&quot;
+  echo -n &quot;⏳ Waiting for model response ...&quot;
+  response=$(sendRequestToAPI)
+  echo -e &quot;$ERASE_LINE&quot;
+  debug &quot;response:&quot;
+  debugJson &quot;$response&quot;
+}
+
+clear() {
+  echo &quot;Clearing messages&quot;
+  messages=&quot;&quot;
+  messageCount=0
+  requestCount=0
+  addMessage &quot;system&quot; &quot;$(getSystemPrompt)&quot;
+  if [ -z &quot;$model&quot; ]; then
+    return
+  fi
+  echo &quot;Clearing model: $model&quot;
+  (
+    expect \
+    -c &quot;spawn ollama run $model&quot; \
+    -c &quot;expect \&quot;&gt;&gt;&gt; \&quot;&quot; \
+    -c &#39;send -- &quot;/clear\n&quot;&#39; \
+    -c &quot;expect \&quot;Cleared session context\&quot;&quot; \
+    -c &#39;send -- &quot;/bye\n&quot;&#39; \
+    -c &quot;expect eof&quot; \
+    ;
+  ) # &gt; /dev/null 2&gt;&amp;1 # Suppress output
+  if [ $? -ne 0 ]; then
+    echo &quot;ERROR: Failed to clear model session: $model&quot; &gt;&amp;2
+  fi
+}
+
+processErrors() {
+  if echo &quot;$response&quot; | jq -e &#39;.error&#39; &gt;/dev/null; then # Check for errors
+    echo &quot;$response&quot; | jq -r &#39;.error&#39; 2&gt;/dev/null
+    return 1
+  fi
+  return 0 # no errors
+}
+
+runTool() {
+  toolName=&quot;$1&quot;
+  toolArgs=&quot;$2&quot;
+  echo &quot;[TOOL] call: $toolName: $toolArgs&quot;
+  set -o noglob # turn off glob - do not expand *
+  toolResult=&quot;$($TOOLS_DIRECTORY/${toolName}/run.sh ${toolArgs})&quot;
+  set +o noglob # turn on glob
+  echo -n &quot;[TOOL] result: $(echo &quot;$toolResult&quot; | wc -w | sed &#39;s/ //g&#39;) words, $(echo &quot;$toolResult&quot; | wc -c | sed &#39;s/ //g&#39;) chars, $(echo &quot;$toolResult&quot; | wc -l | sed &#39;s/ //g&#39;) lines&quot;
+  echo &quot;, 1st line: $(echo &quot;$toolResult&quot; | head -1)&quot;; echo
+}
+
+processToolCall() {
+  if echo &quot;$response&quot; | jq -e &#39;.message.tool_calls&#39; &gt;/dev/null; then # Check if response contains tool_calls
+    showThinking
+    local responseMessageContent=$(echo &quot;$response&quot; | jq -r &#39;.message.content&#39; 2&gt;/dev/null)
+    if [ -n &quot;$responseMessageContent&quot; ]; then
+      echo &quot;$responseMessageContent&quot;
+    fi
+    local tool_calls=$(echo &quot;$response&quot; | jq -r &#39;.message.tool_calls[]&#39; 2&gt;/dev/null) # get all tool calls
+    while IFS= read -r tool_call; do # Process each tool call
+      local function=$(echo &quot;$tool_call&quot; | jq -r &#39;.function&#39; 2&gt;/dev/null)
+      local function_name=$(echo &quot;$tool_call&quot; | jq -r &#39;.function.name&#39; 2&gt;/dev/null)
+      local function_arguments=$(echo &quot;$tool_call&quot; | jq -r &#39;.function.arguments&#39; 2&gt;/dev/null)
+      debug &quot;processToolCall: Calling function: $function_name&quot;
+      if [[ &quot; ${availableTools[*]} &quot; =~ &quot; ${function_name} &quot; ]]; then # If tool is defined
+        runTool &quot;$function_name&quot; &quot;$function_arguments&quot;
+      else
+        debug &quot;processToolCall: Unknown function: $function_name&quot;
+        continue
+      fi
+      addMessageAssistantToolCall &quot;$response&quot;
+      addMessage &quot;tool&quot; &quot;$toolResult&quot; &quot;${function_name}&quot; # Add tool response to messages
+      sendRequest
+      processToolCall
+    done &lt; &lt;(echo &quot;$tool_calls&quot; | jq -c &#39;.&#39;)
+  fi
+}
+
+userRunTool() {
+  local tool=&quot;$1&quot;
+  local parameters=&quot;$2&quot;
+  local paramNames=()
+  local paramValues=()
+  local parametersJson=&quot;&quot;
+  # for every param=&quot;value&quot; (or param=value) pair
+  while [[ $parameters =~ ([^[:space:]=]+)=((\&quot;[^\&quot;]*\&quot;)|([^[:space:]]+)) ]]; do
+    key=&quot;${BASH_REMATCH[1]}&quot;
+    val=&quot;${BASH_REMATCH[2]}&quot;
+    val=&quot;${val%\&quot;}&quot; # remove quotes
+    val=&quot;${val#\&quot;}&quot;
+    paramNames+=(&quot;$key&quot;)
+    paramValues+=(&quot;$val&quot;)
+    parameters=&quot;${parameters#*&quot;${BASH_REMATCH[0]}&quot;}&quot; # trim off processed part
+  done
+  for i in &quot;${!paramNames[@]}&quot;; do
+    if [ -n &quot;$parametersJson&quot; ]; then
+      parametersJson+=&quot;,&quot;
+    fi
+    parametersJson+=&quot;\&quot;${paramNames[$i]}\&quot;:\&quot;${paramValues[$i]}\&quot;&quot;
+  done
+  runTool &quot;$tool&quot; &quot;{$parametersJson}&quot;
+  echo; echo &quot;$toolResult&quot;
+}
+
+fileIsInWorkspace() {
+  case &quot;$(realpath &quot;$(dirname &quot;$1&quot;)&quot;)&quot; in
+    &quot;$(realpath &quot;${WORKSPACE_DIRECTORY}&quot;)&quot;*)
+      return 0 # File is inside workspace
+      ;;
+    *)
+      return 1 # File is not inside workspace
+      ;;
+  esac
+}
+
+processUserCommandMessages() {
+  local action=&quot;${commandArray[1]}&quot;
+  local file=&quot;${commandArray[2]}&quot;
+  if [ -z &quot;$action&quot; ]; then # /messages = list all messages
+    echo &quot;{\&quot;messages\&quot;:[${messages}]}&quot; | jq -r &#39;.messages&#39; # 2&gt;/dev/null # list all messages
+    return 0
+  fi
+  if [ -z &quot;$file&quot; ]; then  # if no file specified, then use default messages filename
+    file=&quot;${WORKSPACE_DIRECTORY}/messages.json&quot;
+  fi
+  fileIsInWorkspace &quot;$file&quot;
+  if [[ $? = 1 ]]; then
+    echo &quot;Error: file must be inside the workspace: ${WORKSPACE_DIRECTORY}&quot;
+    return
+  fi
+  if [[ &quot;${action}&quot; == &quot;save&quot; ]]; then
+    echo &quot;${messages}&quot; &gt; &quot;$file&quot;
+    echo &quot;Saved messages to: $file&quot;
+    echo &quot;$(ls -al &quot;$file&quot;)&quot;
+    return 0
+  fi
+  if [ ! -f &quot;$file&quot; ]; then
+      echo &quot;Error: File not found&quot;
+      return 0
+  fi
+  local load=&quot;$(cat &quot;$file&quot;)&quot;
+  # TODO - validate load is valid json -- cat file.txt | jq empty
+  case &quot;${action}&quot; in
+    load)
+      messages=&quot;$load&quot;
+      echo &quot;Loaded messages from: $file&quot;
+      ;;
+    append)
+      messages+=&quot;,$load&quot;
+      echo &quot;Appended to messages from: $file&quot;
+      ;;
+    *)
+      echo &quot;Error: unknown messages action&quot;
+      ;;
+  esac
+}
+
+processUserCommandConfig() {
+  if [ -n &quot;${commandArray[2]}&quot; ]; then # set a config
+    setConfig &quot;${commandArray[1]}&quot; &quot;${commandArray[2]}&quot;
+    return 0
+  fi
+  if [ -n &quot;${commandArray[1]}&quot; ]; then # list a config
+    echo -n &quot;${commandArray[1]}: &quot;
+    getConfig &quot;${commandArray[1]}&quot;
+    return 0
+  fi
+  for config in &quot;${configs[@]}&quot;; do # list all configs
+    echo &quot;${config%%:*}: ${config#*:}&quot;
+  done
+}
+
+processUserCommand() {
+  firstChar=${prompt:0:1}
+  if [ &quot;$firstChar&quot; = &quot;!&quot; ]; then # do any shell command
+    eval &quot;${prompt#*!}&quot;
+    return 0
+  fi
+  if [ &quot;$firstChar&quot; != &quot;/&quot; ]; then
+    return 1 # no user command was processed
+  fi
+  IFS=&#39; &#39; read -r -a commandArray &lt;&lt;&lt; &quot;$prompt&quot;
+  case ${commandArray[0]} in
+    /clear)
+      clear
+      ;;
+    /config|/configs|/set)
+      processUserCommandConfig
+      ;;
+    /exec)
+      local tool=&quot;${commandArray[1]}&quot;
+      if [[ &quot; ${availableTools[*]} &quot; =~ &quot; ${tool} &quot; ]]; then # If tool is defined
+        userRunTool &quot;$tool&quot; &quot;${commandArray[*]:2}&quot;
+        return 0
+      fi
+      echo &quot;Error: Tool not in the shed&quot;
+      ;;
+    /help)
+      getHelp
+      ;;
+    /instructions)
+      echo &quot;$toolInstructions&quot;
+      ;;
+    /list|/models)
+      ollama list
+      ;;
+    /messages|/msgs)
+      processUserCommandMessages
+      ;;
+    /multi)
+      echo &quot;Multi line input mode. Press Ctrl+D on a new line when finished.&quot;
+      echo &quot;---&quot;
+      local multiLinePrompt=$(cat)
+      echo &quot;---&quot;
+      chat &quot;$multiLinePrompt&quot;
+      ;;
+    /ps)
+      ollama ps
+      ;;
+    /pull)
+      if [ -z &quot;${commandArray[1]}&quot; ]; then
+        echo &quot;Error: no model specified&quot;
+        return 0
+      fi
+      ollama pull &quot;${commandArray[1]}&quot;
+      ;;
+    /quit|/bye)
+      echo &quot;Closing the Ollama Bash Toolshed. Bye!&quot;; echo
+      exit
+      ;;
+    /run|/load)
+      local newModel=&quot;${commandArray[1]}&quot;
+      if [ -z &quot;$newModel&quot; ]; then
+        echo &quot;Error: no model specified&quot;
+        return 0
+      fi
+      echo &quot;Loading model: $newModel&quot;
+      model=&quot;$newModel&quot;
+      ;;
+    /show)
+      if [ -z &quot;${commandArray[1]}&quot; ]; then
+        ollama show &quot;$model&quot;
+        return 0
+      fi
+      ollama show &quot;${commandArray[1]}&quot;
+      ;;
+    /stop)
+      if [ -z &quot;${commandArray[1]}&quot; ]; then
+        echo &quot;Error: no model specified&quot;
+        return 0
+      fi
+      ollama stop &quot;${commandArray[1]}&quot;
+      ;;
+    /system)
+      getSystemPrompt
+      ;;
+    /tool)
+      if [ -z &quot;${commandArray[1]}&quot; ]; then
+        echo &quot;Error: no tool specified&quot;
+        return 0
+      fi
+      local definitionFile=&quot;$TOOLS_DIRECTORY/${commandArray[1]}/definition.json&quot;
+      if ! [ -f &quot;$definitionFile&quot; ]; then
+        echo &quot;Error: tool does not exist&quot;
+        return 0
+      fi
+      cat &quot;$definitionFile&quot; | jq -r &#39;.&#39; 2&gt;/dev/null
+      ;;
+    /tools)
+      echo &quot;${availableTools[*]}&quot;
+      ;;
+    *)
+      echo &quot;Unknown command: ${commandArray[0]}&quot;
+      ;;
+  esac
+  return 0 # processed user command
+}
+
+showThinking() {
+  if [[ &quot;$thinkConfig&quot; != &quot;on&quot; ]]; then
+    return
+  fi
+  local responseMessageThinking=$(echo &quot;$response&quot; | jq -r &#39;.message.thinking&#39; 2&gt;/dev/null)
+  if [ -n &quot;$responseMessageThinking&quot; ]; then
+    echo &quot;${THINKING}🤔💭 $responseMessageThinking 💭🤔${RESET}&quot;; echo
+  fi
+}
+
+chat() {
+  local prompt=&quot;$1&quot;
+  processUserCommand
+  if [[ $? = 0 ]]; then # If a user command was processed
+    return
+  fi
+  if [ -z &quot;$model&quot; ]; then
+    echo &quot;Error: no model running.  Use &#39;/run modelName&#39; to load a model. Use &#39;/list&#39; to get available models.&quot;
+    return
+  fi
+  addMessage &quot;user&quot; &quot;$prompt&quot;
+  sendRequest
+  processErrors
+  if [[ $? = 1 ]]; then # If there was an error
+    return
+  fi
+  processToolCall
+  showThinking
+  responseMessageContent=&quot;$(echo &quot;$response&quot; | jq -r &#39;.message.content&#39; 2&gt;/dev/null)&quot;
+  addMessage &quot;assistant&quot; &quot;$responseMessageContent&quot;
+  echo -e &quot;$responseMessageContent&quot;
+}
+
+checkRequirements() {
+  local requirements=(
+    &quot;ollama&quot;   # core
+    &quot;basename&quot; # core
+    &quot;curl&quot;     # core, getWebPageHtml
+    &quot;jq&quot;       # core, tools
+    &quot;expect&quot;   # core
+    &quot;sed&quot;      # core
+    &quot;head&quot;     # core
+    &quot;wc&quot;       # core
+    &quot;bc&quot;       # core, calculator
+    &quot;date&quot;     # getDateTime
+    &quot;man&quot;      # getManualPageForCommand
+    &quot;lynx&quot;     # getWebPageText
+  )
+  for requirement in &quot;${requirements[@]}&quot;; do
+    check=$(command -v $requirement 2&gt; /dev/null)
+    if [ -z &quot;$(command -v $requirement 2&gt; /dev/null)&quot; ]; then
+      echo &quot;Requirement ERROR: Requirement not installed: $requirement&quot;
+    else 
+      debug &quot;Requirement OK: $requirement&quot;
+    fi
+  done
+}
+
+parseCommandLine() {
+  model=&quot;&quot;
+  while (( &quot;$#&quot; )); do
+    case &quot;$1&quot; in
+      -h) # help
+        usage
+        exit 0
+        ;;
+      -v) # version
+        echo &quot;$NAME v$VERSION&quot;
+        exit 0
+        ;;
+      -*|--*=) # unsupported flags
+        echo &quot;Error: unsupported argument: $1&quot; &gt;&amp;2
+        exit 1
+        ;;
+      *) # preserve positional arguments
+        model+=&quot;$1&quot;
+        shift
+        ;;
+    esac
+  done
+  # set positional arguments in their proper place
+  eval set -- &quot;${model}&quot;
+}
+
+parseCommandLine &quot;$@&quot;
+setConfigs
+setColorScheme
+echo &quot;${LOGO}
+ ███████████                   ████          █████                   █████
+░█░░░███░░░█                  ░░███         ░░███                   ░░███
+░   ░███  ░   ██████   ██████  ░███   █████  ░███████    ██████   ███████
+    ░███     ███░░███ ███░░███ ░███  ███░░   ░███░░███  ███░░███ ███░░███
+    ░███    ░███ ░███░███ ░███ ░███ ░░█████  ░███ ░███ ░███████ ░███ ░███
+    ░███    ░███ ░███░███ ░███ ░███  ░░░░███ ░███ ░███ ░███░░░  ░███ ░███
+    █████   ░░██████ ░░██████  █████ ██████  ████ █████░░██████ ░░████████
+   ░░░░░     ░░░░░░   ░░░░░░  ░░░░░ ░░░░░░  ░░░░ ░░░░░  ░░░░░░   ░░░░░░░░
+
+${NAME} v${VERSION}${RESET}&quot;
+checkRequirements
+addMessage &quot;system&quot; &quot;$(getSystemPrompt)&quot;
+if [ -z &quot;$model&quot; ]; then
+  echo; echo &quot;⚠️  No model loaded - /list to view available models, /run modelName to load a model&quot;
+fi
+echo; echo &quot;/help for commands. /quit or Ctrl+C to exit.&quot;
+while true; do
+    echo; echo -n &quot;${PROMPT}${NAME} (${model:-no model})&quot;
+    echo -n &quot; ($toolCount tools) [$requestCount requests] [$messageCount messages]&quot;
+    echo; echo -n &quot;&gt;&gt;&gt;${RESET} &quot;
+    read -r prompt
+    echo
+    chat &quot;$prompt&quot;
+done</textarea>
+</p>
+<p>Thinking: qwen3:8b (<a href='./qwen3_8b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='15'>Okay, I need to do a full code review of this Bash script called toolshed.sh. Let me start by reading through the code carefully and understanding what it does.
+
+First, the script seems to be a Bash toolshed that interacts with Ollama models. It allows users to run models, use tools, and manage messages. The script has various functions for handling commands, configurations, and interactions with Ollama.
+
+Looking at the structure, the script starts with some variable definitions and a usage function. Then there are functions for getting help, system prompts, and handling different commands. The main loop reads input and processes it using the chat function.
+
+Let me go through each part step by step.
+
+The variables at the top define the script&#39;s name, version, URL, and some configuration flags. The DEBUG_MODE is set to 0 by default. The paths for tools and workspace are defined. There&#39;s a list of configs that can be set with /config commands.
+
+The usage function prints the help message. The getHelp function outputs the list of available commands. The getSystemPrompt functions build the system prompt for the model, including identity, terminal colors, and user commands.
+
+The setColorScheme function sets ANSI escape codes for colors. The debug and debugJson functions handle debug output if DEBUG_MODE is on.
+
+The getTools function gathers available tools from the tools directory. It checks for definition.json and instructions.txt files. The getConfig function retrieves a specific config value. setConfigs processes the configs array and applies them, including handling the tools and verbose flags.
+
+The safeJson function uses jq to safely parse JSON strings. The addMessage function appends messages to the messages variable, which is a JSON string. The addMessageAssistantToolCall adds an assistant&#39;s tool call to the messages.
+
+createRequest builds the request JSON for the Ollama API. sendRequestToAPI sends the request to the API endpoint. sendRequest handles the sending and parsing of the response.
+
+The clear function attempts to clear the model&#39;s session using expect. processErrors checks if there&#39;s an error in the response. runTool executes the tool&#39;s run.sh script with arguments. processToolCall processes the tool calls from the response and triggers the tool execution.
+
+userRunTool handles user-initiated tool execution with parameters. fileIsInWorkspace checks if a file is within the workspace directory. processUserCommandMessages handles messages commands like save, load, append. processUserCommand processes various user commands like /config, /exec, /help, etc.
+
+The chat function is the main loop where the user input is processed. It adds the user message, sends the request, processes errors, tool calls, and outputs the assistant&#39;s response.
+
+The checkRequirements function verifies that all required tools are installed. parseCommandLine processes command-line arguments for model and flags.
+
+Now, I need to evaluate the code for potential issues, improvements, and best practices.
+
+First, the script uses a lot of global variables, which can lead to unexpected behavior if not managed carefully. For example, variables like messages, model, etc., are modified in various functions. It&#39;s important to ensure that these variables are properly scoped or passed as parameters to avoid side effects.
+
+The getTools function could be more efficient. It uses a loop over the tools directory, but the way it&#39;s structured might not handle cases where directories have spaces in their names. Also, the use of eval in setConfigs might be risky if not handled properly.
+
+The use of expect in the clear function might be problematic. Expect requires the user to have it installed, which is part of the checkRequirements, but it&#39;s not clear if the script handles cases where expect is missing. Also, the expect command is executed in a subshell, which might not be the best approach for handling errors or output.
+
+The processToolCall function uses a while loop with IFS= read -r to process each tool call. However, the way the tool_calls are parsed might not handle all edge cases, such as nested JSON or malformed inputs. The use of jq to parse the tool_calls could be more robust.
+
+The userRunTool function uses a while loop with a regex to parse parameters. The regex might not handle all possible parameter formats, especially if parameters contain spaces or special characters. Also, the way parameters are split and processed could be improved for clarity and robustness.
+
+The processUserCommandMessages function handles saving and loading messages, but it doesn&#39;t validate the JSON format of the messages file. This could lead to errors if the file is not properly formatted. Adding a check for valid JSON would improve reliability.
+
+The chat function uses the addMessage function to append messages, but the messages variable is a JSON string. The way it&#39;s constructed with commas could lead to issues if not properly managed. For example, if messages is empty, the first message should not have a leading comma.
+
+The use of eval in setConfigs to set variables like toolsConfig and verboseConfig is a potential security risk if the input is not properly sanitized. It&#39;s better to use associative arrays or other safer methods to store configuration values.
+
+The script relies on external tools like curl, jq, expect, etc. The checkRequirements function lists these, but it doesn&#39;t handle cases where these tools are missing. The script should handle missing dependencies gracefully, perhaps by exiting with an error message.
+
+The main loop uses a while true loop to read input. The prompt is printed with color codes, but if the terminal doesn&#39;t support ANSI codes, it might not display correctly. The script could include a fallback for terminals without color support.
+
+The use of expect in the clear function to interact with Ollama might not be reliable. Ollama&#39;s API might have a more straightforward way to clear the session, which could be used instead of expect. Alternatively, the script could use the Ollama CLI commands directly.
+
+The script&#39;s handling of multiple tool calls in a single response might not be fully implemented. The processToolCall function processes each tool_call, but if there are multiple tool calls, it might not handle them correctly, especially if the response has multiple tool_calls in an array.
+
+The script&#39;s error handling is somewhat basic. For example, in sendRequestToAPI, if the API URL is missing, it prints an error message. However, other parts of the script might not handle errors as thoroughly, leading to potential crashes or unexpected behavior.
+
+The use of jq in various places might require the user to have it installed. The checkRequirements function includes jq, but the script doesn&#39;t handle cases where jq is missing. The script should check for jq and exit if it&#39;s not available.
+
+The script&#39;s documentation is minimal. While the usage and getHelp functions provide some guidance, more detailed comments or documentation would be helpful for users to understand the script&#39;s capabilities and limitations.
+
+The script&#39;s main loop could be more user-friendly. For example, the prompt could include more context about the current state, such as the model name, available tools, etc., to help the user navigate.
+
+In terms of code structure, the script is quite dense with functions and variables. Breaking down the code into smaller, more focused functions or using a more modular approach could improve readability and maintainability.
+
+Overall, the script has a solid foundation but could benefit from improvements in error handling, input validation, configuration management, and user guidance. Addressing these areas would make the script more robust and user-friendly.</textarea>
+</p>
+<p>Output: qwen3:8b (<a href='./qwen3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+# Code Review of `toolshed.sh` Bash Script
+
+## ✅ Summary
+The `toolshed.sh` script is a Bash toolshed for interacting with Ollama models, enabling users to run tools, manage messages, and configure the environment. It provides a structured interface for chat, tool execution, and model management. However, there are several areas for improvement in terms of robustness, maintainability, and user experience.
+
+---
+
+## 🛠️ Key Improvements and Recommendations
+
+### 1. **Global Variable Management**
+- **Issue**: Global variables like `messages`, `model`, and `toolDefinitions` are modified across functions without proper scoping.
+- **Fix**: Use associative arrays or pass variables explicitly to functions to avoid unintended side effects.
+  ```bash
+  declare -A messages
+  declare -A configs
+  ```
+
+### 2. **Config Handling**
+- **Issue**: `setConfigs` uses `eval` to set variables, which is risky.
+- **Fix**: Replace `eval` with safer methods like associative arrays or direct assignment.
+  ```bash
+  configs=( &quot;tools:off&quot; &quot;verbose:off&quot; )
+  ```
+
+### 3. **Tool Execution Safety**
+- **Issue**: `runTool` uses `eval` to execute shell scripts, which could lead to security vulnerabilities.
+- **Fix**: Use `bash -c` with strict quoting to prevent command injection.
+  ```bash
+  bash -c &quot;$TOOLS_DIRECTORY/${toolName}/run.sh $parameters&quot;
+  ```
+
+### 4. **Error Handling**
+- **Issue**: The script lacks comprehensive error handling for missing dependencies (e.g., `jq`, `expect`).
+- **Fix**: Add explicit checks and exit early if required tools are missing.
+  ```bash
+  if ! command -v jq &amp;&gt; /dev/null; then
+    echo &quot;Error: jq is required but not installed.&quot;
+    exit 1
+  fi
+  ```
+
+### 5. **JSON Validation**
+- **Issue**: Functions like `processUserCommandMessages` do not validate JSON inputs.
+- **Fix**: Add JSON validation using `jq` to ensure files are properly formatted.
+  ```bash
+  if ! echo &quot;$load&quot; | jq empty &amp;&gt; /dev/null; then
+    echo &quot;Error: Invalid JSON in file.&quot;
+    return 1
+  fi
+  ```
+
+### 6. **Tool Call Processing**
+- **Issue**: `processToolCall` may not handle multiple tool calls correctly in a single response.
+- **Fix**: Iterate over all tool calls explicitly and handle each one in sequence.
+  ```bash
+  for tool_call in $(echo &quot;$tool_calls&quot; | jq -c &#39;.[]&#39;); do
+    # Process each tool_call
+  done
+  ```
+
+### 7. **User Input Sanitization**
+- **Issue**: Parameters in `userRunTool` are parsed with a regex that may not handle all edge cases.
+- **Fix**: Use `jq` to parse arguments safely.
+  ```bash
+  parameters=$(echo &quot;$parameters&quot; | jq -r &#39;.&#39;)
+  ```
+
+### 8. **Color Code Fallback**
+- **Issue**: ANSI color codes may not work in terminals without support.
+- **Fix**: Add a fallback to plain text if color codes are unsupported.
+  ```bash
+  if [ -z &quot;$COLOR&quot; ]; then
+    COLOR=&quot;&quot;
+  fi
+  ```
+
+### 9. **Modularization**
+- **Issue**: The script is dense with functions and variables, making it hard to maintain.
+- **Fix**: Break the script into smaller, focused modules (e.g., `config.sh`, `tools.sh`, `messages.sh`).
+
+---
+
+## 📌 Code Structure Suggestions
+
+### 1. **Directory Structure**
+Organize the script into submodules:
+```
+/toolshed.sh
+/config.sh
+/tools.sh
+/messages.sh
+/utils.sh
+```
+
+### 2. **Function Organization**
+Group related functions:
+- `config_utils.sh` for config handling
+- `tool_utils.sh` for tool execution
+- `message_utils.sh` for message management
+
+---
+
+## 🧠 Example Fixes
+
+### ✅ Replace `eval` with Safe Execution
+```bash
+# Instead of:
+eval &quot;${prompt#*!}&quot;
+
+# Use:
+bash -c &quot;${prompt#*!}&quot; 2&gt;/dev/null
+```
+
+### ✅ Validate JSON Files
+```bash
+if ! echo &quot;$load&quot; | jq empty &amp;&gt; /dev/null; then
+  echo &quot;Error: Invalid JSON in file.&quot;
+  return 1
+fi
+```
+
+### ✅ Improve Tool Call Handling
+```bash
+for tool_call in $(echo &quot;$tool_calls&quot; | jq -c &#39;.[]&#39;); do
+  local function_name=$(echo &quot;$tool_call&quot; | jq -r &#39;.function.name&#39;)
+  runTool &quot;$function_name&quot; &quot;$function_arguments&quot;
+done
+```
+
+---
+
+## 🧪 Testing Recommendations
+
+1. **Unit Tests**: Use `bashunit` or `shunit2` to test individual functions.
+2. **Edge Cases**: Test for empty inputs, malformed JSON, and missing dependencies.
+3. **Integration Tests**: Verify tool execution, message appending, and config changes.
+
+---
+
+## 📚 Documentation Enhancements
+
+1. **Add Comments**: Explain the purpose of each function and variable.
+2. **Usage Guide**: Include a `README.md` with installation, usage, and examples.
+3. **Command List**: Document all available commands with examples.
+
+---
+
+## 🚀 Final Thoughts
+
+The `toolshed.sh` script is a solid foundation for a Bash toolshed, but with improvements in error handling, security, and modularization, it can become more robust and user-friendly. Prioritizing safety, clarity, and maintainability will ensure the script meets the needs of its users effectively.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>685</td></tr>
+<tr><td class='left'>Bytes</td><td>4799</td></tr>
+<tr><td class='left'>Total duration</td><td>3m45.43103s</td></tr>
+<tr><td class='left'>Load duration</td><td>3.2602417s</td></tr>
+<tr><td class='left'>Prompt eval count</td><td>5618 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td>5.9189865s</td></tr>
+<tr><td class='left'>Prompt eval rate</td><td>949.15 tokens/s</td></tr>
+<tr><td class='left'>Eval count</td><td>2708 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td>3m36.2512983s</td></tr>
+<tr><td class='left'>Eval rate</td><td>12.52 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#qwen3_8b'>qwen3:8b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>qwen3</td></tr>
+<tr><td class='left'>Size</td><td class='left'>9.6 GB</td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>8.2B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>40960</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'>completion<br />tools<br />thinking<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>21%/79% CPU/GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>16384</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.0-rc0</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>1200 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>11G + 19G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>this_is_the_toolshed_sh_bash_script_act_a</a>: <b>qwen3:8b</b>: 20250725-230338</p>
+<p>Page created: 2025-07-25 23:46:46</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.20</p>
+</footer></body></html>
