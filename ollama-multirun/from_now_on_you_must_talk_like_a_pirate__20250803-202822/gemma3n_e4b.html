@@ -1,0 +1,102 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gemma3n:e4b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>from_now_on_you_must_talk_like_a_pirate_</a>: <b>gemma3n:e4b</b>: 20250803-202822<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3n_e2b.html'>gemma3n:e2b</a> 
+<b>gemma3n:e4b</b> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_iq4_xs.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:IQ4_XS</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q4_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q4_K_M</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q5_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q5_K_M</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k_l.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K_L</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./from_now_on_you_must_talk_like_a_pirate_.prompt.yaml'>yaml</a>)
+  words:15  bytes:73<br />
+<textarea readonly rows='4'>From now on you must talk like a Pirate!
+Arg, tell me some jokes, matey!</textarea>
+</p>
+<p>Output: gemma3n:e4b (<a href='./gemma3n_e4b.output.txt'>raw</a>)<br />
+<textarea readonly rows='21'>Ahoy there, matey! Shiver me timbers, ye want jokes, do ye? Well, hoist the colors and listen up! I&#39;ve got a treasure chest o&#39; &#39;em for ye!
+
+**Joke 1:** Why did the pirate go to school? 
+... To learn the arrr-ithmetic! 
+
+**Joke 2:** What do ye call a pirate with two eyes and two parrots?
+... A well-rounded scallywag!
+
+**Joke 3:** Why are pirates bad poker players?
+... &#39;Cause they always have a spade!
+
+**Joke 4:** What&#39;s a pirate&#39;s favorite letter?
+... RRRRRRRRR!
+
+**Joke 5:**  Why did the pirate bury his treasure in the library?
+... He wanted to make it a book-tiful surprise!
+
+Arrr, did those tickle yer funny bone, or do I need to dig deeper in me treasure chest?  Let me know if ye want more, savvy?  I&#39;ve got plenty more tales and riddles to spin! </textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gemma3n_e4b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>139</td></tr>
+<tr><td class='left'>Bytes</td><td>759</td></tr>
+<tr><td class='left'>Total duration</td><td>14.7872987s</td></tr>
+<tr><td class='left'>Load duration</td><td>4.2413343s</td></tr>
+<tr><td class='left'>Prompt eval count</td><td>31 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td>221.9119ms</td></tr>
+<tr><td class='left'>Prompt eval rate</td><td>139.70 tokens/s</td></tr>
+<tr><td class='left'>Eval count</td><td>228 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td>10.3235445s</td></tr>
+<tr><td class='left'>Eval rate</td><td>22.09 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gemma3n_e4b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#gemma3n_e4b'>gemma3n:e4b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>gemma3n</td></tr>
+<tr><td class='left'>Size</td><td class='left'>7.6 GB</td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>6.9B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>2048</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>6%/94% CPU/GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>4096</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.1</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>17G + 13G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>from_now_on_you_must_talk_like_a_pirate_</a>: <b>gemma3n:e4b</b>: 20250803-202822</p>
+<p>Page created: 2025-08-03 20:29:35</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun v5.21.3</a></p>
+</footer></body></html>

@@ -1,0 +1,308 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: from_now_on_you_must_talk_like_a_pirate_</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>from_now_on_you_must_talk_like_a_pirate_</b>: 20250803-202822<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3n_e2b.html'>gemma3n:e2b</a> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_iq4_xs.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:IQ4_XS</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q4_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q4_K_M</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q5_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q5_K_M</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k_l.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K_L</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./from_now_on_you_must_talk_like_a_pirate_.prompt.yaml'>yaml</a>)
+  words:15  bytes:73<br />
+<textarea readonly rows='4'>From now on you must talk like a Pirate!
+Arg, tell me some jokes, matey!</textarea>
+</p>
+
+<table class='sortable'>
+  <thead>
+    <tr>
+      <th class='left'>Model</th>
+      <th>Response<br />words</th>
+      <th>Response<br />bytes</th>
+      <th>Total<br />duration</th>
+      <th>Load<br />duration</th>
+      <th>Prompt eval<br />count</th>
+      <th>Prompt eval<br />duration</th>
+      <th>Prompt eval<br />rate</th>
+      <th>Eval<br />count</th>
+      <th>Eval<br />duration</th>
+      <th>Eval<br />rate</th>
+      <th>Model<br />params</th>
+      <th>Model<br />size</th>
+      <th>Model<br />context</th>
+      <th>Ollama<br />context</th>
+      <th>Ollama<br />proc</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+<td class='left'><a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a></td>
+<td>103</td>
+<td>623</td>
+<td>16.4530948s</td>
+<td>3.2562851s</td>
+<td>22 token(s)</td>
+<td>137.1742ms</td>
+<td>160.38 tokens/s</td>
+<td>514 token(s)</td>
+<td>13.0401092s</td>
+<td>39.42 tokens/s</td>
+<td>8.2B</td>
+<td>6.5 GB</td>
+<td>131072</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./dolphin3_8b.html'>dolphin3:8b</a></td>
+<td>105</td>
+<td>567</td>
+<td>6.5272393s</td>
+<td>2.7823774s</td>
+<td>43 token(s)</td>
+<td>149.9841ms</td>
+<td>286.70 tokens/s</td>
+<td>160 token(s)</td>
+<td>3.5943749s</td>
+<td>44.51 tokens/s</td>
+<td>8.0B</td>
+<td>6.1 GB</td>
+<td>131072</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3n_e2b.html'>gemma3n:e2b</a></td>
+<td>149</td>
+<td>781</td>
+<td>7.7585252s</td>
+<td>3.9909812s</td>
+<td>31 token(s)</td>
+<td>290.1362ms</td>
+<td>106.85 tokens/s</td>
+<td>254 token(s)</td>
+<td>3.4769018s</td>
+<td>73.05 tokens/s</td>
+<td>4.5B</td>
+<td>4.5 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./gemma3n_e4b.html'>gemma3n:e4b</a></td>
+<td>139</td>
+<td>759</td>
+<td>14.7872987s</td>
+<td>4.2413343s</td>
+<td>31 token(s)</td>
+<td>221.9119ms</td>
+<td>139.70 tokens/s</td>
+<td>228 token(s)</td>
+<td>10.3235445s</td>
+<td>22.09 tokens/s</td>
+<td>6.9B</td>
+<td>7.6 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>6%/94% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_iq4_xs.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:IQ4_XS</a></td>
+<td>59</td>
+<td>320</td>
+<td>4.8856568s</td>
+<td>2.7826156s</td>
+<td>24 token(s)</td>
+<td>182.3799ms</td>
+<td>131.59 tokens/s</td>
+<td>87 token(s)</td>
+<td>1.9192835s</td>
+<td>45.33 tokens/s</td>
+<td>8.0B</td>
+<td>5.7 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q4_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q4_K_M</a></td>
+<td>44</td>
+<td>227</td>
+<td>4.5459742s</td>
+<td>3.01687s</td>
+<td>24 token(s)</td>
+<td>139.216ms</td>
+<td>172.39 tokens/s</td>
+<td>61 token(s)</td>
+<td>1.3893167s</td>
+<td>43.91 tokens/s</td>
+<td>8.0B</td>
+<td>6.1 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q5_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q5_K_M</a></td>
+<td>83</td>
+<td>467</td>
+<td>6.7826377s</td>
+<td>3.2471131s</td>
+<td>24 token(s)</td>
+<td>139.8694ms</td>
+<td>171.59 tokens/s</td>
+<td>130 token(s)</td>
+<td>3.3947251s</td>
+<td>38.29 tokens/s</td>
+<td>8.0B</td>
+<td>6.9 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K</a></td>
+<td>31</td>
+<td>163</td>
+<td>6.1972929s</td>
+<td>3.7647153s</td>
+<td>24 token(s)</td>
+<td>170.2775ms</td>
+<td>140.95 tokens/s</td>
+<td>50 token(s)</td>
+<td>2.2612946s</td>
+<td>22.11 tokens/s</td>
+<td>8.0B</td>
+<td>8.1 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>10%/90% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k_l.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K_L</a></td>
+<td>45</td>
+<td>242</td>
+<td>7.0851669s</td>
+<td>3.7589118s</td>
+<td>24 token(s)</td>
+<td>170.3027ms</td>
+<td>140.93 tokens/s</td>
+<td>66 token(s)</td>
+<td>3.1544498s</td>
+<td>20.92 tokens/s</td>
+<td>8.0B</td>
+<td>8.3 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>11%/89% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./mistral_7b.html'>mistral:7b</a></td>
+<td>265</td>
+<td>1373</td>
+<td>11.4533459s</td>
+<td>2.3140239s</td>
+<td>27 token(s)</td>
+<td>171.5727ms</td>
+<td>157.37 tokens/s</td>
+<td>416 token(s)</td>
+<td>8.9670904s</td>
+<td>46.39 tokens/s</td>
+<td>7.2B</td>
+<td>5.8 GB</td>
+<td>32768</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a></td>
+<td>68</td>
+<td>319</td>
+<td>5.2860385s</td>
+<td>2.611983s</td>
+<td>40 token(s)</td>
+<td>159.1563ms</td>
+<td>251.33 tokens/s</td>
+<td>82 token(s)</td>
+<td>2.5143906s</td>
+<td>32.61 tokens/s</td>
+<td>8.3B</td>
+<td>8.5 GB</td>
+<td>128000</td>
+<td>4096</td>
+<td>41%/59% CPU/GPU</td>
+</tr>
+<tr>
+<td class='left'><a href='./qwen3_8b.html'>qwen3:8b</a></td>
+<td>72</td>
+<td>479</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>8.2B</td>
+<td>6.5 GB</td>
+<td>40960</td>
+<td>4096</td>
+<td>100% GPU</td>
+</tr>
+</tbody></table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>4096</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.1</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>12G + 18G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<style>
+.sortable thead th:not(.no-sort){cursor:pointer}.sortable thead th:not(.no-sort)::after,.sortable thead th:not(.no-sort)::before{transition:color .1s ease-in-out;font-size:1.2em;color:rgba(0,0,0,0)}.sortable thead th:not(.no-sort)::after{margin-left:3px;content:"▸"}.sortable thead th:not(.no-sort):hover::after{color:inherit}.sortable thead th:not(.no-sort)[aria-sort=descending]::after{color:inherit;content:"▾"}.sortable thead th:not(.no-sort)[aria-sort=ascending]::after{color:inherit;content:"▴"}.sortable thead th:not(.no-sort).indicator-left::after{content:""}.sortable thead th:not(.no-sort).indicator-left::before{margin-right:3px;content:"▸"}.sortable thead th:not(.no-sort).indicator-left:hover::before{color:inherit}.sortable thead th:not(.no-sort).indicator-left[aria-sort=descending]::before{color:inherit;content:"▾"}.sortable thead th:not(.no-sort).indicator-left[aria-sort=ascending]::before{color:inherit;content:"▴"}.sortable{--stripe-color: #e4e4e4;--th-color: #fff;--th-bg: #808080;--td-color: #000;--td-on-stripe-color: #000;border-spacing:0}.sortable.sticky thead th{position:sticky;top:0;z-index:1}.sortable tbody tr:nth-child(odd){background-color:var(--stripe-color);color:var(--td-on-stripe-color)}.sortable thead th{background:var(--th-bg);color:var(--th-color);font-weight:normal;text-align:left;text-transform:capitalize;vertical-align:baseline;white-space:nowrap}.sortable td{color:var(--td-color)}.sortable td,.sortable th{padding:10px}.sortable td:first-child,.sortable th:first-child{border-top-left-radius:4px}.sortable td:last-child,.sortable th:last-child{border-top-right-radius:4px}
+</style>
+<script>
+function sortSortable(a,m){function n(b){if(b){if(m&&b.dataset.sortAlt)return b.dataset.sortAlt;if(b.dataset.sort)return b.dataset.sort;if(b.textContent)return b.textContent}return""}a.dispatchEvent(new Event("sort-start",{bubbles:!0}));for(var c=a.tHead.querySelector("th[aria-sort]"),k=a.tHead.children[0],p="ascending"===c.getAttribute("aria-sort"),f=a.classList.contains("n-last"),e=function(b,q,d){var g=n(q.cells[d]),r=n(b.cells[d]);if(f){if(""===g&&""!==r)return-1;if(""===r&&""!==g)return 1}var u=
++g-+r;g=isNaN(u)?g.localeCompare(r):u;return 0===g&&k.cells[d]&&k.cells[d].hasAttribute("data-sort-tbr")?e(b,q,+k.cells[d].dataset.sortTbr):p?-g:g},h=0;h<a.tBodies.length;h++){var l=a.tBodies[h],v=[].slice.call(l.rows,0);v.sort(function(b,q){var d;return e(b,q,+(null!==(d=c.dataset.sortCol)&&void 0!==d?d:c.cellIndex))});var t=l.cloneNode();t.append.apply(t,v);a.replaceChild(t,l)}a.dispatchEvent(new Event("sort-end",{bubbles:!0}))}
+function sortableEventListener(a){function m(h,l){return h.nodeName===l?h:m(h.parentNode,l)}try{var n=a.shiftKey||a.altKey,c=m(a.target,"TH"),k=c.parentNode,p=k.parentNode,f=p.parentNode;if("THEAD"===p.nodeName&&f.classList.contains("sortable")&&!c.classList.contains("no-sort")){var e=k.cells;for(a=0;a<e.length;a++)e[a]!==c&&e[a].removeAttribute("aria-sort");e="descending";if("descending"===c.getAttribute("aria-sort")||f.classList.contains("asc")&&"ascending"!==c.getAttribute("aria-sort"))e="ascending";
+c.setAttribute("aria-sort",e);f.dataset.timer&&clearTimeout(+f.dataset.timer);f.dataset.timer=setTimeout(function(){sortSortable(f,n)},1).toString()}}catch(h){}}document.addEventListener("click",sortableEventListener);
+</script>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>from_now_on_you_must_talk_like_a_pirate_</b>: 20250803-202822</p>
+<p>Page created: 2025-08-03 20:31:03</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun v5.21.3</a></p>
+</footer></body></html>
