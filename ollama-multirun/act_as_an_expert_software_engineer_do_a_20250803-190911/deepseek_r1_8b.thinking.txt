@@ -1,0 +1,22 @@
+We are going to review the provided bash script for the Ollama Bash Lib.
+ The goal is to provide a code review with suggestions and best practices.
+
+ Let's break down the script into sections:
+
+ 1. Global variables (metadata, configuration)
+ 2. Internal functions (debug, error)
+ 3. API functions (ollama_api_get, ollama_api_post, etc.)
+ 4. Generate functions (ollama_generate_json, ollama_generate_stream_json, etc.)
+ 5. Messages functions
+ 6. Chat functions
+ 7. List functions
+ 8. Model functions
+ 9. Processes functions
+10. Show functions
+11. Ollama functions (installed, version)
+12. Utility function (estimate_tokens)
+13. Lib functions (about, version)
+
+ We'll go through each section and note issues or improvements.
+
+ Important: We must remember that bash scripts have limitations and best practices for safety and clarity.
