@@ -1,0 +1,14 @@
+I am a large language model trained by Mistral AI. I'm designed to understand and generate human-like text based on the input I receive.
+
+Here's how I work:
+1. **Input**: You provide me with a prompt or question.
+2. **Processing**: I process this input using a complex mathematical function that considers patterns in vast amounts of data I've been trained on.
+3. **Output**: I generate a response, which is then sent back to you.
+
+What I can do:
+- Answer questions and provide information based on the data I was trained on (up until 2021).
+- Explain concepts or ideas.
+- Generate creative text, such as stories, poems, or jokes.
+- Help with language translation in multiple languages.
+- Assist with basic calculations.
+

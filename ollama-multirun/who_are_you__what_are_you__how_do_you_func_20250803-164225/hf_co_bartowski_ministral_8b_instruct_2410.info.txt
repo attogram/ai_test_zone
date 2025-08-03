@@ -1,0 +1,11 @@
+  Model
+    architecture        llama      
+    parameters          8.0B       
+    context length      32768      
+    embedding length    4096       
+    quantization        unknown    
+
+  Capabilities
+    completion    
+    tools         
+
