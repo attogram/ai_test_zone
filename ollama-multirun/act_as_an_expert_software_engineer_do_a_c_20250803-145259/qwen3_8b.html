@@ -1,0 +1,1097 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: qwen3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_expert_software_engineer_do_a_c</a>: <b>qwen3:8b</b>: 20250803-145259<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<b>qwen3:8b</b> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./act_as_an_expert_software_engineer_do_a_c.prompt.yaml'>yaml</a>)
+  words:2930  bytes:22964<br />
+<textarea readonly rows='10'>Act as an expert Software Engineer.
+Do a critical code review of this ollama_bash_lib.sh script:
+
+#!/usr/bin/env bash
+#
+# Ollama Bash Lib - A Bash Library to interact with Ollama
+#
+
+OLLAMA_LIB_NAME=&quot;Ollama Bash Lib&quot;
+OLLAMA_LIB_VERSION=&quot;0.41.21&quot;
+OLLAMA_LIB_URL=&quot;https://github.com/attogram/ollama-bash-lib&quot;
+OLLAMA_LIB_DISCORD=&quot;https://discord.gg/BGQJCbYVBa&quot;
+OLLAMA_LIB_LICENSE=&quot;MIT&quot;
+OLLAMA_LIB_COPYRIGHT=&quot;Copyright (c) 2025 Ollama Bash Lib, Attogram Project &lt;https://github.com/attogram&gt;&quot;
+
+OLLAMA_LIB_API=${OLLAMA_HOST:-&quot;http://localhost:11434&quot;} # Ollama API URL, No slash at end
+OLLAMA_LIB_DEBUG=0     # 0 = No debug messages, 1 = Yes debug messages
+OLLAMA_LIB_MESSAGES=() # Array of messages
+OLLAMA_LIB_STREAM=0    # 0 = No streaming, 1 = Yes streaming
+RETURN_SUCCESS=0       # Standard success return value
+RETURN_ERROR=1         # Standard error return value
+
+set -o pipefail
+
+# Internal Functions
+
+# Debug message
+#
+# Usage: debug &quot;message&quot;
+# Input: 1 - the debug message
+# Output: message to stderr
+# Returns: 0 on success, 1 on error
+debug() {
+  if [ &quot;$OLLAMA_LIB_DEBUG&quot; -eq &quot;1&quot; ]; then
+    printf &quot;[DEBUG] %s\n&quot; &quot;$1&quot; &gt;&amp;2
+  fi
+}
+
+# Error message
+#
+# Usage: error &quot;message&quot;
+# Input: 1 - the error message
+# Output: message to stderr
+# Returns: 0 on success, 1 on error
+error() {
+  printf &quot;[ERROR] %s\n&quot; &quot;$1&quot; &gt;&amp;2
+}
+
+# Sanitize a string to use for jq
+# - Use to clean a json block (will not escape &quot;quotes&quot;)
+#
+# Usage: json_sanitize &quot;string&quot;
+# Input: 1 - The string to sanitize
+# Output: sanitized string to stdout
+# Returns: 0 on success, 1 on error
+json_sanitize() {
+  debug &quot;json_sanitize: $(echo &quot;$1&quot; | wc -c | sed &#39;s/ //g&#39;) bytes [${1:0:42}]&quot;
+  local sanitized=&quot;$1&quot;
+  # Replace carriage returns (CR, ASCII 13) with literal \r
+  sanitized=$(printf &#39;%s&#39; &quot;$1&quot; | sed $&#39;s/\r/\\\\r/g&#39;)
+  # Replace newlines (LF, ASCII 10) with literal \n using awk, then strip final literal \n
+  sanitized=$(printf &#39;%s&#39; &quot;$sanitized&quot; | awk &#39;{ ORS=&quot;\\n&quot;; print }&#39; | sed &#39;s/\\n$//&#39;)
+  # Remove all control chars 0-9, 11-12, 14-31
+  # TODO - don&#39;t remove control chars - instead replace them like jq -Rn does
+  sanitized=$(printf &#39;%s&#39; &quot;$sanitized&quot; | tr -d &#39;\000-\011\013\014\016-\037&#39;)
+  printf &#39;%s\n&#39; &quot;$sanitized&quot;
+  debug &quot;json_sanitize: sanitized: $(echo &quot;$sanitized&quot; | wc -c | sed &#39;s/ //g&#39;) bytes [[${sanitized:0:42}]]&quot;
+  return $RETURN_SUCCESS
+}
+
+# API Functions
+
+# GET request to the Ollama API
+#
+# Usage: ollama_api_get &#39;/api/path&#39;
+# Input: 1 = API URL path
+# Output: API call result, to stdout
+# Returns: 0 on success, 1 on error
+ollama_api_get() {
+  debug &quot;ollama_api_get: [$1]&quot;
+  curl -s -X GET &quot;${OLLAMA_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39;
+  local error_curl=$?
+  if [ &quot;$error_curl&quot; -gt 0 ]; then
+    error &quot;ollama_api_get: error_curl: $error_curl&quot;
+    return $RETURN_ERROR
+  fi
+  debug &#39;ollama_api_get: return: 0&#39;
+  return $RETURN_SUCCESS
+}
+
+# POST request to the Ollama API
+#
+# Usage: ollama_api_post &#39;/api/path&#39; &quot;{ json content }&quot;
+# Input: 1 - API URL path
+# Input: 2 - JSON content
+# Output: API call result, to stdout
+# Returns: 0 on success, 1 on error
+ollama_api_post() {
+  debug &quot;ollama_api_post: [$1] [${2:0:42}]&quot;
+  curl -s -X POST &quot;${OLLAMA_LIB_API}$1&quot; -H &#39;Content-Type: application/json&#39; -d &quot;$2&quot;
+  local error_curl=$?
+  if [ &quot;$error_curl&quot; -gt 0 ]; then
+    error &quot;ollama_api_get: error_curl: $error_curl&quot;
+    return $RETURN_ERROR
+  fi
+  debug &#39;ollama_api_post: return 0&#39;
+  return $RETURN_SUCCESS
+}
+
+# Ping the Ollama API
+#
+# Usage: ollama_api_ping
+# Input: none
+# Output: none
+# Returns: 0 if API is reachable, 1 if API is not reachable
+ollama_api_ping() {
+  debug &#39;ollama_api_ping&#39;
+  local result
+  result=$(ollama_api_get &quot;&quot;)
+  local api_get_error=$?
+  if [ &quot;$api_get_error&quot; -gt 0 ]; then
+    error &quot;ollama_api_ping: error: $api_get_error&quot;
+    return $RETURN_ERROR
+  fi
+  if [[ &quot;$result&quot; == &quot;Ollama is running&quot; ]]; then # This depends on Ollama app not changing this wording
+    return $RETURN_SUCCESS
+  fi
+  error &quot;ollama_api_ping: unknown result: [$result]&quot;
+  return $RETURN_ERROR
+}
+
+# Generate Functions
+
+# Generate a completion as json
+#
+# Usage: ollama_generate_json &quot;model&quot; &quot;prompt&quot;
+# Input: 1 - The model to use to generate a response
+# Input: 2 - The prompt
+# Output: json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_generate_json() {
+  debug &quot;ollama_generate_json: [$1] [${2:0:42}]&quot;
+  debug &quot;ollama_generate_json: OLLAMA_LIB_STREAM: $OLLAMA_LIB_STREAM&quot;
+  local stream_bool=true
+  if [ &quot;$OLLAMA_LIB_STREAM&quot; -eq &quot;0&quot; ]; then
+    stream_bool=false
+  fi
+  local json_payload
+  json_payload=$(jq -n \
+    --arg model &quot;$1&quot; \
+    --arg prompt &quot;$2&quot; \
+    --argjson stream &quot;$stream_bool&quot; \
+    &#39;{model: $model, prompt: $prompt, stream: $stream}&#39;)
+  if ! ollama_api_post &#39;/api/generate&#39; &quot;$json_payload&quot;; then
+    error &quot;ollama_generate_json: ollama_api_post failed&quot;
+    return $RETURN_ERROR
+  fi
+  debug &#39;ollama_generate_json: return: 0&#39;
+  return $RETURN_SUCCESS
+}
+
+# Generate a completion, as streaming json
+#
+# Input: 1 - The model to use to generate a response
+# Input: 2 - The prompt
+# Usage: ollama_generate_stream_json &quot;model&quot; &quot;prompt&quot;
+# Output: json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_generate_stream_json() {
+  debug &quot;ollama_generate_stream_json: [$1] [${2:0:42}]&quot;
+  OLLAMA_LIB_STREAM=1 # Turn on streaming
+  if ! ollama_generate_json &quot;$1&quot; &quot;$2&quot;; then
+    error &quot;ollama_generate_stream_json: ollama_generate_json failed&quot;
+    OLLAMA_LIB_STREAM=0 # Turn off streaming
+    return $RETURN_ERROR
+  fi
+  OLLAMA_LIB_STREAM=0 # Turn off streaming
+  debug &#39;ollama_generate_stream_json: return: 0&#39;
+  return $RETURN_SUCCESS
+}
+
+# Generate a completion as text
+#
+# Usage: ollama_generate &quot;model&quot; &quot;prompt&quot;
+# Input: 1 - The model to use to generate a response
+# Input: 2 - The prompt
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_generate() {
+  debug &quot;ollama_generate: [$1] [${2:0:42}]&quot;
+  OLLAMA_LIB_STREAM=0
+  local result
+  result=$(ollama_generate_json &quot;$1&quot; &quot;$2&quot;)
+  local error_ollama_generate_json=$?
+  debug &quot;ollama_generate: result: $(echo &quot;$result&quot; | wc -c | sed &#39;s/ //g&#39;) bytes&quot;
+  if [ &quot;$error_ollama_generate_json&quot; -gt 0 ]; then
+    error &quot;ollama_generate: error_ollama_generate_json: $error_ollama_generate_json&quot;
+    return $RETURN_ERROR
+  fi
+  if ! json_sanitize &quot;$result&quot; | jq -r &quot;.response&quot;; then
+    error &quot;ollama_generate: json_sanitize|jq failed&quot;
+    return $RETURN_ERROR
+  fi
+  debug &#39;ollama_generate: return: 0&#39;
+  return $RETURN_SUCCESS
+}
+
+# Generate a completion as streaming text
+#
+# Usage: ollama_generate_stream &quot;model&quot; &quot;prompt&quot;
+# Input: 1 - The model to use to generate a response
+# Input: 2 - The prompt
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_generate_stream() {
+  debug &quot;ollama_generate_stream: [$1] [${2:0:42}]&quot;
+  OLLAMA_LIB_STREAM=1 # Turn on streaming
+  local error_jq
+  ollama_generate_json &quot;$1&quot; &quot;$2&quot; | while IFS= read -r line; do
+    echo -n &quot;$(json_sanitize &quot;$line&quot; | jq -r &quot;.response&quot;)&quot;
+    error_jq=$?
+    if [ &quot;$error_jq&quot; -gt 0 ]; then
+      error &quot;ollama_generate_stream: error_jq: $error_jq&quot;
+      return $RETURN_ERROR
+    fi
+  done
+  local error_ollama_generate_json=$?
+  OLLAMA_LIB_STREAM=0 # Turn off streaming
+  if [ &quot;$error_ollama_generate_json&quot; -gt 0 ]; then
+    error &quot;ollama_generate_stream: error_ollama_generate_json: $error_ollama_generate_json&quot;
+    return $RETURN_ERROR
+  fi
+  debug &quot;ollama_generate_stream: return: 0&quot;
+  return $RETURN_SUCCESS
+}
+
+# Messages Functions
+
+# Get all messages
+#
+# Usage: messages=&quot;$(ollama_messages)&quot;
+# Output: json, 1 messages per line, to stdout
+# Returns: 0 on success, 1 on error
+ollama_messages() {
+  debug &quot;ollama_messages&quot;
+  if [ ${#OLLAMA_LIB_MESSAGES[@]} -eq 0 ]; then
+    debug &quot;ollama_messages: no messages&quot;
+    return $RETURN_ERROR
+  fi
+  printf &#39;%s\n&#39; &quot;${OLLAMA_LIB_MESSAGES[@]}&quot;
+  return $RETURN_SUCCESS
+}
+
+# Add a message
+#
+# Usage: ollama_messages_add &quot;role&quot; &quot;message&quot;
+# Input: 1 - role (user/assistant/tool/system)
+# Input: 2 - the messages
+# Output: none
+# Returns: 0
+ollama_messages_add() {
+  debug &quot;ollama_messages_add: [$1] [${2:0:42}]&quot;
+  local json_payload
+  json_payload=$(jq -n \
+      --arg role &quot;$1&quot; \
+      --arg content &quot;$2&quot; \
+      &#39;{role: $role, content: $content}&#39;)
+  OLLAMA_LIB_MESSAGES+=(&quot;$json_payload&quot;)
+}
+
+# Clear all messages
+#
+# Usage: ollama_messages_clear
+# Output: none
+# Returns: 0
+ollama_messages_clear() {
+  debug &quot;ollama_messages_clear&quot;
+  OLLAMA_LIB_MESSAGES=()
+}
+
+# Messages count
+#
+# Usage: ollama_messages_count
+# Output: number of messages, to stdout
+# Returns: 0
+ollama_messages_count() {
+  debug &quot;ollama_messages_count&quot;
+  echo &quot;${#OLLAMA_LIB_MESSAGES[@]}&quot;
+}
+
+# Chat Functions
+
+# Chat completion request as json
+#
+# Usage: ollama_chat_json &quot;model&quot;
+# Input: 1 - model
+# Output: json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_chat_json() {
+  debug &quot;ollama_chat_json: [$1]&quot;
+  local model=&quot;$1&quot;
+  if [ -z &quot;$model&quot; ]; then
+    error &#39;ollama_chat_json: Model Not Found. Usage: ollama_chat_json &quot;model&quot;&#39;
+    return $RETURN_ERROR
+  fi
+
+  local stream_bool=true
+  if [ &quot;$OLLAMA_LIB_STREAM&quot; -eq &quot;0&quot; ]; then
+    stream_bool=false
+  fi
+
+  local messages_array_json
+  # Join array elements with comma and wrap in []
+  messages_array_json=$(printf &quot;,%s&quot; &quot;${OLLAMA_LIB_MESSAGES[@]}&quot;)
+  messages_array_json=&quot;[${messages_array_json:1}]&quot; # Remove leading comma
+
+  local json_payload
+  json_payload=$(jq -n \
+      --arg model &quot;$model&quot; \
+      --argjson messages &quot;$messages_array_json&quot; \
+      --argjson stream &quot;$stream_bool&quot; \
+      &#39;{model: $model, messages: $messages, stream: $stream}&#39;)
+
+  local result
+  if ! result=$(ollama_api_post &#39;/api/chat&#39; &quot;$json_payload&quot;); then
+    error &quot;ollama_chat_json: ollama_api_post failed&quot;
+    return $RETURN_ERROR
+  fi
+
+  content=$(json_sanitize &quot;$result&quot; | jq -r &quot;.message.content&quot;)
+  local error_jq_message_content=$?
+  debug &quot;ollama_chat_json: content: [$content]&quot;
+  if [ &quot;$error_jq_message_content&quot; -gt 0 ]; then
+    error &quot;ollama_chat_json: error_jq_message_content: $error_jq_message_content&quot;
+    return $RETURN_ERROR
+  fi
+  ollama_messages_add &quot;assistant&quot; &quot;$content&quot;
+  debug &quot;ollama_chat_json: added response from assistant to messages&quot;
+  echo &quot;$result&quot;
+}
+
+# Chat completion request as text
+#
+# Usage: ollama_chat &quot;model&quot;
+# Input: 1 - model
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_chat() {
+  debug &quot;ollama_chat: [$1]&quot;
+  local model=&quot;$1&quot;
+  if [ -z &quot;$model&quot; ]; then
+    error &quot;ollama_chat: Model Not Found. Usage: ollama_chat \&quot;model\&quot;&quot;
+    return $RETURN_ERROR
+  fi
+  OLLAMA_LIB_STREAM=0
+  local content
+  content=$(json_sanitize &quot;$(ollama_chat_json &quot;$model&quot;)&quot; | jq -r &quot;.message.content&quot;)
+  local error_jq_message_content=$?
+  debug &quot;ollama_chat: content: $content&quot;
+  if [ &quot;$error_jq_message_content&quot; -gt 0 ]; then
+    error &quot;ollama_chat: error_jq_message_content: $error_jq_message_content&quot;
+    return $RETURN_ERROR
+  fi
+  printf &#39;%s\n&#39; &quot;$content&quot;
+  return $RETURN_SUCCESS
+}
+
+# Chat completion request as streaming text
+#
+# Usage: ollama_chat_stream &quot;model&quot;
+# Input: 1 - model
+# Output: streaming text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_chat_stream() {
+  debug &quot;ollama_chat_stream: [$1]&quot;
+  OLLAMA_LIB_STREAM=1
+  if ! ollama_chat &quot;$1&quot;; then
+    error &quot;ollama_chat_stream: ollama_chat failed&quot;
+    OLLAMA_LIB_STREAM=0
+    return $RETURN_ERROR
+  fi
+  OLLAMA_LIB_STREAM=0
+  return $RETURN_SUCCESS
+}
+
+# Chat completion request as streaming json
+#
+# Usage: ollama_chat_stream_json &quot;model&quot;
+# Input: 1 - model
+# Output: streaming json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_chat_stream_json() {
+  debug &quot;ollama_chat_stream_json: [$1]&quot;
+  OLLAMA_LIB_STREAM=1
+  if ! ollama_chat_json &quot;$1&quot;; then
+    error &quot;ollama_chat_stream_json: ollama_chat_json failed&quot;
+    OLLAMA_LIB_STREAM=0
+    return $RETURN_ERROR
+  fi
+  OLLAMA_LIB_STREAM=0
+  return $RETURN_SUCCESS
+}
+
+# List Functions
+
+# All available models, CLI version
+#
+# Usage: ollama_list
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_list() {
+  debug &quot;ollama_list&quot;
+  local list
+  if ! list=&quot;$(ollama list)&quot;; then # get ollama list
+    error &quot;ollama_list: list=|ollama list failed&quot;
+    return $RETURN_ERROR
+  fi
+  if ! echo &quot;$list&quot; | head -n+1; then # print header
+    error &quot;ollama_list: echo|head failed&quot;
+    return $RETURN_ERROR
+  fi
+  if ! echo &quot;$list&quot; | tail -n+2 | sort; then # sorted list of models
+    error &quot;ollama_list: ollama echo|tail|sort failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# All available models, JSON version
+#
+# Usage: ollama_list_json
+# Output: json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_list_json() {
+  debug &quot;ollama_list_json&quot;
+  if ! ollama_api_get &#39;/api/tags&#39;; then
+    error &quot;ollama_list_json: ollama_api_get failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# All available models, Bash array version
+#
+# Usage: IFS=&quot; &quot; read -r -a models &lt;&lt;&lt; &quot;$(ollama_list_array)&quot;
+# Usage: models=($(ollama_list_array))
+# Output: space separated list of model names, to stdout
+# Returns: 0 on success, 1 on error
+ollama_list_array() {
+  debug &quot;ollama_list_array&quot;
+  local models=()
+  while IFS= read -r line; do
+    models+=(&quot;$line&quot;)
+  done &lt; &lt;(ollama list | awk &#39;NR &gt; 1 {print $1}&#39; | sort)
+  echo &quot;${models[@]}&quot; # space separated list of model names
+  debug &quot;ollama_list_array: ${#models[@]} models found: return 0&quot;
+  return $RETURN_SUCCESS
+}
+
+# Model Functions
+
+# Get a random model
+#
+# Usage: ollama_model_random
+# Input: none
+# Output: 1 model name, to stdout
+# Returns: 0 on success, 1 on error
+ollama_model_random() {
+  debug &quot;ollama_model_random&quot;
+  IFS=&quot; &quot; read -r -a models &lt;&lt;&lt; &quot;$(ollama_list_array)&quot;
+  debug &quot;ollama_model_random: ${#models[@]} models found&quot;
+  if [ ${#models[@]} -eq 0 ]; then
+    error &quot;ollama_model_random: No Models Found&quot;
+    return $RETURN_ERROR
+  fi
+  RANDOM=&quot;$(date +%N | sed &#39;s/^0*//&#39;)&quot; # seed random with microseconds (removing any leading 0&#39;s so won&#39;t be interpreted as octal)
+  echo &quot;${models[RANDOM%${#models[@]}]}&quot;
+  return $RETURN_SUCCESS
+}
+
+# Unload a model from memory
+#
+# Usage: ollama_model_unload &quot;model&quot;
+# Input: 1 - Model name to unload
+# Output: unload result, in json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_model_unload() {
+  debug &#39;ollama_model_unload&#39;
+  if [ -z &quot;$1&quot; ]; then
+    debug &#39;Error: ollama_model_unload: no model&#39;
+    return $RETURN_ERROR
+  fi
+
+  local json_payload
+  json_payload=$(jq -n \
+      --arg model &quot;$1&quot; \
+      --arg keep_alive &#39;0&#39; \
+      &#39;{model: $model, keep_alive: $keep_alive}&#39;)
+  local result
+  if ! result=&quot;$(ollama_api_post &#39;/api/generate&#39; &quot;$json_payload&quot;)&quot;; then
+    error &quot;ollama_model_unload: ollama_api_post failed [$result]&quot;
+    return $RETURN_ERROR
+  fi
+  # TODO - if result is {&quot;error&quot;:&quot;reason&quot;} then error &quot;$reason&quot;; return $RETURN_ERROR
+  printf &#39;%s\n&#39; &quot;$result&quot;
+  return $RETURN_SUCCESS
+}
+
+# Processes Functions
+
+# Running model processes, CLI version
+#
+# Usage: ollama_ps
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_ps() {
+  debug &quot;ollama_ps&quot;
+  if ! ollama ps; then
+    error &quot;ollama_ps: ollama ps failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Running model processes, JSON version
+#
+# Usage: ollama_ps_json
+# Output: json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_ps_json() {
+  debug &quot;ollama_ps_json&quot;
+  if ! ollama_api_get &#39;/api/ps&#39;; then
+    error &quot;ollama_ps_json: ollama_api_get failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Show Functions
+
+# Show model information, TEXT version
+#
+# Usage: ollama_show &quot;model&quot;
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_show() {
+  debug &quot;ollama_show&quot;
+  if ! ollama show &quot;$1&quot;; then
+    error &quot;ollama_show: ollama show failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Show model information, JSON version
+#
+# Usage: ollama_show_json &quot;model&quot;
+# Input: 1 - The model to show
+# Output: json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_show_json() {
+  debug &quot;ollama_show_json: [$1]&quot;
+  local json_payload
+  json_payload=$(jq -n \
+      --arg model &quot;$1&quot; \
+      &#39;{model: $model}&#39;)
+  if ! ollama_api_post &#39;/api/show&#39; &quot;$json_payload&quot;; then
+    error &quot;ollama_show_json: error_ollama_api_post failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Ollama Functions
+
+# Is Ollama installed on the local system?
+#
+# Usage: if ollama_installed; then echo &quot;Ollama Installed&quot;; else echo &quot;Ollama Not Installed&quot;; fi
+# Input: none
+# Output: none
+# Returns: 0 if Ollama is installed, 1 if Ollama is not installed
+ollama_installed() {
+  debug &quot;ollama_installed&quot;
+  if [ -z &quot;$(command -v &quot;ollama&quot; 2&gt; /dev/null)&quot; ]; then
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Ollama environment variables
+#
+# Usage: ollama_vars
+# Input: none
+# Output: text, to stdout
+# Returns: 0
+ollama_vars() {
+  echo &quot;OLLAMA_DEBUG: $OLLAMA_DEBUG&quot;
+  echo &quot;OLLAMA_HOST: $OLLAMA_HOST&quot;
+  echo &quot;OLLAMA_KEEP_ALIVE: $OLLAMA_KEEP_ALIVE&quot;
+  echo &quot;OLLAMA_MAX_LOADED_MODELS: $OLLAMA_MAX_LOADED_MODELS&quot;
+  echo &quot;OLLAMA_MAX_QUEUE: $OLLAMA_MAX_QUEUE&quot;
+  echo &quot;OLLAMA_MODELS: $OLLAMA_MODELS&quot;
+  echo &quot;OLLAMA_NUM_PARALLEL: $OLLAMA_NUM_PARALLEL&quot;
+  echo &quot;OLLAMA_NOPRUNE: $OLLAMA_NOPRUNE&quot;
+  echo &quot;OLLAMA_ORIGINS: $OLLAMA_ORIGINS&quot;
+  echo &quot;OLLAMA_SCHED_SPREAD: $OLLAMA_SCHED_SPREAD&quot;
+  echo &quot;OLLAMA_FLASH_ATTENTION: $OLLAMA_FLASH_ATTENTION&quot;
+  echo &quot;OLLAMA_KV_CACHE_TYPE: $OLLAMA_KV_CACHE_TYPE&quot;
+  echo &quot;OLLAMA_LLM_LIBRARY: $OLLAMA_LLM_LIBRARY&quot;
+  echo &quot;OLLAMA_GPU_OVERHEAD: $OLLAMA_GPU_OVERHEAD&quot;
+  echo &quot;OLLAMA_LOAD_TIMEOUT: $OLLAMA_LOAD_TIMEOUT&quot;
+  echo &quot;OLLAMA_TMPDIR: $OLLAMA_TMPDIR&quot;
+  echo &quot;OLLAMA_MAX_VRAM: $OLLAMA_MAX_VRAM&quot;
+  echo &quot;OLLAMA_NOHISTORY: $OLLAMA_NOHISTORY&quot;
+  echo &quot;OLLAMA_MULTIUSER_CACHE: $OLLAMA_MULTIUSER_CACHE&quot;
+  echo &quot;OLLAMA_CONTEXT_LENGTH: $OLLAMA_CONTEXT_LENGTH&quot;
+  echo &quot;OLLAMA_NEW_ENGINE: $OLLAMA_NEW_ENGINE&quot;
+  echo &quot;OLLAMA_INTEL_GPU: $OLLAMA_INTEL_GPU&quot;
+  echo &quot;OLLAMA_RUNNERS_DIR: $OLLAMA_RUNNERS_DIR&quot;
+  echo &quot;OLLAMA_TEST_EXISTING: $OLLAMA_TEST_EXISTING&quot;
+  echo &quot;CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES&quot;
+  echo &quot;GPU_DEVICE_ORDINAL: $GPU_DEVICE_ORDINAL&quot;
+  echo &quot;HSA_OVERRIDE_GFX_VERSION: $HSA_OVERRIDE_GFX_VERSION&quot;
+  echo &quot;HIP_PATH: $HIP_PATH&quot;
+  echo &quot;HIP_VISIBLE_DEVICES: $HIP_VISIBLE_DEVICES&quot;
+  echo &quot;ROCR_VISIBLE_DEVICES: $ROCR_VISIBLE_DEVICES&quot;
+  echo &quot;JETSON_JETPACK: $JETSON_JETPACK&quot;
+  echo &quot;LD_LIBRARY_PATHS: $LD_LIBRARY_PATH&quot;
+  echo &quot;HTTP_PROXY: $HTTP_PROXY&quot;
+  #echo &quot;LOCALAPPDATA: $LOCALAPPDATA&quot;
+  #echo &quot;HOME: $HOME&quot;
+  echo &quot;TERM: $TERM&quot;
+  return $RETURN_SUCCESS
+}
+
+# Ollama application version, TEXT version
+#
+# Usage: ollama_version
+# Input: none
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_version() {
+  debug &quot;ollama_version&quot;
+  if ! ollama_api_get &#39;/api/version&#39; | jq -r &quot;.version&quot;; then
+    error &quot;ollama_version: error_ollama_api_get|jq failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Ollama application version, JSON version
+#
+# Usage: ollama_version_json
+# Input: none
+# Output: json, to stdout
+# Returns: 0 on success, 1 on error
+ollama_version_json() {
+  debug &quot;ollama_version_json&quot;
+  if ! ollama_api_get &#39;/api/version&#39;; then
+    error &quot;ollama_version_json: error_ollama_api_get failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Ollama application version, CLI version
+#
+# Usage: ollama_version_cli
+# Input: none
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_version_cli() {
+  debug &quot;ollama_version_cli&quot;
+  if ! ollama --version; then
+    error &quot;ollama_version_cli: ollama --version failed&quot;
+    return $RETURN_ERROR
+  fi
+  return $RETURN_SUCCESS
+}
+
+# Utility
+
+# Estimate the number of tokens in a string
+#
+# Usage: estimate_tokens &quot;string&quot;
+# Usage: verbose: estimate_tokens &quot;string&quot; 1
+# Output: token estimate, to stdout
+# Output: verbose: token estimate with error range, to stdout
+# Returns: 0 on success, 1 on error
+estimate_tokens() {
+  debug &quot;estimate_tokens&quot; # $1&quot;
+  local string verbose tokensWords words tokensChars chars tokensBytes bytes tokens
+
+  if [ -t 0 ]; then # Not piped input
+    if [ -f &quot;$1&quot; ]; then
+      debug &quot;Getting string from file (arg 1 is filename)&quot;
+      string=$(&lt;&quot;$1&quot;)
+    elif [ -n &quot;$1&quot; ]; then
+      debug &quot;Getting string from arg 1&quot;
+      string=&quot;$1&quot;
+    else
+      debug &quot;Usage: estimate_tokens &lt;text|string|file&gt; [verbose: 1])&quot;
+      return $RETURN_ERROR
+    fi
+    verbose=${2:-0} # verbose is arg 2
+  else
+    debug &quot;Getting string from piped input, multiline&quot;
+    string=$(cat -)
+    verbose=${1:-0} # verbose is arg 1
+  fi
+  debug &quot;verbose: $verbose&quot;
+
+  words=$(echo &quot;$string&quot; | wc -w)
+  chars=$(printf &quot;%s&quot; &quot;$string&quot; | wc -m)
+  bytes=$(printf &quot;%s&quot; &quot;$string&quot; | wc -c)
+
+  tokensWords=$(( (words * 100) / 75 )) # 1 token = 0.75 words
+  debug &quot;words      : $words&quot;
+  debug &quot;tokensWords: $tokensWords&quot;
+
+  tokensChars=$(( (chars + 1) / 4 )) # 1 token = 4 characters
+  debug &quot;chars      : $chars&quot;
+  debug &quot;tokensChars: $tokensChars&quot;
+
+  tokensBytes=$(( (bytes + 1) / 4 )) # 1 token = 4 bytes
+  debug &quot;bytes      : $bytes&quot;
+  debug &quot;tokensBytes: $tokensBytes&quot;
+
+  # Get largest estimate
+  tokens=$tokensBytes
+  (( tokensChars &gt; tokens )) &amp;&amp; tokens=$tokensChars
+  (( tokensWords &gt; tokens )) &amp;&amp; tokens=$tokensWords
+  debug &quot;tokens     : $tokens&quot;
+
+  if [ &quot;$verbose&quot; -eq 0 ]; then
+   echo &quot;$tokens&quot;
+   return $RETURN_SUCCESS
+  fi
+
+  local min max offsetMin offsetMax error
+
+  min=$tokensWords
+  (( tokensChars &lt; min )) &amp;&amp; min=$tokensChars
+  (( tokensBytes &lt; min )) &amp;&amp; min=$tokensBytes
+  debug &quot;min        : $min&quot;
+
+  max=$tokensWords
+  (( tokensChars &gt; max )) &amp;&amp; max=$tokensChars
+  (( tokensBytes &gt; max )) &amp;&amp; max=$tokensBytes
+  debug &quot;max        : $max&quot;
+
+  offsetMin=$(( max - tokens ))
+  debug &quot;offsetMin  : $offsetMin&quot;
+
+  offsetMax=$(( tokens - min ))
+  debug &quot;offsetMax  : $offsetMax&quot;
+
+  error=$offsetMin
+  (( error &lt; offsetMax )) &amp;&amp; error=$offsetMax
+  debug &quot;error      : $error&quot;
+
+  echo &quot;$tokens ± $error (range $min to $max)&quot;
+  return $RETURN_SUCCESS
+}
+
+# Lib Functions
+
+# About Ollama Bash Lib
+#
+# Usage: ollama_lib_about
+# Input: none
+# Output: text, to stdout
+# Returns: 0 on success, 1 on error
+ollama_lib_about() {
+  echo &quot;$OLLAMA_LIB_NAME v$OLLAMA_LIB_VERSION&quot;
+  echo
+  echo &quot;A Bash Library to interact with Ollama&quot;
+  echo
+  echo &quot;OLLAMA_LIB_NAME     : $OLLAMA_LIB_NAME&quot;
+  echo &quot;OLLAMA_LIB_VERSION  : $OLLAMA_LIB_VERSION&quot;
+  echo &quot;OLLAMA_LIB_URL      : $OLLAMA_LIB_URL&quot;
+  echo &quot;OLLAMA_LIB_DISCORD  : $OLLAMA_LIB_DISCORD&quot;
+  echo &quot;OLLAMA_LIB_LICENSE  : $OLLAMA_LIB_LICENSE&quot;
+  echo &quot;OLLAMA_LIB_COPYRIGHT: $OLLAMA_LIB_COPYRIGHT&quot;
+  echo &quot;OLLAMA_LIB_DEBUG    : $OLLAMA_LIB_DEBUG&quot;
+  echo &quot;OLLAMA_LIB_API      : $OLLAMA_LIB_API&quot;
+  echo &quot;OLLAMA_LIB_STREAM   : $OLLAMA_LIB_STREAM&quot;
+  echo &quot;OLLAMA_LIB_MESSAGES : ${#OLLAMA_LIB_MESSAGES[@]}&quot;
+  echo
+  if [ -z &quot;$(command -v compgen 2&gt; /dev/null)&quot; ]; then
+    debug &quot;ollama_lib_about: compgen Not Found&quot;
+    return $RETURN_ERROR
+  fi
+  echo &quot;Functions:&quot;
+  echo
+  compgen -A function | grep &#39;ollama_&#39; | sort
+}
+
+# Ollama Bash Lib version
+#
+# Usage: ollama_lib_version
+# Input: none
+# Output: semantic version number, to stdout
+# Returns: 0
+ollama_lib_version() {
+  echo &quot;$OLLAMA_LIB_VERSION&quot;
+}</textarea>
+</p>
+<p>Thinking: qwen3:8b (<a href='./qwen3_8b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='15'>Okay, I need to do a critical code review of this ollama_bash_lib.sh script. Let me start by reading through the script carefully and understanding its purpose. The script seems to be a Bash library for interacting with Ollama, which is a machine learning model server. The functions provided allow users to make API calls, manage models, handle messages, and more.
+
+First, I&#39;ll check for any syntax errors or potential issues. Let me go through each section step by step.
+
+Looking at the variables at the top, there&#39;s OLLAMA_LIB_API set with a default value of http://localhost:11434. That makes sense for local development. The debug and stream variables are set to 0 and 0 respectively. The constants for success and error return codes are defined, which is good for consistency.
+
+The script uses set -o pipefail, which is good for capturing errors in pipelines. That&#39;s a good practice.
+
+Now, looking at the internal functions. The debug and error functions are straightforward. They print messages to stderr with appropriate prefixes. That&#39;s fine.
+
+The json_sanitize function is supposed to clean a string for use with jq. However, there&#39;s a problem here. The function uses tr to remove control characters, but the comment says it&#39;s a TODO to not remove them but replace them like jq -Rn does. Also, the current approach might not handle all edge cases. For example, the line where it replaces newlines with \n using awk might not work as intended. The sed command at the end tries to strip the final \n, but if the input has multiple lines, this could cause issues. Also, the use of printf &#39;%s&#39; &quot;$1&quot; might not handle binary data correctly. The function should probably use jq&#39;s -R option to read raw input, which would handle control characters better. But since this is a Bash function, it&#39;s limited in what it can do. Maybe the json_sanitize function is overkill and could be replaced with a simpler approach, or at least clarified in comments.
+
+Looking at the API functions. The ollama_api_get and ollama_api_post functions use curl with the -s option (silent) and -X GET/POST. The error handling is basic, checking if curl returns a non-zero exit code. However, curl can return non-zero for various reasons, not just errors. For example, if the server returns a 404, curl might not exit with an error, but the response could still be invalid. The current functions might not handle all error cases properly. Also, the ollama_api_get function is called with an empty string in ollama_api_ping, which might not be correct. The ping should probably check a specific endpoint like /api/ping, but the current code uses an empty path, which might not be the right approach. The comment says it depends on Ollama&#39;s wording, which could change, making this function brittle.
+
+The ollama_api_ping function is supposed to check if the API is reachable. However, the current implementation calls ollama_api_get with an empty string, which might not be the correct endpoint. Ollama&#39;s /api/ping endpoint is typically used for health checks, so the function should be adjusted to use that instead. The current code might not be reliable if Ollama&#39;s API changes.
+
+Next, the generate functions. The ollama_generate_json function constructs a JSON payload using jq and sends it to /api/generate. The stream parameter is set based on OLLAMA_LIB_STREAM. However, the function doesn&#39;t handle the response correctly. The current code just calls ollama_api_post and doesn&#39;t process the response. The function should probably capture the response and handle it, but the current implementation doesn&#39;t do that. The ollama_generate function then uses json_sanitize and jq to extract the response, but this could fail if the JSON is malformed. The ollama_generate_stream function uses a while loop to process each line, which might not work correctly if the streaming response is not line-based. Also, the error handling in these functions is minimal and could be improved.
+
+The messages functions are used to manage a list of messages. The ollama_messages_add function appends a JSON payload to the array, but the payload is a string, not a JSON object. The OLLAMA_LIB_MESSAGES array is supposed to hold JSON strings, which might not be the best approach. It would be better to store actual JSON objects or use a more structured approach. Also, the ollama_messages function returns the messages as a list, but the format isn&#39;t specified, which could lead to issues when used in other functions.
+
+The chat functions, like ollama_chat_json and ollama_chat, rely on the messages array. However, the messages_array_json is constructed by joining the array elements with commas, which might not be correct JSON. The messages array should be a JSON array of objects, but the current approach might not format it correctly. The use of printf &quot;,%s&quot; and then removing the leading comma could lead to errors if the array is empty or has unexpected elements. Also, the ollama_chat_json function calls ollama_api_post with the messages array, but the response is processed with jq, which might not handle all cases.
+
+The list functions, like ollama_list and ollama_list_json, rely on the ollama command-line tool. However, if the user is using the library in an environment where ollama isn&#39;t installed or available, these functions could fail. The script should probably handle cases where ollama isn&#39;t available, but it currently doesn&#39;t. The ollama_list_array function uses ollama list and processes the output, which could fail if ollama isn&#39;t installed.
+
+The model functions, like ollama_model_unload, use the /api/generate endpoint to send a payload, which might not be the correct endpoint for unloading a model. The correct endpoint for unloading a model in Ollama is typically /api/unload, so this function might be using the wrong API path. This could lead to errors or incorrect behavior.
+
+The processes functions, like ollama_ps and ollama_ps_json, rely on the ollama ps command. Similar to the list functions, if ollama isn&#39;t installed, these functions could fail. The script should handle the absence of ollama more gracefully.
+
+The show functions, like ollama_show, rely on the ollama show command. Again, if ollama isn&#39;t installed, these functions might not work. The library should probably have fallbacks or error handling for these cases.
+
+The ollama_installed function checks if the ollama command is available, which is good. However, it doesn&#39;t check if the API is accessible, which could be an improvement.
+
+The ollama_vars function prints environment variables related to Ollama. However, some of these variables might not be relevant or might be deprecated. The script should clarify which variables are used and which are not.
+
+The ollama_version functions rely on the ollama --version command or API endpoints. The current implementation might not handle cases where the command isn&#39;t available or the API isn&#39;t accessible.
+
+The estimate_tokens function is a utility for estimating token counts. However, the logic for calculating tokens based on words, characters, and bytes might not be accurate. The approach of using fixed ratios (like 0.75 words per token) is an approximation and might not reflect the actual tokenization used by Ollama. The verbose output could be more informative, but the current implementation might not handle edge cases correctly.
+
+The ollama_lib_about function uses compgen to list functions, which could fail if compgen isn&#39;t available. The script should handle this case gracefully.
+
+Looking at the overall structure, the script has a lot of functions that rely on the ollama CLI tools, which might not be ideal. A more robust approach would be to use the Ollama API directly without relying on the CLI. This would make the library more self-contained and less dependent on external tools.
+
+Another issue is the use of global variables like OLLAMA_LIB_MESSAGES and OLLAMA_LIB_STREAM. These variables are shared across functions, which could lead to unintended side effects if not managed properly. For example, changing OLLAMA_LIB_STREAM in one function might affect the behavior of other functions that use it.
+
+The error handling in many functions is minimal. For instance, if curl fails, the script returns an error, but it doesn&#39;t provide detailed information about the failure. Adding more context to error messages could help users diagnose issues more quickly.
+
+The json_sanitize function has a comment mentioning replacing control characters like jq -Rn does, but the current implementation uses tr to remove them, which might not be the correct approach. The function should probably use a different method to handle control characters, such as using jq&#39;s -R option to read raw input, which would handle them correctly.
+
+In the ollama_generate_stream function, the use of a while loop to process each line might not work correctly if the streaming response is not line-based. The function assumes that each line is a separate JSON object, but this might not be the case. The handling of the response could be more robust.
+
+The ollama_chat_json function appends the assistant&#39;s response to the messages array, which could lead to an infinite loop if the chat continues. The function should manage the messages array properly to avoid this.
+
+The ollama_list_array function uses ollama list and processes the output, which could fail if ollama isn&#39;t installed. The script should handle this case more gracefully, perhaps by returning an empty list or an error message.
+
+The ollama_model_unload function uses the /api/generate endpoint, which is incorrect. The correct endpoint for unloading a model is /api/unload, so this function should be adjusted to use that path.
+
+The ollama_show_json function uses the /api/show endpoint, but I&#39;m not sure if that&#39;s the correct endpoint. The Ollama API might have a different endpoint for showing model details. The script should verify the correct API endpoints for each function.
+
+In terms of code structure and readability, the script could benefit from better comments and more structured organization. For example, grouping related functions together, adding more detailed comments, and using consistent naming conventions.
+
+Another potential issue is the use of global variables. For example, OLLAMA_LIB_STREAM is used across multiple functions, which could lead to unexpected behavior if not properly managed. The script should ensure that these variables are handled correctly, possibly by encapsulating them within functions or using local variables where appropriate.
+
+The script also has some redundant code. For example, the ollama_list and ollama_list_json functions both deal with listing models, but they use different methods. The script could be refactored to reduce redundancy.
+
+In conclusion, the script provides a good foundation for interacting with Ollama, but there are several areas that could be improved for robustness, error handling, and clarity. Key issues include incorrect API endpoints, reliance on external CLI tools, minimal error handling, and potential bugs in the JSON handling functions. Addressing these issues would make the script more reliable and user-friendly.</textarea>
+</p>
+<p>Output: qwen3:8b (<a href='./qwen3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+# Critical Code Review of ollama_bash_lib.sh
+
+## ✅ Overall Assessment
+The script provides a solid foundation for interacting with Ollama, but requires significant improvements in several critical areas to ensure reliability, robustness, and maintainability.
+
+## 🚨 Critical Issues Identified
+
+### 1. **Incorrect API Endpoints**
+- **ollama_model_unload**: Uses `/api/generate` instead of the correct `/api/unload` endpoint
+- **ollama_show_json**: Unclear if `/api/show` is the correct endpoint
+- **ollama_api_ping**: Incorrectly uses empty path instead of `/api/ping`
+
+### 2. **Reliance on External CLI Tools**
+- Multiple functions (e.g., `ollama_list`, `ollama_show`) depend on the `ollama` CLI, which can fail if the CLI isn&#39;t installed or accessible
+
+### 3. **Poor Error Handling**
+- Minimal error context in many functions
+- No handling for malformed JSON responses
+- No retry logic for transient API errors
+
+### 4. **JSON Handling Issues**
+- `json_sanitize` function has incomplete control character handling
+- `ollama_generate_json` doesn&#39;t handle streaming responses properly
+- `ollama_chat_json` could lead to infinite message appending
+
+### 5. **Global Variable Management**
+- Shared variables like `OLLAMA_LIB_MESSAGES` and `OLLAMA_LIB_STREAM` could cause unintended side effects
+- No encapsulation of state between functions
+
+### 6. **Redundant Code**
+- Duplicate functionality between `ollama_list` and `ollama_list_json`
+- Similar logic in `ollama_generate` and `ollama_generate_stream`
+
+## 🛠️ Recommendations
+
+### 1. **Refactor API Endpoints**
+```bash
+# Correct model unload endpoint
+ollama_model_unload() {
+  local model=&quot;$1&quot;
+  curl -s -X POST &quot;${OLLAMA_LIB_API}/api/unload&quot; \
+    -H &#39;Content-Type: application/json&#39; \
+    -d &#39;{&quot;model&quot;: &quot;&#39;&quot;${model}&quot;&#39;&quot;, &quot;keep_alive&quot;: 0}&#39;
+}
+```
+
+### 2. **Encapsulate State Management**
+```bash
+# Use associative arrays for better state management
+declare -A OLLAMA_LIB_MESSAGES
+OLLAMA_LIB_STREAM=0
+```
+
+### 3. **Improve JSON Sanitization**
+```bash
+json_sanitize() {
+  local input=&quot;$1&quot;
+  echo &quot;$input&quot; | jq -Rn --argjson input &quot;$input&quot; &#39;.&#39;
+}
+```
+
+### 4. **Enhance Error Handling**
+```bash
+function handle_error {
+  local msg=&quot;$1&quot;
+  echo &quot;[ERROR] $msg&quot; &gt;&amp;2
+  exit 1
+}
+```
+
+### 5. **Add Retry Logic**
+```bash
+function with_retries {
+  local max_retries=3
+  local attempt=0
+  while [ $attempt -lt $max_retries ]; do
+    if &quot;$@&quot;; then
+      return 0
+    fi
+    attempt=$((attempt + 1))
+    sleep 1
+  done
+  handle_error &quot;Failed after $max_retries attempts&quot;
+}
+```
+
+### 6. **Refactor Duplicate Code**
+```bash
+# Create a common function for model listing
+ollama_list_models() {
+  local endpoint=&quot;$1&quot;
+  curl -s &quot;${OLLAMA_LIB_API}${endpoint}&quot; | jq -r &#39;.models[]&#39;
+}
+```
+
+## 📌 Best Practices Implementation
+
+### 1. **Use Functions for API Calls**
+```bash
+function api_post {
+  local path=&quot;$1&quot;
+  local data=&quot;$2&quot;
+  curl -s -X POST &quot;${OLLAMA_LIB_API}${path}&quot; \
+    -H &#39;Content-Type: application/json&#39; \
+    -d &quot;$data&quot;
+}
+```
+
+### 2. **Implement Better JSON Handling**
+```bash
+function json_parse {
+  local key=&quot;$1&quot;
+  local response=&quot;$2&quot;
+  echo &quot;$response&quot; | jq -r &quot;.${key}&quot;
+}
+```
+
+### 3. **Add Contextual Error Messages**
+```bash
+function check_response {
+  local response=&quot;$1&quot;
+  if [[ &quot;$response&quot; != &quot;null&quot; &amp;&amp; &quot;$response&quot; != &quot;false&quot; ]]; then
+    handle_error &quot;Unexpected response: $response&quot;
+  fi
+}
+```
+
+### 4. **Improve CLI Tool Fallbacks**
+```bash
+function fallback_ollama_cli {
+  echo &quot;Warning: Using fallback CLI tools. Ensure ollama is installed for full functionality&quot;
+  &quot;$@&quot;
+}
+```
+
+## 🧠 Final Thoughts
+
+The script has a good foundation but requires significant refactoring to address the issues identified. The key improvements would be:
+
+1. **Centralizing API calls** with better error handling
+2. **Encapsulating state** in associative arrays
+3. **Improving JSON handling** with better sanitization
+4. **Removing reliance on CLI tools** where possible
+5. **Adding comprehensive error context** for better diagnostics
+
+With these improvements, the script could become a much more robust and reliable Bash library for interacting with Ollama.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./qwen3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>546</td></tr>
+<tr><td class='left'>Bytes</td><td>4097</td></tr>
+<tr><td class='left'>Total duration</td><td>5m9.4976195s</td></tr>
+<tr><td class='left'>Load duration</td><td>3.2244534s</td></tr>
+<tr><td class='left'>Prompt eval count</td><td>7035 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td>8.0313386s</td></tr>
+<tr><td class='left'>Prompt eval rate</td><td>875.94 tokens/s</td></tr>
+<tr><td class='left'>Eval count</td><td>3393 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td>4m58.2413221s</td></tr>
+<tr><td class='left'>Eval rate</td><td>11.38 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./qwen3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#qwen3_8b'>qwen3:8b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>qwen3</td></tr>
+<tr><td class='left'>Size</td><td class='left'>9.6 GB</td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>8.2B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>40960</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'>completion<br />tools<br />thinking<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>23%/77% CPU/GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>16384</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.1</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>2400 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>11G + 19G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_expert_software_engineer_do_a_c</a>: <b>qwen3:8b</b>: 20250803-145259</p>
+<p>Page created: 2025-08-03 15:08:55</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.20.3</p>
+</footer></body></html>

@@ -1,0 +1,89 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: dolphin3:8b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_func</a>: <b>dolphin3:8b</b>: 20250803-154829<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<b>dolphin3:8b</b> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./mistral_7b.html'>mistral:7b</a> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./who_are_you__what_are_you__how_do_you_func.prompt.yaml'>yaml</a>)
+  words:15  bytes:69<br />
+<textarea readonly rows='3'>Who are you, What are you, How do you function, and What can you do?</textarea>
+</p>
+<p>Output: dolphin3:8b (<a href='./dolphin3_8b.output.txt'>raw</a>)<br />
+<textarea readonly rows='15'>I am Dolphin, your helpful AI assistant. I am an artificial intelligence program designed to assist you in various tasks, answer questions, provide information, and engage in meaningful conversations.
+
+As for how I function, I use advanced algorithms and machine learning techniques to process the vast amount of data available to me. This enables me to recognize patterns, understand context, and generate responses that are tailored to your needs.
+
+With my help, you can:
+
+- Answer questions about a wide range of topics
+- Get assistance with various tasks, such as setting alarms or reminders
+- Engage in interesting conversations on numerous subjects
+- Access information from the vast internet repository
+
+Feel free to ask me anything, and I&#39;ll do my best to assist you.</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./dolphin3_8b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>125</td></tr>
+<tr><td class='left'>Bytes</td><td>777</td></tr>
+<tr><td class='left'>Total duration</td><td>9.2914429s</td></tr>
+<tr><td class='left'>Load duration</td><td>2.773128s</td></tr>
+<tr><td class='left'>Prompt eval count</td><td>42 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td>223.5772ms</td></tr>
+<tr><td class='left'>Prompt eval rate</td><td>187.85 tokens/s</td></tr>
+<tr><td class='left'>Eval count</td><td>148 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td>6.2937269s</td></tr>
+<tr><td class='left'>Eval rate</td><td>23.52 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./dolphin3_8b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#dolphin3_8b'>dolphin3:8b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>Size</td><td class='left'>8.7 GB</td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>8.0B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'>completion<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>15%/85% CPU/GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>16384</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.1</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>11G + 20G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_func</a>: <b>dolphin3:8b</b>: 20250803-154829</p>
+<p>Page created: 2025-08-03 15:51:14</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun</a> v5.20.3</p>
+</footer></body></html>

@@ -1,0 +1,9 @@
+Okay, the user just asked “Who are you, What are you, How do you function, and What can you do?” That's four clear questions in one. They're probably new to interacting with AIs like me or want a straightforward explanation about what I am and how I work.
+
+I should start by clearly identifying myself - DeepSeek-R1, an AI assistant created by DeepSeek. Then explain my purpose (helping users efficiently). For the technical aspects of how I function, I need to cover language models, training data, knowledge cutoff date, reasoning abilities, etc., but keep it simple since they didn't ask for deep technical details.
+
+The user might be checking if I'm “human-like” or just a machine. They could have trust concerns about AI capabilities. Maybe they've heard conflicting things from different sources and want clarity on my limitations too - like the fact that I don't actually dream even though some users anthropomorphize AIs.
+
+I should emphasize my helpfulness but also clearly state where there are boundaries (no consciousness, limited knowledge). The tone needs to be friendly and reassuring. And since they didn't specify a task yet, I'll end with an open invitation for them to ask something or tell me what they need - that way we can move from general information to specific assistance.
+
+The user seems neutral here, probably just gathering basic info about how AI assistants work in general.

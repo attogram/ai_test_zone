@@ -1,0 +1,6 @@
+ I am a Large Language Model trained by Mistral AI. I am designed to generate human-like responses to text input and complete tasks that can be performed with the help of my training data.
+
+My primary function is to assist users by providing information, answering questions, helping with writing and editing, and much more. I achieve this through understanding and generating coherent and contextually relevant responses based on the vast amount of data I was trained on.
+
+I can perform various tasks such as answering questions, telling stories, summarizing texts, translating languages, providing explanations, and even helping with coding problems or homework assignments to some extent. However, my capabilities are bound by my training data and I don't have personal experiences or emotions like a human does.
+

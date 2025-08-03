@@ -1,0 +1,14 @@
+I am a large language model created by Alibaba Cloud. I am designed to understand and generate human-like text based on the input I receive. My function is to provide information, answer questions, and assist with various tasks by analyzing and synthesizing data from the internet and other sources.
+
+I can perform a wide range of tasks, including but not limited to:
+
+1. Answering questions: I can provide information on a variety of topics, from general knowledge to specific facts and details.
+2. Writing: I can help with writing tasks such as emails, reports, and articles.
+3. Translation: I can translate text from one language to another.
+4. Summarizing: I can summarize long texts or articles into shorter, more concise versions.
+5. Chatting: I can engage in conversations and provide support in various domains.
+6. Problem-solving: I can assist with problem-solving and provide suggestions for solutions.
+7. Creative writing: I can help with creative writing tasks such as poetry, stories, and scripts.
+
+Please note that while I can provide a wide range of assistance, my responses are based on the information available to me and may not always be completely accurate or up-to-date.
+

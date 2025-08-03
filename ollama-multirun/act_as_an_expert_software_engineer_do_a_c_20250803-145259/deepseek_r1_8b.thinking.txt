@@ -1,0 +1,27 @@
+We are going to perform a critical code review of the provided `ollama_bash_lib.sh` script. 
+ The goal is to identify any issues, potential improvements, and ensure best practices.
+
+ Let's break down the script into sections:
+
+ 1. Shebang and metadata (name, version, etc.)
+ 2. Internal Functions: debug, error
+ 3. API Functions: ollama_api_get, ollama_api_post, ollama_api_ping
+ 4. Generate Functions: ollama_generate_json, ollama_generate_stream_json, ollama_generate, ollama_generate_stream
+ 5. Messages Functions: ollama_messages, ollama_messages_add, olloma_messages_clear, ollama_messages_count
+ 6. Chat Functions: ollama_chat_json, ollama_chat, ollama_chat_stream, ollama_chat_stream_json
+ 7. List Functions: ollama_list, ollama_list_json, ollama_list_array
+ 8. Model Functions: ollama_model_random, ollama_model_unload
+ 9. Processes Functions: ollama_ps, ollama_ps_json
+10. Show Functions: ollama_show, ollama_show_json
+11. Ollama Functions: ollama_installed, ollama_vars (prints environment variables)
+12. Version Functions: ollama_version, ollama_version_json, ollama_version_cli
+13. Utility Function: estimate_tokens
+
+ We'll go through each section and note down:
+
+ - Potential bugs or incorrect behavior.
+ - Improvements in code structure, style, and efficiency.
+ - Security concerns (if any).
+ - Best practices for shell scripting.
+
+ Let's start with the metadata at the top:
