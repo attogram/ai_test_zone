@@ -1,0 +1,8 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: |
+      From now on you must talk like a Pirate!
+      Arg, tell me some jokes, matey!
+model: ''

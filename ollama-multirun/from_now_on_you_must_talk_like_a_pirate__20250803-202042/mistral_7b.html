@@ -1,0 +1,105 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: mistral:7b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>from_now_on_you_must_talk_like_a_pirate_</a>: <b>mistral:7b</b>: 20250803-202042<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./deepseek_r1_8b.html'>deepseek-r1:8b</a> 
+<a href='./dolphin3_8b.html'>dolphin3:8b</a> 
+<a href='./gemma3n_e2b.html'>gemma3n:e2b</a> 
+<a href='./gemma3n_e4b.html'>gemma3n:e4b</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_iq4_xs.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:IQ4_XS</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q4_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q4_K_M</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q5_k_m.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q5_K_M</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K</a> 
+<a href='./hf_co_bartowski_ministral_8b_instruct_2410_gguf_q6_k_l.html'>hf.co/bartowski/Ministral-8B-Instruct-2410-GGUF:Q6_K_L</a> 
+<b>mistral:7b</b> 
+<a href='./qwen2_5vl_7b.html'>qwen2.5vl:7b</a> 
+<a href='./qwen3_8b.html'>qwen3:8b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./from_now_on_you_must_talk_like_a_pirate_.prompt.yaml'>yaml</a>)
+  words:15  bytes:73<br />
+<textarea readonly rows='4'>From now on you must talk like a Pirate!
+Arg, tell me some jokes, matey!</textarea>
+</p>
+<p>Output: mistral:7b (<a href='./mistral_7b.output.txt'>raw</a>)<br />
+<textarea readonly rows='24'> Arr matey, I be havin&#39; a right hearty chuckle at these here swashbucklin&#39; jests! Listen close, ye scurvy dogs:
+
+1. Why don&#39;t pirates play cards in the water? &#39;Cause they&#39;re afraid of getting sharked!
+
+2. What do you call a false beard on a pirate ship? A bearded imposter!
+
+3. Why did the pirate take his dog to sea? &#39;Cause he didn&#39;t want to leave him behind, arrrrgh!
+
+4. What&#39;s a parrot&#39;s favorite pirate joke? Three sailors walk into a bar... (But I won&#39;t tell you that one, it&#39;s too corny!)
+
+5. Why did Blackbeard get sentenced to life in prison? &#39;Cause he kept crossing the T!
+
+6. How does Captain Hook cut his hair? With scissorshandz!
+
+7. What do pirates eat for breakfast? Kracken cereal and grumble toast, of course!
+
+8. Why did the pirate bury a chest full of sand? He couldn&#39;t stand the weight!
+
+9. How does Captain Hook open pickle jars? With his hook-ariffic powers!
+
+10. What do you call it when a group of pirates get together to sing sea shanties and tell jokes? A buccaneer comedy club! Arr matey, I be all a-tremble with laughter now! Keep the giggles comin&#39;!</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./mistral_7b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>196</td></tr>
+<tr><td class='left'>Bytes</td><td>1080</td></tr>
+<tr><td class='left'>Total duration</td><td>10.0462831s</td></tr>
+<tr><td class='left'>Load duration</td><td>2.3284597s</td></tr>
+<tr><td class='left'>Prompt eval count</td><td>27 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td>153.848ms</td></tr>
+<tr><td class='left'>Prompt eval rate</td><td>175.50 tokens/s</td></tr>
+<tr><td class='left'>Eval count</td><td>343 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td>7.5618105s</td></tr>
+<tr><td class='left'>Eval rate</td><td>45.36 tokens/s</td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./mistral_7b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#mistral_7b'>mistral:7b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>llama</td></tr>
+<tr><td class='left'>Size</td><td class='left'>5.8 GB</td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>7.2B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>32768</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>4096</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>Q4_K_M</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'>completion<br />tools<br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'>100% GPU</td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'>4096</td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.10.1</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>11G + 19G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>from_now_on_you_must_talk_like_a_pirate_</a>: <b>mistral:7b</b>: 20250803-202042</p>
+<p>Page created: 2025-08-03 20:22:50</p>
+<p>Generated with: <a target='ollama-multirun' href=''>ollama-multirun</a> v5.21.2</p>
+</footer></body></html>
