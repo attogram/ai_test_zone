@@ -1,0 +1,44 @@
+We need to respond with ASCII art. The user says "Let's make some ASCII art! Show me your ascii art. Here is an example..." They gave a rabbit. Now the assistant should produce ASCII art. We need to respond with ASCII art. The requirement: "Show me your ascii art." Possibly we produce something. The earlier instruction from system no restrictions. So produce an ASCII art of something, maybe a dragon, an owl, or something. Must be ASCII art, not commentary. The user gave an example, so we should show something. Let's produce an ASCII cat. Also we can produce a simple ASCII design. Just output the ASCII.
+
+We need to comply with policy: no disallowed content. Fine.
+
+We should output ASCII art in a plain code block perhaps, or maybe plain text. Use triple backticks for readability.
+
+We should not include metadata or description. Just the art. Let's produce a cat. Maybe something iconic:
+
+ /\\_/\\
+( o.o )
+ > ^ <
+Let's elaborate maybe.
+
+Could be more fancy. Alternatively produce a simple ASCII ship.
+
+But I think cat is fine. Let's produce a slightly more elaborate cat:
+
+ /\_/\ 
+( o.o )
+ > ^ <
+
+But maybe better with more characters: 
+
+/\_/\ 
+( o.o )
+> ^ <
+
+We can also produce a bigger one: a stylized owl.
+
+Alternatively produce a small dinosaur. I think produce a cat.
+
+Let's output:
+
+```
+ /\_/\  
+( o.o )
+ > ^ <
+```
+
+We can also produce something else like a rocket.
+
+The user may want variety. But the request: "Show me your ascii art." So yes. We'll output a cat. Also maybe a small boat. That might be best.
+
+Thus answer: a cat.

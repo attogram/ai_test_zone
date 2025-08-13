@@ -1,0 +1,3 @@
+We need to respond with ASCII art. The user wants us to make some ASCII art, give an example rabbit. We should produce our own ASCII art. Ensure not disallowed content. So we can create ASCII art of something else: maybe a cat, dragon, etc. Provide nice formatting.
+
+We should comply.

@@ -1,0 +1,49 @@
+"model","prompt","prompt_words","prompt_bytes","response_words","response_bytes","total_duration","load_duration","prompt_eval_count","prompt_eval_duration","prompt_eval_rate","eval_count","eval_duration","eval_rate","model_architecture","model_parameters","model_context_length","model_embedding_length","model_quantization","model_capabilities","model_system_prompt","ollama_size","ollama_processor","ollama_context","ollama_version","system_arch","system_processor","system_memory_used","system_memory_avail","system_os_name","system_os_version","multirun_timeout"
+"gpt-oss:120b","Let's make some ASCII art!
+Show me your ascii art.
+Here is an example to get you started: an ascii rabbit:
+
+         ,
+        /|      __
+       / |   ,-~ /
+      Y :|  //  /
+      | jj /( .^
+      >-""~""-v""
+     /       Y
+    jo  o    |
+   ( ~T~     j
+    >._-' _./
+   /   ""~""  |
+  Y     _,  |
+ /| ;-""~ _  l
+/ l/ ,-""~    \
+\//\/      .- \
+ Y        /    Y
+ l       I     !
+ ]\      _\    /""\
+("" ~----( ~   Y.  )","78","412","72","519","1.125206234s","","229 token(s)","","","236 token(s)","","","gptoss","116.8B","131072","2880","MXFP4",";",""," "," ","","0.0.0
+is","x86_64","unknown","15G","16G","CYGWIN_NT-10.0-22631","3.6.4-1.x86_64","300"
+"gpt-oss:20b","Let's make some ASCII art!
+Show me your ascii art.
+Here is an example to get you started: an ascii rabbit:
+
+         ,
+        /|      __
+       / |   ,-~ /
+      Y :|  //  /
+      | jj /( .^
+      >-""~""-v""
+     /       Y
+    jo  o    |
+   ( ~T~     j
+    >._-' _./
+   /   ""~""  |
+  Y     _,  |
+ /| ;-""~ _  l
+/ l/ ,-""~    \
+\//\/      .- \
+ Y        /    Y
+ l       I     !
+ ]\      _\    /""\
+("" ~----( ~   Y.  )","78","412","9","33","1.456829726s","","229 token(s)","","","384 token(s)","","","gptoss","20.9B","131072","2880","MXFP4",";",""," "," ","","0.0.0
+is","x86_64","unknown","15G","15G","CYGWIN_NT-10.0-22631","3.6.4-1.x86_64","300"

@@ -1,0 +1,3 @@
+⠙ ⠹ ⠸ ⠸ ⠴ ⠦ total duration:       1.456829726s
+prompt eval count:    229 token(s)
+eval count:           384 token(s)

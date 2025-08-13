@@ -1,0 +1,7 @@
+  Model
+    architecture        gptoss    
+    parameters          116.8B    
+    context length      131072    
+    embedding length    2880      
+    quantization        MXFP4     
+

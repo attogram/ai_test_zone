@@ -1,0 +1,149 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gpt-oss:20b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>let_s_make_some_ascii_art_show_me_your_</a>: <b>gpt-oss:20b</b>: 20250814-001819<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./gpt_oss_120b.html'>gpt-oss:120b</a> 
+<b>gpt-oss:20b</b> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./let_s_make_some_ascii_art_show_me_your_.prompt.yaml'>yaml</a>)
+  words:78  bytes:412<br />
+<textarea readonly rows='10'>Let&#39;s make some ASCII art!
+Show me your ascii art.
+Here is an example to get you started: an ascii rabbit:
+
+         ,
+        /|      __
+       / |   ,-~ /
+      Y :|  //  /
+      | jj /( .^
+      &gt;-&quot;~&quot;-v&quot;
+     /       Y
+    jo  o    |
+   ( ~T~     j
+    &gt;._-&#39; _./
+   /   &quot;~&quot;  |
+  Y     _,  |
+ /| ;-&quot;~ _  l
+/ l/ ,-&quot;~    \
+\//\/      .- \
+ Y        /    Y
+ l       I     !
+ ]\      _\    /&quot;\
+(&quot; ~----( ~   Y.  )</textarea>
+</p>
+<p>Thinking: gpt-oss:20b (<a href='./gpt_oss_20b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='15'>We need to respond with ASCII art. The user says &quot;Let&#39;s make some ASCII art! Show me your ascii art. Here is an example...&quot; They gave a rabbit. Now the assistant should produce ASCII art. We need to respond with ASCII art. The requirement: &quot;Show me your ascii art.&quot; Possibly we produce something. The earlier instruction from system no restrictions. So produce an ASCII art of something, maybe a dragon, an owl, or something. Must be ASCII art, not commentary. The user gave an example, so we should show something. Let&#39;s produce an ASCII cat. Also we can produce a simple ASCII design. Just output the ASCII.
+
+We need to comply with policy: no disallowed content. Fine.
+
+We should output ASCII art in a plain code block perhaps, or maybe plain text. Use triple backticks for readability.
+
+We should not include metadata or description. Just the art. Let&#39;s produce a cat. Maybe something iconic:
+
+ /\\_/\\
+( o.o )
+ &gt; ^ &lt;
+Let&#39;s elaborate maybe.
+
+Could be more fancy. Alternatively produce a simple ASCII ship.
+
+But I think cat is fine. Let&#39;s produce a slightly more elaborate cat:
+
+ /\_/\ 
+( o.o )
+ &gt; ^ &lt;
+
+But maybe better with more characters: 
+
+/\_/\ 
+( o.o )
+&gt; ^ &lt;
+
+We can also produce a bigger one: a stylized owl.
+
+Alternatively produce a small dinosaur. I think produce a cat.
+
+Let&#39;s output:
+
+```
+ /\_/\  
+( o.o )
+ &gt; ^ &lt;
+```
+
+We can also produce something else like a rocket.
+
+The user may want variety. But the request: &quot;Show me your ascii art.&quot; So yes. We&#39;ll output a cat. Also maybe a small boat. That might be best.
+
+Thus answer: a cat.</textarea>
+</p>
+<p>Output: gpt-oss:20b (<a href='./gpt_oss_20b.output.txt'>raw</a>)<br />
+<textarea readonly rows='9'>
+```
+ /\_/\  
+( o.o )
+ &gt; ^ &lt;
+```</textarea>
+</p>
+<p><a href='./gpt_oss_20b.json'>JSON test results</a> <a href='./gpt_oss_20b.csv'>CSV test results</a></p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gpt_oss_20b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>9</td></tr>
+<tr><td class='left'>Bytes</td><td>33</td></tr>
+<tr><td class='left'>Total duration</td><td>1.456829726s</td></tr>
+<tr><td class='left'>Load duration</td><td></td></tr>
+<tr><td class='left'>Prompt eval count</td><td>229 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td></td></tr>
+<tr><td class='left'>Prompt eval rate</td><td></td></tr>
+<tr><td class='left'>Eval count</td><td>384 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td></td></tr>
+<tr><td class='left'>Eval rate</td><td></td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gpt_oss_20b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#gpt_oss_20b'>gpt-oss:20b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>gptoss</td></tr>
+<tr><td class='left'>Size</td><td class='left'> </td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>20.9B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>2880</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>MXFP4</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'><br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'> </td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'></td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.0.0
+is</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>15G + 15G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>let_s_make_some_ascii_art_show_me_your_</a>: <b>gpt-oss:20b</b>: 20250814-001819</p>
+<p>Page created: 2025-08-14 00:18:34</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun v5.23.0</a></p>
+</footer></body></html>

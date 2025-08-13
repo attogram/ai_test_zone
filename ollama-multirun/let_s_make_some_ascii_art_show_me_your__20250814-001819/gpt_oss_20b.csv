@@ -1,0 +1,56 @@
+"key","value"
+"model","gpt-oss:20b"
+"prompt","Let's make some ASCII art!
+Show me your ascii art.
+Here is an example to get you started: an ascii rabbit:
+
+         ,
+        /|      __
+       / |   ,-~ /
+      Y :|  //  /
+      | jj /( .^
+      >-""~""-v""
+     /       Y
+    jo  o    |
+   ( ~T~     j
+    >._-' _./
+   /   ""~""  |
+  Y     _,  |
+ /| ;-""~ _  l
+/ l/ ,-""~    \
+\//\/      .- \
+ Y        /    Y
+ l       I     !
+ ]\      _\    /""\
+("" ~----( ~   Y.  )"
+"prompt_words","78"
+"prompt_bytes","412"
+"response_words","9"
+"response_bytes","33"
+"total_duration","1.456829726s"
+"load_duration",""
+"prompt_eval_count","229 token(s)"
+"prompt_eval_duration",""
+"prompt_eval_rate",""
+"eval_count","384 token(s)"
+"eval_duration",""
+"eval_rate",""
+"model_architecture","gptoss"
+"model_parameters","20.9B"
+"model_context_length","131072"
+"model_embedding_length","2880"
+"model_quantization","MXFP4"
+"model_capabilities",";"
+"model_system_prompt",""
+"ollama_size"," "
+"ollama_processor"," "
+"ollama_context",""
+"ollama_version","0.0.0
+is"
+"system_arch","x86_64"
+"system_processor","unknown"
+"system_memory_used","15G"
+"system_memory_avail","15G"
+"system_os_name","CYGWIN_NT-10.0-22631"
+"system_os_version","3.6.4-1.x86_64"
+"multirun_timeout","300"
