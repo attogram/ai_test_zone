@@ -1,0 +1,161 @@
+| `setSystemMemoryStats` – OS detection | The case pattern `cygwin|msys` will never match because `$OSTYPE` on those platforms is `cygwin` **or** `msys` **with additional suffixes** (e.g., `msys-2.0`). | Memory stats may fall back to the generic code path which may not work on Windows. | Use pattern matching: `case "$OSTYPE" in cygwin*|msys*|win*) … ;;` |
+| Unset variables | Many functions rely on globals (`model`, `prompt`, `outputDirectory`, etc.) without `local` declarations. If a later change introduces a variable name clash the script will silently use the wrong value. | Harder to reason about, risk of bugs when the script grows. | Declare all “temporary” variables `local` inside functions; pass needed values as arguments. |
+| `export OLLAMA_MAX_LOADED_MODELS=1` placed **after** the function definitions | It’s fine, but if a user sources this script the export will affect their environment unexpectedly. | Unintended side‑effects. | Either keep the script **non‑sourcable** (`#!/usr/bin/env bash` with a `main` function and `[[ "${BASH_SOURCE[0]}" == "$0" ]] && main "$@"`) or move the export into the execution block near where it’s needed (just before the loop). |
+
+---
+
+## 3. Maintainability & Code Style  
+
+| Observation | Recommendation |
+|-------------|----------------|
+| **Long file, many responsibilities** – parsing, UI, model handling, HTML generation, system diagnostics are all mixed together. | Split into logical modules (e.g., `args.sh`, `models.sh`, `html.sh`, `system.sh`). Source them from a thin driver script. |
+| **Repeated use of global vars** (`model`, `outputDirectory`, `tag`, `tagDatetime`, etc.). | Pass arguments to functions (`createOutputDirectory "$prompt" "$resultsDirectory"`). This reduces surprising side effects. |
+| **Inconsistent quoting** – many places like `echo "$prompt"` are fine, but several `echo` statements concatenate variables without quotes (`echo $ollamaProcessor`). | Always quote variable expansions: `echo "$ollamaProcessor"`. |
+| **`cat << "EOF"` vs `cat << EOF`** – The script uses both quoted and unquoted heredocs. Quoted heredocs prevent variable expansion, which is desirable for static HTML snippets. Ensure the intention is clear. |
+| **Indentation and alignment** – The HTML‑generation blocks have mixed tabs/spaces, making them hard to read. | Adopt a single indent style (e.g., 2‑space). Consider using a templating approach (e.g., `printf` with format strings) instead of massive `cat <<EOF` blocks. |
+| **Magic numbers** – `TIMEOUT="300"`, `tagDatetime=$(date '+%Y%m%d-%H%M%S')`, buffer sizes for `textarea` (2 padding, 10 lines). | Put them in named constants at the top, possibly grouped under a “configuration” section. |
+| **Duplicate code** – `showHeader` and `showFooter` are simple but repeated many times. If you ever need to change the CSS, you have to edit several spots. | Keep them as functions (already) but also externalise the CSS/JS into separate files and reference them via `<link>` or `<script src>`. |
+| **Function naming** – Some functions start with a verb (`createOutputDirectory`), others are nouns (`setModels`). Adopt a consistent verb‑first style (`detectModels`, `loadPrompt`, etc.). |
+| **Error messages** – They are sometimes printed to stdout (`echo "Error: …"`). Use `>&2` for all error output. |
+| **Exit codes** – On failure the script usually `exit 1`. When a specific error occurs, a distinct exit code helps automation scripts detect the problem (e.g., `2` for missing models, `3` for invalid args). | Define constants: `ERR_USAGE=2; ERR_NO_MODELS=3; …` and `exit $ERR_NO_MODELS`. |
+
+---
+
+## 4. Performance  
+
+| Area | Observation | Optimisation |
+|------|-------------|--------------|
+| **Repeated `ollama ps`** – `setOllamaStats` runs `ollama ps` for every model iteration, even though the data is the same for the whole run. | Run it once before the loop and cache the result. |
+| **Multiple calls to `safeString`** – It’s invoked many times per model (filenames, links, etc.) – each call runs `tr`, `sed`, etc. | Compute the sanitized name once per model and store it (e.g., `sanitized=$(safeString "$model" 80)`), reuse throughout the iteration. |
+| **`grep`/`awk` pipelines for stats extraction** – Each `setStats` runs 8 separate `grep` calls on the same file. | Combine into a single `awk` script that pulls all fields at once, reducing I/O. |
+| **`ls -d "$resultsDirectory"/*`** – Unquoted glob may break if there are no directories (shell will leave the pattern unchanged). Use `printf '%s\n' "$resultsDirectory"/*/` or `find`. | `find "$resultsDirectory" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort -r`. |
+| **`sed` for HTML escaping** – Linear scans per line; fine for small data but could be a bottleneck if outputs are huge. | Use `awk` or `perl -MHTML::Entities -pe '$_=encode_entities($_)'`. |
+| **`sleep "$TIMEOUT"`** – Spawns a subshell for each model; okay for a few models but can explode with dozens. | Use the external `timeout` command (`timeout "$TIMEOUT" ollama run …`) – it handles timer and termination in one process. |
+
+---
+
+## 5. Portability  
+
+| Issue | Impact | Recommendation |
+|-------|--------|----------------|
+| Reliance on `awk` with `-F.` and `exit` inside a subshell for version check – works on most GNU/BusyBox `awk`, but some platforms (e.g., macOS `/usr/bin/awk`) behave slightly differently. | Slight risk of false‑negative version detection. | Use Bash’s `${BASH_VERSINFO[@]}` instead of external `awk`. |
+| Use of `date '+%Y-%m-%d %H:%M:%S'` – works on GNU/date and BSD date, but `date -d` (not used) would be problematic. The script avoids it, which is good. | None. |
+| `top -l 1` (macOS) vs `top -bn1` (Linux) – the script attempts both but only checks `$OSTYPE` for “darwin*”. Windows (Cygwin) path uses `wmic`; older Windows 10 may lack `wmic`. | Memory stats may be missing on some Windows builds. | Prefer a pure‑Bash / cross‑platform method like parsing `/proc/meminfo` on Linux and using `systeminfo` on Windows (via `cmd /c`). |
+| `expect` is optional – good, but `clearModel` silently skips if missing. The rest of the script still calls `stopModel`, which always runs `ollama stop`. If `ollama` isn’t installed, the script fails later with “command not found”. | Needs a pre‑flight check. | Add a `command -v ollama >/dev/null || { echo "ollama not installed" >&2; exit 127; }` early. |
+| Path handling – the script concatenates paths with `$resultsDirectory/${tagDatetime}_${tag}` without quoting. If the results directory contains spaces, it breaks. | Users may wish to store results under a path with spaces. | Use `"${resultsDirectory}/${tagDatetime}_${tag}"` everywhere, and consider `realpath`/`readlink -f` to normalise. |
+
+---
+
+## 6. Security  
+
+| Concern | Why it matters | Fix |
+|----------|----------------|-----|
+| **HTML injection** – Model output is placed directly into a `<textarea>` (escaped) and the rest of the page (e.g., `showPrompt` prints the raw prompt after HTML‑escaping via `textarea`). However, the *stats* tables embed raw values (`$statsTotalDuration`, `$modelArchitecture`, …) without escaping. If a model deliberately returns a string containing `</td><script>…` the generated HTML can be compromised. | Potential XSS when the pages are opened locally or served on a web server. | Escape **all** dynamic values before embedding them into HTML. Implement a generic `html_escape` function and wrap every variable: `echo "$(html_escape "$statsTotalDuration")"`. |
+| **Shell injection** – Most external commands use quoted variables (`ollama run "$model"`). The only risky spot is `ollama run --verbose "${model}"` inside `runModelWithTimeout`. Since `$model` comes from `ollama list` or user‑supplied `-m`, a malicious model name could contain spaces or shell metacharacters. | Could cause command line injection. | Enforce a whitelist of characters for model names (already done by `safeString` for filenames, but not for command execution). Add a validation step: `[[ $model =~ ^[A-Za-z0-9._-]+$ ]] || { echo "Invalid model name: $model" >&2; continue; }`. |
+| **File overwrites** – The script writes many files directly into `$outputDirectory` using names derived from the prompt (`safeString "$prompt"`). If the prompt is long enough it could cause a name collision or exceed filesystem limits. | Overwrites previous runs, or fails with “File name too long”. | Truncate or hash the sanitized prompt (e.g., `printf '%s' "$prompt" | sha1sum | cut -c1-8`) and combine with timestamp, guaranteeing uniqueness. |
+| **`rm -rf` not used**, but **`cp`** and other file ops are run without checks for symbolic links. If a model accidentally returns a path like `../../etc/passwd` in an “image” line, `cp "$image" "$outputDirectory"` would follow the symlink. | Potential file overwrite / symlink attacks. | Use `cp --no-preserve=mode,ownership -a --reflink=auto -- "$image" "$outputDirectory"` and/or verify that `$image` is inside a trusted directory before copying. |
+| **Environment leakage** – The script exports `OLLAMA_MAX_LOADED_MODELS=1` globally, which may affect any subsequent `ollama` commands run by the user in the same shell if they source the script. | Unexpected behaviour for the user. | Keep the script non‑sourcable (wrap main logic in a function and call it only when `$0 == BASH_SOURCE[0]`). |
+
+---
+
+## 7. Testing & Debugging  
+
+* **Add a `--debug` flag** that sets `set -x` (or a custom trace function). This helps troubleshoot failures without editing the script.  
+* **Unit‑testable functions** – Functions that only produce output (e.g., `safeString`, `html_escape`) can be tested with a small test harness (`bats` or plain Bash). Consider moving them to a separate library (`lib.sh`).  
+* **Temporary directory handling** – Use `mktemp -d` for intermediate files if you need a scratch area. Right now the script writes directly into the results directory, which is fine, but test cases should clean up after themselves.
+
+---
+
+## 8. Suggested Refactor Outline  
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+# ----------------------------------------------------------------------
+# Configuration
+# ----------------------------------------------------------------------
+DEFAULT_TIMEOUT=300
+DEFAULT_RESULTS_DIR="results"
+VERSION="5.21.4"
+NAME="ollama-multirun"
+
+# ----------------------------------------------------------------------
+# Helper functions
+# ----------------------------------------------------------------------
+log()   { printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"; }
+error() { log "$@" >&2; }
+die()   { error "$@"; exit "${2:-1}"; }
+
+html_escape() {
+  # Uses perl because it’s portable and fast.
+  perl -MHTML::Entities -pe '$_ = encode_entities($_)'
+}
+
+safe_string() {
+  local s="${1:-}"
+  local max="${2:-40}"
+  printf '%s' "$s" | cut -c1-"$max" |
+    tr '[:upper:]' '[:lower:]' |
+    sed -E 's/[^[:alnum:]]+/_/g; s/^_+|_+$//g'
+}
+# … other helpers (version_check, detect_models, etc.)
+
+# ----------------------------------------------------------------------
+# Argument parsing
+# ----------------------------------------------------------------------
+declare -a models_list
+results_dir="$DEFAULT_RESULTS_DIR"
+timeout_sec=$DEFAULT_TIMEOUT
+prompt=""
+
+while (( $# )); do
+  case "$1" in
+    -h)  usage; exit 0 ;;
+    -v)  echo "$NAME v$VERSION"; exit 0 ;;
+    -m)  shift; IFS=',' read -ra models_list <<< "$1" ;;
+    -r)  shift; results_dir="$1" ;;
+    -t)  shift; timeout_sec="$1" ;;
+    --debug) set -x ;;
+    --) shift; break ;;
+    -*)  die "Unsupported option: $1" ;;
+    *)   prompt+="${prompt:+ }$1" ;;
+  esac
+  shift
+done
+
+# ----------------------------------------------------------------------
+# Main workflow
+# ----------------------------------------------------------------------
+main() {
+  command -v ollama >/dev/null || die "ollama executable not found"
+  detect_models
+  read_prompt_if_needed
+  create_output_dir
+  save_prompt
+  generate_model_overview
+  for model in "${models[@]}"; do
+    run_one_model "$model"
+  done
+  finish_indexes
+}
+# ----------------------------------------------------------------------
+# Run the driver
+# ----------------------------------------------------------------------
+[[ "${BASH_SOURCE[0]}" == "$0" ]] && main "$@"
+```
+
+The above sketch separates **configuration**, **helpers**, **argument parsing**, and **main workflow**. Each block can be unit‑tested independently.
+
+---
+
+## 9. Final Recommendations  
+
+1. **Add robust error handling** (`set -euo pipefail` + explicit checks).  
+2. **Sanitise & escape everything** that ends up in HTML or shells.  
+3. **Cache repeated data** (model list, `ollama ps` output) and compute sanitized filenames once per model.  
+4. **Refactor into modules** – make the script smaller, easier to read, and testable.  
+5. **Use existing utilities** (`timeout`, `html-entities` via `perl` or `python`) instead of handcrafted loops when possible.  
+6. **Document expectations** (required `ollama` version, optional `expect`, supported OS).  
+7. **Consider a more portable JSON/YAML output** for downstream processing; HTML is great for humans but harder for scripts.We need to do code review, give feedback, identify issues, suggestions, best practices, potential bugs, performance, portability, security, style, etc. Provide a thorough review. Should be in expert manner. Let's craft.

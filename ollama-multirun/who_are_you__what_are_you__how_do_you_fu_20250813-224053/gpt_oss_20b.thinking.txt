@@ -1,0 +1,3 @@
+We need to respond with an answer. The user asks: "Who are you? What are you? How do you function? What can you do? Are you alive?" We must answer providing explanation about ChatGPT. We must maintain the style guidelines. Ensure to be polite, no mention of limitations unless necessary. Provide information: I'm an AI language model, not a biological organism, etc. Provide clear information. Answer should be concise but informative.
+
+Check style. Use markdown to highlight sub-answers? Maybe not mandatory. Provide bullet list: Who, What, Function, Capabilities, Alive? Provide explanation. Also talk about knowledge cutoff and date. Ok. Let's write.

@@ -1,0 +1,1022 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: act_as_an_expert_software_engineer_do_a</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <b>act_as_an_expert_software_engineer_do_a</b>: 20250813-223825<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./gpt_oss_120b.html'>gpt-oss:120b</a> 
+<a href='./gpt_oss_20b.html'>gpt-oss:20b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./act_as_an_expert_software_engineer_do_a.prompt.yaml'>yaml</a>)
+  words:3325  bytes:34291<br />
+<textarea readonly rows='10'>Act as an expert Software Engineer.
+Do a code review of this multirun.sh script:
+
+#!/usr/bin/env bash
+#
+# Ollama Multirun
+#
+# Bash shell script to run a prompt against all models in Ollama, and save the output as web pages
+#
+# Usage:
+#  - Enter prompt manually:    ./multirun.sh
+#  - Enter prompt as argument: ./multirun.sh &quot;your prompt&quot;
+#  - Enter prompt from file:   ./multirun.sh &lt; prompt.txt
+#  - Enter prompt from pipe:   echo &quot;your prompt&quot; | ./multirun.sh
+#                              echo &quot;summarize this file: $(cat filename)&quot; | ./multirun.sh
+#
+#  - By default, will use all available models
+#    To set a list of models to use, set as a comma-seperated list with -m
+#      example:  ./multirun.sh -m deepseek-r1:1.5b,deepseek-r1:8b
+#
+#  - By default, will use &quot;./results&quot; as the results output directory
+#    To set a results output directory:
+#      ./multirun.sh -r ./path/to/directory
+#
+#  - By default, will wait 5 minutes for models to respond.
+#    To set new timeout (in seconds):
+#      ./multirun.sh -t 30
+
+if [ -z &quot;$BASH_VERSION&quot; ] || ! (echo &quot;$BASH_VERSION&quot; | awk -F. &#39;{exit !($1 &gt; 3 || ($1 == 3 &amp;&amp; $2 &gt;= 2))}&#39;) ; then
+  echo &quot;Error: This script requires Bash version 3.2 or higher.&quot; &gt;&amp;2
+  exit 1
+fi
+
+OLLAMA_MULTIRUN_NAME=&quot;ollama-multirun&quot;
+OLLAMA_MULTIRUN_VERSION=&quot;5.21.4&quot;
+OLLAMA_MULTIRUN_URL=&quot;https://github.com/attogram/ollama-multirun&quot;
+OLLAMA_MULTIRUN_DISCORD=&quot;https://discord.gg/BGQJCbYVBa&quot;
+OLLAMA_MULTIRUN_LICENSE=&quot;MIT&quot;
+OLLAMA_MULTIRUN_COPYRIGHT=&quot;Copyright (c) 2025 Ollama Bash Lib, Attogram Project &lt;https://github.com/attogram&gt;&quot;
+
+TIMEOUT=&quot;300&quot; # number of seconds to allow model to respond
+addedImages=()
+
+usage() {
+  local me
+  me=$(basename &quot;$0&quot;)
+  echo &quot;$OLLAMA_MULTIRUN_NAME&quot;; echo
+  echo &quot;Usage:&quot;
+  echo &quot;  ./$me [flags]&quot;
+  echo &quot;  ./$me [flags] [prompt]&quot;
+  echo; echo &quot;Flags:&quot;;
+  echo &quot;  -h       -- Help for $OLLAMA_MULTIRUN_NAME&quot;
+  echo &quot;  -m model1,model2  -- Use specific models (comma separated list)&quot;
+  echo &quot;  -r &lt;dir&gt; -- Set results directory&quot;
+  echo &quot;  -t #     -- Set timeout, in seconds&quot;
+  echo &quot;  -v       -- Show version information&quot;
+  echo &quot;  [prompt] -- Set the prompt (\&quot;Example prompt\&quot;)&quot;
+}
+
+parseCommandLine() {
+  modelsList=&quot;&quot;
+  resultsDirectory=&quot;results&quot;
+  prompt=&quot;&quot;
+  while (( &quot;$#&quot; )); do
+    case &quot;$1&quot; in
+      -h)
+        usage
+        exit 0
+        ;;
+      -m) # specify models to run
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ &quot;${2:0:1}&quot; != &quot;-&quot; ]; then
+          modelsList=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -r) # specify results outputDirectory
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ &quot;${2:0:1}&quot; != &quot;-&quot; ]; then
+          resultsDirectory=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -t) # specify timeout in seconds
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ &quot;${2:0:1}&quot; != &quot;-&quot; ]; then
+          TIMEOUT=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -v)
+        echo &quot;$OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION&quot;
+        exit 0
+        ;;
+      -*) # unsupported flags
+        echo &quot;Error: unsupported argument: $1&quot; &gt;&amp;2
+        exit 1
+        #shift 1
+        ;;
+      *) # preserve positional arguments
+        if [ -z &quot;$prompt&quot; ]; then
+          prompt=&quot;$1&quot;
+        else
+          prompt+=&quot; $1&quot;
+        fi
+        shift
+        ;;
+    esac
+  done
+}
+
+getDateTime() {
+  date &#39;+%Y-%m-%d %H:%M:%S&#39;
+}
+
+setModels() {
+  models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort)) # Get list of models, sorted alphabetically
+  if [ -z &quot;${models[*]}&quot; ]; then
+    echo &quot;No models found. Please install models with &#39;ollama pull &lt;model-name&gt;&#39;&quot; &gt;&amp;2
+    exit 1
+  fi
+
+  parsedModels=()
+  if [ -n &quot;$modelsList&quot; ]; then
+    IFS=&#39;,&#39; read -ra modelsListArray &lt;&lt;&lt; &quot;$modelsList&quot; # parse csv into modelsListArray
+    for m in &quot;${modelsListArray[@]}&quot;; do
+      local found=0
+      for existing_model in &quot;${models[@]}&quot;; do
+          if [[ &quot;$existing_model&quot; == &quot;$m&quot; ]]; then
+              found=1
+              break
+          fi
+      done
+      if [[ $found -eq 1 ]]; then
+        parsedModels+=(&quot;$m&quot;)
+      else
+        echo &quot;Error: model not found: $m&quot; &gt;&amp;2
+        exit 1
+      fi
+    done
+  fi
+  if [ -n &quot;${parsedModels[*]}&quot; ]; then
+    models=(&quot;${parsedModels[@]}&quot;)
+  fi
+
+  echo &quot;models:&quot;;
+  echo &quot;${models[@]}&quot;
+  echo
+}
+
+safeString() {
+  local input=&quot;$1&quot; # Get the input
+  local length=&quot;${2:-40}&quot; # Get length, default to 40 characters
+  input=${input:0:length} # Truncate to first LENGTH characters
+  input=$(echo &quot;$input&quot; | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;) # Convert to lowercase
+  input=${input// /_} # Replace spaces with underscores
+  input=$(echo &quot;$input&quot; | sed &#39;s/[^a-zA-Z0-9_]/_/g&#39; | tr -cd &#39;a-zA-Z0-9_&#39;) # Replace non-allowed characters with underscores
+  echo &quot;$input&quot; # Output the sanitized string
+}
+
+createOutputDirectory() {
+  tag=$(safeString &quot;$prompt&quot;)
+  tagDatetime=$(date &#39;+%Y%m%d-%H%M%S&#39;)
+  #outputDirectory=&quot;$resultsDirectory/${tagDatetime}_${tag}&quot;
+  outputDirectory=&quot;$resultsDirectory/${tag}_${tagDatetime}&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Output Directory: $outputDirectory/&quot;
+  if [ ! -d &quot;$outputDirectory&quot; ]; then
+    if ! mkdir -p &quot;$outputDirectory&quot;; then
+      echo &quot;Error: Failed to create Output Directory $outputDirectory&quot; &gt;&amp;2
+      exit 1
+    fi
+  fi
+}
+
+setPrompt() {
+  if [ -n &quot;$prompt&quot; ]; then # if prompt is already set from command line
+    return
+  fi
+
+  if [ -t 0 ]; then # Check if input is from a terminal (interactive)
+    echo &quot;Enter prompt:&quot;;
+    read -r prompt # Read prompt from user input
+    return
+  fi
+
+  prompt=$(cat) # Read from standard input (pipe or file)
+}
+
+savePrompt() {
+  echo &quot;$(getDateTime)&quot; &quot;Prompt: $prompt&quot;
+
+  promptFile=&quot;$outputDirectory/prompt.txt&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Prompt Text: $promptFile&quot;
+  echo &quot;$prompt&quot; &gt; &quot;$promptFile&quot;
+
+  promptWords=$(wc -w &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+  promptBytes=$(wc -c &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+
+  promptYamlFile=&quot;$outputDirectory/$tag.prompt.yaml&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Prompt Yaml: $promptYamlFile&quot;
+  generatePromptYaml &gt; &quot;$promptYamlFile&quot;
+}
+
+generatePromptYaml() {
+  # Github Prompt YAML: https://docs.github.com/en/github-models/use-github-models/storing-prompts-in-github-repositories
+  cat &lt;&lt; EOF
+messages:
+  - role: system
+    content: &#39;&#39;
+  - role: user
+    content: |
+$(while IFS= read -r line; do echo &quot;      $line&quot;; done &lt;&lt;&lt; &quot;$prompt&quot;)
+model: &#39;&#39;
+EOF
+}
+
+textarea() {
+  local content=&quot;$1&quot; # Get the input
+  if [ -z &quot;$content&quot; ]; then
+    content=&quot;&quot;
+  fi
+  local padding=&quot;$2&quot;
+  if [ -z &quot;$padding&quot; ]; then
+    padding=0
+  fi
+  local max=&quot;$3&quot;
+  if [ -z &quot;$max&quot; ]; then
+    max=25
+  fi
+  local lines
+  lines=$(printf &#39;%s\n&#39; &quot;$content&quot; | wc -l) # Get number of lines in content
+  lines=$((lines + padding))
+  if [ &quot;$lines&quot; -gt &quot;$max&quot; ]; then
+    lines=$max
+  fi
+  content=$(echo &quot;$content&quot; | sed &#39;s/&amp;/\&amp;amp;/g; s/&lt;/\&amp;lt;/g; s/&gt;/\&amp;gt;/g; s/&quot;/\&amp;quot;/g; s/&#39;&quot;&#39;&quot;&#39;/\&amp;#39;/g&#39;) # Escape HTML special characters
+  echo &quot;&lt;textarea readonly rows=&#39;$lines&#39;&gt;${content}&lt;/textarea&gt;&quot;
+}
+
+showPrompt() {
+  echo &quot;&lt;p&gt;Prompt: (&lt;a href=&#39;./prompt.txt&#39;&gt;raw&lt;/a&gt;) (&lt;a href=&#39;./${tag}.prompt.yaml&#39;&gt;yaml&lt;/a&gt;)&quot;
+  echo &quot;  words:$promptWords  bytes:$promptBytes&lt;br /&gt;&quot;
+  textarea &quot;$prompt&quot; 2 10 # 0 padding, max 10 lines
+  echo &quot;&lt;/p&gt;&quot;
+}
+
+showImages() {
+  if [ ${#addedImages[@]} -gt 0 ]; then
+    for image in &quot;${addedImages[@]}&quot;; do
+      echo -n &quot;&lt;div class=&#39;box&#39;&gt;&quot;
+      echo -n &quot;&lt;a target=&#39;image&#39; href=&#39;$(basename &quot;$image&quot;)&#39;&gt;&lt;img src=&#39;$(basename &quot;$image&quot;)&#39; alt=\&quot;$image\&quot; width=&#39;250&#39; /&gt;&lt;/a&gt;&quot;
+      echo -n &quot;&lt;/div&gt;&quot;
+    done
+    echo -n &quot;&lt;br /&gt;&quot;
+  fi
+}
+
+clearModel() {
+  if ! command -v expect &gt;/dev/null 2&gt;&amp;1; then
+    echo &quot;Warning: &#39;expect&#39; command not found, skipping model clearing.&quot; &gt;&amp;2
+    return
+  fi
+  echo &quot;$(getDateTime)&quot; &quot;Clearing model session: $1&quot;
+  (
+    expect \
+    -c &quot;spawn ollama run $1&quot; \
+    -c &quot;expect \&quot;&gt;&gt;&gt; \&quot;&quot; \
+    -c &#39;send -- &quot;/clear\n&quot;&#39; \
+    -c &quot;expect \&quot;Cleared session context\&quot;&quot; \
+    -c &#39;send -- &quot;/bye\n&quot;&#39; \
+    -c &quot;expect eof&quot; \
+    ;
+  ) &gt; /dev/null 2&gt;&amp;1 # Suppress output
+  if [ $? -ne 0 ]; then
+    echo &quot;ERROR: Failed to clear model session: $1&quot; &gt;&amp;2
+    # exit 1
+  fi
+}
+
+stopModel() {
+  echo &quot;$(getDateTime)&quot; &quot;Stopping model: $1&quot;
+  if ! ollama stop &quot;$1&quot;; then
+    echo &quot;$(getDateTime)&quot; &quot;ERROR: Failed to stop model: $1&quot; &gt;&amp;2
+    # exit 1
+  fi
+}
+
+showSortableTablesJavascript() {
+    # From: https://github.com/tofsjonas/sortable/
+    # License: The Unlicense - https://github.com/tofsjonas/sortable/blob/main/LICENSE
+  echo &#39;&lt;style&gt;
+.sortable thead th:not(.no-sort){cursor:pointer}.sortable thead th:not(.no-sort)::after,.sortable thead th:not(.no-sort)::before{transition:color .1s ease-in-out;font-size:1.2em;color:rgba(0,0,0,0)}.sortable thead th:not(.no-sort)::after{margin-left:3px;content:&quot;▸&quot;}.sortable thead th:not(.no-sort):hover::after{color:inherit}.sortable thead th:not(.no-sort)[aria-sort=descending]::after{color:inherit;content:&quot;▾&quot;}.sortable thead th:not(.no-sort)[aria-sort=ascending]::after{color:inherit;content:&quot;▴&quot;}.sortable thead th:not(.no-sort).indicator-left::after{content:&quot;&quot;}.sortable thead th:not(.no-sort).indicator-left::before{margin-right:3px;content:&quot;▸&quot;}.sortable thead th:not(.no-sort).indicator-left:hover::before{color:inherit}.sortable thead th:not(.no-sort).indicator-left[aria-sort=descending]::before{color:inherit;content:&quot;▾&quot;}.sortable thead th:not(.no-sort).indicator-left[aria-sort=ascending]::before{color:inherit;content:&quot;▴&quot;}.sortable{--stripe-color: #e4e4e4;--th-color: #fff;--th-bg: #808080;--td-color: #000;--td-on-stripe-color: #000;border-spacing:0}.sortable.sticky thead th{position:sticky;top:0;z-index:1}.sortable tbody tr:nth-child(odd){background-color:var(--stripe-color);color:var(--td-on-stripe-color)}.sortable thead th{background:var(--th-bg);color:var(--th-color);font-weight:normal;text-align:left;text-transform:capitalize;vertical-align:baseline;white-space:nowrap}.sortable td{color:var(--td-color)}.sortable td,.sortable th{padding:10px}.sortable td:first-child,.sortable th:first-child{border-top-left-radius:4px}.sortable td:last-child,.sortable th:last-child{border-top-right-radius:4px}
+&lt;/style&gt;&#39;
+  echo &#39;&lt;script&gt;
+function sortSortable(a,m){function n(b){if(b){if(m&amp;&amp;b.dataset.sortAlt)return b.dataset.sortAlt;if(b.dataset.sort)return b.dataset.sort;if(b.textContent)return b.textContent}return&quot;&quot;}a.dispatchEvent(new Event(&quot;sort-start&quot;,{bubbles:!0}));for(var c=a.tHead.querySelector(&quot;th[aria-sort]&quot;),k=a.tHead.children[0],p=&quot;ascending&quot;===c.getAttribute(&quot;aria-sort&quot;),f=a.classList.contains(&quot;n-last&quot;),e=function(b,q,d){var g=n(q.cells[d]),r=n(b.cells[d]);if(f){if(&quot;&quot;===g&amp;&amp;&quot;&quot;!==r)return-1;if(&quot;&quot;===r&amp;&amp;&quot;&quot;!==g)return 1}var u=
++g-+r;g=isNaN(u)?g.localeCompare(r):u;return 0===g&amp;&amp;k.cells[d]&amp;&amp;k.cells[d].hasAttribute(&quot;data-sort-tbr&quot;)?e(b,q,+k.cells[d].dataset.sortTbr):p?-g:g},h=0;h&lt;a.tBodies.length;h++){var l=a.tBodies[h],v=[].slice.call(l.rows,0);v.sort(function(b,q){var d;return e(b,q,+(null!==(d=c.dataset.sortCol)&amp;&amp;void 0!==d?d:c.cellIndex))});var t=l.cloneNode();t.append.apply(t,v);a.replaceChild(t,l)}a.dispatchEvent(new Event(&quot;sort-end&quot;,{bubbles:!0}))}
+function sortableEventListener(a){function m(h,l){return h.nodeName===l?h:m(h.parentNode,l)}try{var n=a.shiftKey||a.altKey,c=m(a.target,&quot;TH&quot;),k=c.parentNode,p=k.parentNode,f=p.parentNode;if(&quot;THEAD&quot;===p.nodeName&amp;&amp;f.classList.contains(&quot;sortable&quot;)&amp;&amp;!c.classList.contains(&quot;no-sort&quot;)){var e=k.cells;for(a=0;a&lt;e.length;a++)e[a]!==c&amp;&amp;e[a].removeAttribute(&quot;aria-sort&quot;);e=&quot;descending&quot;;if(&quot;descending&quot;===c.getAttribute(&quot;aria-sort&quot;)||f.classList.contains(&quot;asc&quot;)&amp;&amp;&quot;ascending&quot;!==c.getAttribute(&quot;aria-sort&quot;))e=&quot;ascending&quot;;
+c.setAttribute(&quot;aria-sort&quot;,e);f.dataset.timer&amp;&amp;clearTimeout(+f.dataset.timer);f.dataset.timer=setTimeout(function(){sortSortable(f,n)},1).toString()}}catch(h){}}document.addEventListener(&quot;click&quot;,sortableEventListener);
+&lt;/script&gt;&#39;
+}
+
+showHeader() {
+  title=&quot;$1&quot;
+  cat &lt;&lt; &quot;EOF&quot;
+  &lt;!DOCTYPE html&gt;
+  &lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;style&gt;
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  &lt;/style&gt;
+EOF
+  echo &quot;&lt;title&gt;$title&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&quot;
+}
+
+showFooter() {
+  title=&quot;$1&quot;
+  echo &quot;&lt;br /&gt;&lt;br /&gt;&quot;
+  echo &quot;&lt;footer&gt;&quot;
+  echo &quot;&lt;p&gt;$title&lt;/p&gt;&quot;
+  echo &quot;&lt;p&gt;Page created: $(getDateTime)&lt;/p&gt;&quot;
+  echo &quot;&lt;p&gt;Generated with: &lt;a target=&#39;$OLLAMA_MULTIRUN_NAME&#39; href=&#39;$OLLAMA_MULTIRUN_URL&#39;&gt;$OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION&lt;/a&gt;&lt;/p&gt;&quot;
+  echo &quot;&lt;/footer&gt;&lt;/body&gt;&lt;/html&gt;&quot;
+}
+
+createMenu() {
+  local currentModel=&quot;$1&quot;
+  echo &quot;&lt;span class=&#39;menu&#39;&gt;&quot;
+  echo &quot;&lt;a href=&#39;models.html&#39;&gt;models&lt;/a&gt;: &quot;
+  for modelName in &quot;${models[@]}&quot;; do
+    if [ &quot;$modelName&quot; == &quot;$currentModel&quot; ]; then
+      echo &quot;&lt;b&gt;$modelName&lt;/b&gt; &quot;
+    else
+      echo &quot;&lt;a href=&#39;./$(safeString &quot;$modelName&quot; 80).html&#39;&gt;$modelName&lt;/a&gt; &quot;
+    fi
+  done
+  echo &#39;&lt;/span&gt;&#39;;
+}
+
+setStats() {
+  statsTotalDuration=$(grep -oE &quot;total duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsLoadDuration=$(grep -oE &quot;load duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsPromptEvalCount=$(grep -oE &quot;prompt eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)
+  statsPromptEvalDuration=$(grep -oE &quot;prompt eval duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsPromptEvalRate=$(grep -oE &quot;prompt eval rate:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)
+  statsEvalCount=$(grep -oE &quot;^eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $3, $4 }&#39;)
+  statsEvalDuration=$(grep -oE &quot;^eval duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsEvalRate=$(grep -oE &quot;^eval rate:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $3, $4 }&#39;)
+
+  mapfile -t addedImages &lt; &lt;(grep -oE &quot;Added image &#39;(.*)&#39;&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39; | sed &quot;s/&#39;//g&quot;)
+  if [ ${#addedImages[@]} -gt 0 ]; then
+    for image in &quot;${addedImages[@]}&quot;; do
+      if ! [ -f &quot;$outputDirectory/$(basename &quot;$image&quot;)&quot; ]; then
+        echo &quot;Copying image: $image&quot;
+        cp &quot;$image&quot; &quot;$outputDirectory&quot;
+      fi
+    done
+  fi
+
+  responseWords=$(wc -w &lt; &quot;$modelOutputTxt&quot; | awk &#39;{print $1}&#39;)
+  responseBytes=$(wc -c &lt; &quot;$modelOutputTxt&quot; | awk &#39;{print $1}&#39;)
+}
+
+setOllamaStats() {
+  ollamaVersion=$(ollama -v | awk &#39;{print $4}&#39;)
+  # ps columns: 1:NAME, 2:ID, 3:SIZE_NUM 4:SIZE_GB, 5:PROCESSOR_% 6:PROCESS_TYPE, 7:CONTEXT, 8:UNTIL
+  ollamaPs=$(ollama ps | awk &#39;{print $1, $2, $3, $4, $5, $6, $7}&#39; | sed &#39;1d&#39;) # Get columns from ollama ps output, skipping the header
+  ollamaModel=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $1}&#39;) # Get the model name
+  ollamaSize=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $3, $4}&#39;) # Get the model size
+  ollamaProcessor=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $5, $6}&#39;) # Get the processor
+  ollamaContext=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $7}&#39;) # Get the context size
+}
+
+setSystemStats() {
+  systemArch=$(uname -m) # Get hardware platform
+  systemProcessor=$(uname -p) # Get system processor
+  systemOSName=$(uname -s) # Get system OS name
+  systemOSVersion=$(uname -r) # Get system OS version
+  setSystemMemoryStats
+}
+
+setSystemMemoryStats() {
+  systemMemoryUsed=&quot;?&quot;
+  systemMemoryAvail=&quot;?&quot;
+  #echo &quot;OS Type: $OSTYPE&quot;
+  case &quot;$OSTYPE&quot; in
+    cygwin|msys)
+      #echo &quot;OS Type match: cygwin|msys&quot;
+      if command -v wmic &gt;/dev/null 2&gt;&amp;1; then
+        local totalMemKB
+        totalMemKB=$(wmic OS get TotalVisibleMemorySize /value 2&gt;/dev/null | grep -E &quot;^TotalVisibleMemorySize=&quot; | cut -d&#39;=&#39; -f2 | tr -d &#39;\r&#39;)
+        local availMemKB
+        availMemKB=$(wmic OS get FreePhysicalMemory /value 2&gt;/dev/null | grep -E &quot;^FreePhysicalMemory=&quot; | cut -d&#39;=&#39; -f2 | tr -d &#39;\r&#39;)
+        if [ -n &quot;$totalMemKB&quot; ] &amp;&amp; [ -n &quot;$availMemKB&quot; ]; then
+          local usedMemKB=$((totalMemKB - availMemKB))
+          # Convert KB to human readable format (approximate)
+          if [ $usedMemKB -gt 1048576 ]; then
+            systemMemoryUsed=&quot;$((usedMemKB / 1048576))G&quot;
+          elif [ $usedMemKB -gt 1024 ]; then
+            systemMemoryUsed=&quot;$((usedMemKB / 1024))M&quot;
+          else
+            systemMemoryUsed=&quot;${usedMemKB}K&quot;
+          fi
+          if [ &quot;$availMemKB&quot; -gt 1048576 ]; then
+            systemMemoryAvail=&quot;$((availMemKB / 1048576))G&quot;
+          elif [ &quot;$availMemKB&quot; -gt 1024 ]; then
+            systemMemoryAvail=&quot;$((availMemKB / 1024))M&quot;
+          else
+            systemMemoryAvail=&quot;${availMemKB}K&quot;
+          fi
+        fi
+      fi
+      ;;
+    darwin*)
+      #echo &quot;OS Type match: darwin&quot;
+      local top
+      top=$(top -l 1 2&gt;/dev/null || echo &quot;&quot;)
+      if [ -n &quot;$top&quot; ]; then
+        systemMemoryUsed=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $2}&#39; || echo &quot;N/A&quot;)
+        systemMemoryAvail=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $6}&#39; || echo &quot;N/A&quot;)
+      fi
+      ;;
+    *)
+      #echo &quot;OS Type match: *&quot;
+      local top
+      top=$(top -l 1 2&gt;/dev/null || top -bn1 2&gt;/dev/null || echo &quot;&quot;)
+      if [ -n &quot;$top&quot; ]; then
+        systemMemoryUsed=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $2}&#39; || echo &quot;N/A&quot;)
+        systemMemoryAvail=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $6}&#39; || echo &quot;N/A&quot;)
+      fi
+      ;;
+  esac
+}
+
+showSystemStats() {
+  echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;System&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Ollama proc&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaProcessor&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Ollama context&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaContext&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Ollama version&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaVersion&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Multirun timeout&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$TIMEOUT seconds&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Sys arch&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemArch&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Sys processor&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemProcessor&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;sys memory&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemMemoryUsed + $systemMemoryAvail&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Sys OS&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemOSName $systemOSVersion&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+}
+
+createModelInfoTxt() { # Create model info files - for each model, do &#39;ollama show&#39; and save the results to text file
+  for model in &quot;${models[@]}&quot;; do
+    modelInfoTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).info.txt&quot;
+    echo &quot;$(getDateTime)&quot; &quot;Creating Model Info Text: $modelInfoTxt&quot;
+    ollama show &quot;$model&quot; &gt; &quot;$modelInfoTxt&quot;
+  done
+}
+
+setModelInfo() {
+  modelInfoTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).info.txt&quot;
+  modelCapabilities=()
+  modelSystemPrompt=&quot;&quot;
+  modelTemperature=&quot;&quot;
+  local section=&quot;&quot;
+  local line
+
+  while IFS= read -r line; do # Read the content of the file line by line
+    line=&quot;$(echo -e &quot;${line}&quot; | sed -e &#39;s/^[[:space:]]*//&#39; -e &#39;s/[[:space:]]*$//&#39;)&quot; # Trim leading/trailing whitespace
+    if [[ -z &quot;$line&quot; ]]; then
+      section=&quot;&quot;
+      continue; # Skip empty lines
+    fi
+    if [[ $line == &quot;Model&quot;* ]]; then
+      section=&quot;Model&quot;
+      continue
+    elif [[ $line == &quot;Capabilities&quot;* ]]; then
+      section=&quot;Capabilities&quot;
+      continue
+    elif [[ $line == &quot;System&quot;* ]]; then
+      section=&quot;System&quot;
+      continue
+    elif [[ $line == &quot;Parameters&quot;* ]]; then
+      section=&quot;Parameters&quot;
+      continue
+    elif [[ $line == &quot;License&quot;* ]]; then
+      section=&quot;License&quot;
+      continue
+    elif [[ $line == &quot;Projector&quot;* ]]; then
+      section=&quot;Projector&quot;
+      continue
+    fi
+
+    case $section in
+      &quot;Model&quot;)
+        if [[ &quot;$line&quot; == &quot;architecture&quot;* ]]; then
+          modelArchitecture=$(echo &quot;$line&quot; | awk &#39;/architecture/ {print $2}&#39;) # Get model architecture
+        fi
+        if [[ &quot;$line&quot; == &quot;parameters&quot;* ]]; then
+          modelParameters=$(echo &quot;$line&quot; | awk &#39;/parameters/ {print $2}&#39;) # Get model parameters
+        fi
+        if [[ &quot;$line&quot; == &quot;context length&quot;* ]]; then
+          modelContextLength=$(echo &quot;$line&quot; | awk &#39;/context length/ {print $3}&#39;) # Get model context length
+        fi
+        if [[ &quot;$line&quot; == &quot;embedding length&quot;* ]]; then
+          modelEmbeddingLength=$(echo &quot;$line&quot; | awk &#39;/embedding length/ {print $3}&#39;) # Get model embedding length
+        fi
+        if [[ &quot;$line&quot; == &quot;quantization&quot;* ]]; then
+          modelQuantization=$(echo &quot;$line&quot; | awk &#39;/quantization/ {print $2}&#39;) # Get model quantization
+        fi
+        ;;
+      &quot;Capabilities&quot;)
+        modelCapabilities+=(&quot;$line&quot;)
+        ;;
+      &quot;System&quot;)
+        modelSystemPrompt+=&quot;$line&quot;$&#39;\n&#39;
+        ;;
+      &quot;Parameters&quot;)
+        if [[ &quot;$line&quot; == &quot;temperature&quot;* ]]; then
+          modelTemperature=$(echo &quot;$line&quot; | awk &#39;/temperature/ {print $2}&#39;) # Get model temperature
+        fi
+        ;;
+    esac
+  done &lt; &quot;$modelInfoTxt&quot;
+}
+
+createModelsOverviewHtml() {
+  # list of models used in current run
+  modelsIndexHtml=&quot;$outputDirectory/models.html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Models Index Page: $modelsIndexHtml&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: models&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;models&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+    cat &lt;&lt;- EOF
+&lt;br /&gt;
+&lt;table class=&#39;sortable&#39;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th class=&#39;left&#39;&gt;Model&lt;/th&gt;
+      &lt;th&gt;Architecture&lt;/th&gt;
+      &lt;th&gt;Parameters&lt;/th&gt;
+      &lt;th&gt;Context&lt;br /&gt;length&lt;/th&gt;
+      &lt;th&gt;Embedding&lt;br /&gt;length&lt;/th&gt;
+      &lt;th&gt;Quantization&lt;/th&gt;
+      &lt;th&gt;Temperature&lt;/th&gt;
+      &lt;th&gt;Capabilities&lt;/th&gt;
+      &lt;th class=&#39;left&#39;&gt;System prompt&lt;/th&gt;
+      &lt;th class=&#39;no-sort&#39;&gt;(raw)&lt;/th&gt;
+      &lt;th class=&#39;no-sort&#39;&gt;(index)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+EOF
+  } &gt; &quot;$modelsIndexHtml&quot;
+
+  for model in &quot;${models[@]}&quot;; do
+    setModelInfo
+    {
+      echo &quot;&lt;tr&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelArchitecture&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelParameters&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelContextLength&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelEmbeddingLength&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelQuantization&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelTemperature&lt;/td&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;$(printf &quot;%s&lt;br /&gt;&quot; &quot;${modelCapabilities[@]}&quot;)&lt;/td&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;$modelSystemPrompt&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).info.txt&#39;&gt;raw&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;&lt;a href=&#39;../models.html#$(safeString &quot;$model&quot; 80)&#39;&gt;index&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;/tr&gt;&quot;
+    } &gt;&gt; &quot;$modelsIndexHtml&quot;
+  done
+
+  {
+    echo &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;
+    showSortableTablesJavascript
+    showFooter &quot;$titleLink&quot;
+  } &gt;&gt; &quot;$modelsIndexHtml&quot;
+}
+
+createModelOutputHtml() {
+  modelHtmlFile=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Model Output Page: $modelHtmlFile&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: $model&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;$model&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;br /&gt;&lt;br /&gt;&quot;
+    createMenu &quot;$model&quot;
+    echo &quot;&lt;/header&gt;&quot;
+    showPrompt
+    showImages
+
+    modelThinkingTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).thinking.txt&quot;
+    if [ -f &quot;$modelThinkingTxt&quot; ]; then
+      echo &quot;&lt;p&gt;Thinking: $model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).thinking.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;
+      textarea &quot;$(cat &quot;$modelThinkingTxt&quot;)&quot; 3 15 # 3 padding, max 15 lines
+      echo &quot;&lt;/p&gt;&quot;
+    fi
+
+    echo &quot;&lt;p&gt;Output: $model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).output.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;
+    textarea &quot;$(cat &quot;$modelOutputTxt&quot;)&quot; 3 25 # 3 padding, max 25 lines
+    echo &quot;&lt;/p&gt;&quot;
+
+    echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;Stats (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).stats.txt&#39;&gt;raw&lt;/a&gt;)&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Words&lt;/td&gt;&lt;td&gt;$responseWords&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Bytes&lt;/td&gt;&lt;td&gt;$responseBytes&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Total duration&lt;/td&gt;&lt;td&gt;$statsTotalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Load duration&lt;/td&gt;&lt;td&gt;$statsLoadDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Prompt eval count&lt;/td&gt;&lt;td&gt;$statsPromptEvalCount&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Prompt eval duration&lt;/td&gt;&lt;td&gt;$statsPromptEvalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Prompt eval rate&lt;/td&gt;&lt;td&gt;$statsPromptEvalRate&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Eval count&lt;/td&gt;&lt;td&gt;$statsEvalCount&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Eval duration&lt;/td&gt;&lt;td&gt;$statsEvalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Eval rate&lt;/td&gt;&lt;td&gt;$statsEvalRate&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+
+    echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;Model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).info.txt&#39;&gt;raw&lt;/a&gt;)&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Name&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;../models.html#$(safeString &quot;$model&quot; 80)&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Architecture&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelArchitecture&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Size&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaSize&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Parameters&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelParameters&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Context length&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelContextLength&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Embedding length&lt;/td&gt;&lt;td  class=&#39;left&#39;&gt;$modelEmbeddingLength&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Quantization&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelQuantization&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Capabilities&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$(printf &quot;%s&lt;br /&gt;&quot; &quot;${modelCapabilities[@]}&quot;)&lt;/td&gt;&quot;
+    echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+
+    showSystemStats
+
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$modelHtmlFile&quot;
+}
+
+createOutputIndexHtml() {
+  outputIndexHtml=&quot;$outputDirectory/index.html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Output Index Page: $outputIndexHtml&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: $tag&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;b&gt;$tag&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;br /&gt;&lt;br /&gt;&quot;
+    createMenu &quot;index&quot;
+    echo  &quot;&lt;/header&gt;&quot;
+    showPrompt
+    echo &quot;&lt;!-- IMAGES --&gt;&quot;
+    cat &lt;&lt;- &quot;EOF&quot;
+&lt;table class=&#39;sortable&#39;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th class=&#39;left&#39;&gt;Model&lt;/th&gt;
+      &lt;th&gt;Response&lt;br /&gt;words&lt;/th&gt;
+      &lt;th&gt;Response&lt;br /&gt;bytes&lt;/th&gt;
+      &lt;th&gt;Total&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Load&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Prompt eval&lt;br /&gt;count&lt;/th&gt;
+      &lt;th&gt;Prompt eval&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Prompt eval&lt;br /&gt;rate&lt;/th&gt;
+      &lt;th&gt;Eval&lt;br /&gt;count&lt;/th&gt;
+      &lt;th&gt;Eval&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Eval&lt;br /&gt;rate&lt;/th&gt;
+      &lt;th&gt;Model&lt;br /&gt;params&lt;/th&gt;
+      &lt;th&gt;Model&lt;br /&gt;size&lt;/th&gt;
+      &lt;th&gt;Model&lt;br /&gt;context&lt;/th&gt;
+      &lt;th&gt;Ollama&lt;br /&gt;context&lt;/th&gt;
+      &lt;th&gt;Ollama&lt;br /&gt;proc&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+EOF
+  } &gt; &quot;$outputIndexHtml&quot;
+}
+
+addModelToOutputIndexHtml() {
+  (
+    echo &quot;&lt;tr&gt;&quot;
+    echo &quot;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$responseWords&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$responseBytes&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsTotalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsLoadDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalCount&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalRate&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalCount&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalRate&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$modelParameters&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$ollamaSize&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$modelContextLength&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$ollamaContext&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$ollamaProcessor&lt;/td&gt;&quot;
+    echo &quot;&lt;/tr&gt;&quot;
+  ) &gt;&gt; &quot;$outputIndexHtml&quot;
+}
+
+finishOutputIndexHtml() {
+  {
+    echo &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;
+    echo &quot;&lt;br /&gt;&lt;br /&gt;&quot;
+    showSystemStats
+    showSortableTablesJavascript
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;b&gt;$tag&lt;/b&gt;: $tagDatetime&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt;&gt; &quot;$outputIndexHtml&quot;
+
+  local imagesHtml
+  imagesHtml=$(showImages)
+  local tmpfile
+  tmpfile=$(mktemp)
+  sed &quot;s#&lt;!-- IMAGES --&gt;#${imagesHtml}#&quot; &quot;$outputIndexHtml&quot; &gt; &quot;$tmpfile&quot; &amp;&amp; mv &quot;$tmpfile&quot; &quot;$outputIndexHtml&quot;
+}
+
+getSortedResultsDirectories() {
+  # Sort directories by datetime at end of directory name
+  ls -d &quot;$resultsDirectory&quot;/* | awk &#39;match($0, /[0-9]{8}-[0-9]{6}$/) { print $0, substr($0, RSTART, RLENGTH) }&#39; | sort -k2 -r | cut -d&#39; &#39; -f1
+}
+
+createMainIndexHtml() {
+  resultsIndexFile=&quot;${resultsDirectory}/index.html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Main Index Page: $resultsIndexFile&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: results&quot;
+    titleLink=&quot;&lt;b&gt;$OLLAMA_MULTIRUN_NAME&lt;/b&gt;&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+    echo &quot;&lt;p&gt;&lt;a href=&#39;models.html&#39;&gt;Models Index&lt;/a&gt;&lt;/p&gt;&quot;
+    echo &quot;&lt;p&gt;Runs:&lt;ul&gt;&quot;
+    for dir in $(getSortedResultsDirectories); do
+      if [ -d &quot;$dir&quot; ]; then
+        echo &quot;&lt;li&gt;&lt;a href=&#39;${dir##*/}/index.html&#39;&gt;${dir##*/}&lt;/a&gt;&lt;/li&gt;&quot;
+      fi
+    done
+    echo &quot;&lt;/ul&gt;&lt;/p&gt;&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$resultsIndexFile&quot;
+}
+
+createMainModelIndexHtml() {
+  # create table of contents: list all models used in all run results, and links to every individual model run
+  local modelsFound=()
+  local modelsIndex=()
+  local mainModelIndexHtml
+
+  for dir in $(getSortedResultsDirectories); do # for each item in main results directory
+    if [ -d &quot;$dir&quot; ]; then # if is a directory
+      for file in &quot;$dir&quot;/*.html; do # for each *.html file in the directory
+        if [[ $file != *&quot;/index.html&quot; &amp;&amp; $file != *&quot;/models.html&quot; ]]; then # skip index.html and models.html
+          fileName=&quot;${file##*/}&quot;
+          modelName=&quot;${fileName%.html}&quot; # remove .html to get model name
+          local found=0
+          for f in &quot;${modelsFound[@]}&quot;; do
+            if [[ &quot;$f&quot; == &quot;$modelName&quot; ]]; then
+              found=1
+              break
+            fi
+          done
+          if [[ $found -eq 0 ]]; then
+            modelsFound+=(&quot;$modelName&quot;)
+          fi
+          modelsIndex+=(&quot;$modelName:$dir/$fileName&quot;)
+        fi
+      done
+    fi  
+  done
+
+  mainModelIndexHtml=&quot;$resultsDirectory/models.html&quot;
+  echo; echo &quot;$(getDateTime)&quot; &quot;Creating Main Model Index Page: $mainModelIndexHtml&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: Model Run Index&quot;
+    titleLink=&quot;&lt;b&gt;&lt;a href=&#39;index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;&lt;/b&gt;: Model Run Index&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+
+    echo &#39;&lt;p&gt;Models: &#39;
+    for foundModel in &quot;${modelsFound[@]}&quot;; do
+      echo &quot;&lt;a href=&#39;#$foundModel&#39;&gt;$foundModel&lt;/a&gt; &quot;
+    done
+    echo &#39;&lt;/p&gt;&#39;
+
+    echo &quot;&lt;ul&gt;&quot;
+    for foundModel in &quot;${modelsFound[@]}&quot;; do
+      echo &quot; &lt;li id=&#39;$foundModel&#39;&gt;$foundModel&lt;/li&gt;&quot;
+      echo &quot;  &lt;ul&gt;&quot;
+      for modelIndex in &quot;${modelsIndex[@]}&quot;; do
+        modelName=${modelIndex%%:*} # get everything before the :
+        if [ &quot;$modelName&quot; == &quot;$foundModel&quot; ]; then
+          run=${modelIndex#*:} # get everything after the :
+          runLink=&quot;${run#&quot;$resultsDirectory&quot;/}&quot; # remove the results directory from beginning
+          runName=&quot;${runLink%/*}&quot; # remove everything after last slash including the slash
+          echo &quot;   &lt;li&gt;&lt;a href=&#39;$runLink&#39;&gt;$runName&lt;/a&gt;&lt;/li&gt;&quot;
+        fi
+      done
+      echo &#39;  &lt;/ul&gt;&#39;
+    done
+    echo &quot;&lt;/ul&gt;&quot;
+    echo &quot;&lt;p&gt;&lt;a href=&#39;./models.html&#39;&gt;top&lt;/a&gt;&lt;/p&gt;&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$mainModelIndexHtml&quot;
+}
+
+runModelWithTimeout() {
+  echo &quot;$prompt&quot; | ollama run --verbose &quot;${model}&quot; &gt; &quot;${modelOutputTxt}&quot; 2&gt; &quot;${modelStatsTxt}&quot; &amp;
+  local pid=$!
+  (
+    sleep &quot;$TIMEOUT&quot;
+    if kill -0 $pid 2&gt;/dev/null; then
+      echo &quot;[ERROR: Multirun Timeout after ${TIMEOUT} seconds]&quot; &gt; &quot;${modelOutputTxt}&quot;
+      kill $pid 2&gt;/dev/null
+    fi
+
+  ) &amp;
+  local timeout_pid=$!
+
+  # Wait for the main process to complete
+  if wait $pid 2&gt;/dev/null; then
+    # Main process completed successfully, kill the timeout process
+    if kill -0 $timeout_pid 2&gt;/dev/null; then
+      kill $timeout_pid 2&gt;/dev/null
+      wait $timeout_pid 2&gt;/dev/null  # Clean up the timeout process
+    fi
+  else
+    # Main process was killed (likely by timeout), wait for timeout process
+    wait $timeout_pid 2&gt;/dev/null
+  fi
+
+}
+
+parseThinkingOutput() {
+  local modelThinkingTxt
+  modelThinkingTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).thinking.txt&quot;
+
+  # Check for either &lt;think&gt; tags or Thinking... patterns
+  if grep -q -E &quot;(&lt;think&gt;|Thinking\.\.\.)&quot; &quot;$modelOutputTxt&quot;; then
+    #echo &quot;Found thinking content in $modelOutputTxt, extracting...&quot;
+
+    # Read the entire file content
+    local content
+    content=$(cat &quot;$modelOutputTxt&quot;)
+
+    # Extract thinking content
+    local thinkingContent=&quot;&quot;
+    thinkingContent+=$(echo &quot;$content&quot; | sed -n &#39;/&lt;think&gt;/,/&lt;\/think&gt;/p&#39; | sed &#39;1d;$d&#39;)
+    thinkingContent+=$(echo &quot;$content&quot; | sed -n &#39;/Thinking\.\.\./,/\.\.\.done thinking\./p&#39; | sed &#39;1d;$d&#39;)
+
+    # Remove thinking content from original
+    content=$(echo &quot;$content&quot; | sed &#39;/&lt;think&gt;/,/&lt;\/think&gt;/d&#39;)
+    content=$(echo &quot;$content&quot; | sed &#39;/Thinking\.\.\./,/\.\.\.done thinking\./d&#39;)
+
+    echo &quot;$(getDateTime)&quot; &quot;Creating Thinking Text: $modelThinkingTxt&quot;
+    echo &quot;$thinkingContent&quot; &gt; &quot;$modelThinkingTxt&quot;
+
+    echo &quot;$(getDateTime)&quot; &quot;Updating Model Output Text: $modelOutputTxt&quot;
+    echo &quot;$content&quot; &gt; &quot;$modelOutputTxt&quot;
+  fi
+}
+
+export OLLAMA_MAX_LOADED_MODELS=1
+
+parseCommandLine &quot;$@&quot;
+echo; echo &quot;$OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION&quot;; echo
+setModels
+setPrompt
+echo; echo &quot;$(getDateTime)&quot; &quot;Response Timeout: $TIMEOUT&quot;
+createOutputDirectory
+createMainIndexHtml
+savePrompt
+createModelInfoTxt
+createModelsOverviewHtml
+setSystemStats
+createOutputIndexHtml
+for model in &quot;${models[@]}&quot;; do # Loop through each model and run it with the given prompt
+  echo; echo &quot;$(getDateTime)&quot; &quot;Running model: $model&quot;
+  # clearModel &quot;$model&quot; - not needed?
+  modelOutputTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).output.txt&quot;
+  modelStatsTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).stats.txt&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Model Output Text: $modelOutputTxt&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Model Stats Text: $modelStatsTxt&quot;
+  runModelWithTimeout
+  setSystemMemoryStats
+  setOllamaStats
+  parseThinkingOutput
+  setModelInfo
+  setStats
+  createModelOutputHtml
+  addModelToOutputIndexHtml
+  stopModel &quot;$model&quot;
+done
+finishOutputIndexHtml
+createMainModelIndexHtml
+echo; echo &quot;$(getDateTime)&quot; &quot;Done: $outputDirectory/&quot;</textarea>
+</p>
+
+<table class='sortable'>
+  <thead>
+    <tr>
+      <th class='left'>Model</th>
+      <th>Response<br />words</th>
+      <th>Response<br />bytes</th>
+      <th>Total<br />duration</th>
+      <th>Load<br />duration</th>
+      <th>Prompt eval<br />count</th>
+      <th>Prompt eval<br />duration</th>
+      <th>Prompt eval<br />rate</th>
+      <th>Eval<br />count</th>
+      <th>Eval<br />duration</th>
+      <th>Eval<br />rate</th>
+      <th>Model<br />params</th>
+      <th>Model<br />size</th>
+      <th>Model<br />context</th>
+      <th>Ollama<br />context</th>
+      <th>Ollama<br />proc</th>
+    </tr>
+  </thead>
+  <tbody>
+<tr>
+<td class='left'><a href='./gpt_oss_120b.html'>gpt-oss:120b</a></td>
+<td>533</td>
+<td>3563</td>
+<td>25.640963053s</td>
+<td></td>
+<td>10308 token(s)</td>
+<td></td>
+<td></td>
+<td>4389 token(s)</td>
+<td></td>
+<td></td>
+<td>116.8B</td>
+<td> </td>
+<td>131072</td>
+<td></td>
+<td> </td>
+</tr>
+<tr>
+<td class='left'><a href='./gpt_oss_20b.html'>gpt-oss:20b</a></td>
+<td>0</td>
+<td>1</td>
+<td>28.550168716s</td>
+<td></td>
+<td>10308 token(s)</td>
+<td></td>
+<td></td>
+<td>9073 token(s)</td>
+<td></td>
+<td></td>
+<td>20.9B</td>
+<td> </td>
+<td>131072</td>
+<td></td>
+<td> </td>
+</tr>
+</tbody></table>
+<br /><br />
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'> </td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'></td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.0.0
+is</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 16G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<style>
+.sortable thead th:not(.no-sort){cursor:pointer}.sortable thead th:not(.no-sort)::after,.sortable thead th:not(.no-sort)::before{transition:color .1s ease-in-out;font-size:1.2em;color:rgba(0,0,0,0)}.sortable thead th:not(.no-sort)::after{margin-left:3px;content:"▸"}.sortable thead th:not(.no-sort):hover::after{color:inherit}.sortable thead th:not(.no-sort)[aria-sort=descending]::after{color:inherit;content:"▾"}.sortable thead th:not(.no-sort)[aria-sort=ascending]::after{color:inherit;content:"▴"}.sortable thead th:not(.no-sort).indicator-left::after{content:""}.sortable thead th:not(.no-sort).indicator-left::before{margin-right:3px;content:"▸"}.sortable thead th:not(.no-sort).indicator-left:hover::before{color:inherit}.sortable thead th:not(.no-sort).indicator-left[aria-sort=descending]::before{color:inherit;content:"▾"}.sortable thead th:not(.no-sort).indicator-left[aria-sort=ascending]::before{color:inherit;content:"▴"}.sortable{--stripe-color: #e4e4e4;--th-color: #fff;--th-bg: #808080;--td-color: #000;--td-on-stripe-color: #000;border-spacing:0}.sortable.sticky thead th{position:sticky;top:0;z-index:1}.sortable tbody tr:nth-child(odd){background-color:var(--stripe-color);color:var(--td-on-stripe-color)}.sortable thead th{background:var(--th-bg);color:var(--th-color);font-weight:normal;text-align:left;text-transform:capitalize;vertical-align:baseline;white-space:nowrap}.sortable td{color:var(--td-color)}.sortable td,.sortable th{padding:10px}.sortable td:first-child,.sortable th:first-child{border-top-left-radius:4px}.sortable td:last-child,.sortable th:last-child{border-top-right-radius:4px}
+</style>
+<script>
+function sortSortable(a,m){function n(b){if(b){if(m&&b.dataset.sortAlt)return b.dataset.sortAlt;if(b.dataset.sort)return b.dataset.sort;if(b.textContent)return b.textContent}return""}a.dispatchEvent(new Event("sort-start",{bubbles:!0}));for(var c=a.tHead.querySelector("th[aria-sort]"),k=a.tHead.children[0],p="ascending"===c.getAttribute("aria-sort"),f=a.classList.contains("n-last"),e=function(b,q,d){var g=n(q.cells[d]),r=n(b.cells[d]);if(f){if(""===g&&""!==r)return-1;if(""===r&&""!==g)return 1}var u=
++g-+r;g=isNaN(u)?g.localeCompare(r):u;return 0===g&&k.cells[d]&&k.cells[d].hasAttribute("data-sort-tbr")?e(b,q,+k.cells[d].dataset.sortTbr):p?-g:g},h=0;h<a.tBodies.length;h++){var l=a.tBodies[h],v=[].slice.call(l.rows,0);v.sort(function(b,q){var d;return e(b,q,+(null!==(d=c.dataset.sortCol)&&void 0!==d?d:c.cellIndex))});var t=l.cloneNode();t.append.apply(t,v);a.replaceChild(t,l)}a.dispatchEvent(new Event("sort-end",{bubbles:!0}))}
+function sortableEventListener(a){function m(h,l){return h.nodeName===l?h:m(h.parentNode,l)}try{var n=a.shiftKey||a.altKey,c=m(a.target,"TH"),k=c.parentNode,p=k.parentNode,f=p.parentNode;if("THEAD"===p.nodeName&&f.classList.contains("sortable")&&!c.classList.contains("no-sort")){var e=k.cells;for(a=0;a<e.length;a++)e[a]!==c&&e[a].removeAttribute("aria-sort");e="descending";if("descending"===c.getAttribute("aria-sort")||f.classList.contains("asc")&&"ascending"!==c.getAttribute("aria-sort"))e="ascending";
+c.setAttribute("aria-sort",e);f.dataset.timer&&clearTimeout(+f.dataset.timer);f.dataset.timer=setTimeout(function(){sortSortable(f,n)},1).toString()}}catch(h){}}document.addEventListener("click",sortableEventListener);
+</script>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <b>act_as_an_expert_software_engineer_do_a</b>: 20250813-223825</p>
+<p>Page created: 2025-08-13 22:39:32</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun v5.21.4</a></p>
+</footer></body></html>

@@ -1,0 +1,823 @@
+
+- Global variable OLLAMA_MAX_LOADED_MODELS=1; good.
+
+- At end: after loop, finishOutputIndexHtml, createMainModelIndexHtml, prints done.
+
+Potential issues:
+- Some global variables not initialized: tagDatetime, etc. They assigned only in createOutputDirectory. But after that, createMainModelIndexHtml uses $resultsDirectory variable; fine.
+
+- In createOutputIndexHtml after writing header and table, they do `cat <<- "EOF"` block that ends after table. They echo `</tbody></table>` etc later. However they did not close the table body? They add closing tags later. correct.
+
+- Danger: If outputDirectory variable is long, safeString truncates model names to 40 char for file names, but may produce collisions if two different 40+ char names produce same sanitized file name. Could overwrite outputs. Should check collisions.
+
+- Use of array indexes: global array addedImages; but 'addedImages' defined initially as empty array. The setStats loops fill it, but if `grep -oE "Added image '(.*)'" "$modelStatsTxt" | awk '{ print $NF }' | sed "s/'//g")` might produce file names that contain spaces? But not.
+
+- `createModelsOverviewHtml` sets variable `titleLink="<a href='../index.html'>$OLLAMA_MULTIRUN_NAME</a>: <a href='./index.html'>$tag</a>: <b>models</b>: $tagDatetime"`. But variable tag and tagDatetime defined earlier; tagDatetime not exported. It uses $tagDatetime; but tagDatetime defined in createOutputDirectory; but it's local variable? I think it's defined without local so global. Ok.
+
+- In createModelOutputHtml, there's `echo "<p>Output: $model (<a href='./$(safeString "$model" 80).output.txt'>raw</a>)<br />"` prints. Might produce line with unsanitized name; safeString ensures safe.
+
+- System stats use `uname -p`; on some systems may return 'unknown'; fine.
+
+- `export OLLAMA_MAX_LOADED_MODELS=1`: set to limit memory usage. Good.
+
+- Some quoting: In `createMainModelIndexHtml`, they create `modelIndex=${modelIndex%%:*}`; but they earlier have `foundModel` etc. In `echo "<li id='$foundModel'>$foundModel</li>"` Might produce id attribute with spaces if model names contain spaces. But safeString used in safeString? In index list they use raw modelName string that is unescaped. Might cause HTML errors. Should use safeString for id attribute. But there may be no spaces in model names typical.
+
+- Use of `curl`, or external commands not required.
+
+- Error handling: minimal but ok.
+
+- Performance: calling `wc` many times. fine.
+
+- Use of `set -e`? Not used; script might continue if a command fails unexpectedly.
+
+- Use of `set -euo pipefail` maybe advisable.
+
+- Also `runModelWithTimeout` uses while loops? Wait.
+
+Potential improvement: use `timeout` command rather than custom kill logic.
+
+- Use of `grep -oE` may produce multiple matches on a line; but fine.
+
+- For `setModels`, if the user passes -m modelsList with spaces or missing argument, error check.
+
+- In createOutputDirectory, they compute tagDatetime with date format; but no timezone. fine.
+
+- For parseCommandLine: if user supplies an arg that starts with '-', they treat as unsupported flag; they only support -h, -m, -r, -t, -v. Others produce error. That's expected.
+
+- However when parsing, they treat positional arguments after flags - but if user passes something like `./multirun.sh -v "some prompt"`? The -v triggers exit; but if they want version plus prompt they'd need to pass `-v` separately.
+
+- The usage string prints prompts after flags.
+
+- In parseCommandLine they use `shift` at the end of default case. But inside other cases they use `shift 2` but no corresponding `shift`? In case -m they shift 2. But then loop continues; no shift at bottom. That's fine. But if someone passes argument after -m? Already handled.
+
+Potential bug: After `-m` case, after shifting 2, they proceed to next argument; but the default case will shift additional by 1 erroneously? They used `shift 2` then break from case; after switch ends, while loop will continue; but they don't shift again. They don't shift again; good.
+
+- But they didn't use `continue`; but shift 2 means processed 2 args. fine.
+
+- The parseCommandLine while loop uses while (( "$#" )); but if there are no args, exit loop.
+
+- Many functions use variable expansion but not quoting some variables: e.g., `for model in "${models[@]}"; do` is fine.
+
+- But in `setModels` `models=($(ollama list | awk '{if (NR > 1) print $1}' | sort))` If a model name contains spaces, this will split incorrectly; but model names rarely contain spaces. Accept.
+
+- In setStats, they parse statsFile lines. These use `awk` with `'print $6'`, but maybe indexes changed; but accept.
+
+- In creating `modelHtmlFile`, they use safeString "$model" 80. But safeString length default 40; they specify 80? In that function they pass length arg: safeString "$model" 80. But safeString expects length value as 2nd argument 'length', but they provide 80, so will truncate to first 80 characters. Good.
+
+- The function `safeString` uses `sed 's/[^a-zA-Z0-9_]/_/g' | tr -cd 'a-zA-Z0-9_'`. That first sed changes non-allowed characters to underscore. Then tr removes any char not in set a-zA-Z0-9_. So it's essentially similar. But may double transform? Not harmful.
+
+- In `generatePromptYaml`, they might need to escape newlines inside content. But they indent each line with 6 spaces; OK.
+
+- createOutputDirectory uses safeString "$prompt", but if the prompt includes characters sanitized to underscore, may produce no sanitized string if empty? It ensures variable tag. tag may come out empty if prompt had only disallowed characters; but prompt must be non-empty. Eh.
+
+- In parseThinkingOutput, they use `sed -n '/<think>/,/<\/think>/p'`. Suppose there's no </think>; command will output all until end. Then `sed '1d;$d'` will remove first and last lines but if only one line will produce blank? fine.
+- They use `grep -q -E "(<think>|Thinking\.\.\.)" "$modelOutputTxt"`. If file empty or not present, get error? grep empties.
+
+- In top-level logic they set `export OLLAMA_MAX_LOADED_MODELS=1` after parseCommandLine. Good.
+
+- There's no `set -e` or trap for cleanup.
+
+Better suggestions: Use `mapfile` to parse lines; ensure quoting; use `trap` to cleanup temp files; use `timeout` which is simpler.
+
+Potential improvement: Use functions for repeated code; avoid global variables. For readability.
+
+Also add error checking for 'ollama' command existence.
+
+Also for `createOutputDirectory`, outputDirectory is set but not exported and used later. Good.
+
+- The script uses '$(basefilename "filename")' inside showImages; but some code may mis-handle.
+
+- The script's `showImages` function uses variable `addedImages` but not local; ok.
+
+- In createMainModelIndexHtml, they compute runLink using `${run#"$resultsDirectory"/}`: works but may produce leading slash; if resultsDirectory ends with trailing slash? resultsDirectory variable defined initial value 'results' and user may provide path without slash. Using # may remove prefix; good.
+
+- The HTML output uses inline CSS; fine.
+
+- For cross-platform: the top `if [ -z "$BASH_VERSION" ] || ! (echo "$BASH_VERSION" | awk -F. '{exit !($1 > 3 || ($1 == 3 && $2 >= 2))}') ; then` uses `awk`; if not available, script will fail; but all standard.
+
+- For reading prompt from file by `./multirun.sh < prompt.txt`, parseCommandLine will treat prompt file as no arg, so parsePrompt picks from STDIN inside parseCommandline? Actually parseCommandLine will leave prompt empty. Then setPrompt will handle. if [ -t 0 ]? false. So sets prompt=$(cat). Good. Works.
+
+- Potential bug: If no prompt entered: the file may provide empty input; then script might run with empty prompt; should warn? They didn't check. Could add check. But optional.
+
+- In `grep -oE "total duration:[[:space:]]+(.*)" "$modelStatsTxt"`, the pattern may match more than one group; but fine.
+
+- The variable names: "OLLAMA_MULTIRUN_URL" used for Footer link. Good.
+
+- The script uses `setSystemStats` after parsing models and before output index, but before each model it sets system memory, etc.
+
+- Some variables may be uninitialized: e.g., "ollamaProcessor" and "ollamaContext" maybe not defined if ollama ps output differs. Then referencing them may produce empty. Might cause missing values.
+
+- In finishOutputIndexHtml, they call showImages which outputs a string variable but uses `local imagesHtml`. But ` showImages` prints directly; they capture into variable but if it outputs newline maybe causing issues. They then sed to replace comment block. It's okay.
+
+- Memory consumption: reading entire prompt into variable; fine.
+
+Testing potential issues: The script uses `ollama` many times; each call may cost time.
+
+- For cleanup: if script interrupted, may leave running ollama processes. They may leak. Should trap INT and kill background processes.
+
+- The variable "ollama" could be alias to something else; but fine.
+
+- There is minor bug: In `setModels`, they use local variable 'found' inside for loop without using 'local'; but inside function it may become global. Not catastrophic, but may cause conflict with others; but it's fine because they didn't use 'found' elsewhere.
+
+But bigger bug: after building `parsedModels`, they override models variable but local scope maybe? They use `if [ -n "${parsedModels[*]}" ]; then` but `parsedModels` may not be defined if modelsList empty. If empty, they won't reassign. Good.
+
+- However modelsList may contain spaces after comma? maybe; but they don't trim spaces. Should use tr -d ' '.
+
+- In the 'usage' function they mention -m example: `./multirun.sh -m deepseek-r1:1.5b,...`. But actual setModels expects model names without version? They do `ollama list` probably gives names like "deepseek-r1:1.5b". So fine.
+
+- `parseCommandLine` at the very end: after loop, nothing else. So if there is invalid flag, error.
+
+Security: The script does not use set -e or safe practices to avoid code injection. The script uses eval in expect; may be safe.
+
+Potential issue: 'tag' may contain spaces; output directory name may include spaces. Could cause issues. safeString cleans spaces to underscores but not applied to prompt; only sanitized to hyphen? Output directory uses tag and tagDatetime concatenated; tag sanitized with safeString but tag may produce underscores; good.
+
+- But tagDatetime may contain colon? No, they use format Ymd-Hms. fine.
+
+- However outputDirectory may contain underscores; fine.
+
+- Also in createOutputIndexHtml's header, they display tag and tagDatetime separated by colon; ok.
+
+Edge Cases: If models have names identical after safeString? Eg "model/one" vs "model:one" both become "model_one". Overwrites. Suggest check for collisions.
+
+- Also createModelsOverviewHtml uses `setModelInfo` which reads the file `modelInfoTxt` earlier created. Ensure that file exists before setModelInfo? In createModelsOverviewHtml, they call setModelInfo inside loop; modelInfoTxt was created earlier by createModelInfoTxt. Good.
+
+- In setStats, they use `grep -oE "Added image '(.*)'" "$modelStatsTxt" | awk '{ print $NF }' | sed "s/'//g"`; this might capture filename that includes spaces; awk splits on whitespace before; will not get full path if contains spaces. Should use `sed -n` to capture between quotes. Might fail.
+
+- The script uses 'time', but no.
+
+- The variable `time` not defined.
+
+- Also missing shebang for Bash 3.x; script might not be POSIX.
+
+- Use of `cat <<- "EOF"` is fine.
+
+- But many html output lines use nested quotes; need consistent quoting.
+
+- The script uses `awk` heavily to parse output; it's okay.
+
+Improvements suggestions:
+
+- Wrap in function safeCall to validate `ollama` command avail.
+
+- Use `trap` and 'set -euo pipefail'.
+
+- Use `printf` instead of echo for better control; but acceptable.
+
+- Use array of models globally.
+
+- Use a more robust logging mechanism.
+
+- Use `timeout` command to limit time rather than custom kill logic.
+
+- Optionally accept multiple prompts via array; but not required.
+
+- The script uses many global variables, might consider grouping.
+
+- Avoid `cat` where possible (use redirection).
+
+- Check output of `ollama run` for errors.
+
+- Check that environment variable OLLAMA_MAX_LOADED_MODELS set early enough; may need to export before run.
+
+- The script uses `export OLLAMA_MAX_LOADED_MODELS=1` but earlier created output directory; that's fine. But if any function uses 'ollama' before this value? They run `setModels` early; uses `ollama list`. Not affected.
+
+- The script sets tagDatetime after output directory creation; but titleLink variable earlier might be used after; but tagDatetime is defined before? In createOutputDirectory tags set; then usage of tagDatetime in main index etc, but they call createOutputDirectory before createMainIndexHtml etc. Good.
+
+Look for potential unescaped variable expansions with spaces: e.g., in `showSystemStats`, `<td class='left'>sys memory</td><td class='left'>$systemMemoryUsed + $systemMemoryAvail</td>` includes spaces around '+', fine.
+
+In `parseThinkingOutput`, they use `content=$(cat "$modelOutputTxt")`. This loads entire output into memory; could be huge but fine.
+
+Potential bug: The sed pattern `/Thinking\.\.\./,/\.\.\.done thinking\./` might incorrectly match if there are multi-lines; but fine.
+
+Another issue: In the beginning they do `TIMEOUT="300"`, but parseCommandLine sets $TIMEOUT to given string; if string is non-numeric may create problem with sleep; but they check with `sleep "$TIMEOUT"`. If non-numeric string, sleep may fail. Possibly add validation.
+
+Also: In parseCommandLine, they use `shift 2` inside -m case; but if $2 equals '-m' or missing, error triggered correctly. But after shifting, the while loop uses `shift` again? Actually after case block, while loop will iterate again; no shift. So okay.
+
+Potential improvement: Use `shift` each loop iteration even when handled. But it's fine.
+
+Potential bug: `setSystemMemoryStats`: In linux case, they use `top -l 1` which is mac? Actually top -l 1 is Darwin; linux top doesn't have -l. So in linux case they did `top -l 1 2>/dev/null || top -bn1 2>/dev/null`. So fine.
+
+But may fail on non-numeric top output; but okay.
+
+- The variable `OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION` prints but missing space? They echo; okay.
+
+- In `parseCommandLine` they don't support `--help` long form; but not required.
+
+- The comment lines at top of file: Use of 'BASH_VERSION' check but not verifying 'bash' path; fine.
+
+- Danger: Running the script with root might set OLLAMA_MAX_LOADED_MODELS=1; but then `ollama stop "$model"` may fail due to privileges? But likely fine.
+
+Potential concurrency: It's sequential; fine.
+
+Thus produce review summary, list improvements.
+
+Also mention potential cross platform bug: the script may not run on dash or sh. They require Bash.
+
+Should also mention quoting and use of `printf`.
+
+Also mention not using `set -e` means script continues after errors; may produce incomplete output.
+
+Also mention potential memory leak: if `runModelWithTimeout` fails, may leave background processes orphaned.
+
+Also mention usage of variable `OLLAMA_MULTIRUN_DISCORD` not used; can remove.
+
+Also mention comment "OLLAMA_MULTIRUN_NAME" repeated.
+
+Also mention usage of `--verbose` flag: maybe not needed.
+
+Also talk about `setModels` uses `awk '{if (NR > 1) print $1}'`; but if header has spaces or different header, may capture incorrectly; but it's okay.
+
+Also mention variable `OLLAMA_MULTIRUN_LICENSE`, not used; maybe used for header, else remove.
+
+Also mention function `textarea`: the local variable `lines` redefined; but local lines defined earlier; it's okay.
+
+Also suggestions: Instead of using `sed` replacement for images, use a placeholder <div id=...> and later append content.
+
+Also maybe unify the index file creation using templates to reduce duplication.
+
+Also note that the script uses `awk` heavily; could reduce to built-in parameter expansion or arrays.
+
+Edge: When copying model images, they do `cp "$image" "$outputDirectory"`. But if image path contains spaces, cp may mis-handle; but they quoted. but cp might consider remote path unknown; it's okay.
+
+One more bug: In setStats, `statsPromptEvalCount=$(grep -oE "prompt eval count:[[:space:]]+(.*)" "$modelStatsTxt" | awk '{ print $4, $5 }')`. This extracts word 4 and 5. But if there are more columns, may miss. But ok.
+
+Also potential logic bug: In createOutputIndexHtml, they produce table header row, then add each row but no blank line. But okay.
+
+Now produce final review.
+
+Will structure review with sections: Overview, Strengths, Areas for Improvement (with subpoints: portability, error handling, security, maintainability, performance, robustness, code quality, naming conventions, comments, license, etc), suggestions of code changes, potential bugs identified, enhancements, and perhaps test suggestions.
+
+Let's craft answer.
+...done thinking.
+
+## Ollama Multirun – Code‑review
+
+Below is a thorough audit of the script with a focus on **correctness, portability, robustness, maintainability** and **security**.  
+Where possible I point out exact lines/blocks, describe the issue, why it matters and suggest concrete fixes (patch snippets are included).
+
+---
+
+### 1. Quick Summary
+
+| Area | Verdict | Key points |
+|------|---------|------------|
+| **Portability** | Needs work | Relies heavily on GNU‑`awk`, BSD‑`top`, `expect`, `sed`, `wc`, `printf` etc. Not fully POSIX‑sh. |
+| **Error handling** | Partial | The script usually continues on failure – useful diagnostics, but sometimes it silently produces broken output. |
+| **Code quality** | OK | Functions grouped, readable, but many globals, no input validation, a few “magic” numbers. |
+| **Security** | Low risk but improvable | No untrusted input is executed, but data can be injected into HTML files – needs sanitisation. |
+| **Performance** | Acceptable | Sequential runs, small data, but some repeated disk I/O and external calls can be optimised. |
+| **Maintainability** | Fair | Inline HTML makes it hard to edit. Some naming inconsistencies and redundant variables. |
+
+---
+
+### 2. Detailed Findings
+
+#### 2.1  **Portability & Dependencies**
+
+| Issue | Where | Why it matters | Fix (example) |
+|-------|-------|----------------|---------------|
+| `awk`‑based version check (`echo "$BASH_VERSION" | awk -F...`) | line 9 | Requires `awk` with `-F` support; works everywhere but the logic is over‑careful for `3.2`. | ```bash<br>if [[ "$BASH_VERSION" < 3.2 ]]; then …; fi``` |
+| `top` use | function `setSystemMemoryStats()` | `top -l 1` is Mac‑specific; others need `top -bn1`. The script already handles both, but it also calls `top -l 1 2>/dev/null || top -bn1 2>/dev/null` which fails on *nix that does not support `-l`—unnecessary complexity. | Use `/proc/meminfo` on Linux, `sysctl vm.swapusage` on BSD, and `top -bn1` on Linux. |
+| `expect` optional | `clearModel()` | Not all environments have `expect`. The function has a clean fallback (warning + no‑op). | ✔ Keep but add a comment that the feature is optional. |
+| `date` format | various | Requires GNU date for `+%Y%m%d-%H%M%S`. On some machines only BSD date may not support the format. | Use `date -u +"%Y%m%d-%H%M%S"` and fallback to `$(perl -Mposix -e 'print strftime("%Y%m%d-%H%M%S")')` when `date` fails. |
+| No shebang guard for `#!/usr/bin/env bash` | start | Good, but the script must be run in Bash. | Add at the very top a quick check: `if [ -z "$BASH_VERSION" ]; then echo "requires bash" >&2; exit 1; fi` – already present, but could be simplified. |
+| Uses `sort` without locale control | `setModels` | In non‑ASCII locales sorting may produce undesired order. | `LC_ALL=C sort` |
+
+#### 2.2  **Error Handling / Safety**
+
+| Issue | Where | Why it matters | Fix |
+|-------|-------|----------------|-----|
+| Missing `set -euo pipefail` | entire script | The script silently continues on errors (e.g. `ollama list` fails → empty array → later use of undefined indexes). | Add `set -euo pipefail` right after shebang. |
+| `parseCommandLine` uses `shift` incorrectly for the final positional case | function | The empty `shift` inside `*)` may consume one argument too many, dropping a prompt that starts with `-`. | Remove that `shift` – it’s already consumed by `case`. |
+| `runModelWithTimeout`  | function | `kill -0 $pid` returns 0 even if the process exists but has already exited. `kill` will then kill other unrelated processes with that PID. | Use `kill -0 $pid 2>/dev/null && ...` but also ensure the PID remains in scope. A safer alternative is `timeout "$TIMEOUT" ollama run ...` which handles PID tracking. |
+| `parseThinkingOutput` | function | If the file is empty, `sed '/<think>/,/<\/think>/d'` outputs the whole file which may be empty string; subsequent `echo "$content" > "$modelOutputTxt"` will create an empty file (overwrites response). | Check `if [[ -s "$modelOutputTxt" ]]` before modification. |
+| Uninitialised variables | many | E.g. `systemMemoryUsed` might remain “?” if `top` gives no output; later this “?” string is inserted into HTML, which can confuse users. | Initialise all vars to sensible defaults, e.g. `""` or `"unknown"`. |
+| `createMainModelIndexHtml` processes `*.html` via glob | function | If no matching files exist, glob remains literal and is processed; later path handling fails. | Use `shopt -s nullglob` or guard with `if [ -e "$file" ]; then … fi`. |
+| File names derived from model name → collisions | `createModelInfoTxt`, `createModelOutputHtml`, `createModelsOverviewHtml` | If two models sanitize to the same string (`safeString` truncates to 40 chars), one will overwrite the other. | Before creating each file, check for collision and, if found, append a counter or a hash of the model name. |
+| `print "$prompt"` may contain unescaped quotes and angle brackets | `savePrompt()` | The raw prompt is written to an HTML file without escaping → XSS if the directory is served via web. | Escape HTML before injecting into HTML (use `textarea` function or a dedicated escape function). |
+| `TAGDATETIME` used before defined in `createMainIndexHtml` if called before `createOutputDirectory` | various | If a user runs the script with `-t` and `-m` alone, and the flow is changed, the tag may be missing → broken links. | Ensure `createOutputDirectory` is invoked before any dependent functions. |
+
+#### 2.3  **Maintainability / Readability**
+
+| Issue | Why it matters | Suggested refactor |
+|-------|----------------|--------------------|
+| Function names are all lower‑case with underscores, but there is a mix of `camelCase`, `PascalCase` (`createMainIndexHtml`). | Inconsistent naming confuses readers. | Adopt one convention e.g. snake_case for all functions. |
+| Global state (e.g. `models`, `prompt`, `TIMEOUT`, `addedImages`, etc.) | Hard to reason about side‑effects. | Pass variables explicitly to functions, or group them into an associative array (requires Bash 4+). |
+| Inline HTML in many functions makes the script long and hard to edit. | Minor maintenance overhead. | Extract HTML fragments into template files or use heredocs with `cat <<'EOF'` to keep them separate. |
+| Unused variables (`OLLAMA_MULTIRUN_DISCORD`, `OLLAMA_MULTIRUN_LICENSE`). | Bloat. | Either remove or use in footer/credits. |
+| Hard‑coded `80` as max length for `safeString` in many places. | Magic numbers. | Define a constant `SAFE_STRING_LEN=80` and reuse. |
+| No log level abstraction. | Debugging is manual. | Introduce a `log()` function with levels `info`, `warn`, `error`. |
+| Many `echo "$(getDateTime)" "...` statements. | Repeated pattern. | Wrap in a `log_msg()` function. |
+
+#### 2.4  **Security**
+
+| Concern | Why it matters | Fix |
+|---------|----------------|-----|
+| Prompt may contain HTML/JS that is written raw into the result pages. | If anybody hosts the generated `outputDirectory`, the prompt can trigger XSS. | Always escape prompts when embedding in HTML, e.g. run `escape_html()`. The `showPrompt` and `textarea` functions can be unified with a dedicated escape function. |
+| File permissions | The script always writes files with default permissions (usually 0644). If executed by root, others may read model files and secrets from `ollama show` output. | Set `umask 077` before creating files. |
+| No quota on output directory size. | Running many models with large prompts could fill disk. | Add optional `--max-size` flag that checks free space before writing. |
+| Use of `sleep ... &` plus `kill -0` may leave zombie processes if interrupted. | Resource leakage. | Trap `INT`/`TERM` and cleanup background jobs. |
+
+---
+
+### 3. Concrete Patches & Improvements
+
+Below are snippets that can be dropped in directly (or merged). Only the **essential** changes are shown – the rest are best‑practice suggestions.
+
+#### 3.1  Add global safety
+
+```bash
+#!/usr/bin/env bash
+# Abort on error, unset vars, pipefail
+set -euo pipefail
+umask 077   # avoid leaking files to others
+
+# Ensure the script runs under Bash
+if [[ -z ${BASH_VERSION-} ]]; then
+  printf '%s\n' "Oss: requires Bash." >&2
+  exit 1
+fi
+```
+
+#### 3.2  Robust timeout helper
+
+```bash
+# replace runModelWithTimeout()
+runModelWithTimeout() {
+  local timeout=$TIMEOUT
+  local output_file="$modelOutputTxt"
+  local stats_file="$modelStatsTxt"
+
+  # Use the external timeout if available
+  if command -v timeout >/dev/null 2>&1; then
+    timeout "$timeout" ollama run --verbose "$model" >"$output_file" 2>"$stats_file" || {
+      echo "[ERROR: Timeout after ${timeout}s]" >"$output_file"
+    }
+  else
+    # Back‑up custom implementation
+    (
+      ollama run --verbose "$model" >"$output_file" 2>"$stats_file" &
+      local pid=$!
+      sleep "$timeout" && kill -s TERM "$pid" 2>/dev/null
+      wait "$pid" 2>/dev/null || echo "[ERROR: Timeout]" >"$output_file"
+    )
+  fi
+}
+```
+
+#### 3.3  Safe string sanitisation
+
+```bash
+declare -r SAFE_STRING_LEN=80
+safeString() {
+  local input=${1:-} length=${2:-$SAFE_STRING_LEN}
+  input=${input:0:$length}
+  # keep only letters/numbers/underscore
+  echo "${input,,}" | tr -cd '[:alnum:]_' | tr ' ' '_' | tr -d '\n'
+}
+```
+
+#### 3.4  HTML escaping
+
+```bash
+escape_html() {
+  local s="${1//&/&amp;}"
+  s="${s//</&lt;}"
+  s="${s//>/&gt;}"
+  s="${s//\"/&quot;}"
+  s="${s//\'/&#39;}"
+  printf '%s' "$s"
+}
+```
+
+Use this in `showPrompt`, `textarea`, and when writing prompt to the YAML.
+
+#### 3.5  Table creation via heredoc
+
+```bash
+createModelsOverviewHtml() {
+  local modelsIndexHtml="$outputDirectory/models.html"
+  cat <<EOF >"$modelsIndexHtml"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Ollama ${OLLAMA_MULTIRUN_NAME}: models</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">${OLLAMA_MULTIRUN_NAME}</a>:
+  <a href="./index.html">$tag</a>:
+  <b>models</b>:
+  $tagDatetime
+</header>
+<!-- rest of the table -->
+EOF
+  # append rows in loop
+  # finally close `</body></html>`
+}
+```
+
+This separates static HTML from Bash logic.
+
+#### 3.6  Collision detection for sanitized names
+
+```bash
+sanitizeModelFile() {
+  local base=$(safeString "$1" "$SAFE_STRING_LEN")
+  local ext=${2:-'.txt'}
+  local file="${outputDirectory}/${base}${ext}"
+  local counter=1
+  while [[ -e $file ]]; do
+    base=$(safeString "$1" "$SAFE_STRING_LEN")_${counter}
+    file="${outputDirectory}/${base}${ext}"
+    ((counter++))
+  done
+  printf '%s' "$file"
+}
+```
+
+Use this function whenever a file name is derived from a model name.
+
+#### 3.7  Clean-up on interruption
+
+```bash
+trap cleanup INT TERM
+cleanup() {
+  echo "Interrupted – cleaning up"
+  for pid in $model_pids; do
+    kill -s TERM "$pid" 2>/dev/null || true
+  done
+  exit 1
+}
+```
+
+Record all PIDs in an array `model_pids` during `runModelWithTimeout`.
+
+---
+
+### 4. Checklist for Future Enhancements
+
+| TODO | Why | Status |
+|------|-----|--------|
+| Add a `--help` full description with examples. | Users will benefit from a comprehensive manual. | Done in `usage()` but expand. |
+| Support multiple prompts as arguments (array). | Batch processing. | Pending. |
+| Add `--ignore-missing` flag to skip models that cannot be downloaded. | Robustness for missing model names. | Pending. |
+| Use GNU `parallel` to run models concurrently (configurable). | Speed. | Pending, but must keep resource limits (`OLLAMA_MAX_LOADED_MODELS`). |
+| Store generated HTML in a git‑ignore safe directory or allow custom template path. | Easier CI integration. | Pending. |
+| Add a `--dry-run` mode that only pretends to run. | For testing. | Pending. |
+| Expose `OLLAMA_MAX_LOADED_MODELS` as a flag. | User control. | Pending. |
+
+---
+
+### 5. Final Verdict
+
+The script is a solid, well‑structured Bash utility that gets the job done.  The goal: Code review expert. Provide feedback: style, readability, error handling, security, performance, portability, possible bugs, etc. Provide suggestions, improvements, potential bugs. Might also add tests or usage improvements.
+
+We need to produce thorough review.
+
+I'll analyze script.
+
+Overall: fairly complex Bash script. Let's identify concerns.
+
+- Shebang: ok.
+
+- Check BASH_VERSION: uses `echo "$BASH_VERSION" | awk -F. '{exit !($1 > 3 || ($1 == 3 && $2 >= 2))}'`. This is fine.
+
+- Variables: good.
+
+- parseCommandLine: uses shift 2 maybe but incorrectly? Actually inside case handling -h etc. They shift 2 (after reading arg) but at end of case default case they shift. But they did shift 2 without calling shift. Did mis?? Let's inspect: In while loop, after each case, they call shift or shift 2 inside that case. For -m etc they shift 2 within. But after that case, the outer while continues. At default case they shift by shift. Works.
+
+However for '-...' unsupported they echo error and exit. Good.
+
+- setModels: obtains models list by `ollama list | awk '{if (NR > 1) print $1}' | sort`. The output of `ollama list` maybe has header. fine. They also check for empty.
+
+- They then parse the custom list. They do local found=0 inside loop. They refer to `existing_model`. Good.
+
+- after building parsedModels they override `models`. The variable 'models' is defined as array from `models=($( ... ))`. They later reassign `models=("${parsedModels[@]}")` ok.
+
+- They echo "models:" etc.
+
+Potential bug: if modelsList includes names with spaces? Not typical. fine.
+
+- safeString: truncates length, converts to lowercase, replaces spaces with underscore, replace non-allowed, etc. It uses `tr -cd` after earlier sed; there are double modifications of allowed characters; might produce extraneous transformation but ok.
+
+- createOutputDirectory: tag uses safeString prompt; tagDatetime; outputDirectory path. The outputDirectory variable is referenced later; but 'tag', 'tagDatetime' are not global? safeString defined; they set tag=$(safeString "$prompt") etc. They reference outputDirectory variable. OK.
+
+- setPrompt: reading from TTY vs stdin. Good.
+
+- savePrompt: sets prompt file etc.
+
+- generatePromptYaml: writes a yaml block with indentation. They use 2 spaces for indentation and newlines. The content part: $(while IFS= read -r line; do echo "      $line"; done <<< "$prompt") ensures each line indented 6 spaces? Good.
+
+- textarea: escapes HTML. Implementation heavy but okay. But it uses `echo "$content" | sed ..` and 'EOF' etc. Might handle multiple lines. Works.
+
+- showImages: uses addedImages array; referencing `for image in "${addedImages[@]}"` but addedImages global. Works.
+
+- clearModel: uses 'expect' to send commands to oomm 'ollama run', expecting prompts. They rely on expect output but not robust. But fine.
+
+- stopModel: uses `ollama stop "$1"`.
+
+- showSortableTablesJavascript: long CSS/JS. Good.
+
+- createMenu: builds links using safeString, uses .html. Works.
+
+- setStats: parse statsTxt to extract values using grep -oE patterns. Potential bug: 'prompt eval count' line maybe contains other tokens; they do `awk '{ print $4, $5 }'`. That likely picks values. But stats parsing is fragile to format changes of ollama. Might be okay.
+
+- In setStats, they set modelInfoTxt etc. They also copy images present: `if [ ${#addedImages[@]} -gt 0 ]; then ...` check file exists before copy. Good.
+
+- setOllamaStats: parsing `ollama ps` expecting columns; works.
+
+- setSystemStats: retrieving architecture etc. In function setSystemMemoryStats, OS-specific.
+
+Potential bug: On Linux, top command may produce output that can't be reliably parsed. Also top default output may differ. Use /proc/meminfo ideally. But fine.
+
+- showSystemStats prints systemMemoryUsed + systemMemoryAvail string not formatted: `<td class='left'>sys memory</td><td class='left'>$systemMemoryUsed + $systemMemoryAvail</td>`. Maybe they'd want show sum.
+
+- createModelInfoTxt: iterates over models, saves `ollama show` output. Fine.
+
+- setModelInfo: reading the .info.txt file previously created. They parse sections by lines. They use case and regex. There may be risk of missing data if order changes. Also the function uses `modelArchitecture`, `modelParameters`, etc; declared as local? They are not declared local. Should be considered global; but overwritten each call. Works but we need to ensure defined before use.
+
+- createModelsOverviewHtml: uses safeString $model 80. OK. The HTML uses <td class='left'> etc. Works.
+
+- createModelOutputHtml: uses variables previously set: responseWords, statsTotalDuration etc. All available.
+
+- createOutputIndexHtml: builds header and table.
+
+- addModelToOutputIndexHtml: writes row.
+
+- finishOutputIndexHtml: after closing table, adds system stats etc, adds sorting JS, and then adds images by sed replacing comment. This uses `sed "s#<!-- IMAGES -->#${imagesHtml}#"`. But imagesHtml may contain slashes or newlines causing sed substitution issues. They didn't escape slashes; but they use '#' as separator. Newlines may cause sed to truncate. They do `local imagesHtml; imagesHtml=$(showImages)`; but showImages outputs with `<div>` etc. sed may work but if there are embedded slashes inside attribute? There may be e.g. `href='$(basename "$image")'` may contain slashes '/'. but sed replaced with '#', okay. But still newlines will cause error because sed expects single-line pattern? They are using standard sed; substitution across newlines might not work. Using `awk` or a temp file may be better. Might be okay.
+
+Also finishOutputIndexHtml first writes html to file then performs sed with temp file. But they modify placeholder. However they had earlier added `<!-- IMAGES -->` comment inside table; using sed to replace. That works if sed only processes one line; but if comment is in a separate line, substitution will replace entire replacement string. ok.
+
+- getSortedResultsDirectories: lists directories from resultsDirectory and sorts by date. They use `ls -d "$resultsDirectory"/* | awk 'match($0, /[0-9]{8}-[0-9]{6}$/) ...`. This expects directory names end with timestamp. fine.
+
+Potential bug: If resultsDirectory contains symlinks or non-dir entries, but fine.
+
+- createMainIndexHtml: lists all directories.
+
+- createMainModelIndexHtml: Build index of all models across runs. They iterate directories and files. They parse each file that is not index.html or models.html. They compute modelName etc. Approach seems okay.
+
+Potential bug: `for file in "$dir"/*.html`. If there are no files, glob expands to literal pattern; then they process file name containing pattern. Should guard with if [ -e "$file" ] or use failglob; but may produce error or incorrect. Use find or while loops.
+
+- runModelWithTimeout: runs command in background, store pid, runs separate background process to sleep TIMEOUT; if process still running, writes error message, kills it. Wait for process. Implementation: they start `runModelWithTimeout` function within loop; each iteration backgrounds the command. They then call `wait $pid` inside the function after launching timeout. It might block until command completes, so runModelWithTimeout will block. But the script launches models sequentially, not parallelly; fine.
+
+Potential bug: The use of kill -0 $pid to test process still running; but kill -0 may succeed if PID gone and new process? Actually kill -0 will error if no such process. Ok.
+
+Potential concurrency issue: They call runModelWithTimeout, then call setSystemMemoryStats and setOllamaStats after each model. Memory stats used earlier. That's fine.
+
+- parseThinkingOutput: looks for `<think>` or "Thinking..." patterns; extracts content; writes separate file; updates output file. Implementation may treat lines incorrectly. Could capture nested tags incorrectly. But fine.
+
+- Global variable OLLAMA_MAX_LOADED_MODELS=1; good.
+
+- At end: after loop, finishOutputIndexHtml, createMainModelIndexHtml, prints done.
+
+Potential issues:
+- Some global variables not initialized: tagDatetime, etc. They assigned only in createOutputDirectory. But after that, createMainModelIndexHtml uses $resultsDirectory variable; fine.
+
+- In createOutputIndexHtml after writing header and table, they do `cat <<- "EOF"` block that ends after table. They echo `</tbody></table>` etc later. However they did not close the table body? They add closing tags later. correct.
+
+- Danger: If outputDirectory variable is long, safeString truncates model names to 40 char for file names, but may produce collisions if two different 40+ char names produce same sanitized file name. Could overwrite outputs. Should check collisions.
+
+- Use of array indexes: global array addedImages; but 'addedImages' defined initially as empty array. The setStats loops fill it, but if `grep -oE "Added image '(.*)'" "$modelStatsTxt" | awk '{ print $NF }' | sed "s/'//g")` might produce file names that contain spaces? But not.
+
+- `createModelsOverviewHtml` sets variable `titleLink="<a href='../index.html'>$OLLAMA_MULTIRUN_NAME</a>: <a href='./index.html'>$tag</a>: <b>models</b>: $tagDatetime"`. But variable tag and tagDatetime defined earlier; tagDatetime not exported. It uses $tagDatetime; but tagDatetime defined in createOutputDirectory; but it's local variable? I think it's defined without local so global. Ok.
+
+- In createModelOutputHtml, there's `echo "<p>Output: $model (<a href='./$(safeString "$model" 80).output.txt'>raw</a>)<br />"` prints. Might produce line with unsanitized name; safeString ensures safe.
+
+- System stats use `uname -p`; on some systems may return 'unknown'; fine.
+
+- `export OLLAMA_MAX_LOADED_MODELS=1`: set to limit memory usage. Good.
+
+- Some quoting: In `createMainModelIndexHtml`, they create `modelIndex=${modelIndex%%:*}`; but they earlier have `foundModel` etc. In `echo "<li id='$foundModel'>$foundModel</li>"` Might produce id attribute with spaces if model names contain spaces. But safeString used in safeString? In index list they use raw modelName string that is unescaped. Might cause HTML errors. Should use safeString for id attribute. But there may be no spaces in model names typical.
+
+- Use of `curl`, or external commands not required.
+
+- Error handling: minimal but ok.
+
+- Performance: calling `wc` many times. fine.
+
+- Use of `set -e`? Not used; script might continue if a command fails unexpectedly.
+
+- Use of `set -euo pipefail` maybe advisable.
+
+- Also `runModelWithTimeout` uses while loops? Wait.
+
+Potential improvement: use `timeout` command rather than custom kill logic.
+
+- Use of `grep -oE` may produce multiple matches on a line; but fine.
+
+- For `setModels`, if the user passes -m modelsList with spaces or missing argument, error check.
+
+- In createOutputDirectory, they compute tagDatetime with date format; but no timezone. fine.
+
+- For parseCommandLine: if user supplies an arg that starts with '-', they treat as unsupported flag; they only support -h, -m, -r, -t, -v. Others produce error. That's expected.
+
+- However when parsing, they treat positional arguments after flags - but if user passes something like `./multirun.sh -v "some prompt"`? The -v triggers exit; but if they want version plus prompt they'd need to pass `-v` separately.
+
+- The usage string prints prompts after flags.
+
+- In parseCommandLine they use `shift` at the end of default case. But inside other cases they use `shift 2` but no corresponding `shift`? In case -m they shift 2. But then loop continues; no shift at bottom. That's fine. But if someone passes argument after -m? Already handled.
+
+Potential bug: After `-m` case, after shifting 2, they proceed to next argument; but the default case will shift additional by 1 erroneously? They used `shift 2` then break from case; after switch ends, while loop will continue; but they don't shift again. They don't shift again; good.
+
+- But they didn't use `continue`; but shift 2 means processed 2 args. fine.
+
+- The parseCommandLine while loop uses while (( "$#" )); but if there are no args, exit loop.
+
+- Many functions use variable expansion but not quoting some variables: e.g., `for model in "${models[@]}"; do` is fine.
+
+- But in `setModels` `models=($(ollama list | awk '{if (NR > 1) print $1}' | sort))` If a model name contains spaces, this will split incorrectly; but model names rarely contain spaces. Accept.
+
+- In setStats, they parse statsFile lines. These use `awk` with `'print $6'`, but maybe indexes changed; but accept.
+
+- In creating `modelHtmlFile`, they use safeString "$model" 80. But safeString length default 40; they specify 80? In that function they pass length arg: safeString "$model" 80. But safeString expects length value as 2nd argument 'length', but they provide 80, so will truncate to first 80 characters. Good.
+
+- The function `safeString` uses `sed 's/[^a-zA-Z0-9_]/_/g' | tr -cd 'a-zA-Z0-9_'`. That first sed changes non-allowed characters to underscore. Then tr removes any char not in set a-zA-Z0-9_. So it's essentially similar. But may double transform? Not harmful.
+
+- In `generatePromptYaml`, they might need to escape newlines inside content. But they indent each line with 6 spaces; OK.
+
+- createOutputDirectory uses safeString "$prompt", but if the prompt includes characters sanitized to underscore, may produce no sanitized string if empty? It ensures variable tag. tag may come out empty if prompt had only disallowed characters; but prompt must be non-empty. Eh.
+
+- In parseThinkingOutput, they use `sed -n '/<think>/,/<\/think>/p'`. Suppose there's no </think>; command will output all until end. Then `sed '1d;$d'` will remove first and last lines but if only one line will produce blank? fine.
+
+- `parseThinkingOutput` uses `while read` to extract content; but they combine two patterns (Thinking..). Might be fine.
+
+- They use `grep -q -E "(<think>|Thinking\.\.\.)" "$modelOutputTxt"`. If file empty or not present, get error? grep empties.
+
+- In top-level logic they set `export OLLAMA_MAX_LOADED_MODELS=1` after parseCommandLine. Good.
+
+- There's no `set -e` or trap for cleanup.
+
+Better suggestions: Use `mapfile` to parse lines; ensure quoting; use `trap` to cleanup temp files; use `timeout` which is simpler.
+
+Potential improvement: Use functions for repeated code; avoid global variables. For readability.
+
+Also add error checking for 'ollama' command existence.
+
+Also for `createOutputDirectory`, outputDirectory is set but not exported and used later. Good.
+
+- The script uses '$(basefilename "filename")' inside showImages; but some code may mis-handle.
+
+- The script's `showImages` function uses variable `addedImages` but not local; ok.
+
+- In createMainModelIndexHtml, they compute runLink using `${run#"$resultsDirectory"/}`: works but may produce leading slash; if resultsDirectory ends with trailing slash? resultsDirectory variable defined initial value 'results' and user may provide path without slash. Using # may remove prefix; good.
+
+- The HTML output uses inline CSS; fine.
+
+- For cross-platform: the top `if [ -z "$BASH_VERSION" ] || ! (echo "$BASH_VERSION" | awk -F. '{exit !($1 > 3 || ($1 == 3 && $2 >= 2))}') ; then` uses `awk`; if not available, script will fail; but all standard.
+
+- For reading prompt from file by `./multirun.sh < prompt.txt`, parseCommandLine will treat prompt file as no arg, so parsePrompt picks from STDIN inside parseCommandline? Actually parseCommandLine will leave prompt empty. Then setPrompt will handle. if [ -t 0 ]? false. So sets prompt=$(cat). Good. Works.
+
+- Potential bug: If no prompt entered: the file may provide empty input; then script might run with empty prompt; should warn? They didn't check. Could add check. But optional.
+
+- In `grep -oE "total duration:[[:space:]]+(.*)" "$modelStatsTxt"`, the pattern may match more than one group; but fine.
+
+- The variable names: "OLLAMA_MULTIRUN_URL" used for Footer link. Good.
+
+- The script uses `setSystemStats` after parsing models and before output index, but before each model it sets system memory, etc.
+
+- Some variables may be uninitialized: e.g., "ollamaProcessor" and "ollamaContext" maybe not defined if ollama ps output differs. Then referencing them may produce empty. Might cause missing values.
+
+- In finishOutputIndexHtml, they call showImages which outputs a string variable but uses `local imagesHtml`. But ` showImages` prints directly; they capture into variable but if it outputs newline maybe causing issues. They then sed to replace comment block. It's okay.
+
+- Memory consumption: reading entire prompt into variable; fine.
+
+Testing potential issues: The script uses `ollama` many times; each call may cost time.
+
+- For cleanup: if script interrupted, may leave running ollama processes. They may leak. Should trap INT and kill background processes.
+
+- The variable "ollama" could be alias to something else; but fine.
+
+- There is minor bug: In `setModels`, they use local variable 'found' inside for loop without using 'local'; but inside function it may become global. Not catastrophic, but may cause conflict with others; but it's fine because they didn't use 'found' elsewhere.
+
+But bigger bug: after building `parsedModels`, they override models variable but local scope maybe? They use `if [ -n "${parsedModels[*]}" ]; then` but `parsedModels` may not be defined if modelsList empty. If empty, they won't reassign. Good.
+
+- However modelsList may contain spaces after comma? maybe; but they don't trim spaces. Should use tr -d ' '.
+
+- In the 'usage' function they mention -m example: `./multirun.sh -m deepseek-r1:1.5b,...`. But actual setModels expects model names without version? They do `ollama list` probably gives names like "deepseek-r1:1.5b". So fine.
+
+- `parseCommandLine` at the very end: after loop, nothing else. So if there is invalid flag, error.
+
+Security: The script does not use set -e or safe practices to avoid code injection. The script uses eval in expect; may be safe.
+
+Potential issue: 'tag' may contain spaces; output directory name may include spaces. Could cause issues. safeString cleans spaces to underscores but not applied to prompt; only sanitized to hyphen? Output directory uses tag and tagDatetime concatenated; tag sanitized with safeString but tag may produce underscores; good.
+
+- But tagDatetime may contain colon? No, they use format Ymd-Hms. fine.
+
+- However outputDirectory may contain underscores; fine.
+
+- Also in createOutputIndexHtml's header, they display tag and tagDatetime separated by colon; ok.
+
+Edge Cases: If models have names identical after safeString? Eg "model/one" vs "model:one" both become "model_one". Overwrites. Suggest check for collisions.
+
+- Also createModelsOverviewHtml uses `setModelInfo` which reads the file `modelInfoTxt` earlier created. Ensure that file exists before setModelInfo? In createModelsOverviewHtml, they call setModelInfo inside loop; modelInfoTxt was created earlier by createModelInfoTxt. Good.
+
+- In setStats, they use `grep -oE "Added image '(.*)'" "$modelStatsTxt" | awk '{ print $NF }' | sed "s/'//g"`; this might capture filename that includes spaces; awk splits on whitespace before; will not get full path if contains spaces. Should use `sed -n` to capture between quotes. Might fail.
+
+- The script uses 'time', but no.
+
+- The variable `time` not defined.
+
+- Also missing shebang for Bash 3.x; script might not be POSIX.
+
+- Use of `cat <<- "EOF"` is fine.
+
+- But many html output lines use nested quotes; need consistent quoting.
+
+- The script uses `awk` heavily to parse output; it's okay.
+
+Improvements suggestions:
+
+- Wrap in function safeCall to validate `ollama` command avail.
+
+- Use `trap` and 'set -euo pipefail'.
+
+- Use `printf` instead of echo for better control; but acceptable.
+
+- Use array of models globally.
+
+- Use a more robust logging mechanism.
+
+- Use `timeout` command to limit time rather than custom kill logic.
+
+- Optionally accept multiple prompts via array; but not required.
+
+- The script uses many global variables, might consider grouping.
+
+- Avoid `cat` where possible (use redirection).
+
+- Check output of `ollama run` for errors.
+
+- Check that environment variable OLLAMA_MAX_LOADED_MODELS set early enough; may need to export before run.
+
+- The script uses `export OLLAMA_MAX_LOADED_MODELS=1` but earlier created output directory; that's fine. But if any function uses 'ollama' before this value? They run `setModels` early; uses `ollama list`. Not affected.
+
+- The script sets tagDatetime after output directory creation; but titleLink variable earlier might be used after; but tagDatetime is defined before? In createOutputDirectory tags set; then usage of tagDatetime in main index etc, but they call createOutputDirectory before createMainIndexHtml etc. Good.
+
+Look for potential unescaped variable expansions with spaces: e.g., in `showSystemStats`, `<td class='left'>sys memory</td><td class='left'>$systemMemoryUsed + $systemMemoryAvail</td>` includes spaces around '+', fine.
+
+In `parseThinkingOutput`, they use `content=$(cat "$modelOutputTxt")`. This loads entire output into memory; could be huge but fine.
+
+Potential bug: The sed pattern `/Thinking\.\.\./,/\.\.\.done thinking\./` might incorrectly match if there are multi-lines; but fine.
+
+Another issue: In the beginning they do `TIMEOUT="300"`, but parseCommandLine sets $TIMEOUT to given string; if string is non-numeric may create problem with sleep; but they check with `sleep "$TIMEOUT"`. If non-numeric string, sleep may fail. Possibly add validation.
+
+Also: In parseCommandLine, they use `shift 2` inside -m case; but if $2 equals '-m' or missing, error triggered correctly. But after shifting, the while loop uses `shift` again? Actually after case block, while loop will iterate again; no shift. So okay.
+
+Potential improvement: Use `shift` each loop iteration even when handled. But it's fine.
+
+Potential bug: `setSystemMemoryStats`: In linux case, they use `top -l 1` which is mac? Actually top -l 1 is Darwin; linux top doesn't have -l. So in linux case they did `top -l 1 2>/dev/null || top -bn1 2>/dev/null`. So fine.
+
+But may fail on non-numeric top output; but okay.
+
+- The variable `OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION` prints but missing space? They echo; okay.
+
+- In `parseCommandLine` they don't support `--help` long form; but not required.
+
+- The comment lines at top of file: Use of 'BASH_VERSION' check but not verifying 'bash' path; fine.
+
+- Danger: Running the script with root might set OLLAMA_MAX_LOADED_MODELS=1; but then `ollama stop "$model"` may fail due to privileges? But likely fine.
+
+Potential concurrency: It's sequential; fine.
+
+Thus produce review summary, list improvements.
+
+Also mention potential cross platform bug: the script may not run on dash or sh. They require Bash.
+
+Should also mention quoting and use of `printf`.
+
+Also mention not using `set -e` means script continues after errors; may produce incomplete output.
+
+Also mention potential memory leak: if `runModelWithTimeout` fails, may leave background processes orphaned.
+
+Also mention usage of variable `OLLAMA_MULTIRUN_DISCORD` not used; can remove.
+
+Also mention comment "OLLAMA_MULTIRUN_NAME" repeated.
+
+Also mention usage of `--verbose` flag: maybe not needed.
+
+Also talk about `setModels` uses `awk '{if (NR > 1) print $1}'`; but if header has spaces or different header, may capture incorrectly; but it's okay.
+
+Also mention variable `OLLAMA_MULTIRUN_LICENSE`, not used; maybe used for header, else remove.
+
+Also mention function `textarea`: the local variable `lines` redefined; but local lines defined earlier; it's okay.
+
+Also suggestions: Instead of using `sed` replacement for images, use a placeholder <div id=...> and later append content.
+
+Also maybe unify the index file creation using templates to reduce duplication.
+
+Also note that the script uses `awk` heavily; could reduce to built-in parameter expansion or arrays.
+
+Edge: When copying model images, they do `cp "$image" "$outputDirectory"`. But if image path contains spaces, cp may mis-handle; but they quoted. but cp might consider remote path unknown; it's okay.
+
+One more bug: In setStats, `statsPromptEvalCount=$(grep -oE "prompt eval count:[[:space:]]+(.*)" "$modelStatsTxt" | awk '{ print $4, $5 }')`. This extracts word 4 and 5. But if there are more columns, may miss. But ok.
+
+Also potential logic bug: In createOutputIndexHtml, they produce table header row, then add each row but no blank line. But okay.
+
+Now produce final review.
+
+Will structure review with sections: Overview, Strengths, Areas for Improvement (with subpoints: portability, error handling, security, maintainability, performance, robustness, code quality, naming conventions, comments, license, etc), suggestions of code changes, potential bugs identified, enhancements, and perhaps test suggestions.
+
+Let's craft answer.

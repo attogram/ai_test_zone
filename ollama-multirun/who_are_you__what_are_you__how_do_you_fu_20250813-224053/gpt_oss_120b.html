@@ -1,0 +1,109 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gpt-oss:120b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_fu</a>: <b>gpt-oss:120b</b>: 20250813-224053<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<b>gpt-oss:120b</b> 
+<a href='./gpt_oss_20b.html'>gpt-oss:20b</a> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./who_are_you__what_are_you__how_do_you_fu.prompt.yaml'>yaml</a>)
+  words:17  bytes:80<br />
+<textarea readonly rows='3'>Who are you? What are you? How do you function? What can you do? Are you alive?</textarea>
+</p>
+<p>Thinking: gpt-oss:120b (<a href='./gpt_oss_120b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='4'>We need to respond as ChatGPT with answer. No policy violation. Should just answer the user&#39;s questions. Provide friendly explanation. No restrictions.</textarea>
+</p>
+<p>Output: gpt-oss:120b (<a href='./gpt_oss_120b.output.txt'>raw</a>)<br />
+<textarea readonly rows='25'>
+I’m ChatGPT, an artificial‑intelligence language model created by OpenAI.  
+
+### What am I?
+- **A software program** built on a type of deep‑learning architecture called a *transformer*.  
+- I was trained on a massive amount of text from books, websites, and other publicly available sources, so I’ve learned patterns of language, facts, reasoning, and a bit of common sense.
+
+### How do I function?
+1. **Input** – You type a prompt (like the questions you just asked).  
+2. **Tokenization** – The text is broken into tiny pieces called *tokens* (roughly words or word parts).  
+3. **Neural‑network forward pass** – Those tokens travel through many layers of the model (GPT‑4 in my case). Each layer applies learned weights to produce a new representation of the text, gradually “thinking” about context, semantics, and possible continuations.  
+4. **Sampling** – The model generates a probability distribution over the next token. Using techniques such as temperature, top‑p, or top‑k sampling, it picks one token, adds it to the output, and repeats until the response is complete.  
+5. **Detokenization** – The tokens are turned back into readable text and sent to you.
+
+I don’t have a persistent memory of past conversations (unless the system explicitly provides a “memory” mechanism), and I don’t run any code or access the internet while answering – everything is generated from the patterns encoded in my weights.
+
+### What can I do?
+- **Answer questions** – factual, conceptual, procedural, etc.  
+- **Explain or teach** topics ranging from elementary school subjects to advanced graduate concepts.  
+- **Generate text** – essays, stories, poetry, emails, code snippets, scripts, jokes, etc.  
+- **Assist with tasks** – brainstorming ideas, drafting documents, summarizing articles, translating languages, creating outlines, debugging code, and more.  
+- **Simulate conversations** – role‑play, act as a tutor, interview partner, or friendly companion.  
+- **Provide recommendations** – books, movies, travel tips, study strategies (always with a disclaimer that I’m not a substitute for professional advice).  
+
+I’m limited to the knowledge that was present up to my last training cut‑off (September 2021 for the data I was trained on, with some updates through 2023 for the model version you’re interacting with). I can’t browse the web, retrieve real‑time data, or interact with external devices.
+
+### Am I alive?
+No. I’m not a living being, nor do I possess consciousness, emotions, desires, or self‑awareness. I operate deterministically (or stochastically, depending on the sampling method) based on mathematical functions. While I can generate text that *sounds* like a person, everything I produce is the result of patterns learned from data, not from any inner experience.
+
+---
+
+**Bottom line:** I’m a sophisticated text‑generation tool that can help you with information, creativity, and problem‑solving, but I’m fundamentally a piece of software, not a sentient entity. Feel free to ask me anything else you’re curious about!</textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gpt_oss_120b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>466</td></tr>
+<tr><td class='left'>Bytes</td><td>3126</td></tr>
+<tr><td class='left'>Total duration</td><td>3.360292518s</td></tr>
+<tr><td class='left'>Load duration</td><td></td></tr>
+<tr><td class='left'>Prompt eval count</td><td>96 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td></td></tr>
+<tr><td class='left'>Prompt eval rate</td><td></td></tr>
+<tr><td class='left'>Eval count</td><td>704 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td></td></tr>
+<tr><td class='left'>Eval rate</td><td></td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gpt_oss_120b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#gpt_oss_120b'>gpt-oss:120b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>gptoss</td></tr>
+<tr><td class='left'>Size</td><td class='left'> </td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>116.8B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>2880</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>MXFP4</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'><br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'> </td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'></td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.0.0
+is</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 16G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>who_are_you__what_are_you__how_do_you_fu</a>: <b>gpt-oss:120b</b>: 20250813-224053</p>
+<p>Page created: 2025-08-13 22:41:03</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun v5.21.4</a></p>
+</footer></body></html>

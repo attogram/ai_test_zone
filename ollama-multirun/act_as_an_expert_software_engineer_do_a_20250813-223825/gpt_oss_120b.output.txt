@@ -1,0 +1,30 @@
+
+## Code Review – `multirun.sh`
+
+### 1. Overview  
+
+`multirun.sh` is a fairly large Bash utility that:
+
+* Parses command‑line arguments (`-m`, `-r`, `-t`, `-v`, `-h`).
+* Determines the list of Ollama models (or a user‑supplied subset).
+* Prompts the user for a prompt (or reads from stdin/pipes).
+* Creates a timestamped results directory.
+* Runs each model with `ollama run --verbose`, imposing a timeout.
+* Extracts “thinking” sections, gathers stats, copies any generated images, and writes a set of inter‑linked HTML pages (index, per‑model pages, models overview, etc.).
+
+The script works, but there are many places where robustness, maintainability, security and performance can be improved.
+
+Below is a **structured review** grouped by theme, each with concrete suggestions and, where appropriate, example code snippets.
+
+---
+
+## 2. Correctness & Bugs  
+
+| Area | Issue | Why it matters | Fix / improvement |
+|------|-------|----------------|-------------------|
+| Bash version test | Uses `awk` to compare version numbers; the test fails on Bash 4.0‑4.1 because `$2` may be empty. | Future‑proofing, clearer error messages. | Use Bash’s built‑in version comparison: <br>`[[ ${BASH_VERSINFO[0]} -gt 3 || ( ${BASH_VERSINFO[0]} -eq 3 && ${BASH_VERSINFO[1]} -ge 2 ) ]] || { echo "Bash 3.2+ required" >&2; exit 1; }` |
+| `set -e` / error handling | The script relies on manual `if …; then … else exit` checks. If any command in a pipeline fails, the script continues silently. | Unexpected silent failures (e.g., `ollama list` returning non‑zero). | Add `set -euo pipefail` at the top; handle expected non‑zero codes explicitly (`|| true`). |
+| `modelsList` parsing | Uses `IFS=',' read -ra modelsListArray <<< "$modelsList"` – if the user passes an empty string (`-m ""`) the loop iterates once with an empty element and fails later. | Gives a confusing “model not found” error. | Guard against empty string: `[[ -n $modelsList ]] && IFS=',' read -ra …` |
+| `safeString` sanitisation | The final `tr -cd 'a-zA-Z0-9_'` removes *all* non‑allowed characters, even after they’ve been replaced with underscores, leading to double‑underscores being collapsed unintentionally. Also it silently drops characters rather than normalising them. | File names may become unintentionally short or ambiguous. | Use a single `sed` expression: <br>`sed -E 's/[^[:alnum:]]+/_/g; s/^_+|_+$//g'` |
+| `textarea` HTML escaping | The `sed` expression for HTML escaping is fragile (hard‑coded `'` quoting). It also doesn’t escape new‑lines → `<textarea>` will render them fine, but they aren’t escaped for HTML attributes. | Potential XSS if a model returns markup such as `</textarea><script>…`. | Use a deterministic function, e.g.: <br>`printf '%s' "$content" | html_escape` where `html_escape` is a small helper using `awk` or `python -c 'import html,sys; sys.stdout.write(html.escape(sys.stdin.read()))'`. |
+| `runModelWithTimeout` – race condition | The timeout monitor kills the **parent** PID (`$pid`) but does not terminate any child processes that `ollama run` may spawn (e.g., a separate server process). Killing only the parent leaves orphan processes running in the background. | System resources leak; later runs may hit “maximum loaded models”. | Use `timeout` from coreutils (if available) or run the whole command in its own process group: <br>`set -o pipefail; ( ( echo "$prompt" | ollama run --verbose "$model" ) 2> "$modelStatsTxt" > "$modelOutputTxt" ) & pid=$!; ...; kill -TERM -$pid` |

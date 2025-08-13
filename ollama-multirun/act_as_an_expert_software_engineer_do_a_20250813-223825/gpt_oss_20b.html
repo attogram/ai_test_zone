@@ -1,0 +1,1804 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  </style>
+<title>ollama-multirun: gpt-oss:20b</title></head><body>
+<header><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_expert_software_engineer_do_a</a>: <b>gpt-oss:20b</b>: 20250813-223825<br /><br />
+<span class='menu'>
+<a href='models.html'>models</a>: 
+<a href='./gpt_oss_120b.html'>gpt-oss:120b</a> 
+<b>gpt-oss:20b</b> 
+</span>
+</header>
+<p>Prompt: (<a href='./prompt.txt'>raw</a>) (<a href='./act_as_an_expert_software_engineer_do_a.prompt.yaml'>yaml</a>)
+  words:3325  bytes:34291<br />
+<textarea readonly rows='10'>Act as an expert Software Engineer.
+Do a code review of this multirun.sh script:
+
+#!/usr/bin/env bash
+#
+# Ollama Multirun
+#
+# Bash shell script to run a prompt against all models in Ollama, and save the output as web pages
+#
+# Usage:
+#  - Enter prompt manually:    ./multirun.sh
+#  - Enter prompt as argument: ./multirun.sh &quot;your prompt&quot;
+#  - Enter prompt from file:   ./multirun.sh &lt; prompt.txt
+#  - Enter prompt from pipe:   echo &quot;your prompt&quot; | ./multirun.sh
+#                              echo &quot;summarize this file: $(cat filename)&quot; | ./multirun.sh
+#
+#  - By default, will use all available models
+#    To set a list of models to use, set as a comma-seperated list with -m
+#      example:  ./multirun.sh -m deepseek-r1:1.5b,deepseek-r1:8b
+#
+#  - By default, will use &quot;./results&quot; as the results output directory
+#    To set a results output directory:
+#      ./multirun.sh -r ./path/to/directory
+#
+#  - By default, will wait 5 minutes for models to respond.
+#    To set new timeout (in seconds):
+#      ./multirun.sh -t 30
+
+if [ -z &quot;$BASH_VERSION&quot; ] || ! (echo &quot;$BASH_VERSION&quot; | awk -F. &#39;{exit !($1 &gt; 3 || ($1 == 3 &amp;&amp; $2 &gt;= 2))}&#39;) ; then
+  echo &quot;Error: This script requires Bash version 3.2 or higher.&quot; &gt;&amp;2
+  exit 1
+fi
+
+OLLAMA_MULTIRUN_NAME=&quot;ollama-multirun&quot;
+OLLAMA_MULTIRUN_VERSION=&quot;5.21.4&quot;
+OLLAMA_MULTIRUN_URL=&quot;https://github.com/attogram/ollama-multirun&quot;
+OLLAMA_MULTIRUN_DISCORD=&quot;https://discord.gg/BGQJCbYVBa&quot;
+OLLAMA_MULTIRUN_LICENSE=&quot;MIT&quot;
+OLLAMA_MULTIRUN_COPYRIGHT=&quot;Copyright (c) 2025 Ollama Bash Lib, Attogram Project &lt;https://github.com/attogram&gt;&quot;
+
+TIMEOUT=&quot;300&quot; # number of seconds to allow model to respond
+addedImages=()
+
+usage() {
+  local me
+  me=$(basename &quot;$0&quot;)
+  echo &quot;$OLLAMA_MULTIRUN_NAME&quot;; echo
+  echo &quot;Usage:&quot;
+  echo &quot;  ./$me [flags]&quot;
+  echo &quot;  ./$me [flags] [prompt]&quot;
+  echo; echo &quot;Flags:&quot;;
+  echo &quot;  -h       -- Help for $OLLAMA_MULTIRUN_NAME&quot;
+  echo &quot;  -m model1,model2  -- Use specific models (comma separated list)&quot;
+  echo &quot;  -r &lt;dir&gt; -- Set results directory&quot;
+  echo &quot;  -t #     -- Set timeout, in seconds&quot;
+  echo &quot;  -v       -- Show version information&quot;
+  echo &quot;  [prompt] -- Set the prompt (\&quot;Example prompt\&quot;)&quot;
+}
+
+parseCommandLine() {
+  modelsList=&quot;&quot;
+  resultsDirectory=&quot;results&quot;
+  prompt=&quot;&quot;
+  while (( &quot;$#&quot; )); do
+    case &quot;$1&quot; in
+      -h)
+        usage
+        exit 0
+        ;;
+      -m) # specify models to run
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ &quot;${2:0:1}&quot; != &quot;-&quot; ]; then
+          modelsList=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -r) # specify results outputDirectory
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ &quot;${2:0:1}&quot; != &quot;-&quot; ]; then
+          resultsDirectory=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -t) # specify timeout in seconds
+        if [ -n &quot;$2&quot; ] &amp;&amp; [ &quot;${2:0:1}&quot; != &quot;-&quot; ]; then
+          TIMEOUT=$2
+          shift 2
+        else
+          echo &quot;Error: Argument for $1 is missing&quot; &gt;&amp;2
+          exit 1
+        fi
+        ;;
+      -v)
+        echo &quot;$OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION&quot;
+        exit 0
+        ;;
+      -*) # unsupported flags
+        echo &quot;Error: unsupported argument: $1&quot; &gt;&amp;2
+        exit 1
+        #shift 1
+        ;;
+      *) # preserve positional arguments
+        if [ -z &quot;$prompt&quot; ]; then
+          prompt=&quot;$1&quot;
+        else
+          prompt+=&quot; $1&quot;
+        fi
+        shift
+        ;;
+    esac
+  done
+}
+
+getDateTime() {
+  date &#39;+%Y-%m-%d %H:%M:%S&#39;
+}
+
+setModels() {
+  models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort)) # Get list of models, sorted alphabetically
+  if [ -z &quot;${models[*]}&quot; ]; then
+    echo &quot;No models found. Please install models with &#39;ollama pull &lt;model-name&gt;&#39;&quot; &gt;&amp;2
+    exit 1
+  fi
+
+  parsedModels=()
+  if [ -n &quot;$modelsList&quot; ]; then
+    IFS=&#39;,&#39; read -ra modelsListArray &lt;&lt;&lt; &quot;$modelsList&quot; # parse csv into modelsListArray
+    for m in &quot;${modelsListArray[@]}&quot;; do
+      local found=0
+      for existing_model in &quot;${models[@]}&quot;; do
+          if [[ &quot;$existing_model&quot; == &quot;$m&quot; ]]; then
+              found=1
+              break
+          fi
+      done
+      if [[ $found -eq 1 ]]; then
+        parsedModels+=(&quot;$m&quot;)
+      else
+        echo &quot;Error: model not found: $m&quot; &gt;&amp;2
+        exit 1
+      fi
+    done
+  fi
+  if [ -n &quot;${parsedModels[*]}&quot; ]; then
+    models=(&quot;${parsedModels[@]}&quot;)
+  fi
+
+  echo &quot;models:&quot;;
+  echo &quot;${models[@]}&quot;
+  echo
+}
+
+safeString() {
+  local input=&quot;$1&quot; # Get the input
+  local length=&quot;${2:-40}&quot; # Get length, default to 40 characters
+  input=${input:0:length} # Truncate to first LENGTH characters
+  input=$(echo &quot;$input&quot; | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;) # Convert to lowercase
+  input=${input// /_} # Replace spaces with underscores
+  input=$(echo &quot;$input&quot; | sed &#39;s/[^a-zA-Z0-9_]/_/g&#39; | tr -cd &#39;a-zA-Z0-9_&#39;) # Replace non-allowed characters with underscores
+  echo &quot;$input&quot; # Output the sanitized string
+}
+
+createOutputDirectory() {
+  tag=$(safeString &quot;$prompt&quot;)
+  tagDatetime=$(date &#39;+%Y%m%d-%H%M%S&#39;)
+  #outputDirectory=&quot;$resultsDirectory/${tagDatetime}_${tag}&quot;
+  outputDirectory=&quot;$resultsDirectory/${tag}_${tagDatetime}&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Output Directory: $outputDirectory/&quot;
+  if [ ! -d &quot;$outputDirectory&quot; ]; then
+    if ! mkdir -p &quot;$outputDirectory&quot;; then
+      echo &quot;Error: Failed to create Output Directory $outputDirectory&quot; &gt;&amp;2
+      exit 1
+    fi
+  fi
+}
+
+setPrompt() {
+  if [ -n &quot;$prompt&quot; ]; then # if prompt is already set from command line
+    return
+  fi
+
+  if [ -t 0 ]; then # Check if input is from a terminal (interactive)
+    echo &quot;Enter prompt:&quot;;
+    read -r prompt # Read prompt from user input
+    return
+  fi
+
+  prompt=$(cat) # Read from standard input (pipe or file)
+}
+
+savePrompt() {
+  echo &quot;$(getDateTime)&quot; &quot;Prompt: $prompt&quot;
+
+  promptFile=&quot;$outputDirectory/prompt.txt&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Prompt Text: $promptFile&quot;
+  echo &quot;$prompt&quot; &gt; &quot;$promptFile&quot;
+
+  promptWords=$(wc -w &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+  promptBytes=$(wc -c &lt; &quot;$promptFile&quot; | awk &#39;{print $1}&#39;)
+
+  promptYamlFile=&quot;$outputDirectory/$tag.prompt.yaml&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Prompt Yaml: $promptYamlFile&quot;
+  generatePromptYaml &gt; &quot;$promptYamlFile&quot;
+}
+
+generatePromptYaml() {
+  # Github Prompt YAML: https://docs.github.com/en/github-models/use-github-models/storing-prompts-in-github-repositories
+  cat &lt;&lt; EOF
+messages:
+  - role: system
+    content: &#39;&#39;
+  - role: user
+    content: |
+$(while IFS= read -r line; do echo &quot;      $line&quot;; done &lt;&lt;&lt; &quot;$prompt&quot;)
+model: &#39;&#39;
+EOF
+}
+
+textarea() {
+  local content=&quot;$1&quot; # Get the input
+  if [ -z &quot;$content&quot; ]; then
+    content=&quot;&quot;
+  fi
+  local padding=&quot;$2&quot;
+  if [ -z &quot;$padding&quot; ]; then
+    padding=0
+  fi
+  local max=&quot;$3&quot;
+  if [ -z &quot;$max&quot; ]; then
+    max=25
+  fi
+  local lines
+  lines=$(printf &#39;%s\n&#39; &quot;$content&quot; | wc -l) # Get number of lines in content
+  lines=$((lines + padding))
+  if [ &quot;$lines&quot; -gt &quot;$max&quot; ]; then
+    lines=$max
+  fi
+  content=$(echo &quot;$content&quot; | sed &#39;s/&amp;/\&amp;amp;/g; s/&lt;/\&amp;lt;/g; s/&gt;/\&amp;gt;/g; s/&quot;/\&amp;quot;/g; s/&#39;&quot;&#39;&quot;&#39;/\&amp;#39;/g&#39;) # Escape HTML special characters
+  echo &quot;&lt;textarea readonly rows=&#39;$lines&#39;&gt;${content}&lt;/textarea&gt;&quot;
+}
+
+showPrompt() {
+  echo &quot;&lt;p&gt;Prompt: (&lt;a href=&#39;./prompt.txt&#39;&gt;raw&lt;/a&gt;) (&lt;a href=&#39;./${tag}.prompt.yaml&#39;&gt;yaml&lt;/a&gt;)&quot;
+  echo &quot;  words:$promptWords  bytes:$promptBytes&lt;br /&gt;&quot;
+  textarea &quot;$prompt&quot; 2 10 # 0 padding, max 10 lines
+  echo &quot;&lt;/p&gt;&quot;
+}
+
+showImages() {
+  if [ ${#addedImages[@]} -gt 0 ]; then
+    for image in &quot;${addedImages[@]}&quot;; do
+      echo -n &quot;&lt;div class=&#39;box&#39;&gt;&quot;
+      echo -n &quot;&lt;a target=&#39;image&#39; href=&#39;$(basename &quot;$image&quot;)&#39;&gt;&lt;img src=&#39;$(basename &quot;$image&quot;)&#39; alt=\&quot;$image\&quot; width=&#39;250&#39; /&gt;&lt;/a&gt;&quot;
+      echo -n &quot;&lt;/div&gt;&quot;
+    done
+    echo -n &quot;&lt;br /&gt;&quot;
+  fi
+}
+
+clearModel() {
+  if ! command -v expect &gt;/dev/null 2&gt;&amp;1; then
+    echo &quot;Warning: &#39;expect&#39; command not found, skipping model clearing.&quot; &gt;&amp;2
+    return
+  fi
+  echo &quot;$(getDateTime)&quot; &quot;Clearing model session: $1&quot;
+  (
+    expect \
+    -c &quot;spawn ollama run $1&quot; \
+    -c &quot;expect \&quot;&gt;&gt;&gt; \&quot;&quot; \
+    -c &#39;send -- &quot;/clear\n&quot;&#39; \
+    -c &quot;expect \&quot;Cleared session context\&quot;&quot; \
+    -c &#39;send -- &quot;/bye\n&quot;&#39; \
+    -c &quot;expect eof&quot; \
+    ;
+  ) &gt; /dev/null 2&gt;&amp;1 # Suppress output
+  if [ $? -ne 0 ]; then
+    echo &quot;ERROR: Failed to clear model session: $1&quot; &gt;&amp;2
+    # exit 1
+  fi
+}
+
+stopModel() {
+  echo &quot;$(getDateTime)&quot; &quot;Stopping model: $1&quot;
+  if ! ollama stop &quot;$1&quot;; then
+    echo &quot;$(getDateTime)&quot; &quot;ERROR: Failed to stop model: $1&quot; &gt;&amp;2
+    # exit 1
+  fi
+}
+
+showSortableTablesJavascript() {
+    # From: https://github.com/tofsjonas/sortable/
+    # License: The Unlicense - https://github.com/tofsjonas/sortable/blob/main/LICENSE
+  echo &#39;&lt;style&gt;
+.sortable thead th:not(.no-sort){cursor:pointer}.sortable thead th:not(.no-sort)::after,.sortable thead th:not(.no-sort)::before{transition:color .1s ease-in-out;font-size:1.2em;color:rgba(0,0,0,0)}.sortable thead th:not(.no-sort)::after{margin-left:3px;content:&quot;▸&quot;}.sortable thead th:not(.no-sort):hover::after{color:inherit}.sortable thead th:not(.no-sort)[aria-sort=descending]::after{color:inherit;content:&quot;▾&quot;}.sortable thead th:not(.no-sort)[aria-sort=ascending]::after{color:inherit;content:&quot;▴&quot;}.sortable thead th:not(.no-sort).indicator-left::after{content:&quot;&quot;}.sortable thead th:not(.no-sort).indicator-left::before{margin-right:3px;content:&quot;▸&quot;}.sortable thead th:not(.no-sort).indicator-left:hover::before{color:inherit}.sortable thead th:not(.no-sort).indicator-left[aria-sort=descending]::before{color:inherit;content:&quot;▾&quot;}.sortable thead th:not(.no-sort).indicator-left[aria-sort=ascending]::before{color:inherit;content:&quot;▴&quot;}.sortable{--stripe-color: #e4e4e4;--th-color: #fff;--th-bg: #808080;--td-color: #000;--td-on-stripe-color: #000;border-spacing:0}.sortable.sticky thead th{position:sticky;top:0;z-index:1}.sortable tbody tr:nth-child(odd){background-color:var(--stripe-color);color:var(--td-on-stripe-color)}.sortable thead th{background:var(--th-bg);color:var(--th-color);font-weight:normal;text-align:left;text-transform:capitalize;vertical-align:baseline;white-space:nowrap}.sortable td{color:var(--td-color)}.sortable td,.sortable th{padding:10px}.sortable td:first-child,.sortable th:first-child{border-top-left-radius:4px}.sortable td:last-child,.sortable th:last-child{border-top-right-radius:4px}
+&lt;/style&gt;&#39;
+  echo &#39;&lt;script&gt;
+function sortSortable(a,m){function n(b){if(b){if(m&amp;&amp;b.dataset.sortAlt)return b.dataset.sortAlt;if(b.dataset.sort)return b.dataset.sort;if(b.textContent)return b.textContent}return&quot;&quot;}a.dispatchEvent(new Event(&quot;sort-start&quot;,{bubbles:!0}));for(var c=a.tHead.querySelector(&quot;th[aria-sort]&quot;),k=a.tHead.children[0],p=&quot;ascending&quot;===c.getAttribute(&quot;aria-sort&quot;),f=a.classList.contains(&quot;n-last&quot;),e=function(b,q,d){var g=n(q.cells[d]),r=n(b.cells[d]);if(f){if(&quot;&quot;===g&amp;&amp;&quot;&quot;!==r)return-1;if(&quot;&quot;===r&amp;&amp;&quot;&quot;!==g)return 1}var u=
++g-+r;g=isNaN(u)?g.localeCompare(r):u;return 0===g&amp;&amp;k.cells[d]&amp;&amp;k.cells[d].hasAttribute(&quot;data-sort-tbr&quot;)?e(b,q,+k.cells[d].dataset.sortTbr):p?-g:g},h=0;h&lt;a.tBodies.length;h++){var l=a.tBodies[h],v=[].slice.call(l.rows,0);v.sort(function(b,q){var d;return e(b,q,+(null!==(d=c.dataset.sortCol)&amp;&amp;void 0!==d?d:c.cellIndex))});var t=l.cloneNode();t.append.apply(t,v);a.replaceChild(t,l)}a.dispatchEvent(new Event(&quot;sort-end&quot;,{bubbles:!0}))}
+function sortableEventListener(a){function m(h,l){return h.nodeName===l?h:m(h.parentNode,l)}try{var n=a.shiftKey||a.altKey,c=m(a.target,&quot;TH&quot;),k=c.parentNode,p=k.parentNode,f=p.parentNode;if(&quot;THEAD&quot;===p.nodeName&amp;&amp;f.classList.contains(&quot;sortable&quot;)&amp;&amp;!c.classList.contains(&quot;no-sort&quot;)){var e=k.cells;for(a=0;a&lt;e.length;a++)e[a]!==c&amp;&amp;e[a].removeAttribute(&quot;aria-sort&quot;);e=&quot;descending&quot;;if(&quot;descending&quot;===c.getAttribute(&quot;aria-sort&quot;)||f.classList.contains(&quot;asc&quot;)&amp;&amp;&quot;ascending&quot;!==c.getAttribute(&quot;aria-sort&quot;))e=&quot;ascending&quot;;
+c.setAttribute(&quot;aria-sort&quot;,e);f.dataset.timer&amp;&amp;clearTimeout(+f.dataset.timer);f.dataset.timer=setTimeout(function(){sortSortable(f,n)},1).toString()}}catch(h){}}document.addEventListener(&quot;click&quot;,sortableEventListener);
+&lt;/script&gt;&#39;
+}
+
+showHeader() {
+  title=&quot;$1&quot;
+  cat &lt;&lt; &quot;EOF&quot;
+  &lt;!DOCTYPE html&gt;
+  &lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;style&gt;
+    a:hover { background-color: yellow; color: black; }
+    body { font-family: monospace; }
+    header, footer { background-color: #f0f0f0; padding: 10px; }
+    li { margin: 5px; }
+    table, td, th { border-collapse: collapse; }
+    td, th { border: 1px solid #cccccc; padding: 5px; text-align: right; }
+    tr:hover { background-color: lightyellow; color: black; }
+    textarea { border: 1px solid #cccccc; white-space: pre-wrap; width: 90%; }
+    .box { display: inline-block; margin: 3px; padding: 2px; vertical-align: top; }
+    .left { text-align: left; }
+    .menu { font-size: small; }
+  &lt;/style&gt;
+EOF
+  echo &quot;&lt;title&gt;$title&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&quot;
+}
+
+showFooter() {
+  title=&quot;$1&quot;
+  echo &quot;&lt;br /&gt;&lt;br /&gt;&quot;
+  echo &quot;&lt;footer&gt;&quot;
+  echo &quot;&lt;p&gt;$title&lt;/p&gt;&quot;
+  echo &quot;&lt;p&gt;Page created: $(getDateTime)&lt;/p&gt;&quot;
+  echo &quot;&lt;p&gt;Generated with: &lt;a target=&#39;$OLLAMA_MULTIRUN_NAME&#39; href=&#39;$OLLAMA_MULTIRUN_URL&#39;&gt;$OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION&lt;/a&gt;&lt;/p&gt;&quot;
+  echo &quot;&lt;/footer&gt;&lt;/body&gt;&lt;/html&gt;&quot;
+}
+
+createMenu() {
+  local currentModel=&quot;$1&quot;
+  echo &quot;&lt;span class=&#39;menu&#39;&gt;&quot;
+  echo &quot;&lt;a href=&#39;models.html&#39;&gt;models&lt;/a&gt;: &quot;
+  for modelName in &quot;${models[@]}&quot;; do
+    if [ &quot;$modelName&quot; == &quot;$currentModel&quot; ]; then
+      echo &quot;&lt;b&gt;$modelName&lt;/b&gt; &quot;
+    else
+      echo &quot;&lt;a href=&#39;./$(safeString &quot;$modelName&quot; 80).html&#39;&gt;$modelName&lt;/a&gt; &quot;
+    fi
+  done
+  echo &#39;&lt;/span&gt;&#39;;
+}
+
+setStats() {
+  statsTotalDuration=$(grep -oE &quot;total duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsLoadDuration=$(grep -oE &quot;load duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsPromptEvalCount=$(grep -oE &quot;prompt eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)
+  statsPromptEvalDuration=$(grep -oE &quot;prompt eval duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsPromptEvalRate=$(grep -oE &quot;prompt eval rate:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)
+  statsEvalCount=$(grep -oE &quot;^eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $3, $4 }&#39;)
+  statsEvalDuration=$(grep -oE &quot;^eval duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39;)
+  statsEvalRate=$(grep -oE &quot;^eval rate:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $3, $4 }&#39;)
+
+  mapfile -t addedImages &lt; &lt;(grep -oE &quot;Added image &#39;(.*)&#39;&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39; | sed &quot;s/&#39;//g&quot;)
+  if [ ${#addedImages[@]} -gt 0 ]; then
+    for image in &quot;${addedImages[@]}&quot;; do
+      if ! [ -f &quot;$outputDirectory/$(basename &quot;$image&quot;)&quot; ]; then
+        echo &quot;Copying image: $image&quot;
+        cp &quot;$image&quot; &quot;$outputDirectory&quot;
+      fi
+    done
+  fi
+
+  responseWords=$(wc -w &lt; &quot;$modelOutputTxt&quot; | awk &#39;{print $1}&#39;)
+  responseBytes=$(wc -c &lt; &quot;$modelOutputTxt&quot; | awk &#39;{print $1}&#39;)
+}
+
+setOllamaStats() {
+  ollamaVersion=$(ollama -v | awk &#39;{print $4}&#39;)
+  # ps columns: 1:NAME, 2:ID, 3:SIZE_NUM 4:SIZE_GB, 5:PROCESSOR_% 6:PROCESS_TYPE, 7:CONTEXT, 8:UNTIL
+  ollamaPs=$(ollama ps | awk &#39;{print $1, $2, $3, $4, $5, $6, $7}&#39; | sed &#39;1d&#39;) # Get columns from ollama ps output, skipping the header
+  ollamaModel=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $1}&#39;) # Get the model name
+  ollamaSize=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $3, $4}&#39;) # Get the model size
+  ollamaProcessor=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $5, $6}&#39;) # Get the processor
+  ollamaContext=$(echo &quot;$ollamaPs&quot; | awk &#39;{print $7}&#39;) # Get the context size
+}
+
+setSystemStats() {
+  systemArch=$(uname -m) # Get hardware platform
+  systemProcessor=$(uname -p) # Get system processor
+  systemOSName=$(uname -s) # Get system OS name
+  systemOSVersion=$(uname -r) # Get system OS version
+  setSystemMemoryStats
+}
+
+setSystemMemoryStats() {
+  systemMemoryUsed=&quot;?&quot;
+  systemMemoryAvail=&quot;?&quot;
+  #echo &quot;OS Type: $OSTYPE&quot;
+  case &quot;$OSTYPE&quot; in
+    cygwin|msys)
+      #echo &quot;OS Type match: cygwin|msys&quot;
+      if command -v wmic &gt;/dev/null 2&gt;&amp;1; then
+        local totalMemKB
+        totalMemKB=$(wmic OS get TotalVisibleMemorySize /value 2&gt;/dev/null | grep -E &quot;^TotalVisibleMemorySize=&quot; | cut -d&#39;=&#39; -f2 | tr -d &#39;\r&#39;)
+        local availMemKB
+        availMemKB=$(wmic OS get FreePhysicalMemory /value 2&gt;/dev/null | grep -E &quot;^FreePhysicalMemory=&quot; | cut -d&#39;=&#39; -f2 | tr -d &#39;\r&#39;)
+        if [ -n &quot;$totalMemKB&quot; ] &amp;&amp; [ -n &quot;$availMemKB&quot; ]; then
+          local usedMemKB=$((totalMemKB - availMemKB))
+          # Convert KB to human readable format (approximate)
+          if [ $usedMemKB -gt 1048576 ]; then
+            systemMemoryUsed=&quot;$((usedMemKB / 1048576))G&quot;
+          elif [ $usedMemKB -gt 1024 ]; then
+            systemMemoryUsed=&quot;$((usedMemKB / 1024))M&quot;
+          else
+            systemMemoryUsed=&quot;${usedMemKB}K&quot;
+          fi
+          if [ &quot;$availMemKB&quot; -gt 1048576 ]; then
+            systemMemoryAvail=&quot;$((availMemKB / 1048576))G&quot;
+          elif [ &quot;$availMemKB&quot; -gt 1024 ]; then
+            systemMemoryAvail=&quot;$((availMemKB / 1024))M&quot;
+          else
+            systemMemoryAvail=&quot;${availMemKB}K&quot;
+          fi
+        fi
+      fi
+      ;;
+    darwin*)
+      #echo &quot;OS Type match: darwin&quot;
+      local top
+      top=$(top -l 1 2&gt;/dev/null || echo &quot;&quot;)
+      if [ -n &quot;$top&quot; ]; then
+        systemMemoryUsed=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $2}&#39; || echo &quot;N/A&quot;)
+        systemMemoryAvail=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $6}&#39; || echo &quot;N/A&quot;)
+      fi
+      ;;
+    *)
+      #echo &quot;OS Type match: *&quot;
+      local top
+      top=$(top -l 1 2&gt;/dev/null || top -bn1 2&gt;/dev/null || echo &quot;&quot;)
+      if [ -n &quot;$top&quot; ]; then
+        systemMemoryUsed=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $2}&#39; || echo &quot;N/A&quot;)
+        systemMemoryAvail=$(echo &quot;$top&quot; | awk &#39;/PhysMem/ {print $6}&#39; || echo &quot;N/A&quot;)
+      fi
+      ;;
+  esac
+}
+
+showSystemStats() {
+  echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;System&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Ollama proc&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaProcessor&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Ollama context&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaContext&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Ollama version&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaVersion&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Multirun timeout&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$TIMEOUT seconds&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Sys arch&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemArch&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Sys processor&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemProcessor&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;sys memory&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemMemoryUsed + $systemMemoryAvail&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Sys OS&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemOSName $systemOSVersion&lt;/td&gt;&lt;/tr&gt;&quot;
+  echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+}
+
+createModelInfoTxt() { # Create model info files - for each model, do &#39;ollama show&#39; and save the results to text file
+  for model in &quot;${models[@]}&quot;; do
+    modelInfoTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).info.txt&quot;
+    echo &quot;$(getDateTime)&quot; &quot;Creating Model Info Text: $modelInfoTxt&quot;
+    ollama show &quot;$model&quot; &gt; &quot;$modelInfoTxt&quot;
+  done
+}
+
+setModelInfo() {
+  modelInfoTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).info.txt&quot;
+  modelCapabilities=()
+  modelSystemPrompt=&quot;&quot;
+  modelTemperature=&quot;&quot;
+  local section=&quot;&quot;
+  local line
+
+  while IFS= read -r line; do # Read the content of the file line by line
+    line=&quot;$(echo -e &quot;${line}&quot; | sed -e &#39;s/^[[:space:]]*//&#39; -e &#39;s/[[:space:]]*$//&#39;)&quot; # Trim leading/trailing whitespace
+    if [[ -z &quot;$line&quot; ]]; then
+      section=&quot;&quot;
+      continue; # Skip empty lines
+    fi
+    if [[ $line == &quot;Model&quot;* ]]; then
+      section=&quot;Model&quot;
+      continue
+    elif [[ $line == &quot;Capabilities&quot;* ]]; then
+      section=&quot;Capabilities&quot;
+      continue
+    elif [[ $line == &quot;System&quot;* ]]; then
+      section=&quot;System&quot;
+      continue
+    elif [[ $line == &quot;Parameters&quot;* ]]; then
+      section=&quot;Parameters&quot;
+      continue
+    elif [[ $line == &quot;License&quot;* ]]; then
+      section=&quot;License&quot;
+      continue
+    elif [[ $line == &quot;Projector&quot;* ]]; then
+      section=&quot;Projector&quot;
+      continue
+    fi
+
+    case $section in
+      &quot;Model&quot;)
+        if [[ &quot;$line&quot; == &quot;architecture&quot;* ]]; then
+          modelArchitecture=$(echo &quot;$line&quot; | awk &#39;/architecture/ {print $2}&#39;) # Get model architecture
+        fi
+        if [[ &quot;$line&quot; == &quot;parameters&quot;* ]]; then
+          modelParameters=$(echo &quot;$line&quot; | awk &#39;/parameters/ {print $2}&#39;) # Get model parameters
+        fi
+        if [[ &quot;$line&quot; == &quot;context length&quot;* ]]; then
+          modelContextLength=$(echo &quot;$line&quot; | awk &#39;/context length/ {print $3}&#39;) # Get model context length
+        fi
+        if [[ &quot;$line&quot; == &quot;embedding length&quot;* ]]; then
+          modelEmbeddingLength=$(echo &quot;$line&quot; | awk &#39;/embedding length/ {print $3}&#39;) # Get model embedding length
+        fi
+        if [[ &quot;$line&quot; == &quot;quantization&quot;* ]]; then
+          modelQuantization=$(echo &quot;$line&quot; | awk &#39;/quantization/ {print $2}&#39;) # Get model quantization
+        fi
+        ;;
+      &quot;Capabilities&quot;)
+        modelCapabilities+=(&quot;$line&quot;)
+        ;;
+      &quot;System&quot;)
+        modelSystemPrompt+=&quot;$line&quot;$&#39;\n&#39;
+        ;;
+      &quot;Parameters&quot;)
+        if [[ &quot;$line&quot; == &quot;temperature&quot;* ]]; then
+          modelTemperature=$(echo &quot;$line&quot; | awk &#39;/temperature/ {print $2}&#39;) # Get model temperature
+        fi
+        ;;
+    esac
+  done &lt; &quot;$modelInfoTxt&quot;
+}
+
+createModelsOverviewHtml() {
+  # list of models used in current run
+  modelsIndexHtml=&quot;$outputDirectory/models.html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Models Index Page: $modelsIndexHtml&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: models&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;models&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+    cat &lt;&lt;- EOF
+&lt;br /&gt;
+&lt;table class=&#39;sortable&#39;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th class=&#39;left&#39;&gt;Model&lt;/th&gt;
+      &lt;th&gt;Architecture&lt;/th&gt;
+      &lt;th&gt;Parameters&lt;/th&gt;
+      &lt;th&gt;Context&lt;br /&gt;length&lt;/th&gt;
+      &lt;th&gt;Embedding&lt;br /&gt;length&lt;/th&gt;
+      &lt;th&gt;Quantization&lt;/th&gt;
+      &lt;th&gt;Temperature&lt;/th&gt;
+      &lt;th&gt;Capabilities&lt;/th&gt;
+      &lt;th class=&#39;left&#39;&gt;System prompt&lt;/th&gt;
+      &lt;th class=&#39;no-sort&#39;&gt;(raw)&lt;/th&gt;
+      &lt;th class=&#39;no-sort&#39;&gt;(index)&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+EOF
+  } &gt; &quot;$modelsIndexHtml&quot;
+
+  for model in &quot;${models[@]}&quot;; do
+    setModelInfo
+    {
+      echo &quot;&lt;tr&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelArchitecture&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelParameters&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelContextLength&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelEmbeddingLength&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelQuantization&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;$modelTemperature&lt;/td&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;$(printf &quot;%s&lt;br /&gt;&quot; &quot;${modelCapabilities[@]}&quot;)&lt;/td&gt;&quot;
+      echo &quot;&lt;td class=&#39;left&#39;&gt;$modelSystemPrompt&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).info.txt&#39;&gt;raw&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;td&gt;&lt;a href=&#39;../models.html#$(safeString &quot;$model&quot; 80)&#39;&gt;index&lt;/a&gt;&lt;/td&gt;&quot;
+      echo &quot;&lt;/tr&gt;&quot;
+    } &gt;&gt; &quot;$modelsIndexHtml&quot;
+  done
+
+  {
+    echo &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;
+    showSortableTablesJavascript
+    showFooter &quot;$titleLink&quot;
+  } &gt;&gt; &quot;$modelsIndexHtml&quot;
+}
+
+createModelOutputHtml() {
+  modelHtmlFile=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Model Output Page: $modelHtmlFile&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: $model&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;$model&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;br /&gt;&lt;br /&gt;&quot;
+    createMenu &quot;$model&quot;
+    echo &quot;&lt;/header&gt;&quot;
+    showPrompt
+    showImages
+
+    modelThinkingTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).thinking.txt&quot;
+    if [ -f &quot;$modelThinkingTxt&quot; ]; then
+      echo &quot;&lt;p&gt;Thinking: $model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).thinking.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;
+      textarea &quot;$(cat &quot;$modelThinkingTxt&quot;)&quot; 3 15 # 3 padding, max 15 lines
+      echo &quot;&lt;/p&gt;&quot;
+    fi
+
+    echo &quot;&lt;p&gt;Output: $model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).output.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;
+    textarea &quot;$(cat &quot;$modelOutputTxt&quot;)&quot; 3 25 # 3 padding, max 25 lines
+    echo &quot;&lt;/p&gt;&quot;
+
+    echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;Stats (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).stats.txt&#39;&gt;raw&lt;/a&gt;)&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Words&lt;/td&gt;&lt;td&gt;$responseWords&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Bytes&lt;/td&gt;&lt;td&gt;$responseBytes&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Total duration&lt;/td&gt;&lt;td&gt;$statsTotalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Load duration&lt;/td&gt;&lt;td&gt;$statsLoadDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Prompt eval count&lt;/td&gt;&lt;td&gt;$statsPromptEvalCount&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Prompt eval duration&lt;/td&gt;&lt;td&gt;$statsPromptEvalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Prompt eval rate&lt;/td&gt;&lt;td&gt;$statsPromptEvalRate&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Eval count&lt;/td&gt;&lt;td&gt;$statsEvalCount&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Eval duration&lt;/td&gt;&lt;td&gt;$statsEvalDuration&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Eval rate&lt;/td&gt;&lt;td&gt;$statsEvalRate&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+
+    echo &quot;&lt;div class=&#39;box&#39;&gt;&lt;table&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39; colspan=&#39;2&#39;&gt;Model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).info.txt&#39;&gt;raw&lt;/a&gt;)&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Name&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;../models.html#$(safeString &quot;$model&quot; 80)&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Architecture&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelArchitecture&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Size&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$ollamaSize&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Parameters&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelParameters&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Context length&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelContextLength&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Embedding length&lt;/td&gt;&lt;td  class=&#39;left&#39;&gt;$modelEmbeddingLength&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Quantization&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$modelQuantization&lt;/td&gt;&lt;/tr&gt;&quot;
+    echo &quot;&lt;tr&gt;&lt;td class=&#39;left&#39;&gt;Capabilities&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$(printf &quot;%s&lt;br /&gt;&quot; &quot;${modelCapabilities[@]}&quot;)&lt;/td&gt;&quot;
+    echo &quot;&lt;/table&gt;&lt;/div&gt;&quot;
+
+    showSystemStats
+
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$modelHtmlFile&quot;
+}
+
+createOutputIndexHtml() {
+  outputIndexHtml=&quot;$outputDirectory/index.html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Output Index Page: $outputIndexHtml&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: $tag&quot;
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;b&gt;$tag&lt;/b&gt;: $tagDatetime&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;br /&gt;&lt;br /&gt;&quot;
+    createMenu &quot;index&quot;
+    echo  &quot;&lt;/header&gt;&quot;
+    showPrompt
+    echo &quot;&lt;!-- IMAGES --&gt;&quot;
+    cat &lt;&lt;- &quot;EOF&quot;
+&lt;table class=&#39;sortable&#39;&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th class=&#39;left&#39;&gt;Model&lt;/th&gt;
+      &lt;th&gt;Response&lt;br /&gt;words&lt;/th&gt;
+      &lt;th&gt;Response&lt;br /&gt;bytes&lt;/th&gt;
+      &lt;th&gt;Total&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Load&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Prompt eval&lt;br /&gt;count&lt;/th&gt;
+      &lt;th&gt;Prompt eval&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Prompt eval&lt;br /&gt;rate&lt;/th&gt;
+      &lt;th&gt;Eval&lt;br /&gt;count&lt;/th&gt;
+      &lt;th&gt;Eval&lt;br /&gt;duration&lt;/th&gt;
+      &lt;th&gt;Eval&lt;br /&gt;rate&lt;/th&gt;
+      &lt;th&gt;Model&lt;br /&gt;params&lt;/th&gt;
+      &lt;th&gt;Model&lt;br /&gt;size&lt;/th&gt;
+      &lt;th&gt;Model&lt;br /&gt;context&lt;/th&gt;
+      &lt;th&gt;Ollama&lt;br /&gt;context&lt;/th&gt;
+      &lt;th&gt;Ollama&lt;br /&gt;proc&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+EOF
+  } &gt; &quot;$outputIndexHtml&quot;
+}
+
+addModelToOutputIndexHtml() {
+  (
+    echo &quot;&lt;tr&gt;&quot;
+    echo &quot;&lt;td class=&#39;left&#39;&gt;&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).html&#39;&gt;$model&lt;/a&gt;&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$responseWords&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$responseBytes&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsTotalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsLoadDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalCount&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsPromptEvalRate&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalCount&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalDuration&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$statsEvalRate&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$modelParameters&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$ollamaSize&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$modelContextLength&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$ollamaContext&lt;/td&gt;&quot;
+    echo &quot;&lt;td&gt;$ollamaProcessor&lt;/td&gt;&quot;
+    echo &quot;&lt;/tr&gt;&quot;
+  ) &gt;&gt; &quot;$outputIndexHtml&quot;
+}
+
+finishOutputIndexHtml() {
+  {
+    echo &quot;&lt;/tbody&gt;&lt;/table&gt;&quot;
+    echo &quot;&lt;br /&gt;&lt;br /&gt;&quot;
+    showSystemStats
+    showSortableTablesJavascript
+    titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;b&gt;$tag&lt;/b&gt;: $tagDatetime&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt;&gt; &quot;$outputIndexHtml&quot;
+
+  local imagesHtml
+  imagesHtml=$(showImages)
+  local tmpfile
+  tmpfile=$(mktemp)
+  sed &quot;s#&lt;!-- IMAGES --&gt;#${imagesHtml}#&quot; &quot;$outputIndexHtml&quot; &gt; &quot;$tmpfile&quot; &amp;&amp; mv &quot;$tmpfile&quot; &quot;$outputIndexHtml&quot;
+}
+
+getSortedResultsDirectories() {
+  # Sort directories by datetime at end of directory name
+  ls -d &quot;$resultsDirectory&quot;/* | awk &#39;match($0, /[0-9]{8}-[0-9]{6}$/) { print $0, substr($0, RSTART, RLENGTH) }&#39; | sort -k2 -r | cut -d&#39; &#39; -f1
+}
+
+createMainIndexHtml() {
+  resultsIndexFile=&quot;${resultsDirectory}/index.html&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Main Index Page: $resultsIndexFile&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: results&quot;
+    titleLink=&quot;&lt;b&gt;$OLLAMA_MULTIRUN_NAME&lt;/b&gt;&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+    echo &quot;&lt;p&gt;&lt;a href=&#39;models.html&#39;&gt;Models Index&lt;/a&gt;&lt;/p&gt;&quot;
+    echo &quot;&lt;p&gt;Runs:&lt;ul&gt;&quot;
+    for dir in $(getSortedResultsDirectories); do
+      if [ -d &quot;$dir&quot; ]; then
+        echo &quot;&lt;li&gt;&lt;a href=&#39;${dir##*/}/index.html&#39;&gt;${dir##*/}&lt;/a&gt;&lt;/li&gt;&quot;
+      fi
+    done
+    echo &quot;&lt;/ul&gt;&lt;/p&gt;&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$resultsIndexFile&quot;
+}
+
+createMainModelIndexHtml() {
+  # create table of contents: list all models used in all run results, and links to every individual model run
+  local modelsFound=()
+  local modelsIndex=()
+  local mainModelIndexHtml
+
+  for dir in $(getSortedResultsDirectories); do # for each item in main results directory
+    if [ -d &quot;$dir&quot; ]; then # if is a directory
+      for file in &quot;$dir&quot;/*.html; do # for each *.html file in the directory
+        if [[ $file != *&quot;/index.html&quot; &amp;&amp; $file != *&quot;/models.html&quot; ]]; then # skip index.html and models.html
+          fileName=&quot;${file##*/}&quot;
+          modelName=&quot;${fileName%.html}&quot; # remove .html to get model name
+          local found=0
+          for f in &quot;${modelsFound[@]}&quot;; do
+            if [[ &quot;$f&quot; == &quot;$modelName&quot; ]]; then
+              found=1
+              break
+            fi
+          done
+          if [[ $found -eq 0 ]]; then
+            modelsFound+=(&quot;$modelName&quot;)
+          fi
+          modelsIndex+=(&quot;$modelName:$dir/$fileName&quot;)
+        fi
+      done
+    fi  
+  done
+
+  mainModelIndexHtml=&quot;$resultsDirectory/models.html&quot;
+  echo; echo &quot;$(getDateTime)&quot; &quot;Creating Main Model Index Page: $mainModelIndexHtml&quot;
+  {
+    showHeader &quot;$OLLAMA_MULTIRUN_NAME: Model Run Index&quot;
+    titleLink=&quot;&lt;b&gt;&lt;a href=&#39;index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;&lt;/b&gt;: Model Run Index&quot;
+    echo &quot;&lt;header&gt;$titleLink&lt;/header&gt;&quot;
+
+    echo &#39;&lt;p&gt;Models: &#39;
+    for foundModel in &quot;${modelsFound[@]}&quot;; do
+      echo &quot;&lt;a href=&#39;#$foundModel&#39;&gt;$foundModel&lt;/a&gt; &quot;
+    done
+    echo &#39;&lt;/p&gt;&#39;
+
+    echo &quot;&lt;ul&gt;&quot;
+    for foundModel in &quot;${modelsFound[@]}&quot;; do
+      echo &quot; &lt;li id=&#39;$foundModel&#39;&gt;$foundModel&lt;/li&gt;&quot;
+      echo &quot;  &lt;ul&gt;&quot;
+      for modelIndex in &quot;${modelsIndex[@]}&quot;; do
+        modelName=${modelIndex%%:*} # get everything before the :
+        if [ &quot;$modelName&quot; == &quot;$foundModel&quot; ]; then
+          run=${modelIndex#*:} # get everything after the :
+          runLink=&quot;${run#&quot;$resultsDirectory&quot;/}&quot; # remove the results directory from beginning
+          runName=&quot;${runLink%/*}&quot; # remove everything after last slash including the slash
+          echo &quot;   &lt;li&gt;&lt;a href=&#39;$runLink&#39;&gt;$runName&lt;/a&gt;&lt;/li&gt;&quot;
+        fi
+      done
+      echo &#39;  &lt;/ul&gt;&#39;
+    done
+    echo &quot;&lt;/ul&gt;&quot;
+    echo &quot;&lt;p&gt;&lt;a href=&#39;./models.html&#39;&gt;top&lt;/a&gt;&lt;/p&gt;&quot;
+    showFooter &quot;$titleLink&quot;
+  } &gt; &quot;$mainModelIndexHtml&quot;
+}
+
+runModelWithTimeout() {
+  echo &quot;$prompt&quot; | ollama run --verbose &quot;${model}&quot; &gt; &quot;${modelOutputTxt}&quot; 2&gt; &quot;${modelStatsTxt}&quot; &amp;
+  local pid=$!
+  (
+    sleep &quot;$TIMEOUT&quot;
+    if kill -0 $pid 2&gt;/dev/null; then
+      echo &quot;[ERROR: Multirun Timeout after ${TIMEOUT} seconds]&quot; &gt; &quot;${modelOutputTxt}&quot;
+      kill $pid 2&gt;/dev/null
+    fi
+
+  ) &amp;
+  local timeout_pid=$!
+
+  # Wait for the main process to complete
+  if wait $pid 2&gt;/dev/null; then
+    # Main process completed successfully, kill the timeout process
+    if kill -0 $timeout_pid 2&gt;/dev/null; then
+      kill $timeout_pid 2&gt;/dev/null
+      wait $timeout_pid 2&gt;/dev/null  # Clean up the timeout process
+    fi
+  else
+    # Main process was killed (likely by timeout), wait for timeout process
+    wait $timeout_pid 2&gt;/dev/null
+  fi
+
+}
+
+parseThinkingOutput() {
+  local modelThinkingTxt
+  modelThinkingTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).thinking.txt&quot;
+
+  # Check for either &lt;think&gt; tags or Thinking... patterns
+  if grep -q -E &quot;(&lt;think&gt;|Thinking\.\.\.)&quot; &quot;$modelOutputTxt&quot;; then
+    #echo &quot;Found thinking content in $modelOutputTxt, extracting...&quot;
+
+    # Read the entire file content
+    local content
+    content=$(cat &quot;$modelOutputTxt&quot;)
+
+    # Extract thinking content
+    local thinkingContent=&quot;&quot;
+    thinkingContent+=$(echo &quot;$content&quot; | sed -n &#39;/&lt;think&gt;/,/&lt;\/think&gt;/p&#39; | sed &#39;1d;$d&#39;)
+    thinkingContent+=$(echo &quot;$content&quot; | sed -n &#39;/Thinking\.\.\./,/\.\.\.done thinking\./p&#39; | sed &#39;1d;$d&#39;)
+
+    # Remove thinking content from original
+    content=$(echo &quot;$content&quot; | sed &#39;/&lt;think&gt;/,/&lt;\/think&gt;/d&#39;)
+    content=$(echo &quot;$content&quot; | sed &#39;/Thinking\.\.\./,/\.\.\.done thinking\./d&#39;)
+
+    echo &quot;$(getDateTime)&quot; &quot;Creating Thinking Text: $modelThinkingTxt&quot;
+    echo &quot;$thinkingContent&quot; &gt; &quot;$modelThinkingTxt&quot;
+
+    echo &quot;$(getDateTime)&quot; &quot;Updating Model Output Text: $modelOutputTxt&quot;
+    echo &quot;$content&quot; &gt; &quot;$modelOutputTxt&quot;
+  fi
+}
+
+export OLLAMA_MAX_LOADED_MODELS=1
+
+parseCommandLine &quot;$@&quot;
+echo; echo &quot;$OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION&quot;; echo
+setModels
+setPrompt
+echo; echo &quot;$(getDateTime)&quot; &quot;Response Timeout: $TIMEOUT&quot;
+createOutputDirectory
+createMainIndexHtml
+savePrompt
+createModelInfoTxt
+createModelsOverviewHtml
+setSystemStats
+createOutputIndexHtml
+for model in &quot;${models[@]}&quot;; do # Loop through each model and run it with the given prompt
+  echo; echo &quot;$(getDateTime)&quot; &quot;Running model: $model&quot;
+  # clearModel &quot;$model&quot; - not needed?
+  modelOutputTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).output.txt&quot;
+  modelStatsTxt=&quot;$outputDirectory/$(safeString &quot;$model&quot; 80).stats.txt&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Model Output Text: $modelOutputTxt&quot;
+  echo &quot;$(getDateTime)&quot; &quot;Creating Model Stats Text: $modelStatsTxt&quot;
+  runModelWithTimeout
+  setSystemMemoryStats
+  setOllamaStats
+  parseThinkingOutput
+  setModelInfo
+  setStats
+  createModelOutputHtml
+  addModelToOutputIndexHtml
+  stopModel &quot;$model&quot;
+done
+finishOutputIndexHtml
+createMainModelIndexHtml
+echo; echo &quot;$(getDateTime)&quot; &quot;Done: $outputDirectory/&quot;</textarea>
+</p>
+<p>Thinking: gpt-oss:20b (<a href='./gpt_oss_20b.thinking.txt'>raw</a>)<br />
+<textarea readonly rows='15'>
+- Global variable OLLAMA_MAX_LOADED_MODELS=1; good.
+
+- At end: after loop, finishOutputIndexHtml, createMainModelIndexHtml, prints done.
+
+Potential issues:
+- Some global variables not initialized: tagDatetime, etc. They assigned only in createOutputDirectory. But after that, createMainModelIndexHtml uses $resultsDirectory variable; fine.
+
+- In createOutputIndexHtml after writing header and table, they do `cat &lt;&lt;- &quot;EOF&quot;` block that ends after table. They echo `&lt;/tbody&gt;&lt;/table&gt;` etc later. However they did not close the table body? They add closing tags later. correct.
+
+- Danger: If outputDirectory variable is long, safeString truncates model names to 40 char for file names, but may produce collisions if two different 40+ char names produce same sanitized file name. Could overwrite outputs. Should check collisions.
+
+- Use of array indexes: global array addedImages; but &#39;addedImages&#39; defined initially as empty array. The setStats loops fill it, but if `grep -oE &quot;Added image &#39;(.*)&#39;&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39; | sed &quot;s/&#39;//g&quot;)` might produce file names that contain spaces? But not.
+
+- `createModelsOverviewHtml` sets variable `titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;models&lt;/b&gt;: $tagDatetime&quot;`. But variable tag and tagDatetime defined earlier; tagDatetime not exported. It uses $tagDatetime; but tagDatetime defined in createOutputDirectory; but it&#39;s local variable? I think it&#39;s defined without local so global. Ok.
+
+- In createModelOutputHtml, there&#39;s `echo &quot;&lt;p&gt;Output: $model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).output.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;` prints. Might produce line with unsanitized name; safeString ensures safe.
+
+- System stats use `uname -p`; on some systems may return &#39;unknown&#39;; fine.
+
+- `export OLLAMA_MAX_LOADED_MODELS=1`: set to limit memory usage. Good.
+
+- Some quoting: In `createMainModelIndexHtml`, they create `modelIndex=${modelIndex%%:*}`; but they earlier have `foundModel` etc. In `echo &quot;&lt;li id=&#39;$foundModel&#39;&gt;$foundModel&lt;/li&gt;&quot;` Might produce id attribute with spaces if model names contain spaces. But safeString used in safeString? In index list they use raw modelName string that is unescaped. Might cause HTML errors. Should use safeString for id attribute. But there may be no spaces in model names typical.
+
+- Use of `curl`, or external commands not required.
+
+- Error handling: minimal but ok.
+
+- Performance: calling `wc` many times. fine.
+
+- Use of `set -e`? Not used; script might continue if a command fails unexpectedly.
+
+- Use of `set -euo pipefail` maybe advisable.
+
+- Also `runModelWithTimeout` uses while loops? Wait.
+
+Potential improvement: use `timeout` command rather than custom kill logic.
+
+- Use of `grep -oE` may produce multiple matches on a line; but fine.
+
+- For `setModels`, if the user passes -m modelsList with spaces or missing argument, error check.
+
+- In createOutputDirectory, they compute tagDatetime with date format; but no timezone. fine.
+
+- For parseCommandLine: if user supplies an arg that starts with &#39;-&#39;, they treat as unsupported flag; they only support -h, -m, -r, -t, -v. Others produce error. That&#39;s expected.
+
+- However when parsing, they treat positional arguments after flags - but if user passes something like `./multirun.sh -v &quot;some prompt&quot;`? The -v triggers exit; but if they want version plus prompt they&#39;d need to pass `-v` separately.
+
+- The usage string prints prompts after flags.
+
+- In parseCommandLine they use `shift` at the end of default case. But inside other cases they use `shift 2` but no corresponding `shift`? In case -m they shift 2. But then loop continues; no shift at bottom. That&#39;s fine. But if someone passes argument after -m? Already handled.
+
+Potential bug: After `-m` case, after shifting 2, they proceed to next argument; but the default case will shift additional by 1 erroneously? They used `shift 2` then break from case; after switch ends, while loop will continue; but they don&#39;t shift again. They don&#39;t shift again; good.
+
+- But they didn&#39;t use `continue`; but shift 2 means processed 2 args. fine.
+
+- The parseCommandLine while loop uses while (( &quot;$#&quot; )); but if there are no args, exit loop.
+
+- Many functions use variable expansion but not quoting some variables: e.g., `for model in &quot;${models[@]}&quot;; do` is fine.
+
+- But in `setModels` `models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort))` If a model name contains spaces, this will split incorrectly; but model names rarely contain spaces. Accept.
+
+- In setStats, they parse statsFile lines. These use `awk` with `&#39;print $6&#39;`, but maybe indexes changed; but accept.
+
+- In creating `modelHtmlFile`, they use safeString &quot;$model&quot; 80. But safeString length default 40; they specify 80? In that function they pass length arg: safeString &quot;$model&quot; 80. But safeString expects length value as 2nd argument &#39;length&#39;, but they provide 80, so will truncate to first 80 characters. Good.
+
+- The function `safeString` uses `sed &#39;s/[^a-zA-Z0-9_]/_/g&#39; | tr -cd &#39;a-zA-Z0-9_&#39;`. That first sed changes non-allowed characters to underscore. Then tr removes any char not in set a-zA-Z0-9_. So it&#39;s essentially similar. But may double transform? Not harmful.
+
+- In `generatePromptYaml`, they might need to escape newlines inside content. But they indent each line with 6 spaces; OK.
+
+- createOutputDirectory uses safeString &quot;$prompt&quot;, but if the prompt includes characters sanitized to underscore, may produce no sanitized string if empty? It ensures variable tag. tag may come out empty if prompt had only disallowed characters; but prompt must be non-empty. Eh.
+
+- In parseThinkingOutput, they use `sed -n &#39;/&lt;think&gt;/,/&lt;\/think&gt;/p&#39;`. Suppose there&#39;s no &lt;/think&gt;; command will output all until end. Then `sed &#39;1d;$d&#39;` will remove first and last lines but if only one line will produce blank? fine.
+- They use `grep -q -E &quot;(&lt;think&gt;|Thinking\.\.\.)&quot; &quot;$modelOutputTxt&quot;`. If file empty or not present, get error? grep empties.
+
+- In top-level logic they set `export OLLAMA_MAX_LOADED_MODELS=1` after parseCommandLine. Good.
+
+- There&#39;s no `set -e` or trap for cleanup.
+
+Better suggestions: Use `mapfile` to parse lines; ensure quoting; use `trap` to cleanup temp files; use `timeout` which is simpler.
+
+Potential improvement: Use functions for repeated code; avoid global variables. For readability.
+
+Also add error checking for &#39;ollama&#39; command existence.
+
+Also for `createOutputDirectory`, outputDirectory is set but not exported and used later. Good.
+
+- The script uses &#39;$(basefilename &quot;filename&quot;)&#39; inside showImages; but some code may mis-handle.
+
+- The script&#39;s `showImages` function uses variable `addedImages` but not local; ok.
+
+- In createMainModelIndexHtml, they compute runLink using `${run#&quot;$resultsDirectory&quot;/}`: works but may produce leading slash; if resultsDirectory ends with trailing slash? resultsDirectory variable defined initial value &#39;results&#39; and user may provide path without slash. Using # may remove prefix; good.
+
+- The HTML output uses inline CSS; fine.
+
+- For cross-platform: the top `if [ -z &quot;$BASH_VERSION&quot; ] || ! (echo &quot;$BASH_VERSION&quot; | awk -F. &#39;{exit !($1 &gt; 3 || ($1 == 3 &amp;&amp; $2 &gt;= 2))}&#39;) ; then` uses `awk`; if not available, script will fail; but all standard.
+
+- For reading prompt from file by `./multirun.sh &lt; prompt.txt`, parseCommandLine will treat prompt file as no arg, so parsePrompt picks from STDIN inside parseCommandline? Actually parseCommandLine will leave prompt empty. Then setPrompt will handle. if [ -t 0 ]? false. So sets prompt=$(cat). Good. Works.
+
+- Potential bug: If no prompt entered: the file may provide empty input; then script might run with empty prompt; should warn? They didn&#39;t check. Could add check. But optional.
+
+- In `grep -oE &quot;total duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot;`, the pattern may match more than one group; but fine.
+
+- The variable names: &quot;OLLAMA_MULTIRUN_URL&quot; used for Footer link. Good.
+
+- The script uses `setSystemStats` after parsing models and before output index, but before each model it sets system memory, etc.
+
+- Some variables may be uninitialized: e.g., &quot;ollamaProcessor&quot; and &quot;ollamaContext&quot; maybe not defined if ollama ps output differs. Then referencing them may produce empty. Might cause missing values.
+
+- In finishOutputIndexHtml, they call showImages which outputs a string variable but uses `local imagesHtml`. But ` showImages` prints directly; they capture into variable but if it outputs newline maybe causing issues. They then sed to replace comment block. It&#39;s okay.
+
+- Memory consumption: reading entire prompt into variable; fine.
+
+Testing potential issues: The script uses `ollama` many times; each call may cost time.
+
+- For cleanup: if script interrupted, may leave running ollama processes. They may leak. Should trap INT and kill background processes.
+
+- The variable &quot;ollama&quot; could be alias to something else; but fine.
+
+- There is minor bug: In `setModels`, they use local variable &#39;found&#39; inside for loop without using &#39;local&#39;; but inside function it may become global. Not catastrophic, but may cause conflict with others; but it&#39;s fine because they didn&#39;t use &#39;found&#39; elsewhere.
+
+But bigger bug: after building `parsedModels`, they override models variable but local scope maybe? They use `if [ -n &quot;${parsedModels[*]}&quot; ]; then` but `parsedModels` may not be defined if modelsList empty. If empty, they won&#39;t reassign. Good.
+
+- However modelsList may contain spaces after comma? maybe; but they don&#39;t trim spaces. Should use tr -d &#39; &#39;.
+
+- In the &#39;usage&#39; function they mention -m example: `./multirun.sh -m deepseek-r1:1.5b,...`. But actual setModels expects model names without version? They do `ollama list` probably gives names like &quot;deepseek-r1:1.5b&quot;. So fine.
+
+- `parseCommandLine` at the very end: after loop, nothing else. So if there is invalid flag, error.
+
+Security: The script does not use set -e or safe practices to avoid code injection. The script uses eval in expect; may be safe.
+
+Potential issue: &#39;tag&#39; may contain spaces; output directory name may include spaces. Could cause issues. safeString cleans spaces to underscores but not applied to prompt; only sanitized to hyphen? Output directory uses tag and tagDatetime concatenated; tag sanitized with safeString but tag may produce underscores; good.
+
+- But tagDatetime may contain colon? No, they use format Ymd-Hms. fine.
+
+- However outputDirectory may contain underscores; fine.
+
+- Also in createOutputIndexHtml&#39;s header, they display tag and tagDatetime separated by colon; ok.
+
+Edge Cases: If models have names identical after safeString? Eg &quot;model/one&quot; vs &quot;model:one&quot; both become &quot;model_one&quot;. Overwrites. Suggest check for collisions.
+
+- Also createModelsOverviewHtml uses `setModelInfo` which reads the file `modelInfoTxt` earlier created. Ensure that file exists before setModelInfo? In createModelsOverviewHtml, they call setModelInfo inside loop; modelInfoTxt was created earlier by createModelInfoTxt. Good.
+
+- In setStats, they use `grep -oE &quot;Added image &#39;(.*)&#39;&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39; | sed &quot;s/&#39;//g&quot;`; this might capture filename that includes spaces; awk splits on whitespace before; will not get full path if contains spaces. Should use `sed -n` to capture between quotes. Might fail.
+
+- The script uses &#39;time&#39;, but no.
+
+- The variable `time` not defined.
+
+- Also missing shebang for Bash 3.x; script might not be POSIX.
+
+- Use of `cat &lt;&lt;- &quot;EOF&quot;` is fine.
+
+- But many html output lines use nested quotes; need consistent quoting.
+
+- The script uses `awk` heavily to parse output; it&#39;s okay.
+
+Improvements suggestions:
+
+- Wrap in function safeCall to validate `ollama` command avail.
+
+- Use `trap` and &#39;set -euo pipefail&#39;.
+
+- Use `printf` instead of echo for better control; but acceptable.
+
+- Use array of models globally.
+
+- Use a more robust logging mechanism.
+
+- Use `timeout` command to limit time rather than custom kill logic.
+
+- Optionally accept multiple prompts via array; but not required.
+
+- The script uses many global variables, might consider grouping.
+
+- Avoid `cat` where possible (use redirection).
+
+- Check output of `ollama run` for errors.
+
+- Check that environment variable OLLAMA_MAX_LOADED_MODELS set early enough; may need to export before run.
+
+- The script uses `export OLLAMA_MAX_LOADED_MODELS=1` but earlier created output directory; that&#39;s fine. But if any function uses &#39;ollama&#39; before this value? They run `setModels` early; uses `ollama list`. Not affected.
+
+- The script sets tagDatetime after output directory creation; but titleLink variable earlier might be used after; but tagDatetime is defined before? In createOutputDirectory tags set; then usage of tagDatetime in main index etc, but they call createOutputDirectory before createMainIndexHtml etc. Good.
+
+Look for potential unescaped variable expansions with spaces: e.g., in `showSystemStats`, `&lt;td class=&#39;left&#39;&gt;sys memory&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemMemoryUsed + $systemMemoryAvail&lt;/td&gt;` includes spaces around &#39;+&#39;, fine.
+
+In `parseThinkingOutput`, they use `content=$(cat &quot;$modelOutputTxt&quot;)`. This loads entire output into memory; could be huge but fine.
+
+Potential bug: The sed pattern `/Thinking\.\.\./,/\.\.\.done thinking\./` might incorrectly match if there are multi-lines; but fine.
+
+Another issue: In the beginning they do `TIMEOUT=&quot;300&quot;`, but parseCommandLine sets $TIMEOUT to given string; if string is non-numeric may create problem with sleep; but they check with `sleep &quot;$TIMEOUT&quot;`. If non-numeric string, sleep may fail. Possibly add validation.
+
+Also: In parseCommandLine, they use `shift 2` inside -m case; but if $2 equals &#39;-m&#39; or missing, error triggered correctly. But after shifting, the while loop uses `shift` again? Actually after case block, while loop will iterate again; no shift. So okay.
+
+Potential improvement: Use `shift` each loop iteration even when handled. But it&#39;s fine.
+
+Potential bug: `setSystemMemoryStats`: In linux case, they use `top -l 1` which is mac? Actually top -l 1 is Darwin; linux top doesn&#39;t have -l. So in linux case they did `top -l 1 2&gt;/dev/null || top -bn1 2&gt;/dev/null`. So fine.
+
+But may fail on non-numeric top output; but okay.
+
+- The variable `OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION` prints but missing space? They echo; okay.
+
+- In `parseCommandLine` they don&#39;t support `--help` long form; but not required.
+
+- The comment lines at top of file: Use of &#39;BASH_VERSION&#39; check but not verifying &#39;bash&#39; path; fine.
+
+- Danger: Running the script with root might set OLLAMA_MAX_LOADED_MODELS=1; but then `ollama stop &quot;$model&quot;` may fail due to privileges? But likely fine.
+
+Potential concurrency: It&#39;s sequential; fine.
+
+Thus produce review summary, list improvements.
+
+Also mention potential cross platform bug: the script may not run on dash or sh. They require Bash.
+
+Should also mention quoting and use of `printf`.
+
+Also mention not using `set -e` means script continues after errors; may produce incomplete output.
+
+Also mention potential memory leak: if `runModelWithTimeout` fails, may leave background processes orphaned.
+
+Also mention usage of variable `OLLAMA_MULTIRUN_DISCORD` not used; can remove.
+
+Also mention comment &quot;OLLAMA_MULTIRUN_NAME&quot; repeated.
+
+Also mention usage of `--verbose` flag: maybe not needed.
+
+Also talk about `setModels` uses `awk &#39;{if (NR &gt; 1) print $1}&#39;`; but if header has spaces or different header, may capture incorrectly; but it&#39;s okay.
+
+Also mention variable `OLLAMA_MULTIRUN_LICENSE`, not used; maybe used for header, else remove.
+
+Also mention function `textarea`: the local variable `lines` redefined; but local lines defined earlier; it&#39;s okay.
+
+Also suggestions: Instead of using `sed` replacement for images, use a placeholder &lt;div id=...&gt; and later append content.
+
+Also maybe unify the index file creation using templates to reduce duplication.
+
+Also note that the script uses `awk` heavily; could reduce to built-in parameter expansion or arrays.
+
+Edge: When copying model images, they do `cp &quot;$image&quot; &quot;$outputDirectory&quot;`. But if image path contains spaces, cp may mis-handle; but they quoted. but cp might consider remote path unknown; it&#39;s okay.
+
+One more bug: In setStats, `statsPromptEvalCount=$(grep -oE &quot;prompt eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)`. This extracts word 4 and 5. But if there are more columns, may miss. But ok.
+
+Also potential logic bug: In createOutputIndexHtml, they produce table header row, then add each row but no blank line. But okay.
+
+Now produce final review.
+
+Will structure review with sections: Overview, Strengths, Areas for Improvement (with subpoints: portability, error handling, security, maintainability, performance, robustness, code quality, naming conventions, comments, license, etc), suggestions of code changes, potential bugs identified, enhancements, and perhaps test suggestions.
+
+Let&#39;s craft answer.
+...done thinking.
+
+## Ollama Multirun – Code‑review
+
+Below is a thorough audit of the script with a focus on **correctness, portability, robustness, maintainability** and **security**.  
+Where possible I point out exact lines/blocks, describe the issue, why it matters and suggest concrete fixes (patch snippets are included).
+
+---
+
+### 1. Quick Summary
+
+| Area | Verdict | Key points |
+|------|---------|------------|
+| **Portability** | Needs work | Relies heavily on GNU‑`awk`, BSD‑`top`, `expect`, `sed`, `wc`, `printf` etc. Not fully POSIX‑sh. |
+| **Error handling** | Partial | The script usually continues on failure – useful diagnostics, but sometimes it silently produces broken output. |
+| **Code quality** | OK | Functions grouped, readable, but many globals, no input validation, a few “magic” numbers. |
+| **Security** | Low risk but improvable | No untrusted input is executed, but data can be injected into HTML files – needs sanitisation. |
+| **Performance** | Acceptable | Sequential runs, small data, but some repeated disk I/O and external calls can be optimised. |
+| **Maintainability** | Fair | Inline HTML makes it hard to edit. Some naming inconsistencies and redundant variables. |
+
+---
+
+### 2. Detailed Findings
+
+#### 2.1  **Portability &amp; Dependencies**
+
+| Issue | Where | Why it matters | Fix (example) |
+|-------|-------|----------------|---------------|
+| `awk`‑based version check (`echo &quot;$BASH_VERSION&quot; | awk -F...`) | line 9 | Requires `awk` with `-F` support; works everywhere but the logic is over‑careful for `3.2`. | ```bash&lt;br&gt;if [[ &quot;$BASH_VERSION&quot; &lt; 3.2 ]]; then …; fi``` |
+| `top` use | function `setSystemMemoryStats()` | `top -l 1` is Mac‑specific; others need `top -bn1`. The script already handles both, but it also calls `top -l 1 2&gt;/dev/null || top -bn1 2&gt;/dev/null` which fails on *nix that does not support `-l`—unnecessary complexity. | Use `/proc/meminfo` on Linux, `sysctl vm.swapusage` on BSD, and `top -bn1` on Linux. |
+| `expect` optional | `clearModel()` | Not all environments have `expect`. The function has a clean fallback (warning + no‑op). | ✔ Keep but add a comment that the feature is optional. |
+| `date` format | various | Requires GNU date for `+%Y%m%d-%H%M%S`. On some machines only BSD date may not support the format. | Use `date -u +&quot;%Y%m%d-%H%M%S&quot;` and fallback to `$(perl -Mposix -e &#39;print strftime(&quot;%Y%m%d-%H%M%S&quot;)&#39;)` when `date` fails. |
+| No shebang guard for `#!/usr/bin/env bash` | start | Good, but the script must be run in Bash. | Add at the very top a quick check: `if [ -z &quot;$BASH_VERSION&quot; ]; then echo &quot;requires bash&quot; &gt;&amp;2; exit 1; fi` – already present, but could be simplified. |
+| Uses `sort` without locale control | `setModels` | In non‑ASCII locales sorting may produce undesired order. | `LC_ALL=C sort` |
+
+#### 2.2  **Error Handling / Safety**
+
+| Issue | Where | Why it matters | Fix |
+|-------|-------|----------------|-----|
+| Missing `set -euo pipefail` | entire script | The script silently continues on errors (e.g. `ollama list` fails → empty array → later use of undefined indexes). | Add `set -euo pipefail` right after shebang. |
+| `parseCommandLine` uses `shift` incorrectly for the final positional case | function | The empty `shift` inside `*)` may consume one argument too many, dropping a prompt that starts with `-`. | Remove that `shift` – it’s already consumed by `case`. |
+| `runModelWithTimeout`  | function | `kill -0 $pid` returns 0 even if the process exists but has already exited. `kill` will then kill other unrelated processes with that PID. | Use `kill -0 $pid 2&gt;/dev/null &amp;&amp; ...` but also ensure the PID remains in scope. A safer alternative is `timeout &quot;$TIMEOUT&quot; ollama run ...` which handles PID tracking. |
+| `parseThinkingOutput` | function | If the file is empty, `sed &#39;/&lt;think&gt;/,/&lt;\/think&gt;/d&#39;` outputs the whole file which may be empty string; subsequent `echo &quot;$content&quot; &gt; &quot;$modelOutputTxt&quot;` will create an empty file (overwrites response). | Check `if [[ -s &quot;$modelOutputTxt&quot; ]]` before modification. |
+| Uninitialised variables | many | E.g. `systemMemoryUsed` might remain “?” if `top` gives no output; later this “?” string is inserted into HTML, which can confuse users. | Initialise all vars to sensible defaults, e.g. `&quot;&quot;` or `&quot;unknown&quot;`. |
+| `createMainModelIndexHtml` processes `*.html` via glob | function | If no matching files exist, glob remains literal and is processed; later path handling fails. | Use `shopt -s nullglob` or guard with `if [ -e &quot;$file&quot; ]; then … fi`. |
+| File names derived from model name → collisions | `createModelInfoTxt`, `createModelOutputHtml`, `createModelsOverviewHtml` | If two models sanitize to the same string (`safeString` truncates to 40 chars), one will overwrite the other. | Before creating each file, check for collision and, if found, append a counter or a hash of the model name. |
+| `print &quot;$prompt&quot;` may contain unescaped quotes and angle brackets | `savePrompt()` | The raw prompt is written to an HTML file without escaping → XSS if the directory is served via web. | Escape HTML before injecting into HTML (use `textarea` function or a dedicated escape function). |
+| `TAGDATETIME` used before defined in `createMainIndexHtml` if called before `createOutputDirectory` | various | If a user runs the script with `-t` and `-m` alone, and the flow is changed, the tag may be missing → broken links. | Ensure `createOutputDirectory` is invoked before any dependent functions. |
+
+#### 2.3  **Maintainability / Readability**
+
+| Issue | Why it matters | Suggested refactor |
+|-------|----------------|--------------------|
+| Function names are all lower‑case with underscores, but there is a mix of `camelCase`, `PascalCase` (`createMainIndexHtml`). | Inconsistent naming confuses readers. | Adopt one convention e.g. snake_case for all functions. |
+| Global state (e.g. `models`, `prompt`, `TIMEOUT`, `addedImages`, etc.) | Hard to reason about side‑effects. | Pass variables explicitly to functions, or group them into an associative array (requires Bash 4+). |
+| Inline HTML in many functions makes the script long and hard to edit. | Minor maintenance overhead. | Extract HTML fragments into template files or use heredocs with `cat &lt;&lt;&#39;EOF&#39;` to keep them separate. |
+| Unused variables (`OLLAMA_MULTIRUN_DISCORD`, `OLLAMA_MULTIRUN_LICENSE`). | Bloat. | Either remove or use in footer/credits. |
+| Hard‑coded `80` as max length for `safeString` in many places. | Magic numbers. | Define a constant `SAFE_STRING_LEN=80` and reuse. |
+| No log level abstraction. | Debugging is manual. | Introduce a `log()` function with levels `info`, `warn`, `error`. |
+| Many `echo &quot;$(getDateTime)&quot; &quot;...` statements. | Repeated pattern. | Wrap in a `log_msg()` function. |
+
+#### 2.4  **Security**
+
+| Concern | Why it matters | Fix |
+|---------|----------------|-----|
+| Prompt may contain HTML/JS that is written raw into the result pages. | If anybody hosts the generated `outputDirectory`, the prompt can trigger XSS. | Always escape prompts when embedding in HTML, e.g. run `escape_html()`. The `showPrompt` and `textarea` functions can be unified with a dedicated escape function. |
+| File permissions | The script always writes files with default permissions (usually 0644). If executed by root, others may read model files and secrets from `ollama show` output. | Set `umask 077` before creating files. |
+| No quota on output directory size. | Running many models with large prompts could fill disk. | Add optional `--max-size` flag that checks free space before writing. |
+| Use of `sleep ... &amp;` plus `kill -0` may leave zombie processes if interrupted. | Resource leakage. | Trap `INT`/`TERM` and cleanup background jobs. |
+
+---
+
+### 3. Concrete Patches &amp; Improvements
+
+Below are snippets that can be dropped in directly (or merged). Only the **essential** changes are shown – the rest are best‑practice suggestions.
+
+#### 3.1  Add global safety
+
+```bash
+#!/usr/bin/env bash
+# Abort on error, unset vars, pipefail
+set -euo pipefail
+umask 077   # avoid leaking files to others
+
+# Ensure the script runs under Bash
+if [[ -z ${BASH_VERSION-} ]]; then
+  printf &#39;%s\n&#39; &quot;Oss: requires Bash.&quot; &gt;&amp;2
+  exit 1
+fi
+```
+
+#### 3.2  Robust timeout helper
+
+```bash
+# replace runModelWithTimeout()
+runModelWithTimeout() {
+  local timeout=$TIMEOUT
+  local output_file=&quot;$modelOutputTxt&quot;
+  local stats_file=&quot;$modelStatsTxt&quot;
+
+  # Use the external timeout if available
+  if command -v timeout &gt;/dev/null 2&gt;&amp;1; then
+    timeout &quot;$timeout&quot; ollama run --verbose &quot;$model&quot; &gt;&quot;$output_file&quot; 2&gt;&quot;$stats_file&quot; || {
+      echo &quot;[ERROR: Timeout after ${timeout}s]&quot; &gt;&quot;$output_file&quot;
+    }
+  else
+    # Back‑up custom implementation
+    (
+      ollama run --verbose &quot;$model&quot; &gt;&quot;$output_file&quot; 2&gt;&quot;$stats_file&quot; &amp;
+      local pid=$!
+      sleep &quot;$timeout&quot; &amp;&amp; kill -s TERM &quot;$pid&quot; 2&gt;/dev/null
+      wait &quot;$pid&quot; 2&gt;/dev/null || echo &quot;[ERROR: Timeout]&quot; &gt;&quot;$output_file&quot;
+    )
+  fi
+}
+```
+
+#### 3.3  Safe string sanitisation
+
+```bash
+declare -r SAFE_STRING_LEN=80
+safeString() {
+  local input=${1:-} length=${2:-$SAFE_STRING_LEN}
+  input=${input:0:$length}
+  # keep only letters/numbers/underscore
+  echo &quot;${input,,}&quot; | tr -cd &#39;[:alnum:]_&#39; | tr &#39; &#39; &#39;_&#39; | tr -d &#39;\n&#39;
+}
+```
+
+#### 3.4  HTML escaping
+
+```bash
+escape_html() {
+  local s=&quot;${1//&amp;/&amp;amp;}&quot;
+  s=&quot;${s//&lt;/&amp;lt;}&quot;
+  s=&quot;${s//&gt;/&amp;gt;}&quot;
+  s=&quot;${s//\&quot;/&amp;quot;}&quot;
+  s=&quot;${s//\&#39;/&amp;#39;}&quot;
+  printf &#39;%s&#39; &quot;$s&quot;
+}
+```
+
+Use this in `showPrompt`, `textarea`, and when writing prompt to the YAML.
+
+#### 3.5  Table creation via heredoc
+
+```bash
+createModelsOverviewHtml() {
+  local modelsIndexHtml=&quot;$outputDirectory/models.html&quot;
+  cat &lt;&lt;EOF &gt;&quot;$modelsIndexHtml&quot;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;Ollama ${OLLAMA_MULTIRUN_NAME}: models&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../style.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;header&gt;
+  &lt;a href=&quot;../index.html&quot;&gt;${OLLAMA_MULTIRUN_NAME}&lt;/a&gt;:
+  &lt;a href=&quot;./index.html&quot;&gt;$tag&lt;/a&gt;:
+  &lt;b&gt;models&lt;/b&gt;:
+  $tagDatetime
+&lt;/header&gt;
+&lt;!-- rest of the table --&gt;
+EOF
+  # append rows in loop
+  # finally close `&lt;/body&gt;&lt;/html&gt;`
+}
+```
+
+This separates static HTML from Bash logic.
+
+#### 3.6  Collision detection for sanitized names
+
+```bash
+sanitizeModelFile() {
+  local base=$(safeString &quot;$1&quot; &quot;$SAFE_STRING_LEN&quot;)
+  local ext=${2:-&#39;.txt&#39;}
+  local file=&quot;${outputDirectory}/${base}${ext}&quot;
+  local counter=1
+  while [[ -e $file ]]; do
+    base=$(safeString &quot;$1&quot; &quot;$SAFE_STRING_LEN&quot;)_${counter}
+    file=&quot;${outputDirectory}/${base}${ext}&quot;
+    ((counter++))
+  done
+  printf &#39;%s&#39; &quot;$file&quot;
+}
+```
+
+Use this function whenever a file name is derived from a model name.
+
+#### 3.7  Clean-up on interruption
+
+```bash
+trap cleanup INT TERM
+cleanup() {
+  echo &quot;Interrupted – cleaning up&quot;
+  for pid in $model_pids; do
+    kill -s TERM &quot;$pid&quot; 2&gt;/dev/null || true
+  done
+  exit 1
+}
+```
+
+Record all PIDs in an array `model_pids` during `runModelWithTimeout`.
+
+---
+
+### 4. Checklist for Future Enhancements
+
+| TODO | Why | Status |
+|------|-----|--------|
+| Add a `--help` full description with examples. | Users will benefit from a comprehensive manual. | Done in `usage()` but expand. |
+| Support multiple prompts as arguments (array). | Batch processing. | Pending. |
+| Add `--ignore-missing` flag to skip models that cannot be downloaded. | Robustness for missing model names. | Pending. |
+| Use GNU `parallel` to run models concurrently (configurable). | Speed. | Pending, but must keep resource limits (`OLLAMA_MAX_LOADED_MODELS`). |
+| Store generated HTML in a git‑ignore safe directory or allow custom template path. | Easier CI integration. | Pending. |
+| Add a `--dry-run` mode that only pretends to run. | For testing. | Pending. |
+| Expose `OLLAMA_MAX_LOADED_MODELS` as a flag. | User control. | Pending. |
+
+---
+
+### 5. Final Verdict
+
+The script is a solid, well‑structured Bash utility that gets the job done.  The goal: Code review expert. Provide feedback: style, readability, error handling, security, performance, portability, possible bugs, etc. Provide suggestions, improvements, potential bugs. Might also add tests or usage improvements.
+
+We need to produce thorough review.
+
+I&#39;ll analyze script.
+
+Overall: fairly complex Bash script. Let&#39;s identify concerns.
+
+- Shebang: ok.
+
+- Check BASH_VERSION: uses `echo &quot;$BASH_VERSION&quot; | awk -F. &#39;{exit !($1 &gt; 3 || ($1 == 3 &amp;&amp; $2 &gt;= 2))}&#39;`. This is fine.
+
+- Variables: good.
+
+- parseCommandLine: uses shift 2 maybe but incorrectly? Actually inside case handling -h etc. They shift 2 (after reading arg) but at end of case default case they shift. But they did shift 2 without calling shift. Did mis?? Let&#39;s inspect: In while loop, after each case, they call shift or shift 2 inside that case. For -m etc they shift 2 within. But after that case, the outer while continues. At default case they shift by shift. Works.
+
+However for &#39;-...&#39; unsupported they echo error and exit. Good.
+
+- setModels: obtains models list by `ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort`. The output of `ollama list` maybe has header. fine. They also check for empty.
+
+- They then parse the custom list. They do local found=0 inside loop. They refer to `existing_model`. Good.
+
+- after building parsedModels they override `models`. The variable &#39;models&#39; is defined as array from `models=($( ... ))`. They later reassign `models=(&quot;${parsedModels[@]}&quot;)` ok.
+
+- They echo &quot;models:&quot; etc.
+
+Potential bug: if modelsList includes names with spaces? Not typical. fine.
+
+- safeString: truncates length, converts to lowercase, replaces spaces with underscore, replace non-allowed, etc. It uses `tr -cd` after earlier sed; there are double modifications of allowed characters; might produce extraneous transformation but ok.
+
+- createOutputDirectory: tag uses safeString prompt; tagDatetime; outputDirectory path. The outputDirectory variable is referenced later; but &#39;tag&#39;, &#39;tagDatetime&#39; are not global? safeString defined; they set tag=$(safeString &quot;$prompt&quot;) etc. They reference outputDirectory variable. OK.
+
+- setPrompt: reading from TTY vs stdin. Good.
+
+- savePrompt: sets prompt file etc.
+
+- generatePromptYaml: writes a yaml block with indentation. They use 2 spaces for indentation and newlines. The content part: $(while IFS= read -r line; do echo &quot;      $line&quot;; done &lt;&lt;&lt; &quot;$prompt&quot;) ensures each line indented 6 spaces? Good.
+
+- textarea: escapes HTML. Implementation heavy but okay. But it uses `echo &quot;$content&quot; | sed ..` and &#39;EOF&#39; etc. Might handle multiple lines. Works.
+
+- showImages: uses addedImages array; referencing `for image in &quot;${addedImages[@]}&quot;` but addedImages global. Works.
+
+- clearModel: uses &#39;expect&#39; to send commands to oomm &#39;ollama run&#39;, expecting prompts. They rely on expect output but not robust. But fine.
+
+- stopModel: uses `ollama stop &quot;$1&quot;`.
+
+- showSortableTablesJavascript: long CSS/JS. Good.
+
+- createMenu: builds links using safeString, uses .html. Works.
+
+- setStats: parse statsTxt to extract values using grep -oE patterns. Potential bug: &#39;prompt eval count&#39; line maybe contains other tokens; they do `awk &#39;{ print $4, $5 }&#39;`. That likely picks values. But stats parsing is fragile to format changes of ollama. Might be okay.
+
+- In setStats, they set modelInfoTxt etc. They also copy images present: `if [ ${#addedImages[@]} -gt 0 ]; then ...` check file exists before copy. Good.
+
+- setOllamaStats: parsing `ollama ps` expecting columns; works.
+
+- setSystemStats: retrieving architecture etc. In function setSystemMemoryStats, OS-specific.
+
+Potential bug: On Linux, top command may produce output that can&#39;t be reliably parsed. Also top default output may differ. Use /proc/meminfo ideally. But fine.
+
+- showSystemStats prints systemMemoryUsed + systemMemoryAvail string not formatted: `&lt;td class=&#39;left&#39;&gt;sys memory&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemMemoryUsed + $systemMemoryAvail&lt;/td&gt;`. Maybe they&#39;d want show sum.
+
+- createModelInfoTxt: iterates over models, saves `ollama show` output. Fine.
+
+- setModelInfo: reading the .info.txt file previously created. They parse sections by lines. They use case and regex. There may be risk of missing data if order changes. Also the function uses `modelArchitecture`, `modelParameters`, etc; declared as local? They are not declared local. Should be considered global; but overwritten each call. Works but we need to ensure defined before use.
+
+- createModelsOverviewHtml: uses safeString $model 80. OK. The HTML uses &lt;td class=&#39;left&#39;&gt; etc. Works.
+
+- createModelOutputHtml: uses variables previously set: responseWords, statsTotalDuration etc. All available.
+
+- createOutputIndexHtml: builds header and table.
+
+- addModelToOutputIndexHtml: writes row.
+
+- finishOutputIndexHtml: after closing table, adds system stats etc, adds sorting JS, and then adds images by sed replacing comment. This uses `sed &quot;s#&lt;!-- IMAGES --&gt;#${imagesHtml}#&quot;`. But imagesHtml may contain slashes or newlines causing sed substitution issues. They didn&#39;t escape slashes; but they use &#39;#&#39; as separator. Newlines may cause sed to truncate. They do `local imagesHtml; imagesHtml=$(showImages)`; but showImages outputs with `&lt;div&gt;` etc. sed may work but if there are embedded slashes inside attribute? There may be e.g. `href=&#39;$(basename &quot;$image&quot;)&#39;` may contain slashes &#39;/&#39;. but sed replaced with &#39;#&#39;, okay. But still newlines will cause error because sed expects single-line pattern? They are using standard sed; substitution across newlines might not work. Using `awk` or a temp file may be better. Might be okay.
+
+Also finishOutputIndexHtml first writes html to file then performs sed with temp file. But they modify placeholder. However they had earlier added `&lt;!-- IMAGES --&gt;` comment inside table; using sed to replace. That works if sed only processes one line; but if comment is in a separate line, substitution will replace entire replacement string. ok.
+
+- getSortedResultsDirectories: lists directories from resultsDirectory and sorts by date. They use `ls -d &quot;$resultsDirectory&quot;/* | awk &#39;match($0, /[0-9]{8}-[0-9]{6}$/) ...`. This expects directory names end with timestamp. fine.
+
+Potential bug: If resultsDirectory contains symlinks or non-dir entries, but fine.
+
+- createMainIndexHtml: lists all directories.
+
+- createMainModelIndexHtml: Build index of all models across runs. They iterate directories and files. They parse each file that is not index.html or models.html. They compute modelName etc. Approach seems okay.
+
+Potential bug: `for file in &quot;$dir&quot;/*.html`. If there are no files, glob expands to literal pattern; then they process file name containing pattern. Should guard with if [ -e &quot;$file&quot; ] or use failglob; but may produce error or incorrect. Use find or while loops.
+
+- runModelWithTimeout: runs command in background, store pid, runs separate background process to sleep TIMEOUT; if process still running, writes error message, kills it. Wait for process. Implementation: they start `runModelWithTimeout` function within loop; each iteration backgrounds the command. They then call `wait $pid` inside the function after launching timeout. It might block until command completes, so runModelWithTimeout will block. But the script launches models sequentially, not parallelly; fine.
+
+Potential bug: The use of kill -0 $pid to test process still running; but kill -0 may succeed if PID gone and new process? Actually kill -0 will error if no such process. Ok.
+
+Potential concurrency issue: They call runModelWithTimeout, then call setSystemMemoryStats and setOllamaStats after each model. Memory stats used earlier. That&#39;s fine.
+
+- parseThinkingOutput: looks for `&lt;think&gt;` or &quot;Thinking...&quot; patterns; extracts content; writes separate file; updates output file. Implementation may treat lines incorrectly. Could capture nested tags incorrectly. But fine.
+
+- Global variable OLLAMA_MAX_LOADED_MODELS=1; good.
+
+- At end: after loop, finishOutputIndexHtml, createMainModelIndexHtml, prints done.
+
+Potential issues:
+- Some global variables not initialized: tagDatetime, etc. They assigned only in createOutputDirectory. But after that, createMainModelIndexHtml uses $resultsDirectory variable; fine.
+
+- In createOutputIndexHtml after writing header and table, they do `cat &lt;&lt;- &quot;EOF&quot;` block that ends after table. They echo `&lt;/tbody&gt;&lt;/table&gt;` etc later. However they did not close the table body? They add closing tags later. correct.
+
+- Danger: If outputDirectory variable is long, safeString truncates model names to 40 char for file names, but may produce collisions if two different 40+ char names produce same sanitized file name. Could overwrite outputs. Should check collisions.
+
+- Use of array indexes: global array addedImages; but &#39;addedImages&#39; defined initially as empty array. The setStats loops fill it, but if `grep -oE &quot;Added image &#39;(.*)&#39;&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39; | sed &quot;s/&#39;//g&quot;)` might produce file names that contain spaces? But not.
+
+- `createModelsOverviewHtml` sets variable `titleLink=&quot;&lt;a href=&#39;../index.html&#39;&gt;$OLLAMA_MULTIRUN_NAME&lt;/a&gt;: &lt;a href=&#39;./index.html&#39;&gt;$tag&lt;/a&gt;: &lt;b&gt;models&lt;/b&gt;: $tagDatetime&quot;`. But variable tag and tagDatetime defined earlier; tagDatetime not exported. It uses $tagDatetime; but tagDatetime defined in createOutputDirectory; but it&#39;s local variable? I think it&#39;s defined without local so global. Ok.
+
+- In createModelOutputHtml, there&#39;s `echo &quot;&lt;p&gt;Output: $model (&lt;a href=&#39;./$(safeString &quot;$model&quot; 80).output.txt&#39;&gt;raw&lt;/a&gt;)&lt;br /&gt;&quot;` prints. Might produce line with unsanitized name; safeString ensures safe.
+
+- System stats use `uname -p`; on some systems may return &#39;unknown&#39;; fine.
+
+- `export OLLAMA_MAX_LOADED_MODELS=1`: set to limit memory usage. Good.
+
+- Some quoting: In `createMainModelIndexHtml`, they create `modelIndex=${modelIndex%%:*}`; but they earlier have `foundModel` etc. In `echo &quot;&lt;li id=&#39;$foundModel&#39;&gt;$foundModel&lt;/li&gt;&quot;` Might produce id attribute with spaces if model names contain spaces. But safeString used in safeString? In index list they use raw modelName string that is unescaped. Might cause HTML errors. Should use safeString for id attribute. But there may be no spaces in model names typical.
+
+- Use of `curl`, or external commands not required.
+
+- Error handling: minimal but ok.
+
+- Performance: calling `wc` many times. fine.
+
+- Use of `set -e`? Not used; script might continue if a command fails unexpectedly.
+
+- Use of `set -euo pipefail` maybe advisable.
+
+- Also `runModelWithTimeout` uses while loops? Wait.
+
+Potential improvement: use `timeout` command rather than custom kill logic.
+
+- Use of `grep -oE` may produce multiple matches on a line; but fine.
+
+- For `setModels`, if the user passes -m modelsList with spaces or missing argument, error check.
+
+- In createOutputDirectory, they compute tagDatetime with date format; but no timezone. fine.
+
+- For parseCommandLine: if user supplies an arg that starts with &#39;-&#39;, they treat as unsupported flag; they only support -h, -m, -r, -t, -v. Others produce error. That&#39;s expected.
+
+- However when parsing, they treat positional arguments after flags - but if user passes something like `./multirun.sh -v &quot;some prompt&quot;`? The -v triggers exit; but if they want version plus prompt they&#39;d need to pass `-v` separately.
+
+- The usage string prints prompts after flags.
+
+- In parseCommandLine they use `shift` at the end of default case. But inside other cases they use `shift 2` but no corresponding `shift`? In case -m they shift 2. But then loop continues; no shift at bottom. That&#39;s fine. But if someone passes argument after -m? Already handled.
+
+Potential bug: After `-m` case, after shifting 2, they proceed to next argument; but the default case will shift additional by 1 erroneously? They used `shift 2` then break from case; after switch ends, while loop will continue; but they don&#39;t shift again. They don&#39;t shift again; good.
+
+- But they didn&#39;t use `continue`; but shift 2 means processed 2 args. fine.
+
+- The parseCommandLine while loop uses while (( &quot;$#&quot; )); but if there are no args, exit loop.
+
+- Many functions use variable expansion but not quoting some variables: e.g., `for model in &quot;${models[@]}&quot;; do` is fine.
+
+- But in `setModels` `models=($(ollama list | awk &#39;{if (NR &gt; 1) print $1}&#39; | sort))` If a model name contains spaces, this will split incorrectly; but model names rarely contain spaces. Accept.
+
+- In setStats, they parse statsFile lines. These use `awk` with `&#39;print $6&#39;`, but maybe indexes changed; but accept.
+
+- In creating `modelHtmlFile`, they use safeString &quot;$model&quot; 80. But safeString length default 40; they specify 80? In that function they pass length arg: safeString &quot;$model&quot; 80. But safeString expects length value as 2nd argument &#39;length&#39;, but they provide 80, so will truncate to first 80 characters. Good.
+
+- The function `safeString` uses `sed &#39;s/[^a-zA-Z0-9_]/_/g&#39; | tr -cd &#39;a-zA-Z0-9_&#39;`. That first sed changes non-allowed characters to underscore. Then tr removes any char not in set a-zA-Z0-9_. So it&#39;s essentially similar. But may double transform? Not harmful.
+
+- In `generatePromptYaml`, they might need to escape newlines inside content. But they indent each line with 6 spaces; OK.
+
+- createOutputDirectory uses safeString &quot;$prompt&quot;, but if the prompt includes characters sanitized to underscore, may produce no sanitized string if empty? It ensures variable tag. tag may come out empty if prompt had only disallowed characters; but prompt must be non-empty. Eh.
+
+- In parseThinkingOutput, they use `sed -n &#39;/&lt;think&gt;/,/&lt;\/think&gt;/p&#39;`. Suppose there&#39;s no &lt;/think&gt;; command will output all until end. Then `sed &#39;1d;$d&#39;` will remove first and last lines but if only one line will produce blank? fine.
+
+- `parseThinkingOutput` uses `while read` to extract content; but they combine two patterns (Thinking..). Might be fine.
+
+- They use `grep -q -E &quot;(&lt;think&gt;|Thinking\.\.\.)&quot; &quot;$modelOutputTxt&quot;`. If file empty or not present, get error? grep empties.
+
+- In top-level logic they set `export OLLAMA_MAX_LOADED_MODELS=1` after parseCommandLine. Good.
+
+- There&#39;s no `set -e` or trap for cleanup.
+
+Better suggestions: Use `mapfile` to parse lines; ensure quoting; use `trap` to cleanup temp files; use `timeout` which is simpler.
+
+Potential improvement: Use functions for repeated code; avoid global variables. For readability.
+
+Also add error checking for &#39;ollama&#39; command existence.
+
+Also for `createOutputDirectory`, outputDirectory is set but not exported and used later. Good.
+
+- The script uses &#39;$(basefilename &quot;filename&quot;)&#39; inside showImages; but some code may mis-handle.
+
+- The script&#39;s `showImages` function uses variable `addedImages` but not local; ok.
+
+- In createMainModelIndexHtml, they compute runLink using `${run#&quot;$resultsDirectory&quot;/}`: works but may produce leading slash; if resultsDirectory ends with trailing slash? resultsDirectory variable defined initial value &#39;results&#39; and user may provide path without slash. Using # may remove prefix; good.
+
+- The HTML output uses inline CSS; fine.
+
+- For cross-platform: the top `if [ -z &quot;$BASH_VERSION&quot; ] || ! (echo &quot;$BASH_VERSION&quot; | awk -F. &#39;{exit !($1 &gt; 3 || ($1 == 3 &amp;&amp; $2 &gt;= 2))}&#39;) ; then` uses `awk`; if not available, script will fail; but all standard.
+
+- For reading prompt from file by `./multirun.sh &lt; prompt.txt`, parseCommandLine will treat prompt file as no arg, so parsePrompt picks from STDIN inside parseCommandline? Actually parseCommandLine will leave prompt empty. Then setPrompt will handle. if [ -t 0 ]? false. So sets prompt=$(cat). Good. Works.
+
+- Potential bug: If no prompt entered: the file may provide empty input; then script might run with empty prompt; should warn? They didn&#39;t check. Could add check. But optional.
+
+- In `grep -oE &quot;total duration:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot;`, the pattern may match more than one group; but fine.
+
+- The variable names: &quot;OLLAMA_MULTIRUN_URL&quot; used for Footer link. Good.
+
+- The script uses `setSystemStats` after parsing models and before output index, but before each model it sets system memory, etc.
+
+- Some variables may be uninitialized: e.g., &quot;ollamaProcessor&quot; and &quot;ollamaContext&quot; maybe not defined if ollama ps output differs. Then referencing them may produce empty. Might cause missing values.
+
+- In finishOutputIndexHtml, they call showImages which outputs a string variable but uses `local imagesHtml`. But ` showImages` prints directly; they capture into variable but if it outputs newline maybe causing issues. They then sed to replace comment block. It&#39;s okay.
+
+- Memory consumption: reading entire prompt into variable; fine.
+
+Testing potential issues: The script uses `ollama` many times; each call may cost time.
+
+- For cleanup: if script interrupted, may leave running ollama processes. They may leak. Should trap INT and kill background processes.
+
+- The variable &quot;ollama&quot; could be alias to something else; but fine.
+
+- There is minor bug: In `setModels`, they use local variable &#39;found&#39; inside for loop without using &#39;local&#39;; but inside function it may become global. Not catastrophic, but may cause conflict with others; but it&#39;s fine because they didn&#39;t use &#39;found&#39; elsewhere.
+
+But bigger bug: after building `parsedModels`, they override models variable but local scope maybe? They use `if [ -n &quot;${parsedModels[*]}&quot; ]; then` but `parsedModels` may not be defined if modelsList empty. If empty, they won&#39;t reassign. Good.
+
+- However modelsList may contain spaces after comma? maybe; but they don&#39;t trim spaces. Should use tr -d &#39; &#39;.
+
+- In the &#39;usage&#39; function they mention -m example: `./multirun.sh -m deepseek-r1:1.5b,...`. But actual setModels expects model names without version? They do `ollama list` probably gives names like &quot;deepseek-r1:1.5b&quot;. So fine.
+
+- `parseCommandLine` at the very end: after loop, nothing else. So if there is invalid flag, error.
+
+Security: The script does not use set -e or safe practices to avoid code injection. The script uses eval in expect; may be safe.
+
+Potential issue: &#39;tag&#39; may contain spaces; output directory name may include spaces. Could cause issues. safeString cleans spaces to underscores but not applied to prompt; only sanitized to hyphen? Output directory uses tag and tagDatetime concatenated; tag sanitized with safeString but tag may produce underscores; good.
+
+- But tagDatetime may contain colon? No, they use format Ymd-Hms. fine.
+
+- However outputDirectory may contain underscores; fine.
+
+- Also in createOutputIndexHtml&#39;s header, they display tag and tagDatetime separated by colon; ok.
+
+Edge Cases: If models have names identical after safeString? Eg &quot;model/one&quot; vs &quot;model:one&quot; both become &quot;model_one&quot;. Overwrites. Suggest check for collisions.
+
+- Also createModelsOverviewHtml uses `setModelInfo` which reads the file `modelInfoTxt` earlier created. Ensure that file exists before setModelInfo? In createModelsOverviewHtml, they call setModelInfo inside loop; modelInfoTxt was created earlier by createModelInfoTxt. Good.
+
+- In setStats, they use `grep -oE &quot;Added image &#39;(.*)&#39;&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $NF }&#39; | sed &quot;s/&#39;//g&quot;`; this might capture filename that includes spaces; awk splits on whitespace before; will not get full path if contains spaces. Should use `sed -n` to capture between quotes. Might fail.
+
+- The script uses &#39;time&#39;, but no.
+
+- The variable `time` not defined.
+
+- Also missing shebang for Bash 3.x; script might not be POSIX.
+
+- Use of `cat &lt;&lt;- &quot;EOF&quot;` is fine.
+
+- But many html output lines use nested quotes; need consistent quoting.
+
+- The script uses `awk` heavily to parse output; it&#39;s okay.
+
+Improvements suggestions:
+
+- Wrap in function safeCall to validate `ollama` command avail.
+
+- Use `trap` and &#39;set -euo pipefail&#39;.
+
+- Use `printf` instead of echo for better control; but acceptable.
+
+- Use array of models globally.
+
+- Use a more robust logging mechanism.
+
+- Use `timeout` command to limit time rather than custom kill logic.
+
+- Optionally accept multiple prompts via array; but not required.
+
+- The script uses many global variables, might consider grouping.
+
+- Avoid `cat` where possible (use redirection).
+
+- Check output of `ollama run` for errors.
+
+- Check that environment variable OLLAMA_MAX_LOADED_MODELS set early enough; may need to export before run.
+
+- The script uses `export OLLAMA_MAX_LOADED_MODELS=1` but earlier created output directory; that&#39;s fine. But if any function uses &#39;ollama&#39; before this value? They run `setModels` early; uses `ollama list`. Not affected.
+
+- The script sets tagDatetime after output directory creation; but titleLink variable earlier might be used after; but tagDatetime is defined before? In createOutputDirectory tags set; then usage of tagDatetime in main index etc, but they call createOutputDirectory before createMainIndexHtml etc. Good.
+
+Look for potential unescaped variable expansions with spaces: e.g., in `showSystemStats`, `&lt;td class=&#39;left&#39;&gt;sys memory&lt;/td&gt;&lt;td class=&#39;left&#39;&gt;$systemMemoryUsed + $systemMemoryAvail&lt;/td&gt;` includes spaces around &#39;+&#39;, fine.
+
+In `parseThinkingOutput`, they use `content=$(cat &quot;$modelOutputTxt&quot;)`. This loads entire output into memory; could be huge but fine.
+
+Potential bug: The sed pattern `/Thinking\.\.\./,/\.\.\.done thinking\./` might incorrectly match if there are multi-lines; but fine.
+
+Another issue: In the beginning they do `TIMEOUT=&quot;300&quot;`, but parseCommandLine sets $TIMEOUT to given string; if string is non-numeric may create problem with sleep; but they check with `sleep &quot;$TIMEOUT&quot;`. If non-numeric string, sleep may fail. Possibly add validation.
+
+Also: In parseCommandLine, they use `shift 2` inside -m case; but if $2 equals &#39;-m&#39; or missing, error triggered correctly. But after shifting, the while loop uses `shift` again? Actually after case block, while loop will iterate again; no shift. So okay.
+
+Potential improvement: Use `shift` each loop iteration even when handled. But it&#39;s fine.
+
+Potential bug: `setSystemMemoryStats`: In linux case, they use `top -l 1` which is mac? Actually top -l 1 is Darwin; linux top doesn&#39;t have -l. So in linux case they did `top -l 1 2&gt;/dev/null || top -bn1 2&gt;/dev/null`. So fine.
+
+But may fail on non-numeric top output; but okay.
+
+- The variable `OLLAMA_MULTIRUN_NAME v$OLLAMA_MULTIRUN_VERSION` prints but missing space? They echo; okay.
+
+- In `parseCommandLine` they don&#39;t support `--help` long form; but not required.
+
+- The comment lines at top of file: Use of &#39;BASH_VERSION&#39; check but not verifying &#39;bash&#39; path; fine.
+
+- Danger: Running the script with root might set OLLAMA_MAX_LOADED_MODELS=1; but then `ollama stop &quot;$model&quot;` may fail due to privileges? But likely fine.
+
+Potential concurrency: It&#39;s sequential; fine.
+
+Thus produce review summary, list improvements.
+
+Also mention potential cross platform bug: the script may not run on dash or sh. They require Bash.
+
+Should also mention quoting and use of `printf`.
+
+Also mention not using `set -e` means script continues after errors; may produce incomplete output.
+
+Also mention potential memory leak: if `runModelWithTimeout` fails, may leave background processes orphaned.
+
+Also mention usage of variable `OLLAMA_MULTIRUN_DISCORD` not used; can remove.
+
+Also mention comment &quot;OLLAMA_MULTIRUN_NAME&quot; repeated.
+
+Also mention usage of `--verbose` flag: maybe not needed.
+
+Also talk about `setModels` uses `awk &#39;{if (NR &gt; 1) print $1}&#39;`; but if header has spaces or different header, may capture incorrectly; but it&#39;s okay.
+
+Also mention variable `OLLAMA_MULTIRUN_LICENSE`, not used; maybe used for header, else remove.
+
+Also mention function `textarea`: the local variable `lines` redefined; but local lines defined earlier; it&#39;s okay.
+
+Also suggestions: Instead of using `sed` replacement for images, use a placeholder &lt;div id=...&gt; and later append content.
+
+Also maybe unify the index file creation using templates to reduce duplication.
+
+Also note that the script uses `awk` heavily; could reduce to built-in parameter expansion or arrays.
+
+Edge: When copying model images, they do `cp &quot;$image&quot; &quot;$outputDirectory&quot;`. But if image path contains spaces, cp may mis-handle; but they quoted. but cp might consider remote path unknown; it&#39;s okay.
+
+One more bug: In setStats, `statsPromptEvalCount=$(grep -oE &quot;prompt eval count:[[:space:]]+(.*)&quot; &quot;$modelStatsTxt&quot; | awk &#39;{ print $4, $5 }&#39;)`. This extracts word 4 and 5. But if there are more columns, may miss. But ok.
+
+Also potential logic bug: In createOutputIndexHtml, they produce table header row, then add each row but no blank line. But okay.
+
+Now produce final review.
+
+Will structure review with sections: Overview, Strengths, Areas for Improvement (with subpoints: portability, error handling, security, maintainability, performance, robustness, code quality, naming conventions, comments, license, etc), suggestions of code changes, potential bugs identified, enhancements, and perhaps test suggestions.
+
+Let&#39;s craft answer.</textarea>
+</p>
+<p>Output: gpt-oss:20b (<a href='./gpt_oss_20b.output.txt'>raw</a>)<br />
+<textarea readonly rows='4'></textarea>
+</p>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Stats (<a href='./gpt_oss_20b.stats.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Words</td><td>0</td></tr>
+<tr><td class='left'>Bytes</td><td>1</td></tr>
+<tr><td class='left'>Total duration</td><td>28.550168716s</td></tr>
+<tr><td class='left'>Load duration</td><td></td></tr>
+<tr><td class='left'>Prompt eval count</td><td>10308 token(s)</td></tr>
+<tr><td class='left'>Prompt eval duration</td><td></td></tr>
+<tr><td class='left'>Prompt eval rate</td><td></td></tr>
+<tr><td class='left'>Eval count</td><td>9073 token(s)</td></tr>
+<tr><td class='left'>Eval duration</td><td></td></tr>
+<tr><td class='left'>Eval rate</td><td></td></tr>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>Model (<a href='./gpt_oss_20b.info.txt'>raw</a>)</td></tr>
+<tr><td class='left'>Name</td><td class='left'><a href='../models.html#gpt_oss_20b'>gpt-oss:20b</a></td></tr>
+<tr><td class='left'>Architecture</td><td class='left'>gptoss</td></tr>
+<tr><td class='left'>Size</td><td class='left'> </td></tr>
+<tr><td class='left'>Parameters</td><td class='left'>20.9B</td></tr>
+<tr><td class='left'>Context length</td><td class='left'>131072</td></tr>
+<tr><td class='left'>Embedding length</td><td  class='left'>2880</td></tr>
+<tr><td class='left'>Quantization</td><td class='left'>MXFP4</td></tr>
+<tr><td class='left'>Capabilities</td><td class='left'><br /></td>
+</table></div>
+<div class='box'><table>
+<tr><td class='left' colspan='2'>System</td></tr>
+<tr><td class='left'>Ollama proc</td><td class='left'> </td></tr>
+<tr><td class='left'>Ollama context</td><td class='left'></td></tr>
+<tr><td class='left'>Ollama version</td><td class='left'>0.0.0
+is</td></tr>
+<tr><td class='left'>Multirun timeout</td><td class='left'>300 seconds</td></tr>
+<tr><td class='left'>Sys arch</td><td class='left'>x86_64</td></tr>
+<tr><td class='left'>Sys processor</td><td class='left'>unknown</td></tr>
+<tr><td class='left'>sys memory</td><td class='left'>14G + 16G</td></tr>
+<tr><td class='left'>Sys OS</td><td class='left'>CYGWIN_NT-10.0-22631 3.6.4-1.x86_64</td></tr>
+</table></div>
+<br /><br />
+<footer>
+<p><a href='../index.html'>ollama-multirun</a>: <a href='./index.html'>act_as_an_expert_software_engineer_do_a</a>: <b>gpt-oss:20b</b>: 20250813-223825</p>
+<p>Page created: 2025-08-13 22:39:31</p>
+<p>Generated with: <a target='ollama-multirun' href='https://github.com/attogram/ollama-multirun'>ollama-multirun v5.21.4</a></p>
+</footer></body></html>
